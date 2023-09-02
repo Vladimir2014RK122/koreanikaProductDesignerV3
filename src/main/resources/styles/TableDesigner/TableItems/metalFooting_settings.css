@@ -1,0 +1,23 @@
+
+
+#anchorPaneRoot {
+    -fx-padding: 0;
+    -fx-background-color: MAIN_COLOR_DARK;
+}
+
+#toggleButtonPaintingType1, #toggleButtonPaintingType2 {
+    -fx-base: transparent
+}
+
+#toggleButtonPaintingType1:selected, #toggleButtonPaintingType2:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+#toggleButtonPaintingType1:selected:focused, #toggleButtonPaintingType2:selected:focused {
+    -fx-background-color: -fx-focus-color;
+}
+
+
+#labelPrice {
+    -fx-font-weight: bold;
+}

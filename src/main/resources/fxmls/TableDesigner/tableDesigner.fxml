@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="anchorPaneRoot" prefHeight="1000.0" prefWidth="1374.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ScrollPane id="scrollPaneVBoxTable" layoutX="315.0" layoutY="30.0" prefViewportHeight="570.0" prefViewportWidth="285.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="320.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+            <content>
+                <VBox id="vBoxTableZone" layoutX="380.0" layoutY="115.0" prefHeight="200.0" prefWidth="282.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="315.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+            </content>
+        </ScrollPane>
+        <ScrollPane id="scrollPaneItems" hbarPolicy="NEVER" layoutX="-2.0" layoutY="-15.0" maxWidth="320.0" minWidth="300.0" prefViewportHeight="494.0" prefViewportWidth="325.0" prefWidth="320.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <content>
+                <AnchorPane id="anchorPaneIntoScrollPaneItems" maxWidth="310.0" minWidth="310.0" prefWidth="310.0">
+                    <children>
+                        <Accordion id="accordionItems" maxWidth="300.0" minWidth="310.0" prefHeight="550.0" prefWidth="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <panes>
+                                <TitledPane animated="false" minWidth="300.0" text="Изделие">
+                                    <content>
+                                        <AnchorPane minHeight="100.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0" styleClass="backgroundSettings" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Раковина">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Кромка">
+                                    <content>
+                                        <AnchorPane minHeight="50.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Бортик">
+                                    <content>
+                                        <AnchorPane maxHeight="180.0" minHeight="0.0" minWidth="0.0" prefHeight="140.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Радиусный элемент">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Вырезы">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Полировка камня">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Соединение элементов">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Каплесборник">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Проточки под радиатор">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Проточки для стока воды">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Подставки под горячее">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Подложки и сплошные основания">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Металлокаркас">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Выезд замерщика">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Доставка">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" text="Монтаж">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                        <TitledPane animated="false" text="Сантехника">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                           </content>
+                        </TitledPane>
+                        <TitledPane animated="false" text="Поддоны">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                           </content>
+                        </TitledPane>
+                                <TitledPane animated="false" layoutX="10.0" layoutY="418.0" text="Дополнительно">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="false" layoutX="10.0" layoutY="442.0" text="Скидка">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </TitledPane>
+                            </panes>
+                        </Accordion>
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+      <AnchorPane id="anchorPaneMenu" layoutX="315.0" layoutY="-86.0" prefHeight="30.0" AnchorPane.leftAnchor="320.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="2.0">
+               <children>
+                  <ToggleButton id="btnRowsView" mnemonicParsing="false" />
+                  <ToggleButton id="btnCardsView" mnemonicParsing="false" />
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+    </children>
+   <stylesheets>
+      <URL value="@../../styles/colorsKoreanika.css" />
+      <URL value="@../../styles/rootTheme.css" />
+      <URL value="@../../styles/TableDesigner/tableDesigner.css" />
+      <URL value="@../../styles/TableDesigner/tableItemsSettingsStyle.css" />
+   </stylesheets>
+</AnchorPane>

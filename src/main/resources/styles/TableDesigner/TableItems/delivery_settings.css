@@ -1,0 +1,16 @@
+
+
+#anchorPaneRoot {
+    -fx-padding: 0;
+    -fx-background-color: MAIN_COLOR_DARK;
+}
+
+#imageView{
+    -fx-image: url("../../images/TableDesigner/DeliveryItem/delivery.png");
+}
+
+#labelPrice {
+    -fx-font-weight: bold;
+}
+
+

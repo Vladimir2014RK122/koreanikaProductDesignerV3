@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.net.*?>
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="anchorPaneCutDesignerRoot" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <SplitPane id="splitPaneMain" dividerPositions="0.16833333333333333, 0.665" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+        <items>
+          <AnchorPane id="anchorPaneTreeViewShapes" maxWidth="100.0" minHeight="0.0" minWidth="100.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <TreeView id="treeViewProjectElements" prefHeight="400.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="368.0" prefWidth="156.0">
+               <children>
+                  <ScrollPane id="scrollPaneWorkPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <Pane id="cutPane" prefHeight="100.0" prefWidth="100.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="AnchorPaneInfoZone" maxWidth="200.0" prefHeight="370.0" prefWidth="304.0">
+               <children>
+                  <SplitPane id="splitPaneInfo" dividerPositions="0.5" layoutX="20.0" layoutY="65.0" minWidth="200.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane id="anchorPaneStatistics" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <ScrollPane id="scrollPaneStatistics" prefViewportHeight="184.0" prefViewportWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <TableView id="tableViewStatistics" layoutX="-25.0" minWidth="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn editable="false" minWidth="75.0" prefWidth="75.0" sortable="false" text="Материал" />
+                                        <TableColumn editable="false" maxWidth="65.0" minWidth="65.0" prefWidth="65.0" sortable="false" text="Толщина" />
+                                          <TableColumn editable="false" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" sortable="false" text="Исп. %" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                 </content>
+                              </ScrollPane>
+                           </children></AnchorPane>
+                      <AnchorPane id="anchorPaneShapeInfo" maxHeight="190.0" minHeight="50.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <ScrollPane id="ScrollPaneShapeInfo" layoutX="-14.0" layoutY="-8.0" maxHeight="190.0" minHeight="50.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children></AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <AnchorPane id="anchorPaneMenu" layoutX="36.0" layoutY="-86.0" prefHeight="30.0" prefWidth="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ChoiceBox id="choiceBoxAddMaterialSheet" layoutX="408.0" layoutY="1.0" minHeight="26.0" prefHeight="26.0" prefWidth="140.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="1.0" />
+            <Label layoutX="300.0" layoutY="6.0" minHeight="26.0" prefHeight="26.0" text="Добавить лист:" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="1.0" />
+            <Button id="btnAddMaterialSheet" layoutX="560.0" layoutY="-1.0" maxHeight="26.0" maxWidth="26.0" minHeight="26.0" minWidth="26.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" text="+" AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="1.0">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Button>
+            <Button id="btnRotateLeft" layoutX="118.0" layoutY="4.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.bottomAnchor="2.5" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="2.5">
+               <tooltip>
+                  <Tooltip text="Повернуть -90" />
+               </tooltip>
+            </Button>
+            <Button id="btnRotateRight" layoutX="151.0" layoutY="4.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.bottomAnchor="2.5" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="2.5">
+               <tooltip>
+                  <Tooltip text="Повернуть +90" />
+               </tooltip>
+            </Button>
+            <Button id="btnRotateCustom" layoutX="161.0" layoutY="14.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.bottomAnchor="2.5" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="2.5">
+               <tooltip>
+                  <Tooltip text="Повернуть" />
+               </tooltip>
+            </Button>
+            <Button id="btnAddDimH" layoutX="202.0" layoutY="6.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.bottomAnchor="2.5" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="2.5">
+               <tooltip>
+                  <Tooltip text="Добавить горизонтальный размер" />
+               </tooltip>
+            </Button>
+            <Button id="btnAddDimV" layoutX="212.0" layoutY="16.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.bottomAnchor="2.5" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="2.5">
+               <tooltip>
+                  <Tooltip text="Добавить вертикальный размер" />
+               </tooltip>
+            </Button>
+            <Button id="btnUpdateStatistics" layoutX="761.0" layoutY="14.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="1.0">
+               <tooltip>
+                  <Tooltip text="Обновить статистику" />
+               </tooltip>
+            </Button>
+            <Button id="btnPrint" layoutX="36.0" layoutY="8.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0">
+               <tooltip>
+                  <Tooltip text="Повернуть -90" />
+               </tooltip>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+   <stylesheets>
+      <URL value="@../styles/cutDesigner.css" />
+      <URL value="@../styles/rootTheme.css" />
+   </stylesheets>
+</AnchorPane>

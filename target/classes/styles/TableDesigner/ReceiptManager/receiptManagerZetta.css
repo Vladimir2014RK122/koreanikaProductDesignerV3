@@ -1,0 +1,264 @@
+
+.imageViewLogo{
+    -fx-image: url("../../images/receiptManager/ZettaNewLogo.png");
+}
+
+.labelTableHeader{
+    -fx-background-color: #FF8133;
+}
+
+.labelTableResult, .labelTableResultPrice{
+    -fx-background-color: #FF8133;
+}
+
+/*#gridPaneTop {*/
+/*    !*-fx-background-image: url(../../images/receiptManager/receiptBackground_v3.png);*!*/
+/*    -fx-padding: 0;*/
+/*}*/
+
+/*
+.grid{
+     -fx-background-color: black;
+     -fx-background-insets: 0, 1 1 0 0 ;
+     -fx-padding: 1 ;
+ }
+.cell{
+    -fx-background-color: black ;
+    -fx-background-insets: 0, 0 0 1 1 ;
+  }
+*/
+/*#imageViewLogo {*/
+/*    -fx-border-width: RECEIPT_BORDER_WIDTH;*/
+/*    -fx-padding: 0;*/
+/*    -fx-border-radius: 0;*/
+/*    -fx-border-color: RECEIPT_BORDER_COLOR_2;*/
+/*}*/
+
+/*#labelGeneralName, #labelDate, #labelManagerName,#labelVersion, #labelNull51, #labelNull14, #labelNull24, #labelCostumerName, #labelCostumerAddress, #labelNull72,*/
+/*#labelCashDate, #labelUSD, #labelEUR, #labelSpecification, #labelNull65, #labelNull74, #labelNull75, #labelNull84,*/
+/*#labelNull85, #labelNull94, #labelNull104, #labelStoneType, #labelElementType, #labelMaterial, #labelCollection,*/
+/*#labelColor, #labelLength, #labelWidth, #labelInchType, #labelPrice, #labelCount, #labelResultPrice,*/
+/*#labelStoneTypeValue, #labelElementTypeValue, #labelStoneNameValue, #labelStoneCollectionValue,*/
+/*#labelStoneColorValue, #labelStoneWidthValue, #labelStoneHeightValue, #labelInchesValue, #labelPriceValue,*/
+/*#labelSquareValue, #labelResultPriceValue, #labelAdditionalFeatureName, #labelAdditionalFeatureInches,*/
+/*#labelAdditionalFeaturePrice, #labelAdditionalFeatureCount, #labelAdditionalFeatureResultPrice,*/
+/*#labelEdgeValueName, #labelEdgeValueSubName, #labelEdgeNull1, #labelEdgeNull2, #labelEdgeInches, #labelEdgePrice,*/
+/*#labelEdgeCount, #labelEdgeResultPrice, #labelAdditionalAllPriceName, #labelAdditionalAllPrice, #labelAllPriceName,*/
+/*#labelAllPrice, #labelMountName, #labelMountPercent, #labelMountPrice, #labelResultPriceUSDName, #labelResultPriceUSD,*/
+/*#labelResultPriceRURName, #labelResultPriceRUR {*/
+
+/*}*/
+
+
+/*#labelGeneralName, #labelDate, #labelManagerName,#labelVersion, #labelNull51, #labelNull14, #labelNull24,*/
+/*#labelCostumerName, #labelCostumerAddress, #labelNull72,*/
+/*#labelCashDate, #labelUSD, #labelEUR, #labelSpecification {*/
+
+/*}*/
+
+/*#labelSpecification, #labelNull65, #labelNull74, #labelNull75, #labelNull84, #labelNull85,*/
+/*#labelNull94, #labelNull104, #labelStoneType, #labelElementType, #labelMaterial, #labelCollection,*/
+/*#labelColor, #labelLength, #labelWidth, #labelInchType, #labelPrice, #labelCount, #labelResultPrice,*/
+/*#labelAdditionalFeatureName, #labelAdditionalFeatureInches, #labelAdditionalFeaturePrice,*/
+/*#labelAdditionalFeatureCount, #labelAdditionalFeatureResultPrice, #labelAdditionalAllPrice, #labelResultPriceUSDName, #labelResultPriceUSD,*/
+/*#labelResultPriceRURName, #labelResultPriceRUR {*/
+
+
+/*}*/
+
+
+
+/*#labelGeneralName, #labelManagerName, #labelNull51, #labelNull14, #labelNull24, #labelCostumerName,*/
+/*#labelCostumerAddress, #labelNull72,*/
+/*#labelCashDate, #labelUSD, #labelEUR, #labelSpecification{*/
+
+
+/*}*/
+
+/*#labelGeneralName {*/
+/*    -fx-font-weight: bold;*/
+/*}*/
+
+/*#labelPriceValue,*/
+/*#labelSquareValue, #labelResultPriceValue, #labelEdgeValueName, #labelEdgeNull1,*/
+/*#labelEdgeNull2, #labelEdgePrice, #labelEdgeCount, #labelEdgeResultPrice, #labelAdditionalAllPriceName,*/
+/*#labelAllPriceName, #labelMountName, #labelMountPrice, #labelAllPrice, #labelMountPercent {*/
+/*    -fx-background-color: RECEIPT_LIGHT_BEIGE;*/
+/*    -fx-text-fill: RECEIPT_COLOR_TEXT;*/
+/*}*/
+
+/*#labelAdditionalAllPriceName, #labelAllPriceName, #labelMountName, #labelResultPriceUSDName, #labelResultPriceRURName {*/
+/*    -fx-text-alignment: left;*/
+/*    -fx-content-display: left;*/
+/*}*/
+
+
+/*#labelResultPriceUSDName, #labelResultPriceRURName, #labelResultPriceUSD, #labelResultPriceRUR {*/
+
+/*    -fx-font-size: 15;*/
+/*    -fx-font-weight: bold;*/
+/*    -fx-border-width: 1;*/
+/*}*/
+
+/*#labelNull72, #labelStoneTypeValue, #labelElementTypeValue, #labelStoneNameValue, #labelStoneCollectionValue,*/
+/*#labelStoneColorValue, #labelEdgeValueSubName {*/
+/*    -fx-background-color: RECEIPT_LIGHT_GREEN;*/
+/*    -fx-text-fill: RECEIPT_COLOR_TEXT;*/
+/*}*/
+
+/*#labelElementType, #labelStoneType, #labelColor, #labelLength, #labelWidth, #labelInchType, #labelPrice, #labelCount,*/
+/*#labelResultPrice,*/
+/*#labelAdditionalFeatureName, #labelAdditionalFeatureInches, #labelAdditionalFeaturePrice, #labelAdditionalFeatureCount,*/
+/*#labelAdditionalFeatureResultPrice, #labelSpecification, #labelText, #labelField {*/
+/*    -fx-font-weight: bold;*/
+/*    -fx-font-size: 13;*/
+
+/*}*/
+
+/*#labelAdditionalAllPriceName, #labelAdditionalAllPrice, #labelAllPriceName, #labelAllPrice, #labelMountName, #labelMountPercent, #labelMountPrice, #labelResultPriceUSDName,*/
+/*#labelResultPriceUSD, #labelResultPriceRURName, #labelResultPriceRUR {*/
+/*    -fx-background-color: #ffffff;*/
+/*}*/
+
+/*#labelStoneWidthValue, #labelStoneHeightValue {*/
+/*    -fx-background-color: WHITE;*/
+/*    -fx-text-fill: RECEIPT_COLOR_TEXT;*/
+/*}*/
+
+/*#labelInchesValue, #labelEdgeInches {*/
+/*    -fx-background-color: RECEIPT_DARK_BEIGE;*/
+/*    -fx-text-fill: RECEIPT_COLOR_TEXT;*/
+/*}*/
+
+/*#labelCashDate, #labelUSD, #labelEUR {*/
+/*    -fx-text-fill: RECEIPT_COLOR_TEXT;*/
+/*}*/
+
+
+
+
+/*!*********************************************8*!*/
+
+
+/*#labelVersion, #labelSpecification, #labelStoneType, #labelElementType, #labelMaterial, #labelCollection,*/
+/*#labelColor, #labelLength, #labelWidth, #labelInchType, #labelPrice, #labelCount, #labelResultPrice,*/
+/*#labelResultPriceRURName, #labelResultPriceRUR, #labelResultPriceUSDName, #labelResultPriceUSD,*/
+/*#labelAdditionalFeatureName, #labelAdditionalFeatureInches, #labelAdditionalFeaturePrice, #labelAdditionalFeatureCount,*/
+/*#labelAdditionalFeatureResultPrice, #labelDiscountName, #labelDiscountPrice,*/
+/*#labelServicesWorksName, #labelServicesWorksInches, #labelServicesWorksCost, #labelServicesWorksCount,*/
+/*#labelServicesWorksPrice,*/
+/*#labelServicesWorksPriceName, #labelServicesWorksPriceValue,*/
+/*#labelAllPriceName, #labelAllPrice{*/
+/*    -fx-background-color: RECEIPT_COLOR_1;*/
+
+/*}*/
+/*#labelDate,#labelGeneralName, #labelManagerName,#labelCostumerName,*/
+/*#labelCostumerAddress,#labelCashDate, #labelUSD, #labelEUR, #labelNull51{*/
+/*    -fx-background-color: RECEIPT_COLOR_2;*/
+/*}*/
+
+/*#labelPriceValue, #labelPriceValue, #labelResultPriceValue, #labelEdgePrice, #labelEdgeCount, #labelEdgeResultPrice,*/
+/*#labelEdgeValueName,*/
+/*#labelMountName, #labelMountPercent, #labelMountPrice,*/
+/*#labelSmallProductName, #labelSmallProductPercent, #labelSmallProductPrice,*/
+/*#labelDeliveryValueName, #labelDeliveryValueSubName, #labelDeliveryNull1, #labelDeliveryNull2,*/
+/*#labelDeliveryPrice, #labelDeliveryCount, #labelDeliveryResultPrice,*/
+/*#labelMeasuringValueName, #labelMeasuringValueSubName, #labelMeasuringNull1, #labelMeasuringNull2, #labelMeasuringNull2,*/
+/*#labelMeasuringPrice, #labelMeasuringCount, #labelMeasuringResultPrice,*/
+/*#labelSinkPrice, #labelSinkCount, #labelSinkResultPrice{*/
+/*    -fx-background-color: RECEIPT_COLOR_3;*/
+/*}*/
+
+/*#labelInchesValue, #labelEdgeInches,*/
+/*#labelDeliveryInches,*/
+/*#labelMeasuringInches,*/
+/*#labelSinkInches{*/
+/*    -fx-background-color: RECEIPT_COLOR_4;*/
+/*}*/
+
+/*#labelElementTypeValue, #labelStoneTypeValue, #labelStoneColorValue,*/
+/*#labelEdgeValueSubName, #labelDiscountPercent,*/
+/*#labelSinkValueName, #labelSinkValueSubName{*/
+/*    -fx-background-color: RECEIPT_COLOR_5;*/
+/*}*/
+
+
+/*#labelFeatureImage {*/
+/*    -fx-font-size: 11;*/
+/*}*/
+
+
+
+/*#textFieldDocName, #textFieldCostumerName, #textFieldCostumerAddress, #textFieldCoefficient, #textFieldManagerName,*/
+/*#textAreaManagerName {*/
+/*    -fx-border-width: 1;*/
+/*    -fx-padding: 0;*/
+/*    -fx-border-radius: 0;*/
+/*    !*-fx-border-style:solid centered;*!*/
+/*    -fx-border-style: solid centered;*/
+/*    -fx-border-color: RECEIPT_BORDER_COLOR_2;*/
+/*    -fx-font-size: 13;*/
+/*    -fx-alignment: center;*/
+/*    -fx-wrap-text: true;*/
+/*}*/
+
+/*#textFieldDocName, #textFieldCostumerName, #textFieldCostumerAddress,*/
+/*#textFieldManagerName {*/
+/*    -fx-text-fill: RECEIPT_COLOR_TEXT;*/
+/*    -fx-background-color: RECEIPT_COLOR_2;*/
+/*    -fx-border-radius: 0;*/
+/*}*/
+
+/*#textFieldDocName {*/
+/*    -fx-font-size: 13;*/
+/*    -fx-font-weight: bold;*/
+/*}*/
+
+
+/*#textFieldCoefficient {*/
+/*    -fx-background-color: RECEIPT_DARK_GREEN;*/
+/*    -fx-text-fill: RECEIPT_COLOR_TEXT;*/
+/*    !*-fx-border-style:solid centered;*!*/
+/*    -fx-border-radius: 0;*/
+/*}*/
+
+/*#flowPaneForFeaturesPictures {*/
+/*    -fx-background-color: RECEIPT_LIGHT_GREEN;*/
+/*    -fx-border-style: solid centered;*/
+/*    -fx-border-width: 1;*/
+/*    -fx-border-color: RECEIPT_BORDER_COLOR_2;*/
+/*    -fx-border-radius: 0;*/
+/*    -fx-padding: 0 -1 0 -1;*/
+/*}*/
+
+/*#labelFeatureImage{*/
+/*    -fx-border-width: 1;*/
+/*    -fx-border-color: RECEIPT_BORDER_COLOR_2;*/
+/*    -fx-border-style: solid centered;*/
+/*}*/
+
+
+/*#rootPaneFeatureImg {*/
+/*    -fx-border-width: 1;*/
+/*    -fx-padding: 0;*/
+/*    -fx-border-radius: 0;*/
+/*    -fx-border-color: RECEIPT_BORDER_COLOR_2;*/
+/*    -fx-border-style: solid centered;*/
+/*}*/
+
+#labelFeatureImage {
+
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-font-size: 11;
+    -fx-content-display: center;
+    -fx-border-width: 0;
+    -fx-border-style: solid centered;
+    -fx-padding: 2;
+    -fx-border-radius: 0;
+    -fx-border-color: RECEIPT_BORDER_COLOR_2;
+    -fx-wrap-text: true;
+    /*-fx-background-color: RECEIPT_LIGHT_BEIGE;*/
+    -fx-text-fill: RECEIPT_COLOR_TEXT;
+    -fx-background-color: #ffffff;
+}

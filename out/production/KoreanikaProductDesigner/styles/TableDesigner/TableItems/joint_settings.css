@@ -1,0 +1,26 @@
+@import url("../../rootTheme.css");
+
+#anchorPaneRoot{
+    -fx-padding: 0;
+    -fx-background-color: MAIN_COLOR_DARK;
+}
+
+
+ #toggleButtonShape1, #toggleButtonShape2, #toggleButtonShape3, #toggleButtonShape4 {
+     -fx-base: transparent
+ }
+ #toggleButtonShape1:selected, #toggleButtonShape2:selected,
+ #toggleButtonShape3:selected, #toggleButtonShape4:selected {
+     -fx-background-color: -fx-focus-color;
+ }
+ #toggleButtonShape1:selected:focused, #toggleButtonShape2:selected:focused,
+ #toggleButtonShape3:selected:focused, #toggleButtonShape4:selected:focused {
+     -fx-background-color: -fx-focus-color;
+ }
+
+
+
+ #labelPrice{
+    -fx-font-weight: bold;
+ }
+

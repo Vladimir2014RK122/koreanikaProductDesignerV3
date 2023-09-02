@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="anchorPaneRoot" maxHeight="530.0" maxWidth="300.0" minHeight="530.0" minWidth="300.0" prefHeight="530.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label layoutX="10.0" layoutY="41.0" prefHeight="25.0" prefWidth="100.0" text="Материал:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+        <ChoiceBox id="choiceBoxMaterial" layoutX="163.0" layoutY="47.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="10.0" />
+        <Label layoutX="14.0" layoutY="75.0" prefHeight="25.0" prefWidth="100.0" text="Тип кромки:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="115.0" />
+        <TextField id="textFieldLength" layoutX="150.0" layoutY="186.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="225.0" />
+        <Button id="btnAdd" layoutX="234.0" layoutY="411.0" mnemonicParsing="false" text="Добавить" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+        <TextField id="textFieldHeight" layoutX="150.0" layoutY="45.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="80.0" />
+        <Label layoutX="10.0" layoutY="45.0" prefHeight="25.0" prefWidth="100.0" text="Высота, мм.:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="80.0" />
+        <Label layoutX="10.0" layoutY="190.0" prefHeight="25.0" prefWidth="100.0" text="Длина, п.м.:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="225.0" />
+        <ComboBox id="comboBoxBorderType" layoutX="136.0" layoutY="95.0" prefHeight="100.0" prefWidth="140.0" visibleRowCount="5" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="115.0" />
+      <Label layoutX="10.0" layoutY="215.0" prefHeight="25.0" prefWidth="190.0" text="Тип обработки кромки:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="260.0" />
+      <ToggleButton id="toggleButtonBorderCut4" layoutX="228.0" layoutY="258.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="225.0" AnchorPane.topAnchor="295.0" />
+      <ToggleButton id="toggleButtonBorderCut3" layoutX="153.0" layoutY="258.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="295.0" />
+      <ToggleButton id="toggleButtonBorderCut1" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="17.0" layoutY="258.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="295.0" />
+      <ToggleButton id="toggleButtonBorderCut2" layoutX="85.0" layoutY="258.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="295.0" />
+      <Label layoutX="10.0" layoutY="324.0" prefHeight="25.0" prefWidth="100.0" text="Запил угла:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="360.0" />
+      <ToggleButton id="toggleButtonBorderAngleCut1" layoutX="89.0" layoutY="350.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="395.0" />
+      <ToggleButton id="toggleButtonBorderAngleCut2" layoutX="157.0" layoutY="350.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="395.0" />
+      <ChoiceBox id="choiceBoxAngleCutQuantity" layoutX="145.0" layoutY="325.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="360.0" />
+      <Label layoutX="12.0" layoutY="35.0" prefHeight="25.0" prefWidth="100.0" text="Толщина:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="45.0" />
+      <ChoiceBox id="choiceBoxDepth" layoutX="148.0" layoutY="40.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="45.0" />
+        <Label id="labelPrice" layoutX="14.0" layoutY="491.0" prefHeight="25.0" prefWidth="190.0" text="Цена: 100$ /п.м" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+    </children>
+   <stylesheets>
+      <URL value="@../../../styles/rootTheme.css" />
+      <URL value="@../../../styles/TableDesigner/TableItems/border_settings.css" />
+   </stylesheets>
+</AnchorPane>

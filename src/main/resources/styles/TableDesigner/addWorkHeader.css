@@ -1,0 +1,29 @@
+/*@import url("../rootTheme.css");*/
+
+#anchorPaneRoot {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+
+
+}
+
+#labelMain {
+
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+    -fx-text-fill: MAIN_TEXT_COLOR_0;
+    -fx-font-family: "Segoe UI Semibold";
+
+    -fx-font-size: 20;
+}
+
+#labelNumber, #labelName, #labelImage, #labelMaterial, #labelNull1, #labelNull2, #labelNull3, #labelQuantity, #labelButtons, #labelPrice {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+    -fx-text-fill: MAIN_TEXT_COLOR_0;
+    -fx-font-size: 11;
+}

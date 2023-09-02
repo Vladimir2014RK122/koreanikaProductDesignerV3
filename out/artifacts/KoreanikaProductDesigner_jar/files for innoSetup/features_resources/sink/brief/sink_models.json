@@ -1,0 +1,407 @@
+{
+	"sink_1":[
+			{ 
+				"model": "300F",
+				"width":300,
+				"height":160,
+				"depth":140,
+				"cuttable":false
+			},
+			{ 
+				"model": "300F+",
+				"width":300,
+				"height":200,
+				"depth":140,
+				"cuttable":false
+			},
+			{
+				"model": "400F", 
+				"width":400,
+				"height":160,
+				"depth":140,
+				"cuttable":false
+			},
+			{ 
+				"model": "400F+",
+				"width":400,	
+				"height":200,
+				"depth":140,
+				"cuttable":false
+			}
+	],
+	"sink_2":[
+		{ 
+			"model": "300KF",
+			"width":300,
+			"height":160,
+			"depth":140,
+			"cuttable":false
+		},
+		{ 
+			"model": "300KF+",
+			"width":300,
+			"height":200,
+			"depth":140,
+			"cuttable":false
+		},
+		{ 
+			"model": "400KF",
+			"width":400,
+			"height":160,
+			"depth":140,
+			"cuttable":false
+		},
+		{ 
+			"model": "400KF+",
+			"width":400,	
+			"height":200,
+			"depth":140,
+			"cuttable":false
+		}
+	],
+	"sink_3":[
+		{
+			"model": "300K", 
+			"width":400,
+			"height":300,
+			"depth":170,
+			"cuttable":false
+		},
+		{ 
+			"model": "340K",
+			"width":400,
+			"height":340,
+			"depth":170,
+			"cuttable":false
+		},
+		{ 
+			"model": "370K",
+			"width":400,
+			"height":370,
+			"depth":170,
+			"cuttable":false
+		},
+		{ 
+			"model": "400K",
+			"width":400,	
+			"height":400,
+			"depth":180,
+			"cuttable":false
+		},
+		{ 
+			"model": "450K",
+			"width":450,	
+			"height":400,
+			"depth":180,
+			"cuttable":false
+		},
+		{ 
+			"model": "500K",
+			"width":500,	
+			"height":400,
+			"depth":180,
+			"cuttable":false
+		}
+	],
+	"sink_4":[
+		{ 
+			"model": "300R",
+			"width":400,
+			"height":300,
+			"depth":170,
+			"cuttable":false
+		},
+		{ 
+			"model": "340R",
+			"width":400,
+			"height":340,
+			"depth":170,
+			"cuttable":false
+		},
+		{ 
+			"model": "370R",
+			"width":400,
+			"height":370,
+			"depth":170,
+			"cuttable":false
+		},
+		{ 
+			"model": "400R",
+			"width":400,	
+			"height":400,
+			"depth":180,
+			"cuttable":false
+		},
+		{ 
+			"model": "450R",
+			"width":450,	
+			"height":400,
+			"depth":180,
+			"cuttable":false
+		},
+		{ 
+			"model": "500R",
+			"width":500,	
+			"height":400,
+			"depth":180,
+			"cuttable":false
+		}
+	],
+	"sink_5":[
+		{ 
+			"model": "370C",
+			"width":370,
+			"height":370,
+			"depth":170,
+			"cuttable":false
+		},
+		{ 
+			"model": "375C",
+			"width":375,
+			"height":375,
+			"depth":170,
+			"cuttable":false
+		},
+		{ 
+			"model": "400C",
+			"width":400,
+			"height":400,
+			"depth":170,
+			"cuttable":false
+		},
+		{ 
+			"model": "450C",
+			"width":450,	
+			"height":450,
+			"depth":180,
+			"cuttable":false
+		}
+	],
+	"sink_6":[
+		{ 
+			"model": "450E",
+			"width":450,
+			"height":370,
+			"depth":170,
+			"cuttable":false
+		},
+		{ 
+			"model": "500E",
+			"width":500,
+			"height":370,
+			"depth":170,
+			"cuttable":false
+		}
+	],
+	"sink_7":[
+		{ 
+			"model": "600T",
+			"width":600,
+			"height":424,
+			"depth":180,
+			"cuttable":false
+		}
+	],
+	"sink_8":[
+		{ 
+			"model": "A201",
+			"width":380,
+			"height":380,
+			"depth":115,
+			"cuttable":false
+		}
+	],
+	"sink_9":[
+		{ 
+			"model": "A202",
+			"width":460,
+			"height":325,
+			"depth":115,
+			"cuttable":false
+		}
+	],
+	"sink_10":[
+		{ 
+			"model": "A203",
+			"width":530,
+			"height":350,
+			"depth":130,
+			"cuttable":false
+		}
+	],
+	"sink_11":[
+		{ 
+			"model": "500B",
+			"width":500,
+			"height":300,
+			"depth":130,
+			"cuttable":false
+		},
+		{ 
+			"model": "625B",
+			"width":625,
+			"height":370,
+			"depth":150,
+			"cuttable":false
+		}
+	],
+	"sink_12":[
+		{ 
+			"model": "KRF300",
+			"width":300,
+			"height":160,
+			"depth":200,
+			"cuttable":true,
+			"topPart":[300, 200],
+			"bottomPart":[300, 200],
+			"leftPart":[200, 160],
+			"rightPart":[200, 160],
+			"centerPart":[300, 160]
+		},
+		{ 
+			"model": "KRF450",
+			"width":450,
+			"height":400,
+			"depth":200,
+			"cuttable":true,
+			"topPart":[450, 200],
+			"bottomPart":[450, 200],
+			"leftPart":[200, 400],
+			"rightPart":[200, 400],
+			"centerPart":[450, 400]
+		},
+		{ 
+			"model": "KRF500",
+			"width":500,
+			"height":400,
+			"depth":200,
+			"cuttable":true,
+			"topPart":[500, 200],
+			"bottomPart":[500, 200],
+			"leftPart":[200, 400],
+			"rightPart":[200, 400],
+			"centerPart":[500, 400]
+		}
+	],
+	"sink_13":[
+		{ 
+			"model": "KF300",
+			"width":340,
+			"height":200,
+			"depth":200,
+			"cuttable":true,
+			"topPart":[340, 200],
+			"bottomPart":[340, 200],
+			"leftPart":[200, 200],
+			"rightPart":[200, 200],
+			"centerPart":[340, 200]
+		},
+		{ 
+			"model": "KF450",
+			"width":490,
+			"height":440,
+			"depth":200
+		},
+		{ 
+			"model": "KF500",
+			"width":540,
+			"height":440,
+			"depth":200,
+			"cuttable":true,
+			"topPart":[540, 200],
+			"bottomPart":[540, 200],
+			"leftPart":[200, 440],
+			"rightPart":[200, 440],
+			"centerPart":[540, 440]
+		}
+	],
+	"sink_14":[
+		{ 
+			"model": "K400",
+			"width":400,
+			"height":400,
+			"depth":200,
+			"cuttable":true,
+			"topPart":[400, 200],
+			"bottomPart":[400, 200],
+			"leftPart":[200, 400],
+			"rightPart":[200, 400],
+			"centerPart":[400, 400]
+		},
+		{ 
+			"model": "K500",
+			"width":500,
+			"height":500,
+			"depth":200,
+			"cuttable":true,
+			"topPart":[500, 200],
+			"bottomPart":[500, 200],
+			"leftPart":[200, 500],
+			"rightPart":[200, 500],
+			"centerPart":[500, 500]
+		}
+	],
+	"sink_15":[
+		{ 
+			"model": "KR400",
+			"width":400,
+			"height":400,
+			"depth":200,
+			"cuttable":true,
+			"topPart":[400, 200],
+			"bottomPart":[400, 200],
+			"leftPart":[200, 400],
+			"rightPart":[200, 400],
+			"centerPart":[400, 400]
+
+		},
+		{ 
+			"model": "KR500",
+			"width":500,
+			"height":500,
+			"depth":200,
+			"cuttable":true,
+			"topPart":[500, 200],
+			"bottomPart":[500, 200],
+			"leftPart":[200, 500],
+			"rightPart":[200, 500],
+			"centerPart":[500, 500]
+		}
+	],
+	"sink_16":[
+		{ 
+			"model": "model 1",
+			"width":400,
+			"height":400,
+			"depth":200,
+			"cuttable":false
+		}
+	],
+	"sink_17":[
+		{ 
+			"model": "model 1",
+			"width":400,
+			"height":400,
+			"depth":200,
+			"cuttable":false
+		}
+	],
+	"sink_18":[
+		{ 
+			"model": "S600",
+			"width":600,
+			"height":400,
+			"depth":200,
+			"cuttable":false
+		},
+		{ 
+			"model": "S800",
+			"width":800,
+			"height":400,
+			"depth":200,
+			"cuttable":false
+		}
+	]
+	
+	
+}

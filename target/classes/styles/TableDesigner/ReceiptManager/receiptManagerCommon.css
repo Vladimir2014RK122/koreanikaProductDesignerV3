@@ -1,0 +1,378 @@
+
+
+
+
+/* ******************************** HEADER ********************************* */
+
+.headerBackground{
+    -fx-background-color: white;
+}
+
+.imageViewLogo{
+    -fx-image: url("../../images/receiptManager/koreanikaNewLogo.png");
+}
+
+.labelTextField{
+    -fx-text-fill: #4F5F56;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 12px;
+    -fx-pref-height: 25px;
+}
+
+
+
+
+.labelBlack{
+    -fx-text-fill: black;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 12px;
+    -fx-pref-height: 25px;
+}
+
+.labelAddress{
+    -fx-text-fill: black;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 10px;
+}
+
+.labelCurrency{
+    -fx-border-color: transparent transparent #8C8C8C transparent;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-alignment: center;
+    -fx-pref-height: 25px;
+    -fx-text-fill: black;
+}
+
+.textFieldData{
+    -fx-pref-height: 25px;
+
+}
+
+
+
+.textFieldDocName{
+    -fx-border-color: transparent;
+    -fx-border-radius: 6px 6px 0 0;
+    -fx-background-radius: 6px 6px 0 0;
+    -fx-background-color: #EDEBE9;
+    -fx-background-image: url(../../images/receiptManager/backgroundPattern1.png);
+    -fx-background-size:600px;
+}
+/* ******************************** HEADER ********************************* */
+
+
+.labelTableHeader{
+    -fx-background-color: #EDEBE9;
+    -fx-text-fill: black;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+}
+
+.labelTableHeader-2{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+}
+
+.labelStoneProduct, .labelProduct{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+}
+
+.labelStoneProductPrice, .labelProductPrice{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+}
+
+.labelProduct-left{
+    -fx-alignment: center-left;
+}
+.labelProduct-right{
+    -fx-alignment: center-right;
+}
+
+.labelTableResult{
+    -fx-background-color: #EDEBE9;
+    -fx-text-fill: black;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 12px;
+    -fx-alignment: center-right;
+}
+
+.labelTableResultPrice{
+    -fx-background-color: #EDEBE9;
+    -fx-text-fill: black;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+}
+
+.labelTableResultEnd , .labelTableResultEndPrice{
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+
+.labelTableResultEndPrice{
+    -fx-font-size: 16px;
+
+}
+
+.labelLastRowTransparent{
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-border-width: 0;
+    -fx-border-color: black;
+}
+
+#rootAnchorPane {
+    -fx-padding: 0;
+    /*-fx-background-color: MAIN_COLOR_DARK;*/
+    -fx-background-color: #ffffff;
+}
+
+#anchorPaneIntoScrollPane{
+    -fx-background-color: #ffffff;
+    -fx-padding: 5px;
+    /*-fx-padding: 0px;*/
+}
+
+#anchorPaneMenu, #anchorPaneResultMenu {
+    -fx-background-color: BACKGROUND_COLOR_2;
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 0;
+
+    -fx-background-image: url(../../images/background_header.png);
+    -fx-background-size:1400px;
+
+}
+
+#gridPaneTop {
+    -fx-grid-lines-visible: false;
+    /*-fx-border-width:  0.5;*/
+
+    -fx-hgap: 0;
+    -fx-vgap: 0;
+    -fx-alignment: center;
+
+    -fx-background-repeat: repeat-y;
+    -fx-background-position: left 160;
+    /*-fx-background-size: 278px 464px;*/
+    -fx-background-size: 600px 900px;
+
+    /*-fx-background-color: null;*/
+    -fx-background-color: #ffffff;
+    /*-fx-background-color: red;*/
+    -fx-padding: 0;
+}
+
+
+#btnDeleteRow {
+    -fx-border-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 20px 20px;
+    -fx-min-height: 25px;
+    -fx-min-width: 25px;
+    -fx-max-height: 25px;
+    -fx-max-width: 25px;
+    -fx-background-radius: 2.0px;
+    -fx-background-color: null;
+    -fx-background-image: url(../../icons/delete.png);
+}
+
+#btnDeleteRow:hover {
+    -fx-background-color: #666666;
+}
+
+#btnDeleteRow:pressed {
+    -fx-background-color: #878787;
+}
+
+
+#btnCurrencyUpdate, #btnCurrencyApply, #btnPrint, #btnAttachSketchImage, #btnDeleteSketchImage, #btnReceiptLog  {
+    -fx-border-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 20px 20px;
+    -fx-min-height: 25px;
+    -fx-min-width: 25px;
+    -fx-max-height: 25px;
+    -fx-max-width: 25px;
+    -fx-background-radius: 2.0px;
+    -fx-background-color: null;
+
+}
+
+#btnPrintQuickly{
+
+    -fx-text-fill: MAIN_TEXT_COLOR_3;
+    -fx-background-color: none;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-background-position: left center;
+    -fx-background-size: 20px 20px;
+    -fx-background-repeat: no-repeat;
+    -fx-label-padding: 0px 0px 0px 20px;
+}
+
+
+#btnCurrencyUpdate:hover, #btnCurrencyApply:hover, #btnPrint:hover,
+#btnAttachSketchImage:hover, #btnDeleteSketchImage:hover, #btnPrintQuickly:hover, #btnReceiptLog:hover {
+    -fx-background-color:linear-gradient(to bottom, rgba(137, 183, 157, 0.4), rgba(137, 183, 157, 0.1));
+    -fx-background-radius: 2px;
+    -fx-border-radius: 2px;
+    -fx-border-width: 1px;
+    -fx-border-color: linear-gradient(to bottom, rgba(137, 183, 157, 0.4), rgba(137, 183, 157, 0.0));
+}
+
+#btnCurrencyUpdate:pressed, #btnCurrencyApply:pressed, #btnPrint:pressed,
+#btnAttachSketchImage:pressed, #btnDeleteSketchImage:pressed, #btnPrintQuickly:pressed, #btnReceiptLog:pressed {
+    -fx-background-color:linear-gradient(to bottom, rgba(137, 183, 157, 1), rgba(137, 183, 157, 0.4));
+    -fx-background-radius: 2px;
+    -fx-border-radius: 2px;
+    -fx-border-width: 1px;
+    -fx-border-color: linear-gradient(to bottom, rgba(137, 183, 157, 1), rgba(137, 183, 157, 0.0));
+}
+
+#btnCurrencyUpdate {
+    -fx-background-image: url(../../icons/ReceiptManager/icons8_refresh_80px.png);
+}
+#btnCurrencyApply {
+    -fx-background-image: url(../../icons/ReceiptManager/icons8_Done_80px.png);
+}
+#btnPrint {
+    -fx-background-image: url(icons/print.png);
+}
+
+#btnReceiptLog {
+    -fx-background-image: url(../../icons/ReceiptManager/icons8_log_240px.png);
+}
+
+#btnPrintQuickly {
+    -fx-background-image: url(icons/toPDF.png);
+
+}
+
+#btnDeleteSketchImage {
+    -fx-background-image: url(../../icons/ReceiptManager/icons8_Delete_100px.png);
+}
+#btnAttachSketchImage {
+    -fx-background-image: url(../../icons/ReceiptManager/icons8_attach_80px.png);
+}
+
+#btnDeleteSketchImage {
+    -fx-background-image: url(../../icons/ReceiptManager/icons8_Delete_100px.png);
+}
+
+#hBoxDetalizationMenu{
+    -fx-alignment: center;
+    -fx-spacing: 0;
+    -fx-padding: 0;
+    -fx-border-insets: 0;
+}
+#LabelDetalization{
+    -fx-text-fill: TEXT_COLOR;
+    -fx-border-width: 0;
+    -fx-padding: 0 10 0 10;
+}
+#toggleButtonFullReceipt{
+    -fx-border-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 20px 20px;
+    -fx-min-height: 23px;
+    -fx-min-width: 50px;
+    -fx-max-height: 23px;
+    -fx-max-width: 50px;
+    -fx-background-radius: 0px 0px 0px 0px;
+    -fx-background-color: null;
+    -fx-background-image: url(icons/list_60px.png);
+}
+#toggleButtonShortReceipt{
+    -fx-border-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 15px 15px;
+    -fx-min-height: 23px;
+    -fx-min-width: 50px;
+    -fx-max-height: 23px;
+    -fx-max-width: 50px;
+    -fx-background-radius: 0px 0px 0px 0px;
+    -fx-background-color: null;
+    -fx-background-image: url(icons/list_60px.png);
+}
+
+#toggleButtonFullReceipt:hover, #toggleButtonShortReceipt:hover{
+    -fx-background-color:linear-gradient(to bottom, rgba(137, 183, 157, 0.4), rgba(137, 183, 157, 0.1));
+    -fx-background-radius: 2px;
+    -fx-border-radius: 2px;
+    -fx-border-width: 1px;
+    -fx-border-color: linear-gradient(to bottom, rgba(137, 183, 157, 0.4), rgba(137, 183, 157, 0.0));
+}
+#toggleButtonFullReceipt:selected, #toggleButtonShortReceipt:selected{
+    -fx-background-color:linear-gradient(to bottom, rgba(137, 183, 157, 1), rgba(137, 183, 157, 0.4));
+    -fx-background-radius: 2px;
+    -fx-border-radius: 2px;
+    -fx-border-width: 1px;
+    -fx-border-color: linear-gradient(to bottom, rgba(137, 183, 157, 1), rgba(137, 183, 157, 0.0));
+}
+
+
+/*.label{*/
+/*    -fx-alignment: center;*/
+/*    -fx-text-alignment: center;*/
+/*    -fx-font-size: 12;*/
+/*    !*-fx-content-display: center;*!*/
+/*    -fx-border-width: 1;*/
+/*    -fx-border-style: solid centered;*/
+/*    !*-fx-padding: 0 5 0 5;*!*/
+/*    !*-fx-border-radius: 0;*!*/
+/*    !*-fx-border-color: RECEIPT_BORDER_COLOR_2;*!*/
+/*    -fx-wrap-text: true;*/
+/*    -fx-text-fill: RECEIPT_COLOR_TEXT;*/
+/*}*/
+
+#labelUSDHeader, #labelEURHeader, #labelNotification{
+    -fx-alignment: center-right;
+    -fx-border-width: 0;
+    -fx-text-fill: TEXT_COLOR;
+}
+
+
+
+#anchorPaneButtonsSketchImage{
+    -fx-border-width: 0;
+    -fx-border-style: solid inside;
+}
+
+#sketchPane{
+     -fx-border-style: solid inside;
+     -fx-border-width: 0;
+     -fx-border-color: RECEIPT_BORDER_COLOR_2;
+ }
+#LabelDetalization{
+    -fx-font-family: "Segoe UI";
+    -fx-text-fill: white;
+}
+
+.label-divider{
+    -fx-border-width: 0;
+}
+
+.hbox-printing{
+    -fx-spacing: 5;
+}

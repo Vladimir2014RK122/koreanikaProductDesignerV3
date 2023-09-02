@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="anchorPaneRoot" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane id="anchorPaneTopMenu" layoutX="120.0" layoutY="8.0" maxHeight="30.0" minHeight="30.0"
+                    prefHeight="200.0" prefWidth="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                    AnchorPane.topAnchor="0.0">
+            <children>
+                <Button id="btnScaleMinus" layoutX="215.0" layoutY="4.0" maxHeight="25.0" maxWidth="25.0"
+                        mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.bottomAnchor="1.0"
+                        AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="1.0">
+                    <font>
+                        <Font size="9.0"/>
+                    </font>
+                </Button>
+                <Button id="btnScalePlus" layoutX="251.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0"
+                        prefWidth="25.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="230.0"
+                        AnchorPane.topAnchor="1.0">
+                    <font>
+                        <Font size="8.0"/>
+                    </font>
+                </Button>
+                <Button id="btnRotateRight" layoutX="302.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0"
+                        prefWidth="25.0" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="1.0">
+                    <tooltip>
+                        <Tooltip text="Поворот -90"/>
+                    </tooltip>
+                </Button>
+                <Button id="btnRotateLeft" layoutX="333.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0"
+                        prefWidth="25.0" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="1.0">
+                    <tooltip>
+                        <Tooltip text="Поворот +90"/>
+                    </tooltip>
+                </Button>
+                <Button id="btnCenter" layoutX="336.0" layoutY="3.0" mnemonicParsing="false" prefHeight="25.0"
+                        prefWidth="25.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="350.0"
+                        AnchorPane.topAnchor="1.0">
+                    <tooltip>
+                        <Tooltip text="Поворот +90"/>
+                    </tooltip>
+                </Button>
+                <Button id="btnDelete" layoutX="387.0" layoutY="3.0" mnemonicParsing="false" prefHeight="25.0"
+                        prefWidth="25.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="380.0"
+                        AnchorPane.topAnchor="1.0">
+                    <tooltip>
+                        <Tooltip text="Поворот +90"/>
+                    </tooltip>
+                </Button>
+            </children>
+        </AnchorPane>
+        <AnchorPane id="anchorPaneBottomMenu" layoutX="114.0" layoutY="319.0" maxHeight="30.0" minHeight="50.0"
+                    prefHeight="200.0" prefWidth="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0">
+            <children>
+                <Button id="btnSave" layoutX="64.0" layoutY="2.0" maxHeight="25.0" mnemonicParsing="false"
+                        prefHeight="25.0" prefWidth="80.0" text="Сохранить" textAlignment="CENTER"
+                        AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0"/>
+            </children>
+        </AnchorPane>
+        <SplitPane id="splitPaneMain" dividerPositions="0.32166666666666666, 0.7" layoutX="181.0" layoutY="100.0"
+                   prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+            <items>
+                <AnchorPane id="anchorPaneAccordionZone" maxWidth="180.0" minHeight="0.0" minWidth="180.0"
+                            prefHeight="160.0" prefWidth="100.0"/>
+                <AnchorPane id="anchorPaneWorkZone" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <ScrollPane id="scrollPaneWorkZone" layoutX="51.0" layoutY="70.0" prefHeight="200.0"
+                                    prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <content>
+                                <Pane id="workPane" prefHeight="200.0" prefWidth="200.0"/>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </AnchorPane>
+                <AnchorPane id="anchorPaneRootRightZone" maxWidth="160.0" prefHeight="340.0" prefWidth="234.0">
+                    <children>
+                        <SplitPane id="splitPaneRightZone" dividerPositions="0.55" layoutX="-30.0" layoutY="14.0"
+                                   orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0"
+                                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <AnchorPane id="anchorPaneAnchorZone" maxHeight="181.0" minHeight="181.0"
+                                            minWidth="177.0" prefHeight="100.0" prefWidth="160.0">
+                                    <children>
+                                        <TextField id="textFieldToLeft" layoutX="8.0" layoutY="48.0" prefHeight="25.0"
+                                                   prefWidth="40.0" AnchorPane.rightAnchor="130.0"
+                                                   AnchorPane.topAnchor="50.0"/>
+                                        <TextField id="textFieldToRight" layoutX="127.0" layoutY="48.0"
+                                                   prefHeight="25.0" prefWidth="40.0" AnchorPane.rightAnchor="10.0"
+                                                   AnchorPane.topAnchor="50.0"/>
+                                        <TextField id="textFieldToTop" layoutX="70.0" layoutY="8.0" prefHeight="25.0"
+                                                   prefWidth="40.0" AnchorPane.rightAnchor="70.0"
+                                                   AnchorPane.topAnchor="10.0"/>
+                                        <TextField id="textFieldToBottom" layoutX="70.0" layoutY="85.0" prefWidth="40.0"
+                                                   AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="90.0"/>
+                                        <RadioButton id="radioBtnAnchorToShape" layoutX="14.0" layoutY="160.0"
+                                                     mnemonicParsing="false" text="Фигура" visible="false"
+                                                     AnchorPane.rightAnchor="95.0" AnchorPane.topAnchor="160.0"/>
+                                        <RadioButton id="radioBtnAnchorToItem" layoutX="89.0" layoutY="146.0"
+                                                     mnemonicParsing="false" text="Элемент" visible="false"
+                                                     AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="160.0"/>
+                                        <Label layoutX="8.0" layoutY="135.0" text="Привязка к:" visible="false"
+                                               AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="130.0"/>
+                                        <Separator layoutY="125.0" prefWidth="200.0" visible="false"
+                                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                                   AnchorPane.topAnchor="125.0"/>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane id="anchorPaneRootModelsZone" minHeight="50.0" minWidth="177.0"
+                                            prefHeight="100.0" prefWidth="160.0">
+                                    <children>
+                                        <ScrollPane id="scrollPaneModelsZone" prefHeight="200.0" prefWidth="200.0"
+                                                    AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+
+</AnchorPane>

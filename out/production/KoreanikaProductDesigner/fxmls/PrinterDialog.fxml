@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="rootAnchorPane" prefHeight="350.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ChoiceBox id="choiceBoxPrinter" layoutX="80.0" layoutY="14.0" prefWidth="150.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="10.0" />
+      <Label layoutX="20.0" layoutY="18.0" prefHeight="25.0" text="Принтер:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+      <Label layoutX="265.0" layoutY="10.0" prefHeight="25.0" text="Копии:" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="10.0" />
+      <TextField id="textFieldCopies" layoutX="321.0" layoutY="10.0" prefHeight="25.0" prefWidth="38.0" text="1" AnchorPane.leftAnchor="310.0" AnchorPane.topAnchor="10.0" />
+      <Button id="btnCopiesUp" alignment="CENTER" contentDisplay="CENTER" layoutX="357.0" layoutY="10.0" maxHeight="10.0" minHeight="10.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="10.0" />
+      <Button id="btnCopiesDown" layoutX="350.0" layoutY="30.0" maxHeight="10.0" minHeight="10.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="25.0" />
+      <Separator layoutY="46.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="50.0" />
+      <Label layoutX="10.0" layoutY="55.0" prefHeight="25.0" text="Страницы для печати:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="50.0" />
+      <RadioButton id="toggleBtnAllPages" layoutX="18.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" text="Все" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0" />
+      <RadioButton id="toggleBtnCurrentPage" layoutX="117.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" text="Текущая" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="80.0" />
+      <RadioButton id="toggleBtnCustomPages" disable="true" layoutX="217.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" text="Страницы" visible="false" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="80.0" />
+      <TextField id="textFieldPages" disable="true" layoutX="260.0" layoutY="71.0" prefHeight="25.0" prefWidth="77.0" text="1" visible="false" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="80.0">
+         <tooltip>
+            <Tooltip text="1-2 или 2,3,4 или 4 или 1-2,3,4" />
+         </tooltip></TextField>
+      <Separator layoutY="114.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="120.0" />
+      <Label layoutX="10.0" layoutY="129.0" prefHeight="25.0" text="Параметры страницы:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="120.0" />
+      <ChoiceBox id="choiceBoxPageSize" layoutX="14.0" layoutY="145.0" prefHeight="25.0" prefWidth="98.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="150.0" />
+      <TextField id="textFieldScale" disable="true" layoutX="209.0" layoutY="145.0" prefHeight="25.0" prefWidth="38.0" text="1" visible="false" AnchorPane.leftAnchor="210.0" AnchorPane.topAnchor="150.0" />
+      <Label disable="true" layoutX="148.0" layoutY="145.0" prefHeight="25.0" text="Масштаб:" visible="false" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="150.0" />
+      <Label disable="true" layoutX="253.0" layoutY="145.0" prefHeight="25.0" text="\%" visible="false" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="150.0" />
+      <RadioButton id="toggleBtnLandscape" layoutX="121.0" layoutY="214.0" mnemonicParsing="false" prefHeight="25.0" text="Альбомная" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="210.0" />
+      <RadioButton id="toggleBtnPortrait" layoutX="22.0" layoutY="214.0" mnemonicParsing="false" prefHeight="25.0" text="Портретная" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="210.0" />
+      <Label layoutX="14.0" layoutY="194.0" prefHeight="25.0" text="Ориентация:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="180.0" />
+      <Slider id="sliderPreview" layoutX="427.0" layoutY="213.0" prefHeight="14.0" prefWidth="156.0" AnchorPane.topAnchor="260.0" />
+      <Separator layoutX="390.0" layoutY="5.0" orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="45.0" AnchorPane.rightAnchor="194.0" AnchorPane.topAnchor="0.0" />
+      <Separator layoutX="6.0" layoutY="359.0" prefWidth="200.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Button id="btnPrint" layoutX="419.0" layoutY="361.0" mnemonicParsing="false" prefWidth="70.0" text="Печать" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="100.0" />
+      <Button id="btnCancel" layoutX="533.0" layoutY="361.0" mnemonicParsing="false" prefWidth="70.0" text="Отменить" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <Label id="labelPreview" alignment="CENTER" layoutX="444.0" layoutY="220.0" prefHeight="25.0" prefWidth="122.0" text="Стр. 1 из 15" AnchorPane.bottomAnchor="55.0" AnchorPane.rightAnchor="35.0" />
+      <Label layoutX="10.0" layoutY="262.0" prefHeight="25.0" text="Поля:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="240.0" />
+      <TextField id="textFieldMarginLeft" layoutX="95.0" layoutY="262.0" prefHeight="25.0" prefWidth="38.0" text="1" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="270.0" />
+      <Label layoutX="55.0" layoutY="262.0" prefHeight="25.0" text="слева:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="270.0" />
+      <Label layoutX="143.0" layoutY="262.0" prefHeight="25.0" text="справа:" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="270.0" />
+      <TextField id="textFieldMarginTop" layoutX="272.0" layoutY="262.0" prefHeight="25.0" prefWidth="38.0" text="1" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="270.0" />
+      <Label layoutX="230.0" layoutY="260.0" prefHeight="25.0" text="сверху:" AnchorPane.leftAnchor="210.0" AnchorPane.topAnchor="270.0" />
+      <TextField id="textFieldMarginRight" layoutX="181.0" layoutY="262.0" prefHeight="25.0" prefWidth="38.0" text="1" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="270.0" />
+      <Label layoutX="320.0" layoutY="261.0" prefHeight="25.0" text="снизу:" AnchorPane.leftAnchor="310.0" AnchorPane.topAnchor="270.0" />
+      <TextField id="textFieldMarginBottom" layoutX="362.0" layoutY="263.0" prefHeight="25.0" prefWidth="38.0" text="1" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="270.0" />
+      <Pane id="panePreviewRoot" layoutX="112.0" layoutY="-188.0" maxHeight="240.0" maxWidth="170.0" minHeight="240.0" minWidth="170.0" prefHeight="240.0" prefWidth="170.0" style="-fx-background-color: grey;" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Pane id="panePreview" layoutX="33.0" layoutY="53.0" prefHeight="148.0" prefWidth="105.0" style="-fx-background-color: white;" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

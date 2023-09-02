@@ -1,0 +1,30 @@
+
+
+
+#labelMaterial {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelNull2 {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelNull3 {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelNull4 {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}

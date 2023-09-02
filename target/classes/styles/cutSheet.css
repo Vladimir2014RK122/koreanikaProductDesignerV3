@@ -1,0 +1,49 @@
+@import url("rootTheme.css");
+
+#cutPane {
+    -fx-background-color: MAIN_COLOR_BLACK;
+    /*-fx-background-color: #F2DBC7;*/
+    -fx-padding: 0, 0, 0, 0;
+}
+
+
+#btnRotateLeft90, #btnRotateRight90, #btnRotateCustom, #btnAddDimH, #btnAddDimV {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 25px 25px;
+    -fx-min-height: 30px;
+    -fx-min-width: 30px;
+    -fx-max-height: 30px;
+    -fx-max-width: 30px;
+    /*-fx-background-radius: 2.0px ;*/
+    -fx-background-color: null;
+}
+
+#btnRotateLeft90:hover, #btnRotateRight90:hover, #btnRotateCustom:hover, #btnAddDimH:hover, #btnAddDimV:hover {
+    -fx-background-color: #666666;
+}
+
+#btnRotateLeft90:pressed, #btnRotateRight90:pressed, #btnRotateCustom:pressed, #btnAddDimH:pressed, #btnAddDimV:pressed {
+    -fx-background-color: #878787;
+}
+
+
+#btnRotateLeft90 {
+    -fx-background-image: url(icons/rotate_left_90.png);
+}
+
+#btnRotateRight90 {
+    -fx-background-image: url(icons/rotate_right_90.png);
+}
+
+#btnRotateCustom {
+    -fx-background-image: url(icons/rotate_custom.png);
+}
+
+#btnAddDimH {
+    -fx-background-image: url(icons/dimensionH.png);
+}
+
+#btnAddDimV {
+    -fx-background-image: url(icons/dimensionV.png);
+}

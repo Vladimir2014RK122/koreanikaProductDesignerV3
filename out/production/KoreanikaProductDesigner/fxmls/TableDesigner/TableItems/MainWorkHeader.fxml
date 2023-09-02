@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="anchorPaneRoot" minHeight="50.0" prefHeight="50.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label id="labelMain" alignment="CENTER" layoutX="254.0" layoutY="6.0" prefHeight="25.0" text="Обязательные работы" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <HBox layoutX="31.0" layoutY="-14.0" prefHeight="25.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+                <Label id="labelNumber" alignment="CENTER" minWidth="20.0" prefHeight="25.0" prefWidth="20.0" text="№">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+                <Label id="labelName" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" text="Наименование изделия">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+                <Label id="labelImage" alignment="CENTER" maxHeight="110.0" minWidth="110.0" prefHeight="25.0" prefWidth="110.0" text="Изображение">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+                <Label id="labelMaterial" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="140.0" prefHeight="25.0" prefWidth="140.0" text="Материал">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+                <Label id="labelNull1" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="60.0" prefHeight="25.0" prefWidth="60.0">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+                <Label id="labelNull2" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="50.0" prefHeight="25.0" prefWidth="50.0">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+                <Label id="labelNull3" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="50.0" prefHeight="25.0" prefWidth="50.0">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+                <Label id="labelQuantity" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="50.0" prefHeight="25.0" prefWidth="50.0" text="Кол-во">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+                <Label id="labelPrice" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="50.0" prefHeight="25.0" prefWidth="50.0" text="Стоимость">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+                <Label id="labelButtons" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="74.0" prefHeight="25.0" prefWidth="74.0" />
+            </children>
+        </HBox>
+    </children>
+   <stylesheets>
+      <URL value="@../../../styles/rootTheme.css" />
+      <URL value="@../../../styles/TableDesigner/MainWorkHeader.css" />
+   </stylesheets>
+</AnchorPane>

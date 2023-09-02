@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="anchorPaneRootCutShapeInfo" minWidth="200.0" prefHeight="190.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets>
+        <URL value="@../../styles/mainWindow.css" />
+        <URL value="@../../styles/cutShapeInfo.css" />
+    </stylesheets>
+    <children>
+        <Label layoutX="14.0" layoutY="33.0" prefHeight="30.0" prefWidth="104.0" text="Номер фигуры:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="30.0" />
+        <Label alignment="CENTER" layoutX="43.0" layoutY="7.0" prefHeight="30.0" prefWidth="115.0" text="Информация об изделии" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+        <Separator layoutY="45.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+        <Label layoutX="10.0" layoutY="65.0" prefHeight="30.0" prefWidth="66.0" text="Материал:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="55.0" />
+        <Label layoutX="10.0" layoutY="95.0" prefHeight="30.0" prefWidth="127.0" text="Толщина материала:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="105.0" />
+        <Label layoutX="10.0" layoutY="131.0" prefHeight="30.0" prefWidth="66.0" text="Ширина" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="130.0" />
+        <Label layoutX="10.0" layoutY="161.0" prefHeight="30.0" prefWidth="66.0" text="Высота:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="155.0" />
+        <Label id="labelShapeNumber" alignment="CENTER_RIGHT" layoutX="71.0" layoutY="42.0" maxWidth="110.0" prefHeight="30.0" prefWidth="42.0" text="10" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0" />
+        <Label id="labelShapeMaterial" alignment="CENTER_RIGHT" layoutX="175.0" layoutY="65.0" maxWidth="116.0" prefHeight="50.0" prefWidth="116.0" text="материалавыавыавыавыа" wrapText="true" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0" />
+        <Label id="labelDepth" alignment="CENTER_RIGHT" layoutX="80.0" layoutY="95.0" maxWidth="110.0" prefHeight="30.0" text="15мм" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="105.0" />
+        <Label id="labelShapeWidth" alignment="CENTER_RIGHT" layoutX="156.0" layoutY="131.0" maxWidth="110.0" prefHeight="30.0" text="15мм" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="130.0" />
+        <Label id="labelShapeHeight" alignment="CENTER_RIGHT" layoutX="156.0" layoutY="155.0" maxWidth="110.0" prefHeight="30.0" text="15мм" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="155.0" />
+    </children>
+</AnchorPane>

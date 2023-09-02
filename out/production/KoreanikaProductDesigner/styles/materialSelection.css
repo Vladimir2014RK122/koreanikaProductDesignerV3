@@ -1,0 +1,52 @@
+@import url("rootTheme.css");
+
+#rootAnchorPane{
+     -fx-padding: 0;
+     -fx-background-color: MAIN_COLOR_DARK;
+ }
+
+
+#btnAnalogShowHide{
+/*     -fx-background-repeat: no-repeat ;
+     -fx-background-image: url(icons/cut_view.png);
+     -fx-min-height: 25px;
+     -fx-min-width: 25px;
+     -fx-max-height: 28px;
+     -fx-max-width: 100px;
+     -fx-pref-width: 100px;
+     -fx-background-position: 75,0,0,0;
+     -fx-text-alignment: right;
+     -fx-border-color : #646464;
+     -fx-border-radius: 5.0px;
+     -fx-background-radius: 5.0px;
+     -fx-label-padding: 0;
+     -fx-content-display: left;*/
+}
+
+#labelSelectedMaterialPart1{
+    -fx-font-weight: bold;
+}
+#labelSelectedMaterialPart2{
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-border-width: 0 0 2 0;
+/*        -fx-border-radius: 5.0px;
+        -fx-background-radius: 5.0px;
+        -fx-background-color: #4C5052;*/
+    -fx-border-color : #646464;
+    -fx-alignment: center;
+}
+
+#labelNotification1, #labelNotification2{
+    -fx-font-size: 12;
+    -fx-text-fill: red;
+}
+
+#labelPriceMaterialInList{
+    -fx-font-weight: bold;
+    -fx-border-radius: 5.0px;
+    -fx-background-radius: 5.0px;
+    -fx-background-color: #4C5052;
+    -fx-border-color : #646464;
+    -fx-alignment: center;
+}

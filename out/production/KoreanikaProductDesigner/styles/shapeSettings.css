@@ -1,0 +1,152 @@
+@import url("rootTheme.css");
+
+
+#anchorPaneSettingsRoot{
+    -fx-padding: 0;
+    -fx-background-color: MAIN_COLOR_LIGHT;
+}
+
+#hBoxHeader{
+    -fx-background-color:MAIN_COLOR_LIGHT;
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-insets: 0px;
+}
+
+
+
+
+
+
+
+
+
+
+
+#rootAnchorPane{
+
+    -fx-background-color: MAIN_COLOR_LIGHT;
+}
+
+
+/* EDGES ICONS --->>>*/
+#imageViewEdgeUpIcon{
+    -fx-image: url(icons/arrow_up.png);
+}
+#imageViewEdgeDownIcon{
+    -fx-image: url(icons/arrow_down.png);
+}
+#imageViewEdgeLeftIcon{
+    -fx-image: url(icons/arrow_left.png);
+}
+#imageViewEdgeRightIcon{
+    -fx-image: url(icons/arrow_right.png);
+}
+
+
+
+#imageViewEdgeAIcon, #imageViewEdgeBIcon, #imageViewEdgeCIcon, #imageViewEdgeDIcon, #imageViewEdgeEIcon, #imageViewEdgeRIcon{
+    -fx-scale-x: 0.5px;
+    -fx-scale-y: 0.5px;
+}
+#imageViewEdgeAIcon{
+    -fx-image: url(icons/a.png);
+}
+#imageViewEdgeBIcon{
+    -fx-image: url(icons/b.png);
+}
+#imageViewEdgeCIcon{
+    -fx-image: url(icons/c.png);
+}
+#imageViewEdgeDIcon{
+    -fx-image: url(icons/d.png);
+}
+#imageViewEdgeEIcon{
+    -fx-image: url(icons/e.png);
+}
+#imageViewEdgeRIcon{
+    -fx-image: url(icons/r.png);
+}
+/* EDGES ICONS <<<---*/
+
+/* ROTATE BUTTONS --->>>*/
+#btnRotateLeft, #btnRotateRight{
+    -fx-border-color : transparent;
+    -fx-background-repeat: no-repeat ;
+    -fx-background-position: center ;
+   	-fx-background-size: 20px 20px;
+   	-fx-min-height: 25px;
+   	-fx-min-width: 25px;
+   	-fx-max-height: 25px;
+   	-fx-max-width: 25px;
+   	-fx-background-radius: 5.0px ;
+   	-fx-background-color: null;
+}
+#btnRotateLeft:hover, #btnRotateRight:hover{
+	-fx-background-color: #666666;
+}
+#btnRotateLeft:pressed, #btnRotateRight:pressed{
+	-fx-background-color: #878787;
+}
+
+
+#btnRotateLeft{
+   	-fx-background-image: url(icons/rotate_left_90.png);
+}
+
+#btnRotateRight{
+   	-fx-background-image: url(icons/rotate_right_90.png);
+}
+/* ROTATE BUTTONS <<<---*/
+
+/* DELETE EDGES BUTTONS -->>>*/
+#btnEdgeUpDelete, #btnEdgeDownDelete, #btnEdgeLeftDelete,  #btnEdgeRightDelete,
+#btnEdgeADelete, #btnEdgeBDelete, #btnEdgeCDelete, #btnEdgeDDelete, #btnEdgeEDelete, #btnEdgeRadiusDelete{
+    -fx-background-repeat: no-repeat;
+	-fx-background-position: center;
+	-fx-background-size: 25px 25px;
+	-fx-min-height: 30px;
+	-fx-min-width: 30px;
+	-fx-max-height: 30px;
+	-fx-max-width: 30px;
+	-fx-background-radius: 5 ;
+	-fx-background-color: null;
+    -fx-border-radius: 5;
+    -fx-background-image: url(icons/delete.png);
+}
+#btnEdgeUpDelete:hover, #btnEdgeDownDelete:hover, #btnEdgeLeftDelete:hover,  #btnEdgeRightDelete:hover,
+#btnEdgeADelete:hover, #btnEdgeBDelete:hover, #btnEdgeCDelete:hover, #btnEdgeDDelete:hover, #btnEdgeEDelete:hover, #btnEdgeRadiusDelete:hover{
+    -fx-background-color: #666666;
+}
+#btnEdgeUpDelete:pressed, #btnEdgeDownDelete:pressed, #btnEdgeLeftDelete:pressed,  #btnEdgeRightDelete:pressed,
+#btnEdgeADelete:pressed, #btnEdgeBDelete:pressed, #btnEdgeCDelete:pressed, #btnEdgeDDelete:pressed, #btnEdgeEDelete:pressed, #btnEdgeRadiusDelete:pressed{
+    -fx-background-color: #878787;
+}
+#btnEdgeUpDelete:focused, #btnEdgeDownDelete:focused, #btnEdgeLeftDelete:focused,  #btnEdgeRightDelete:focused,
+#btnEdgeADelete:focused, #btnEdgeBDelete:focused, #btnEdgeCDelete:focused, #btnEdgeDDelete:focused, #btnEdgeEDelete:focused, #btnEdgeRadiusDelete:focused{
+    -fx-background-color: null;
+    -fx-padding: 0;
+}
+
+#btnEdgeUpDelete{
+	-fx-background-image: url(icons/delete.png);
+}
+#btnEdgeDownDelete{
+	-fx-background-image: url(icons/delete.png);
+}
+#btnEdgeLeftDelete{
+ 	-fx-background-image: url(icons/delete.png);
+}
+#btnEdgeRightDelete{
+ 	-fx-background-image: url(icons/delete.png);
+}
+/* DELETE EDGES BUTTONS <<<--*/
+
+#paneShapeView{
+
+    -fx-background-radius: 5 ;
+	-fx-background-color: #00000010;
+    -fx-border-radius: 5;
+    -fx-border-color: black;
+}

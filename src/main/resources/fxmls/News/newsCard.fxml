@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="cardBackground" prefHeight="350.0" prefWidth="210.0" styleClass="cardBackground" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox id="vBox" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView id="imageView" fitHeight="100.0" fitWidth="210.0" pickOnBounds="true" preserveRatio="true" />
+            <Label id="labelHeader" prefHeight="40.0" prefWidth="210.0" text="Заголовок, не более &#10;двух строк" />
+            <Label id="labelText" prefWidth="210.0" text="Для современного мира &#10;семантический разбор &#10;внешних противодействий &#10;играет важную роль в &#10;формировании &#10;экономической &#10;целесообразности &#10;принимаемых решений. Имеется спорная точка зрения, гласящая примерно " />
+            <HBox prefHeight="30.0" prefWidth="210.0" styleClass="hboxControls">
+               <children>
+                  <Hyperlink id="hyperlink" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="27.0" prefWidth="170.0" text="Узнать больше" />
+                  <Button id="btnMaxMin" mnemonicParsing="false" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+   <stylesheets>
+      <URL value="@../../styles/colorsKoreanika.css" />
+      <URL value="@../../styles/rootTheme.css" />
+      <URL value="@../../styles/WindowDecorator.css" />
+      <URL value="@../../styles/News/NewsBar.css" />
+      <URL value="@../../styles/News/newsCard.css" />
+   </stylesheets>
+</AnchorPane>

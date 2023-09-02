@@ -1,0 +1,20 @@
+@import url("rootTheme.css");
+
+
+#anchorPaneRoot {
+    -fx-padding: 0;
+    -fx-background-color: MAIN_COLOR_DARK;
+}
+
+
+.toggle-button {
+    -fx-base: transparent
+}
+
+.toggle-button:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+.toggle-button:selected:focused {
+    -fx-background-color: -fx-focus-color;
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="anchorPaneRoot" prefHeight="149.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Button id="btnCreateProject" layoutX="58.0" layoutY="103.0" mnemonicParsing="false" prefHeight="25.0"
+                prefWidth="205.0" text="Создать проект" AnchorPane.bottomAnchor="10.0"/>
+        <RadioButton id="radioBtnTableProject" layoutX="166.0" layoutY="66.0" mnemonicParsing="false"
+                     text="&quot;Табличный проект&quot;" AnchorPane.rightAnchor="20.0"/>
+        <RadioButton id="radioBtnSketchProject" layoutX="25.0" layoutY="66.0" mnemonicParsing="false"
+                     text="&quot;Эскизный проект&quot;" AnchorPane.leftAnchor="25.0"/>
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" layoutY="15.0" prefHeight="17.0"
+               prefWidth="278.0" text="Выберите тип создаваемого проекта:" textAlignment="CENTER"/>
+    </children>
+    <stylesheets>
+        <URL value="@../styles/rootTheme.css"/>
+        <URL value="@../styles/projectTypeSelectionWindow.css"/>
+    </stylesheets>
+</AnchorPane>

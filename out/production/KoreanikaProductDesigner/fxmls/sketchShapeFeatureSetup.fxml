@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="rootAnchorPane" prefHeight="450.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <stylesheets>
+      <URL value="@../styles/rootTheme.css" />
+      <URL value="@../styles/setupFeatures.css" />
+   </stylesheets>
+   <children>
+      <Button id="btnApply" layoutX="504.0" layoutY="360.0" mnemonicParsing="false" text="Применить" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <Button id="btnCancel" layoutX="25.0" layoutY="360.0" mnemonicParsing="false" text="Отменить" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+      <TextField id="textFieldLeftAnchor" layoutX="290.0" layoutY="90.0" prefHeight="30.0" prefWidth="50.0" />
+      <TextField id="textFieldTopAnchor" layoutX="374.0" layoutY="14.0" prefHeight="30.0" prefWidth="50.0" />
+      <TextField id="textFieldBottomAnchor" layoutX="374.0" layoutY="166.0" prefHeight="30.0" prefWidth="50.0" />
+      <TextField id="textFieldRightAnchor" layoutX="455.0" layoutY="90.0" prefHeight="30.0" prefWidth="50.0" />
+      <Pane layoutX="349.0" layoutY="55.0" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: blue;">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff491f" height="50.0" layoutX="25.0" layoutY="25.0" stroke="BLACK" strokeType="INSIDE" width="50.0" />
+            <Line endX="15.0" layoutX="5.0" layoutY="50.0" />
+            <Line endX="15.0" layoutX="80.0" layoutY="50.0" />
+            <Line endY="15.0" layoutX="50.0" layoutY="5.0" />
+            <Line endY="15.0" layoutX="50.0" layoutY="80.0" />
+         </children>
+      </Pane>
+      <ImageView id="imageViewInfo" fitHeight="390.0" fitWidth="260.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="289.0" layoutY="209.0" prefHeight="30.0" prefWidth="60.0" text="Модель:" />
+      <RadioButton id="radioBtnMod1" layoutX="290.0" layoutY="245.0" mnemonicParsing="false" text="300F&#9;300 x 160 x 140" />
+      <RadioButton id="radioBtnMod2" layoutX="290.0" layoutY="271.0" mnemonicParsing="false" text="300F&#9;300 x 160 x 140" />
+      <RadioButton id="radioBtnMod3" layoutX="290.0" layoutY="296.0" mnemonicParsing="false" text="300F&#9;300 x 160 x 140" />
+      <RadioButton id="radioBtnMod4" layoutX="290.0" layoutY="320.0" mnemonicParsing="false" text="300F&#9;300 x 160 x 140" />
+      <RadioButton id="radioBtnMod5" layoutX="290.0" layoutY="345.0" mnemonicParsing="false" text="300F&#9;300 x 160 x 140" />
+      <RadioButton id="radioBtnMod6" layoutX="290.0" layoutY="372.0" mnemonicParsing="false" text="300F&#9;300 x 160 x 140" />
+   </children>
+</AnchorPane>

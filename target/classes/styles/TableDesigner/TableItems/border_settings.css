@@ -1,0 +1,31 @@
+/*@import url("../../rootTheme.css");*/
+
+#anchorPaneRoot {
+    -fx-padding: 0;
+    -fx-background-color: MAIN_COLOR_DARK;
+}
+
+#toggleButtonBorderCut1, #toggleButtonBorderCut2, #toggleButtonBorderCut3, #toggleButtonBorderCut4,
+#toggleButtonBorderAngleCut1, #toggleButtonBorderAngleCut2 {
+    -fx-base: transparent
+}
+
+#toggleButtonBorderCut1:selected, #toggleButtonBorderCut2:selected,
+#toggleButtonBorderCut3:selected, #toggleButtonBorderCut4:selected,
+#toggleButtonBorderAngleCut1:selected, #toggleButtonBorderAngleCut2:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+#toggleButtonBorderCut1:selected:focused, #toggleButtonBorderCut2:selected:focused,
+#toggleButtonBorderCut3:selected:focused, #toggleButtonBorderCut4:selected:focused,
+#toggleButtonBorderAngleCut1:selected:focused, #toggleButtonBorderAngleCut2:selected:focused {
+    -fx-background-color: -fx-focus-color;
+}
+
+#labelPrice {
+    -fx-font-weight: bold;
+}
+
+
+
+

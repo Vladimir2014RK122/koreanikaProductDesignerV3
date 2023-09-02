@@ -1,0 +1,70 @@
+
+.label{
+    -fx-font-family: "Segoe UI Semilight";
+    -fx-text-fill: #242424;
+    -fx-font-size: 16px;
+}
+
+#rootAnchorPaneLogin{
+    -fx-background-image: url("images/LoginWindow/background_floor.png");
+    -fx-background-size: 100%;
+    -fx-background-repeat: repeat-x;
+    -fx-background-position: bottom;
+
+}
+
+#btnLogin{
+    -fx-background-color: #658B76;
+    -fx-text-fill: white;
+    -fx-pref-width: 164px;
+    -fx-pref-height: 44px;
+    -fx-font-size: 19;
+    -fx-background-radius: 2.74;
+    -fx-border-width: 0px;
+    /*-fx-border-color: #658B76;*/
+
+}
+
+#btnLogin:hover{
+    -fx-background-color: grey;
+}
+
+#btnLogin:pressed{
+    -fx-background-color: MAIN_COLOR_DARK;
+}
+
+
+#imageViewLogo{
+    -fx-image: url("images/LoginWindow/logo.png");
+    -fx-pref-width: 256px;
+    -fx-pref-height: 75px;
+    -fx-fit-to-height: true;
+}
+
+
+
+#labelHeader{
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 28;
+    -fx-text-fill: #907757;
+}
+
+#labelTextField{
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #4F5F56;
+
+}
+
+#textFieldLogin, #passwordField{
+    -fx-pref-width: 352px;
+    -fx-pref-height: 39px;
+    -fx-background-color: white;
+
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-padding: 0px 10px 0px 10px;
+
+    -fx-border-color: #EBE9E7 #EBE9E7 #838281 #EBE9E7;
+    -fx-border-radius: 6px;
+    -fx-border-width: 2px;
+}

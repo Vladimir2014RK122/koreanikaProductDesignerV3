@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="580.0" prefHeight="580.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ScrollPane id="scrollPane" hbarPolicy="NEVER" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <content>
+                <AnchorPane id="anchorPaneSettingsRoot" minHeight="580.0" prefHeight="580.0" prefWidth="250.0"
+                            stylesheets="@../styles/shapeSettings.css">
+                    <children>
+                        <HBox id="hBoxHeader" alignment="CENTER" layoutY="-36.0" prefHeight="30.0" prefWidth="200.0"
+                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Label prefHeight="30.0" text="Настройки"/>
+                            </children>
+                        </HBox>
+                        <Label layoutX="10.0" layoutY="261.0" prefHeight="30.0" prefWidth="100.0" text="Ширина (мм):"
+                               AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="160.0"/>
+                        <Label layoutX="10.0" layoutY="301.0" prefHeight="30.0" prefWidth="89.0" text="Высота(мм):"
+                               AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="200.0"/>
+                        <TextField id="textFieldWidth" layoutX="140.0" layoutY="261.0" prefHeight="30.0"
+                                   prefWidth="100.0" text="0" AnchorPane.rightAnchor="10.0"
+                                   AnchorPane.topAnchor="160.0"/>
+                        <TextField id="textFieldHeight" layoutX="140.0" layoutY="301.0" prefHeight="30.0"
+                                   prefWidth="100.0" text="0" AnchorPane.rightAnchor="10.0"
+                                   AnchorPane.topAnchor="200.0"/>
+                        <Label layoutX="10.0" layoutY="128.0" prefHeight="30.0" prefWidth="180.0"
+                               text="Материал  по умолчанию:" wrapText="true" AnchorPane.leftAnchor="10.0"
+                               AnchorPane.topAnchor="40.0"/>
+                        <CheckBox id="checkBoxMaterialDefault" layoutX="166.0" layoutY="134.0" mnemonicParsing="false"
+                                  prefHeight="30.0" prefWidth="17.0" AnchorPane.rightAnchor="10.0"
+                                  AnchorPane.topAnchor="40.0"/>
+                        <ChoiceBox id="choiceBoxMaterial" layoutX="138.0" layoutY="40.0" prefHeight="30.0"
+                                   prefWidth="130.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0"/>
+                        <Label layoutX="12.0" layoutY="47.0" prefHeight="30.0" prefWidth="79.0" text="Материал:"
+                               wrapText="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="80.0"/>
+                        <Group id="groupEdges" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+                               AnchorPane.topAnchor="380.0">
+                            <children>
+                                <Label layoutX="10.0" layoutY="370.0" prefHeight="30.0" prefWidth="150.0" text="Кромки:"
+                                       wrapText="true"/>
+                                <TextField id="textFieldEdgeHeight" layoutX="180.0" layoutY="450.0" prefHeight="30.0"
+                                           prefWidth="50.0" text="0"/>
+                                <Label layoutX="10.0" layoutY="450.0" prefHeight="30.0" prefWidth="163.0"
+                                       text="Высота кромки (мм):"/>
+                                <TextField id="textFieldBorderHeight" layoutX="180.0" layoutY="490.0" prefHeight="30.0"
+                                           prefWidth="50.0" text="0"/>
+                                <Label layoutX="10.0" layoutY="490.0" prefHeight="30.0" prefWidth="166.0"
+                                       text="Высота бортика (мм):"/>
+                                <CheckBox id="checkBoxDefaultHeights" layoutX="210.0" layoutY="410.0"
+                                          mnemonicParsing="false" prefHeight="30.0" prefWidth="17.0"/>
+                                <Label layoutX="10.0" layoutY="410.0" prefHeight="30.0" prefWidth="181.0"
+                                       text="Высоты по умолчанию:"/>
+                                <Label layoutX="10.0" layoutY="530.0" prefHeight="30.0" prefWidth="181.0"
+                                       text="Сохранить рисунок:"/>
+                                <CheckBox id="checkBoxSaveImage" layoutX="210.0" layoutY="530.0" mnemonicParsing="false"
+                                          prefHeight="30.0" prefWidth="17.0"/>
+                            </children>
+                        </Group>
+                        <Separator layoutY="239.0" prefHeight="3.0" prefWidth="250.0" AnchorPane.leftAnchor="0.0"
+                                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="250.0"/>
+                        <Separator layoutY="377.0" prefHeight="3.0" prefWidth="250.0" AnchorPane.leftAnchor="0.0"
+                                   AnchorPane.topAnchor="380.0"/>
+                        <TextField id="textFieldY" layoutX="27.0" layoutY="323.0" prefHeight="30.0" prefWidth="210.0"
+                                   text="0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="330.0"/>
+                        <TextField id="textFieldX" layoutX="27.0" layoutY="283.0" prefHeight="30.0" prefWidth="210.0"
+                                   text="0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="290.0"/>
+                        <Label layoutX="7.0" layoutY="323.0" prefHeight="30.0" prefWidth="18.0" text="Y"
+                               AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="330.0"/>
+                        <Label layoutX="7.0" layoutY="283.0" prefHeight="30.0" prefWidth="20.0" text="X"
+                               AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="290.0"/>
+                        <Label layoutX="7.0" layoutY="243.0" prefHeight="30.0" prefWidth="108.0" text="Расположение:"
+                               wrapText="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="250.0"/>
+                        <Label layoutX="10.0" layoutY="130.0" prefHeight="30.0" prefWidth="126.0"
+                               text="Толщина материала:" wrapText="true" AnchorPane.leftAnchor="10.0"
+                               AnchorPane.topAnchor="120.0"/>
+                        <ChoiceBox id="choiceBoxMaterialDepth" layoutX="136.0" layoutY="123.0" prefHeight="30.0"
+                                   prefWidth="101.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="120.0"/>
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

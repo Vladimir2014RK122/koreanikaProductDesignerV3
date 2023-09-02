@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="anchorPaneRoot" maxHeight="700.0" maxWidth="300.0" minHeight="700.0" minWidth="300.0" prefHeight="700.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <stylesheets>
+      <URL value="@../../../styles/rootTheme.css" />
+      <URL value="@../../../styles/TableDesigner/TableItems/stoneProduct_settings.css" />
+   </stylesheets>
+   <children>
+      <ChoiceBox id="choiceBoxElementType" layoutX="163.0" layoutY="14.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="10.0" />
+      <Label layoutX="14.0" layoutY="18.0" prefHeight="25.0" prefWidth="100.0" text="Тип элемента:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+      <Label layoutX="10.0" layoutY="41.0" prefHeight="25.0" prefWidth="100.0" text="Материал:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="45.0" />
+      <ChoiceBox id="choiceBoxMaterial" layoutX="163.0" layoutY="47.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="45.0" />
+      <Label layoutX="14.0" layoutY="75.0" prefHeight="25.0" prefWidth="100.0" text="Толщина:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="80.0" />
+      <ChoiceBox id="choiceBoxDepth" layoutX="150.0" layoutY="80.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="80.0" />
+      <ToggleButton id="toggleButtonShape2" layoutX="82.0" layoutY="140.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="150.0" />
+      <ToggleButton id="toggleButtonShape1" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="14.0" layoutY="140.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="150.0" />
+      <ToggleButton id="toggleButtonShape3" layoutX="150.0" layoutY="140.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="150.0" />
+      <ToggleButton id="toggleButtonShape4" layoutX="225.0" layoutY="140.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="225.0" AnchorPane.topAnchor="150.0" />
+      <Label layoutX="10.0" layoutY="105.0" prefHeight="25.0" prefWidth="100.0" text="Тип фигуры:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="115.0" />
+      <Label layoutX="14.0" layoutY="220.0" prefHeight="25.0" prefWidth="80.0" text="Размеры, мм:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="495.0" />
+      <TextField id="textFieldSizeA" layoutX="141.0" layoutY="255.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="495.0" />
+      <Label layoutX="105.0" layoutY="255.0" prefHeight="25.0" prefWidth="40.0" text="A:" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="495.0" />
+      <Label layoutX="107.0" layoutY="287.0" prefHeight="25.0" prefWidth="40.0" text="B:" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="530.0" />
+      <TextField id="textFieldSizeB" layoutX="143.0" layoutY="287.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="530.0" />
+      <Label id="labelC_R" layoutX="107.0" layoutY="318.0" prefHeight="25.0" prefWidth="40.0" text="C:" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="565.0" />
+      <TextField id="textFieldSizeC" layoutX="143.0" layoutY="318.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="565.0" />
+      <Label id="labelD" layoutX="107.0" layoutY="350.0" prefHeight="25.0" prefWidth="40.0" text="D:" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="600.0" />
+      <TextField id="textFieldSizeD" layoutX="143.0" layoutY="350.0" prefWidth="140.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="600.0" />
+      <Button id="btnAdd" layoutX="234.0" layoutY="411.0" mnemonicParsing="false" text="Добавить" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <ImageView id="imageViewShape" fitHeight="140.0" fitWidth="140.0" layoutX="90.0" layoutY="222.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="350.0" />
+      <Label id="labelPrice" layoutX="14.0" layoutY="491.0" prefHeight="25.0" prefWidth="190.0" text="Цена: 100$ /п.м" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+      <ToggleButton id="toggleButtonShape8" layoutX="238.0" layoutY="217.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="225.0" AnchorPane.topAnchor="215.0" />
+      <ToggleButton id="toggleButtonShape7" layoutX="163.0" layoutY="217.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="215.0" />
+      <ToggleButton id="toggleButtonShape5" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="27.0" layoutY="217.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="215.0" />
+      <ToggleButton id="toggleButtonShape6" layoutX="95.0" layoutY="217.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="215.0" />
+      <ToggleButton id="toggleButtonShape9" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="30.0" layoutY="280.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="280.0" />
+      <ToggleButton id="toggleButtonShape5" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="95.0" layoutY="280.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" visible="false" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="280.0" />
+   </children>
+</AnchorPane>

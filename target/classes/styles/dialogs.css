@@ -1,0 +1,74 @@
+
+.dialog-pane{
+    -fx-background-color: linear-gradient(to bottom right, #fbfbfb, #f7f7f7);
+
+    -fx-background-image: url(images/background_bottom_1.png);
+    -fx-background-repeat: repeat-x;
+    /*-fx-background-radius: 6px;*/
+    -fx-background-position: left bottom;
+    -fx-background-size: 300px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0.1, 0.0, 0.0);
+}
+
+/**Costumization of The Bar where the buttons are located**/
+.dialog-pane > .button-bar > .container {
+    -fx-background-color: transparent;
+}
+
+.dialog-pane > .content.label {
+/*    -fx-padding: 0.5em 0.5em 0.5em 0.5em;
+    -fx-background-color: yellow;
+    -fx-text-fill:black;
+    -fx-font-size:15.0px;*/
+
+    -fx-text-fill: #4F5F56;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 12px;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    /*-fx-font-weight: bold;*/
+    /*-fx-border-radius: 5;*/
+    -fx-insets: 0px;
+    -fx-padding: 10px;
+
+}
+
+/**Costumization of DialogPane Header**/
+.dialog-pane:header .header-panel {
+    -fx-background-color: transparent;
+}
+
+.dialog-pane:header .header-panel .label{
+/*    -fx-background-color: yellow;
+    -fx-background-radius:10px;
+    -fx-text-fill:black;
+    -fx-font-size:15.0px;*/
+
+    -fx-text-fill: #4F5F56;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 13px;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+
+    /*-fx-border-radius: 5;*/
+    -fx-insets: 0px;
+    -fx-padding: 3px;
+
+}
+
+
+.dialog-pane .button{
+    -fx-font-size: 14;
+    -fx-text-fill: white;
+    -fx-background-color: #907757;
+    -fx-background-radius: 2px;
+    -fx-border-color: none;
+}
+
+.dialog-pane .button:hover{
+    -fx-background-color: BACKGROUND_COLOR_4;
+}
+
+.dialog-pane .button:pressed{
+    -fx-background-color: #907757;
+}

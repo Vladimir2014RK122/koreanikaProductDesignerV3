@@ -1,0 +1,62 @@
+
+.backgroundWindow{
+    -fx-background-color: linear-gradient(to bottom right, #fbfbfb, #f7f7f7);
+
+    -fx-background-image: url(images/background_bottom_1.png);
+    -fx-background-repeat: repeat-x;
+    -fx-background-radius: 6px;
+
+    -fx-background-position: left bottom;
+    -fx-background-size: 300px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0.1, 0.0, 0.0);
+}
+
+.header{
+
+    -fx-text-fill: black;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
+
+}
+
+
+.info{
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 12px;
+    -fx-text-fill: #907757;
+}
+
+.text-area{
+    /*-fx-pref-width: 256px;*/
+    -fx-background-color: white;
+
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    /*-fx-padding: 0px 5px 0px 5px;*/
+
+    -fx-border-color: #EBE9E7 #EBE9E7 #838281 #EBE9E7;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+    -fx-background-radius: 4px;
+
+
+
+    -fx-wrap-text: true;
+}
+
+/*.text-area > .scroll-pane{*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-border-color: transparent;*/
+/*}*/
+
+.text-area > .scroll-pane > .content{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.text-area:focused .content{
+    -fx-background-color: white;
+}
+/*text-area:focused .content{*/
+/*    -fx-background-color: transparent;*/
+/*}*/

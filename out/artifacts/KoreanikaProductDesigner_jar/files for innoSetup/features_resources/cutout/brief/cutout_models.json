@@ -1,0 +1,101 @@
+{
+	"cutout_1":[
+		{ 
+			"model": "",
+			"width":12,
+			"height":12
+		}
+	],
+	"cutout_2":[
+		{ 
+			"model": "",
+			"width":35,
+			"height":35
+		}
+	],
+	"cutout_3":[
+		{ 
+			"model": "",
+			"width":560,
+			"height":490
+		}
+	],
+	"cutout_4":[
+		{ 
+			"model": "",
+			"width":65,
+			"height":65
+		}
+	],
+	"cutout_5":[
+		{ 
+			"model": "",
+			"width":300,
+			"height":250
+		}
+	],
+	"cutout_6":[
+		{ 
+			"model": "",
+			"width":560,
+			"height":490
+		}
+	],
+	"cutout_7":[
+		{ 
+			"model": "",
+			"width":400,
+			"height":100
+		}
+	],
+	"cutout_8":[
+		{ 
+			"model": "",
+			"width":560,
+			"height":490
+		}
+	],
+	"cutout_9":[
+		{ 
+			"model": "",
+			"width":560,
+			"height":490
+		}
+	],
+	"cutout_10":[
+		{ 
+			"model": "",
+			"width":560,
+			"height":490
+		}
+	],
+	"cutout_11":[
+		{ 
+			"model": "",
+			"width":560,
+			"height":490
+		}
+	],
+	"cutout_12":[
+		{ 
+			"model": "",
+			"width":560,
+			"height":490
+		}
+	],
+	"cutout_13":[
+		{ 
+			"model": "",
+			"width":100,
+			"height":100
+		}
+	],
+	"cutout_14":[
+		{ 
+			"model": "",
+			"width":50,
+			"height":50
+		}
+	]
+	
+}

@@ -1,0 +1,29 @@
+/*@import url("../../rootTheme.css");*/
+#labelMaterial {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelType {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelLength {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelHeight {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+

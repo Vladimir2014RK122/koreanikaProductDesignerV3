@@ -1,0 +1,57 @@
+
+
+#anchorPaneRoot {
+    -fx-padding: 0;
+    -fx-background-color: MAIN_COLOR_LIGHT;
+}
+
+#labelRowNumber {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelName {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+    -fx-text-alignment: center;
+    -fx-border-style: solid centered;
+}
+
+#anchorPaneImageView {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelMaterial {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelType {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelModel {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelNull1 {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+

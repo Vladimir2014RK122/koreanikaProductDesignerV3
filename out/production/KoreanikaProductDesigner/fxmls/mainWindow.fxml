@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="rootAnchorPaneMainWindow" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" style="-fx-border-insets: 5;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane id="anchorPaneMainMenu" prefHeight="30.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox id="mainMenuHBox" alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="129.0" spacing="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Button id="btnCreateProject" mnemonicParsing="false">
+                     <tooltip>
+                        <Tooltip text="Создать проект" />
+                     </tooltip>
+                  </Button>
+                  <Button id="btnOpenProject" mnemonicParsing="false">
+                     <tooltip>
+                        <Tooltip text="Открыть проект" />
+                     </tooltip>
+                  </Button>
+                  <Button id="btnSaveProject" mnemonicParsing="false">
+                     <tooltip>
+                        <Tooltip text="Сохранить" />
+                     </tooltip>
+                  </Button>
+                  <Button id="btnSaveAsProject" mnemonicParsing="false">
+                     <tooltip>
+                        <Tooltip text="Сохранить как" />
+                     </tooltip>
+                  </Button>
+                  <Button id="btnCloseProject" mnemonicParsing="false">
+                     <tooltip>
+                        <Tooltip text="Закрыть проект" />
+                     </tooltip>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox id="viewMenuHBox" alignment="CENTER_RIGHT" layoutX="253.0" layoutY="2.0" prefHeight="30.0" spacing="2.0" AnchorPane.rightAnchor="320.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Button id="btnShowReceipt" alignment="BOTTOM_LEFT" maxWidth="100.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Счет">
+                     <tooltip>
+                        <Tooltip text="Открыть счет" />
+                     </tooltip>
+                  </Button>
+                  <Button id="btnAutoCut" alignment="BOTTOM_LEFT" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" text="Расчитать">
+                     <tooltip>
+                        <Tooltip text="Разделить объекты на листах автоматически" />
+                     </tooltip>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox id="viewMenuHBox" alignment="CENTER_LEFT" layoutX="155.0" layoutY="5.0" prefHeight="29.0" prefWidth="345.0" spacing="2.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="154.0" AnchorPane.topAnchor="4.0">
+               <children>
+                  <Separator id="separatorMaterial1" maxWidth="16.0" minWidth="6.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="6.0" />
+                  <Button id="btnSelectMaterial" mnemonicParsing="false">
+                     <tooltip>
+                        <Tooltip text="Настроить материал" />
+                     </tooltip>
+                  </Button>
+                  <Label id="labelMaterial" prefHeight="19.0" prefWidth="65.0" text="Материал" />
+                  <Separator id="separatorMaterial2" orientation="VERTICAL" prefHeight="200.0" />
+                  <Label prefHeight="25.0" text="  $: " textAlignment="RIGHT" />
+                  <TextField id="textFieldUSD" alignment="CENTER" prefHeight="25.0" prefWidth="45.0" promptText="78,43" />
+                  <Label prefHeight="25.0" text="   €: " textAlignment="RIGHT" />
+                  <TextField id="textFieldEUR" alignment="CENTER" prefHeight="25.0" prefWidth="45.0" promptText="78,73" />
+                  <Label text="  " textAlignment="RIGHT" />
+                  <Button id="btnCurrencyUpdate" mnemonicParsing="false" />
+                  <Label text="  " textAlignment="RIGHT" />
+                  <Separator id="separatorMaterial2" orientation="VERTICAL" prefHeight="200.0" />
+                  <Label text="  " textAlignment="RIGHT" />
+                  <Button id="btnPriceCoefficient" mnemonicParsing="false" />
+                  <Label text="  " textAlignment="RIGHT" />
+                  <Separator id="separatorMaterial2" orientation="VERTICAL" prefHeight="200.0" />
+               </children>
+            </HBox>
+            <HBox id="viewMenuHBox" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="300.0" spacing="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Button id="btnSketchView" alignment="BASELINE_LEFT" mnemonicParsing="false" text="Эскиз">
+                     <tooltip>
+                        <Tooltip text="Режим эскиза" />
+                     </tooltip>
+                  </Button>
+                  <Button id="btnCutView" alignment="BASELINE_LEFT" mnemonicParsing="false" text="Раскрой">
+                     <tooltip>
+                        <Tooltip text="Режим раскроя" />
+                     </tooltip>
+                  </Button>
+                  <Button id="btn3DView" alignment="BASELINE_LEFT" mnemonicParsing="false" text="3D">
+                     <tooltip>
+                        <Tooltip text="Трехмерный вид" />
+                     </tooltip>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <SplitPane id="splitPaneHorizontal" dividerPositions="0.7452574525745257" layoutX="379.0" layoutY="599.0" orientation="VERTICAL" prefHeight="681.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0">
+        <items>
+            <AnchorPane id="anchorPaneChildrenRoot" prefHeight="200.0" prefWidth="200.0" />
+          <AnchorPane id="anchorPaneListReceipt" maxHeight="187.0" minHeight="187.0" minWidth="0.0" prefHeight="187.0" prefWidth="1024.0">
+               <children>
+                  <Label id="labelReceiptImages" layoutX="129.0" layoutY="39.0" prefHeight="17.0" prefWidth="213.0" text="Добавлено к смете:" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font size="17.0" />
+                     </font></Label>
+                  <ListView id="listViewInReceipt" layoutX="151.0" layoutY="-31.0" maxHeight="150.0" minHeight="150.0" orientation="HORIZONTAL" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+               </children></AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+   <stylesheets>
+      <URL value="@../styles/mainWindow.css" />
+      <URL value="@../styles/rootTheme.css" />
+   </stylesheets>
+</AnchorPane>

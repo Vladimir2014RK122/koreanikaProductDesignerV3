@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="anchorPaneRoot" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label layoutX="10.0" layoutY="41.0" prefHeight="35.0" prefWidth="140.0" text="Доставка в пределах МКАД, шт.:" wrapText="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0" />
+        <Button id="btnAdd" layoutX="234.0" layoutY="411.0" mnemonicParsing="false" text="Добавить" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+        <TextField id="textFieldCount" layoutX="160.0" layoutY="15.0" prefWidth="130.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="65.0" />
+        <Label layoutX="10.0" layoutY="42.0" prefHeight="35.0" prefWidth="140.0" text="Доставка за пределы МКАД, км.:" wrapText="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="110.0" />
+        <TextField id="textFieldLength" layoutX="160.0" layoutY="65.0" prefWidth="130.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="115.0" />
+      <TextField id="textFieldLifting" layoutX="160.0" layoutY="113.0" prefWidth="130.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="165.0" />
+      <Label layoutX="10.0" layoutY="108.0" prefHeight="35.0" prefWidth="147.0" text="Разгрузка, кол-во изделий, шт.:" wrapText="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="160.0" />
+        <Label id="labelPrice" layoutX="14.0" layoutY="491.0" prefHeight="25.0" prefWidth="190.0" text="Цена: 100$ /п.м" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+      <ChoiceBox id="choiceBoxMaterial" layoutX="137.0" layoutY="20.0" prefWidth="150.0" AnchorPane.leftAnchor="140.0" AnchorPane.topAnchor="15.0" />
+      <Label layoutX="20.0" layoutY="51.0" prefHeight="25.0" prefWidth="86.0" text="Материал:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="15.0" />
+    </children>
+   <stylesheets>
+      <URL value="@../../../styles/rootTheme.css" />
+      <URL value="@../../../styles/TableDesigner/TableItems/delivery_settings.css" />
+   </stylesheets>
+</AnchorPane>

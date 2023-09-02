@@ -1,0 +1,414 @@
+/*@import url("rootTheme.css");*/
+
+#anchorPaneCutDesignerRoot {
+    -fx-padding: 0;
+    -fx-background-color: #FCFCFC;
+
+
+}
+
+.anchorPaneCutZone{
+    -fx-background-color: transparent;
+
+    -fx-background-image: url(images/background_left_2.png), url(images/background_right_2.png);
+    -fx-background-size: 300px, 300px;
+    -fx-background-repeat: repeat-y, repeat-y ;
+    -fx-background-position: left top, right top ;
+}
+
+#anchorPaneMenu {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+#cutPane {
+    -fx-background-color: white;
+    /* -fx-background-color: #F2DBC7;*/
+}
+
+#dimensionHLabel, #dimensionVLabel {
+    -fx-text-fill: black;
+}
+
+/*
+.label{
+    -fx-text-fill:#B3B4B4;
+}*/
+
+
+.titled-pane {
+    /*-fx-skin: "com.sun.javafx.scene.control.skin.TitledPaneSkin";
+    -fx-text-fill: -fx-text-base-color;*/
+    -fx-text-fill: #B3B4B4;
+}
+
+.titled-pane:focused {
+    -fx-text-fill: white;
+}
+
+.titled-pane > .title {
+    /*-fx-background-color: -fx-box-border, -fx-inner-border, -fx-body-color;*/
+    -fx-background-color: -fx-box-border, MAIN_COLOR_LIGHT;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
+    -fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+}
+
+.titled-pane:focused > .title {
+    -fx-color: -fx-focus-color;
+}
+
+.titled-pane > .title > .arrow-button {
+    -fx-background-color: null;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0.0em 0.25em 0.0em 0.0em; /* 0 3 0 0 */
+}
+
+.titled-pane > .title > .arrow-button .arrow {
+    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.25em 0.3125em 0.25em 0.3125em; /* 3 3.75 3 3.75 */
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+.titled-pane:collapsed > .title > .arrow-button .arrow {
+    -fx-rotate: -90;
+}
+
+.titled-pane > *.content {
+    /*-fx-background-color: -fx-box-border,*/
+    /*linear-gradient(to bottom, derive(-fx-color, -02%), derive(-fx-color, 65%) 12%, derive(-fx-color, 23%) 88%, derive(-fx-color, 50%) 99%, -fx-box-border);*/
+    -fx-background-insets: 0, 0 1 1 1;
+    -fx-padding: 0.167em;
+}
+
+.titled-pane:focused > .title > .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+
+/*.scroll-pane {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-padding: 0, 0, 0, 0;*/
+/*    !**/
+/*        -fx-border-color:#323232;*/
+/*        -fx-border-width: 1;*!*/
+/*}*/
+
+
+/*.scroll-bar:horizontal, .scroll-bar:vertical {*/
+/*    -fx-background-color: transparent;*/
+/*}*/
+
+/*.scroll-pane > .corner {*/
+/*    -fx-background-color: MAIN_COLOR_LIGHT;*/
+/*}*/
+
+/*.scroll-pane > .viewport {*/
+/*    -fx-background-color: transparent;*/
+/*}*/
+
+/*.scroll-pane:focused {*/
+/*    !*-fx-background-color: #878787;*!*/
+/*    -fx-background-radius: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0;*/
+/*    -fx-background-insets: 0 0 0 0, 0, 0 0 0 0, 0 0 0 0;*/
+/*}*/
+
+/*.increment-button, .decrement-button {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-border-color: transparent;*/
+/*}*/
+
+/*.scroll-bar:horizontal .track,*/
+/*.scroll-bar:vertical .track {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-border-color: transparent;*/
+/*    -fx-background-radius: 0em;*/
+/*    -fx-width: 25px;*/
+/*}*/
+
+/*.scroll-bar:horizontal .thumb,*/
+/*.scroll-bar:vertical .thumb {*/
+/*    -fx-background-color: MAIN_COLOR_BLACK;*/
+/*    -fx-background-radius: 5em;*/
+
+
+/*}*/
+
+
+
+#btnRotateLeft, #btnRotateRight, #btnRotateCustom, #btnAddDimH, #btnAddDimV, #btnUpdateStatistics, #btnPrint {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 22px 22px;
+    -fx-min-height: 25px;
+    -fx-min-width: 25px;
+    -fx-max-height: 25px;
+    -fx-max-width: 25px;
+    /*-fx-background-radius: 2.0px ;*/
+    -fx-background-color: null;
+    -fx-border-width: 0;
+}
+
+#btnRotateLeft:hover, #btnRotateRight:hover, #btnRotateCustom:hover, #btnAddDimH:hover, #btnAddDimV:hover,
+#btnUpdateStatistics:hover {
+    -fx-background-color: #666666;
+}
+
+#btnRotateLeft:pressed, #btnRotateRight:pressed, #btnRotateCustom:pressed, #btnAddDimH:pressed,
+#btnAddDimV:pressed, #btnUpdateStatistics:pressed{
+    -fx-background-color: #878787;
+}
+
+
+
+#btnAutoCut{
+    -fx-background-image: url(CutDesigner/icons/autoCut.png);
+}
+#btnRotateLeft {
+    -fx-background-image: url(icons/rotate_left_90.png);
+}
+
+#btnRotateRight {
+    -fx-background-image: url(icons/rotate_right_90.png);
+}
+
+#btnRotateCustom {
+    -fx-background-image: url(icons/rotate_custom.png);
+}
+
+#btnAddDimH {
+    -fx-background-image: url(icons/dimensionH.png);
+}
+
+#btnAddDimV {
+    -fx-background-image: url(icons/dimensionV.png);
+}
+
+#btnUpdateStatistics {
+    -fx-background-image: url(icons/update.png);
+}
+
+
+
+
+
+
+
+
+
+
+
+#btnAutoCut{
+    -fx-text-fill: black;
+    -fx-background-color: none;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+
+    -fx-background-position: left center;
+    -fx-background-size: 20px 20px;
+    -fx-background-repeat: no-repeat;
+    -fx-label-padding: 0px 0px 0px 10px;
+    -fx-alignment: center-right;
+
+}
+
+#btnRotateLeft, #btnRotateRight, #btnUpdateStatistics, #btnPrint {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 20px 20px;
+    -fx-min-height: 30px;
+    -fx-min-width: 30px;
+    -fx-max-height: 30px;
+    -fx-max-width: 30px;
+    /*-fx-background-radius: 2.0px ;*/
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 2px;
+}
+
+#btnPrint {
+    -fx-background-image: url(CutDesigner/icons/print.png);
+}
+
+#btnRotateLeft {
+    -fx-background-image: url(icons/CutDesigner/rotate_left_black.png);
+}
+
+#btnRotateRight {
+    -fx-background-image: url(icons/CutDesigner/rotate_right_black.png);
+}
+
+#btnUpdateStatistics {
+    -fx-background-image: url(icons/CutDesigner/update.png);
+}
+
+#btnPrint:hover, #btnRotateLeft:hover, #btnRotateRight:hover, #btnUpdateStatistics:hover, #btnAutoCut:hover{
+    -fx-background-color: #bebebe;
+}
+
+#btnPrint:pressed, #btnRotateLeft:pressed, #btnRotateRight:pressed, #btnUpdateStatistics:pressed, #btnAutoCut:pressed{
+    -fx-background-color: #878787;
+}
+
+
+
+
+#btnAddMaterialSheet{
+
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-fill: #907757;
+    -fx-background-image: url(icons/CutDesigner/plus_brown.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: left;
+    -fx-background-size: 20px 20px;
+    -fx-label-padding: 0 0 0 15px;
+    -fx-background-radius: 2px;
+    /*-fx-alignment: left;*/
+}
+
+#btnDelMaterialSheet{
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 20px 20px;
+    -fx-background-image: url(icons/CutDesigner/remove_brown.png);
+    -fx-background-radius: 2px;
+}
+
+#btnDelMaterialSheet:hover, #btnAddMaterialSheet:hover {
+    -fx-background-color: #bebebe;
+}
+
+#btnDelMaterialSheet:pressed, #btnAddMaterialSheet:pressed {
+    -fx-background-color: #878787;
+}
+
+
+
+#btnDelMaterialSheet {
+
+}
+
+.labelSheetName{
+    -fx-font-size: 13;
+    -fx-font-family: "Segoe UI";
+    -fx-text-fill: black;
+}
+
+#labelShapeNumber{
+    -fx-text-fill: #4F5F56;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13;
+}
+
+#cutShapePolygon{
+    -fx-border-width: 0;
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 8, 0, 0, 0);*/
+}
+
+#dimensionVLabel, #dimensionHLabel{
+    -fx-text-fill: white;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 8;
+}
+
+
+.choice-box{
+
+    -fx-background-color: white;
+    -fx-pref-height: 27px;
+    -fx-text-fill: black;
+    -fx-font-size: 11px;
+    /*-fx-padding: 0px 10px 0px 10px;*/
+
+    -fx-border-color: #EBE9E7 #EBE9E7 #838281 #EBE9E7;
+    -fx-border-radius: 4px;
+    -fx-border-width: 1.5px;
+
+}
+
+
+
+.list-view {
+    -fx-background-color: transparent; /* Default color */
+    -fx-padding: 0;
+
+
+
+}
+
+.list-cell {
+    -fx-background-color: BACKGROUND_COLOR_5;
+    -fx-text-fill: MAIN_TEXT_COLOR_0;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+    -fx-height: 16px;
+}
+
+.list-cell:filled {
+    -fx-background-color: transparent;
+    -fx-border-color: none;
+    /*-fx-padding: 0;*/
+}
+
+.list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: none;
+    /*-fx-padding: 0;*/
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: transparent;
+    /*-fx-text-fill: #8F7757;*/
+    /*-fx-border-width: 0 0 0 2px;*/
+    /*-fx-border-color: #89B79D;*/
+}
+.list-cell:filled:selected > #labelPriceMaterialInList {
+    /*-fx-text-fill: #8F7757;*/
+}
+
+.labelMaterialShortName{
+    -fx-pref-height: 38;
+    -fx-text-fill: black;
+    -fx-font-size: 12;
+    -fx-wrap-text: true;
+}
+
+
+/*  CELL ITEM MAXIMIZED */
+.cellItemMaximized{
+    -fx-background-color: #F3F2F1;
+    -fx-background-radius: 5px;
+}
+
+.cellItemMaximized > .labelHeader{
+    -fx-text-fill: #8F7757;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-padding: 0px 0px 0px 10px;
+
+    -fx-border-width: 0 0 0 6px;
+    -fx-border-color: #89B79D;
+}
+
+.cellItemMaximized > .labelInfo{
+    -fx-text-fill: #4f5f56;
+}
+
+.cellItemMaximized > .labelData{
+    -fx-background-color: white;
+    -fx-pref-height: 27px;
+    -fx-text-fill: #828282;
+    -fx-font-size: 11px;
+    /*-fx-padding: 0px 10px 0px 10px;*/
+
+    -fx-border-color: #EBE9E7 #EBE9E7 #838281 #EBE9E7;
+    -fx-border-radius: 4px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 0px 0px 0px 5px;
+}

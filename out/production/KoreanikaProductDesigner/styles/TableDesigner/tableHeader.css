@@ -1,0 +1,28 @@
+@import url("../rootTheme.css");
+
+#anchorPaneRoot{
+    -fx-padding: 0;
+    -fx-background-color: MAIN_COLOR_LIGHT;
+
+
+}
+
+#labelMain{
+
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+
+    -fx-font-weight:bold;
+    -fx-font-size:12;
+}
+
+#labelNumber, #labelName, #labelImage, #labelMaterial, #labelDepth, #labelWidth, #labelHeight, #labelQuantity, #labelButtons{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+
+    -fx-font-size:11;
+}

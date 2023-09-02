@@ -1,0 +1,339 @@
+
+
+/********************************** COMMON **********************************/
+
+#anchorPaneIntoScrollPaneItems{
+    /*-fx-padding: 0;*/
+}
+
+.greenLabel-1{
+    -fx-text-fill: #4F5F56;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 12px;
+}
+
+.brownLabel-price{
+    -fx-text-fill: #907757;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 16px;
+}
+
+.backgroundSettings{
+    -fx-padding: 0;
+    -fx-background-color: #f3f2f1;
+    -fx-background-radius: 0px 0px 6px 6px;
+
+}
+
+.btnBrown{
+    -fx-font-size: 14;
+    -fx-text-fill: white;
+    -fx-background-color: #907757;
+    -fx-background-radius: 2px;
+    -fx-border-color: none;
+}
+
+.btnBrown:hover{
+    -fx-background-color: BACKGROUND_COLOR_4;
+}
+
+.btnBrown:pressed{
+    -fx-background-color: #907757;
+}
+
+.text-field, .choice-box{
+    -fx-text-fill: #828282;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+}
+
+.toggle-button{
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 70px;
+    -fx-background-position: center;
+    -fx-background-insets: 0;
+    -fx-background-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-border-color: #EDEBE9;
+    -fx-border-radius: 6px;
+    -fx-border-insets: 0;
+
+}
+
+.toggle-button:selected{
+
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0.3, 2.0, 2.0);
+}
+
+
+/* s************************************************* stoneProductItem */
+
+
+
+
+#toggleButtonShape1{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/rectangle_2.png);
+}
+#toggleButtonShape2{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/rectangle_corner_2.png);
+}
+#toggleButtonShape3{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/rectangle_circle_2.png);
+}
+#toggleButtonShape4{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_2.png);
+}
+#toggleButtonShape5{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/triangle_2.png);
+}
+#toggleButtonShape6{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/circle_half_2.png);
+}
+#toggleButtonShape7{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/circle_2.png);
+}
+#toggleButtonShape8{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/trapeze_2.png);
+}
+#toggleButtonShape9{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/rhombus_2.png);
+}
+
+#toggleButtonShape1:selected{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/rectangle_3.png);
+}
+#toggleButtonShape2:selected{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/rectangle_corner_3.png);
+}
+#toggleButtonShape3:selected{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/rectangle_circle_3.png);
+}
+#toggleButtonShape4:selected{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_3.png);
+}
+#toggleButtonShape5:selected{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/triangle_3.png);
+}
+#toggleButtonShape6:selected{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/circle_half_3.png);
+}
+#toggleButtonShape7:selected{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/circle_3.png);
+}
+#toggleButtonShape8:selected{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/trapeze_3.png);
+}
+#toggleButtonShape9:selected{
+    -fx-background-image: url(../images/TableDesigner/StoneProductItem/shapes/rhombus_3.png);
+}
+
+/* s************************************************* siphoneItem */
+
+#toggleButtonSiphonType1{
+    -fx-background-image: url(../images/TableDesigner/SiphonItem/siphonType1.png);
+}
+#toggleButtonSiphonType1 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/SiphonItem/siphonType1_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonSiphonType2{
+    -fx-background-image: url(../images/TableDesigner/SiphonItem/siphonType2.png);
+}
+#toggleButtonSiphonType2 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/SiphonItem/siphonType2_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+
+/* s************************************************* sinkItem */
+
+#toggleButtonSinkInstallType1{
+    -fx-background-image: url(../images/TableDesigner/SinkItem/sink_install_type_1.png);
+}
+#toggleButtonSinkInstallType1 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/SinkItem/sink_install_type_1_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonSinkInstallType2{
+    -fx-background-image: url(../images/TableDesigner/SinkItem/sink_install_type_2.png);
+}
+#toggleButtonSinkInstallType2 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/SinkItem/sink_install_type_2_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonSinkEdge1{
+    -fx-background-image: url(../images/TableDesigner/SinkItem/sink_edge_type_1.png);
+}
+#toggleButtonSinkEdge1 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/SinkItem/sink_edge_type_1_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonSinkEdge2{
+    -fx-background-image: url(../images/TableDesigner/SinkItem/sink_edge_type_2.png);
+}
+#toggleButtonSinkEdge2 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/SinkItem/sink_edge_type_2_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+/*#toggleButtonSinkInstallType1:selected{*/
+/*    -fx-background-image: url(../images/TableDesigner/SinkItem/sink_install_type_1_2.png);*/
+/*}*/
+/*#toggleButtonSinkInstallType2:selected{*/
+/*    -fx-background-image: url(../images/TableDesigner/SinkItem/sink_install_type_2_2.png);*/
+/*}*/
+
+/*#toggleButtonSinkEdge1:selected{*/
+/*    -fx-background-image: url(../images/TableDesigner/SinkItem/sink_edge_type_1_2.png);*/
+/*}*/
+/*#toggleButtonSinkEdge2:selected{*/
+/*    -fx-background-image: url(../images/TableDesigner/SinkItem/sink_edge_type_2_2.png);*/
+/*}*/
+
+
+/* s************************************************* BorderItem */
+
+#toggleButtonBorderCut1{
+    -fx-background-image: url(../images/edgeManager/borderCut1_100px.png);
+}
+#toggleButtonBorderCut1 > .tooltip{
+    -fx-graphic: url(../images/edgeManager/borderCut1_white_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonBorderCut2{
+    -fx-background-image: url(../images/edgeManager/borderCut2_100px.png);
+}
+#toggleButtonBorderCut2 > .tooltip{
+    -fx-graphic: url(../images/edgeManager/borderCut2_white_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonBorderCut3{
+    -fx-background-image: url(../images/edgeManager/borderCut3_100px.png);
+}
+#toggleButtonBorderCut3 > .tooltip{
+    -fx-graphic: url(../images/edgeManager/borderCut3_white_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonBorderCut4{
+    -fx-background-image: url(../images/edgeManager/borderCut4_100px.png);
+}
+#toggleButtonBorderCut4 > .tooltip{
+    -fx-graphic: url(../images/edgeManager/borderCut4_white_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonBorderAngleCut1{
+    -fx-background-image: url(../images/edgeManager/borderSideCut1_100px.png);
+}
+#toggleButtonBorderAngleCut1 > .tooltip{
+    -fx-graphic: url(../images/edgeManager/borderSideCut1_white_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonBorderAngleCut2{
+    -fx-background-image: url(../images/edgeManager/borderSideCut2_100px.png);
+}
+#toggleButtonBorderAngleCut2 > .tooltip{
+    -fx-graphic: url(../images/edgeManager/borderSideCut2_white_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+/* ************************************************* JointItem */
+
+#toggleButtonJointType1{
+    -fx-background-image: url(../images/TableDesigner/Joint/jointItemType1_100px.png);
+}
+#toggleButtonJointType1 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/Joint/jointItemType1_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonJointType2{
+    -fx-background-image: url(../images/TableDesigner/Joint/jointItemType2_100px.png);
+}
+#toggleButtonJointType2 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/Joint/jointItemType2_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonJointType3{
+    -fx-background-image: url(../images/TableDesigner/Joint/jointItemType3_100px.png);
+}
+#toggleButtonJointType3 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/Joint/jointItemType3_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonJointType4{
+    -fx-background-image: url(../images/TableDesigner/Joint/jointItemType4_100px.png);
+}
+#toggleButtonJointType4 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/Joint/jointItemType4_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+
+/* ************************************************* PlywoodItem */
+
+#toggleButtonPlywoodType1{
+    -fx-background-image: url(../images/TableDesigner/PlywoodItem/plywoodPaintingType1_100px.png);
+}
+#toggleButtonPlywoodType1 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/PlywoodItem/plywoodPaintingType1_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+#toggleButtonPlywoodType2{
+    -fx-background-image: url(../images/TableDesigner/PlywoodItem/plywoodPaintingType2_100px.png);
+}
+#toggleButtonPlywoodType2 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/PlywoodItem/plywoodPaintingType2_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+
+/* ************************************************* MetalFootingItem */
+
+#toggleButtonPaintingType1{
+    -fx-background-image: url(../images/TableDesigner/MetalFooting/paintingType1_100px.png);
+}
+#toggleButtonPaintingType1 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/MetalFooting/paintingType1_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}
+
+#toggleButtonPaintingType2{
+    -fx-background-image: url(../images/TableDesigner/MetalFooting/paintingType2_100px.png);
+}
+#toggleButtonPaintingType2 > .tooltip{
+    -fx-graphic: url(../images/TableDesigner/MetalFooting/paintingType2_250px.png);
+    -fx-content-display: top;
+    -fx-font-size: 16px;
+}

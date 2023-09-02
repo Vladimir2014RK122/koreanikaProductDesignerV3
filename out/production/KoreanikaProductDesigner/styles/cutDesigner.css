@@ -1,0 +1,215 @@
+@import url("rootTheme.css");
+
+#AnchorPaneCutDesignerRoot{
+    -fx-padding: 0;
+    -fx-background-color: MAIN_COLOR_DARK;
+}
+
+#anchorPaneMenu{
+    -fx-background-color:MAIN_COLOR_LIGHT;
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+}
+
+#cutPane{
+    -fx-background-color: MAIN_COLOR_BLACK;
+   /* -fx-background-color: #F2DBC7;*/
+}
+
+#dimensionHLabel, #dimensionVLabel{
+    -fx-text-fill: black;
+}
+
+/*
+.label{
+    -fx-text-fill:#B3B4B4;
+}*/
+
+
+.titled-pane
+{
+    /*-fx-skin: "com.sun.javafx.scene.control.skin.TitledPaneSkin";
+    -fx-text-fill: -fx-text-base-color;*/
+    -fx-text-fill: #B3B4B4;
+}
+    .titled-pane:focused
+{
+-fx-text-fill: white;
+}
+    .titled-pane > .title
+{
+/*-fx-background-color: -fx-box-border, -fx-inner-border, -fx-body-color;*/
+    -fx-background-color: -fx-box-border,  MAIN_COLOR_LIGHT;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
+    -fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+}
+
+.titled-pane:focused > .title
+{
+-fx-color: -fx-focus-color;
+}
+
+.titled-pane > .title > .arrow-button
+{
+-fx-background-color: null;
+-fx-background-insets: 0;
+-fx-background-radius: 0;
+-fx-padding: 0.0em 0.25em 0.0em 0.0em; /* 0 3 0 0 */
+}
+
+.titled-pane > .title > .arrow-button .arrow
+{
+-fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+-fx-background-insets: 1 0 -1 0, 0;
+-fx-padding: 0.25em 0.3125em 0.25em 0.3125em; /* 3 3.75 3 3.75 */
+-fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+.titled-pane:collapsed > .title > .arrow-button .arrow
+{
+-fx-rotate: -90;
+}
+
+.titled-pane > *.content
+{
+-fx-background-color:
+-fx-box-border,
+linear-gradient(to bottom, derive(-fx-color,-02%), derive(-fx-color,65%) 12%,      derive(-fx-color,23%) 88%, derive(-fx-color,50%) 99%, -fx-box-border);
+-fx-background-insets: 0, 0 1 1 1;
+-fx-padding: 0.167em;
+ }
+
+.titled-pane:focused > .title > .arrow-button .arrow
+{
+-fx-background-color: white;
+}
+
+
+.scroll-pane{
+     -fx-background-color: MAIN_COLOR_LIGHT;
+     -fx-padding: 0,0,0,0;
+ /*
+     -fx-border-color:#323232;
+     -fx-border-width: 1;*/
+ }
+
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: MAIN_COLOR_LIGHT;
+}
+
+.scroll-pane > .viewport {
+   -fx-background-color: MAIN_COLOR_BLACK;
+}
+
+.scroll-pane:focused{
+ 	/*-fx-background-color: #878787;*/
+ 	-fx-background-radius: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0;
+    -fx-background-insets: 0 0 0 0, 0, 0 0 0 0, 0 0 0 0 ;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-width: 25px;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: MAIN_COLOR_BLACK;
+    -fx-background-radius: 5em;
+
+
+}
+
+
+
+
+
+#btnRotateLeft, #btnRotateRight, #btnRotateCustom, #btnAddDimH, #btnAddDimV, #btnUpdateStatistics, #btnPrint{
+    -fx-background-repeat: no-repeat ;
+	-fx-background-position: center ;
+	-fx-background-size: 20px 20px;
+	-fx-min-height: 25px;
+	-fx-min-width: 25px;
+	-fx-max-height: 25px;
+	-fx-max-width: 25px;
+	/*-fx-background-radius: 2.0px ;*/
+	-fx-background-color: null;
+}
+
+#btnRotateLeft:hover, #btnRotateRight:hover, #btnRotateCustom:hover, #btnAddDimH:hover, #btnAddDimV:hover, #btnUpdateStatistics:hover, #btnPrint:hover{
+    -fx-background-color: #666666;
+}
+
+#btnRotateLeft:pressed, #btnRotateRight:pressed, #btnRotateCustom:pressed, #btnAddDimH:pressed, #btnAddDimV:pressed, #btnUpdateStatistics:pressed, #btnPrint:pressed{
+    -fx-background-color: #878787;
+}
+
+#btnPrint{
+   	-fx-background-image: url(icons/print.png);
+}
+
+#btnRotateLeft{
+	-fx-background-image: url(icons/rotate_left_90.png);
+}
+#btnRotateRight{
+	-fx-background-image: url(icons/rotate_right_90.png);
+}
+#btnRotateCustom{
+	-fx-background-image: url(icons/rotate_custom.png);
+}
+#btnAddDimH{
+	-fx-background-image: url(icons/dimensionH.png);
+}
+#btnAddDimV{
+	-fx-background-image: url(icons/dimensionV.png);
+}
+#btnUpdateStatistics{
+	-fx-background-image: url(icons/update.png);
+}
+
+
+
+#btnDelMaterialSheet, #btnAddMaterialSheet{
+    -fx-background-repeat: no-repeat ;
+	-fx-background-position: center ;
+	-fx-background-size: 20px 20px;
+	-fx-min-height: 25px;
+	-fx-min-width: 25px;
+	-fx-max-height: 25px;
+	-fx-max-width: 25px;
+	/*-fx-background-radius: 2.0px ;*/
+	-fx-background-color: null;
+}
+
+#btnDelMaterialSheet:hover, #btnAddMaterialSheet:hover{
+    -fx-background-color: #666666;
+}
+
+#btnDelMaterialSheet:pressed,#btnAddMaterialSheet:pressed{
+    -fx-background-color: #878787;
+}
+#btnDelMaterialSheet{
+	-fx-background-image: url(icons/delete.png);
+}
+
+#btnAddMaterialSheet{
+	-fx-background-image: url(icons/plus.png);
+}
+
+
+

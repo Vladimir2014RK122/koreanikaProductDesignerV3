@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="rootAnchorPane" prefHeight="149.0" prefWidth="250.0" stylesheets="@../styles/rootTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button id="btnSave" layoutX="53.0" layoutY="110.0" mnemonicParsing="false" prefWidth="100.0" text="Сохранить" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+      <Button id="btnCancel" layoutX="207.0" layoutY="111.0" mnemonicParsing="false" prefWidth="100.0" text="Отменить" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <TextField id="textFieldMaterialCoefficient" layoutX="93.0" layoutY="27.0" prefHeight="25.0" prefWidth="75.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0" />
+      <TextField id="textFieldMainCoefficient" layoutX="93.0" layoutY="62.0" prefHeight="25.0" prefWidth="75.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0" />
+      <Label layoutX="24.0" layoutY="31.0" prefHeight="25.0" prefWidth="129.0" text="Наценка на материал:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
+      <Label layoutX="10.0" layoutY="62.0" prefHeight="25.0" prefWidth="129.0" text="Наценка общая:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="55.0" />
+   </children>
+</AnchorPane>

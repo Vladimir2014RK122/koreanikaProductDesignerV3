@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="rootAnchorPaneSketchDesigner" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <SplitPane id="splitPaneMain" dividerPositions="0.10125, 0.68625" layoutX="200.0" layoutY="100.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+        <items>
+          <AnchorPane id="anchorPaneElements" maxWidth="80.0" minHeight="0.0" minWidth="120.0" prefHeight="160.0" prefWidth="80.0">
+               <children>
+                  <Accordion id="accordionItems" layoutX="-48.0" layoutY="80.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <panes>
+                      <TitledPane id="titledPaneTabletops" animated="false" text="Столешница">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-padding: 0;" />
+                        </content>
+                      </TitledPane>
+                      <TitledPane id="titledPaneWallPanel" animated="false" text="Фартук">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-padding: 0;" />
+                        </content>
+                      </TitledPane>
+                        <TitledPane id="titledPaneWindowsill" animated="false" text="Подоконник">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-padding: 0;" />
+                          </content>
+                        </TitledPane>
+                        <TitledPane id="titledPaneFoot" animated="false" text="Опора">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-padding: 0;" />
+                          </content>
+                        </TitledPane>
+                      <TitledPane id="titledPaneSink" animated="false" text="Раковины">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-padding: 0;" />
+                        </content>
+                      </TitledPane>
+                        <TitledPane id="titledPaneGroove" animated="false" text="Проточки">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-padding: 0;" />
+                          </content>
+                        </TitledPane>
+                        <TitledPane id="titledPaneRods" animated="false" text="Прутки">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-padding: 0;" />
+                          </content>
+                        </TitledPane>
+                        <TitledPane id="titledPaneCutouts" animated="false" text="Вырезы">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-padding: 0;" />
+                          </content>
+                        </TitledPane>
+                    </panes>
+                  </Accordion>
+               </children>
+            </AnchorPane>
+          <AnchorPane id="anchorPaneCenter" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <ScrollPane id="scrollPaneCenter" layoutX="71.0" layoutY="85.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <Pane id="sketchPane" prefHeight="1000.0" prefWidth="1000.0">
+                           <children>
+                              <Label id="labelScale" alignment="CENTER" layoutX="238.0" layoutY="23.0" prefHeight="25.0" prefWidth="93.0" style="-fx-graphic-text-gap: 10; -fx-alignment: center-left;" text="Label" />
+                           </children></Pane>
+                     </content>
+                  </ScrollPane>
+               </children></AnchorPane>
+            <AnchorPane id="anchorPaneSettings" maxWidth="250.0" minWidth="250.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ScrollPane id="scrollPaneShapeSettings" prefHeight="250.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <content>
+                      <AnchorPane id="anchorPaneShapeSettings" minHeight="0.0" minWidth="0.0" prefHeight="572.0" prefWidth="250.0" />
+                    </content>
+                  </ScrollPane>
+                  <Button id="btnCancelSettings" mnemonicParsing="false" prefWidth="80.0" text="Отменить" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+                  <Button id="btnSaveSettings" mnemonicParsing="false" prefWidth="80.0" text="Сохранить" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <AnchorPane id="anchorPaneMenu" layoutY="-1.0" prefHeight="30.0" prefWidth="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+         <children>
+            <Button id="btnCreateUnion" layoutX="127.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="1.0" />
+            <Button id="btnCrashUnion" layoutX="153.0" layoutY="3.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="1.0" />
+            <Button id="btnAddDimV" layoutX="302.0" layoutY="7.0" mnemonicParsing="false" AnchorPane.leftAnchor="290.0" AnchorPane.topAnchor="1.0">
+               <tooltip>
+                  <Tooltip text="Добавить вертикальный размер" />
+               </tooltip>
+            </Button>
+            <Button id="btnAddDimH" layoutX="276.0" layoutY="8.0" mnemonicParsing="false" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="1.0">
+               <tooltip>
+                  <Tooltip text="Добавить горизонтальный размер" />
+               </tooltip>
+            </Button>
+            <Button id="btnScalePlus" layoutX="229.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="+" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="1.0" />
+            <Button id="btnScaleMinus" layoutX="197.0" layoutY="4.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" AnchorPane.leftAnchor="190.0" AnchorPane.topAnchor="1.0" />
+            <Button id="btnRotateRight" layoutX="337.0" layoutY="10.0" mnemonicParsing="false" AnchorPane.leftAnchor="340.0" AnchorPane.topAnchor="1.0">
+               <tooltip>
+                  <Tooltip text="Поворот -90" />
+               </tooltip>
+            </Button>
+            <Button id="btnRotateLeft" layoutX="377.0" layoutY="7.0" mnemonicParsing="false" AnchorPane.leftAnchor="370.0" AnchorPane.topAnchor="1.0">
+               <tooltip>
+                  <Tooltip text="Поворот +90" />
+               </tooltip>
+            </Button>
+            <Button id="btnShapeManager" layoutX="443.0" layoutY="7.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="1.0">
+               <tooltip>
+                  <Tooltip id="shapeManagerBtn" text="Менеджер элементов" />
+               </tooltip>
+            </Button>
+            <Button id="btnPrint" layoutX="76.0" layoutY="3.0" mnemonicParsing="false" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0">
+               <tooltip>
+                  <Tooltip text="Поворот +90" />
+               </tooltip>
+            </Button>
+         </children></AnchorPane>
+   </children>
+   <stylesheets>
+      <URL value="@../styles/sketchDesigner.css" />
+      <URL value="@../styles/rootTheme.css" />
+   </stylesheets>
+</AnchorPane>

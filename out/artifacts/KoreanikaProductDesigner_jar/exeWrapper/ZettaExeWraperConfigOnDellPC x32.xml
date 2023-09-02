@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\06718\YandexDisk\Programming\ComercialProjects\KoreanikaProductDesigner\KoreanikaProductDesigner\out\artifacts\KoreanikaProductDesigner_jar\KoreanikaProductDesigner.jar</jar>
+  <outfile>C:\Users\06718\YandexDisk\Programming\ComercialProjects\KoreanikaProductDesigner\KoreanikaProductDesigner\out\artifacts\KoreanikaProductDesigner_jar\files for innoSetup\koreanika.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest>C:\Users\06718\YandexDisk\Programming\ComercialProjects\KoreanikaProductDesigner\KoreanikaProductDesigner\out\artifacts\KoreanikaProductDesigner_jar\exeWrapper\forKPDBuild\exe.manifest</manifest>
+  <icon>C:\Users\06718\YandexDisk\Programming\ComercialProjects\KoreanikaProductDesigner\KoreanikaProductDesigner\out\artifacts\KoreanikaProductDesigner_jar\exeWrapper\forKPDBuild\koreanika_icon_2.ico</icon>
+  <jre>
+    <path>jre</path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>jdkOnly</jdkPreference>
+    <runtimeBits>32/64</runtimeBits>
+    <opt>-Xmx1024m -Xms256m</opt>
+  </jre>
+  <splash>
+    <file>C:\Users\06718\YandexDisk\Programming\ComercialProjects\KoreanikaProductDesigner\KoreanikaProductDesigner\out\artifacts\KoreanikaProductDesigner_jar\exeWrapper\splash_screen.bmp</file>
+    <waitForWindow>true</waitForWindow>
+    <timeout>30</timeout>
+    <timeoutErr>true</timeoutErr>
+  </splash>
+  <messages>
+    <startupErr>An error occurred while starting the application.</startupErr>
+    <bundledJreErr>This application was configured to use a bundled Java Runtime Environment but the runtime is
+missing or corrupted.
+        </bundledJreErr>
+    <jreVersionErr>This application requires a Java Runtime Environment</jreVersionErr>
+    <launcherErr>The registry refers to a nonexistent Java Runtime Environment installation or the runtime is
+            corrupted.
+        </launcherErr>
+    <instanceAlreadyExistsMsg>An application instance is already running.</instanceAlreadyExistsMsg>
+  </messages>
+</launch4jConfig>

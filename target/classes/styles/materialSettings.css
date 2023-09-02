@@ -1,0 +1,199 @@
+
+*{
+    -fx-font-family: "Segoe UI";
+}
+
+.materialSettingsBackground{
+    -fx-background-color: #fbfbfb;
+    -fx-background-image: url(images/background_left_2.png), url(images/background_right_2.png);
+    -fx-background-size: 300px, 300px;
+    -fx-background-repeat: repeat-y, repeat-y ;
+    -fx-background-position: left top, right top ;
+}
+
+.backShadow{
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.labelGreen{
+    -fx-text-fill: #4F5F56;
+}
+
+.labelGreenBold{
+    -fx-text-fill: #4F5F56;
+
+    -fx-font-weight: bold;
+}
+
+.labelBlack{
+    -fx-text-fill: black;
+    -fx-font-size: 12;
+}
+
+.labelBlackHeader{
+    -fx-text-fill: black;
+    -fx-font-size: 13;
+}
+
+
+
+.radioBtnCircle > .box{
+    -fx-background-color: transparent;
+    -fx-border-color: #658B76;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-padding: 0.2em;
+}
+.radioBtnCircle > .box > .mark{
+    -fx-background-color: transparent;
+    -fx-background-radius: 7px;
+    -fx-shape:none;
+}
+.radioBtnCircle:selected > .box{
+    -fx-background-color: transparent;
+    -fx-border-color: #658B76;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-padding: 0.2em;
+}
+.radioBtnCircle:selected > .box > .mark{
+    -fx-background-color: #658B76;
+    -fx-background-radius: 7px;
+    -fx-shape:none;
+    -fx-background-insets: 0 0 0 0, 0;
+}
+
+.textFieldWhite{
+    -fx-pref-height: 27px;
+    -fx-background-color: white;
+
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-padding: 0px 10px 0px 10px;
+
+    -fx-border-color: #EBE9E7 #EBE9E7 #838281 #EBE9E7;
+    -fx-border-radius: 4px;
+    -fx-border-width: 1.5px;
+
+    -fx-padding: 0px 0px 0px 3px
+
+}
+
+
+.choice-box{
+
+    -fx-background-color: white;
+    -fx-pref-height: 27px;
+    -fx-text-fill: black;
+    -fx-font-size: 11px;
+    /*-fx-padding: 0px 10px 0px 10px;*/
+
+    -fx-border-color: #EBE9E7 #EBE9E7 #838281 #EBE9E7;
+    -fx-border-radius: 4px;
+    -fx-border-width: 1.5px;
+
+}
+
+.btnBrown{
+
+    -fx-font-size: 14;
+    -fx-text-fill: MAIN_TEXT_COLOR_3;
+    -fx-background-color: BACKGROUND_COLOR_3;
+    -fx-background-radius: 2px;
+    -fx-border-color: none;
+
+}
+
+.btnBrown:hover{
+    -fx-background-color: BACKGROUND_COLOR_4;
+}
+
+.btnBrown:selected{
+    -fx-background-color: BACKGROUND_COLOR_4;
+}
+
+.btnGrey{
+
+    -fx-font-size: 14;
+    -fx-text-fill: black;
+    -fx-background-color: #F3F2F1;
+    -fx-background-radius: 2px;
+    -fx-border-color: none;
+}
+
+.btnGrey:hover{
+    -fx-background-color: #b2b2b2;
+}
+
+.btnGrey:selected{
+    -fx-background-color: #b4b4b4;
+}
+
+
+.list-view {
+    -fx-background-color: transparent; /* Default color */
+    -fx-padding: 0;
+
+
+
+}
+
+.list-cell {
+    -fx-background-color: BACKGROUND_COLOR_5;
+    -fx-text-fill: MAIN_TEXT_COLOR_0;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+    -fx-height: 16px;
+}
+
+.list-cell:filled {
+    -fx-background-color: transparent;
+    -fx-border-color: none;
+    /*-fx-padding: 0;*/
+}
+
+.list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: none;
+    /*-fx-padding: 0;*/
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #F3F2F1;
+    -fx-text-fill: #8F7757;
+    -fx-border-width: 0 0 0 2px;
+    -fx-border-color: #89B79D;
+}
+.list-cell:filled:selected > #labelPriceMaterialInList {
+    -fx-text-fill: #8F7757;
+}
+
+.labelAddSheetName{
+    -fx-alignment: center-left;
+    -fx-pref-height: 25px;
+}
+
+.btnRemove {
+    -fx-border-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 20px 20px;
+    -fx-min-height: 25px;
+    -fx-min-width: 25px;
+    -fx-max-height: 25px;
+    -fx-max-width: 25px;
+    -fx-background-radius: 2.0px;
+    -fx-background-color: null;
+}
+
+.btnRemove:hover{
+    -fx-background-color: #c4c3c3;
+}
+.btnRemove:pressed{
+    -fx-background-color: #878787;
+}
+
+.btnRemove {
+    -fx-background-image: url(icons/MaterialSelectionWindow/remove_addSheet.png);
+}

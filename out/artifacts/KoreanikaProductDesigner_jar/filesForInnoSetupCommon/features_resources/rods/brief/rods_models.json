@@ -1,0 +1,56 @@
+{
+  "rods_1": [
+    {
+      "model": "Model1_1",
+      "width": 60,
+      "height": 60
+    },
+    {
+      "model": "Model2_1",
+      "width": 120,
+      "height": 120
+    },
+    {
+      "model": "Model3_1",
+      "width": 180,
+      "height": 180
+    },
+    {
+      "model": "Model4_1",
+      "width": 240,
+      "height": 240
+    },
+    {
+      "model": "Model5_1",
+      "width": 300,
+      "height": 300
+    }
+  ],
+  "rods_2": [
+    {
+      "model": "Model1_2",
+      "width": 60,
+      "height": 60
+    },
+    {
+      "model": "Model2_2",
+      "width": 120,
+      "height": 120
+    },
+    {
+      "model": "Model3_2",
+      "width": 180,
+      "height": 180
+    },
+    {
+      "model": "Model4_2",
+      "width": 240,
+      "height": 240
+    },
+    {
+      "model": "Model5_2",
+      "width": 300,
+      "height": 300
+    }
+  ]
+}

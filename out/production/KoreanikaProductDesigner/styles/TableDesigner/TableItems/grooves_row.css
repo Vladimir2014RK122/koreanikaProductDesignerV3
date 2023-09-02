@@ -1,0 +1,138 @@
+@import url("../../rootTheme.css");
+
+#anchorPaneRoot{
+    -fx-padding: 0;
+    -fx-background-color: MAIN_COLOR_LIGHT;
+}
+
+#labelRowNumber{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+}
+
+#labelName{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+}
+
+#anchorPaneImageView{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+}
+
+#labelMaterial{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+}
+
+#labelType{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+}
+
+#labelModel{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+}
+
+#labelNull1{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+}
+
+
+#labelQuantity{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+}
+
+#labelPrice{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+    -fx-font-weight: bold;
+}
+
+#abchorPaneButtons{
+    -fx-border-color:MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style:solid centered;
+}
+
+#btnPlus{
+     -fx-border-color : transparent;
+     -fx-background-repeat: no-repeat ;
+     -fx-background-position: center ;
+     -fx-background-size: 20px 20px;
+     -fx-min-height: 30px;
+     -fx-min-width: 30px;
+     -fx-max-height: 30px;
+     -fx-max-width: 30px;
+     -fx-background-radius: 2.0px ;
+     -fx-background-color: null;
+     -fx-background-image: url(../icons/icons8_add_new_80px.png);
+}
+#btnPlus:hover{
+	-fx-background-color: #666666;
+}
+#btnPlus:pressed{
+	-fx-background-color: #878787;
+}
+
+#btnMinus{
+     -fx-border-color : transparent;
+     -fx-background-repeat: no-repeat ;
+     -fx-background-position: center ;
+     -fx-background-size: 20px 20px;
+     -fx-min-height: 30px;
+     -fx-min-width: 30px;
+     -fx-max-height: 30px;
+     -fx-max-width: 30px;
+     -fx-background-radius: 2.0px ;
+     -fx-background-color: null;
+     -fx-background-image: url(../icons/icons8_reduce_80px.png);
+}
+#btnMinus:hover{
+	-fx-background-color: #666666;
+}
+#btnMinus:pressed{
+	-fx-background-color: #878787;
+}
+
+#btnDelete{
+     -fx-border-color : transparent;
+     -fx-background-repeat: no-repeat ;
+     -fx-background-position: center ;
+     -fx-background-size: 20px 20px;
+     -fx-min-height: 30px;
+     -fx-min-width: 30px;
+     -fx-max-height: 30px;
+     -fx-max-width: 30px;
+     -fx-background-radius: 2.0px ;
+     -fx-background-color: null;
+     -fx-background-image: url(../icons/icons8_delete_512px.png);
+}
+#btnDelete:hover{
+	-fx-background-color: #666666;
+}
+#btnDelete:pressed{
+	-fx-background-color: #878787;
+}

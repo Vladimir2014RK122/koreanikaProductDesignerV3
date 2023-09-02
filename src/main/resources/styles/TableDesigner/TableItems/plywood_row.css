@@ -1,0 +1,31 @@
+
+
+
+#labelPaintingType {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelNull1 {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelLength {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
+#labelWidth {
+    -fx-border-color: MAIN_COLOR_DARK;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-border-style: solid centered;
+}
+
