@@ -7,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import sketchDesigner.Shapes.ElementTypes;
 import utils.MainWindow;
-import utils.MaterialSelectionWindow.ListCellItems.MaterialListCellItem;
 import utils.ProjectHandler;
 //import utils.AppOwner1;
 

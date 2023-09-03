@@ -26,3 +26,10 @@ replay_pid*
 out/artifacts/KoreanikaProductDesigner_jar/filesForInnoSetupCommon/koreanika.exe
 out/artifacts/KoreanikaProductDesigner_jar/filesForInnoSetupCommon/jre/
 out/artifacts/KoreanikaProductDesigner_jar/files for innoSetup/jre/
+
+.idea/
+*.iml
+
+materials_resources/cashed/
+javaDocs/
+target/

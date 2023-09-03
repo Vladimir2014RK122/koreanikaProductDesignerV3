@@ -1,26 +1,18 @@
 package utils;
 
-import javafx.animation.*;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
-import java.awt.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -128,14 +120,14 @@ public class InfoMessage {
 
     public static void showMessage(MessageType messageType, String message, Pane parent) {
 
-        if (parent == null){
+        if (parent == null) {
             parent = rootAnchorPane;
         }
 
         double duration = 5;
         if (message.length() < 50) {
             initNotification(messageType, 300, 60);
-        }else{
+        } else {
             initNotification(messageType, 300, 150);
             duration = 10;
         }
@@ -151,8 +143,8 @@ public class InfoMessage {
         sequentialTransition.getChildren().clear();
 
         TranslateTransition showTransition = new TranslateTransition(Duration.millis(300), paneNotification);
-        showTransition.setFromX(rootAnchorPane.getWidth());
-        showTransition.setToX(rootAnchorPane.getWidth() - paneNotification.getPrefWidth() - 10);
+        showTransition.setFromX(rootAnchorPane.getWidth() / 2);
+        showTransition.setToX(rootAnchorPane.getWidth() / 2  - paneNotification.getPrefWidth() / 2);
 
         PauseTransition pauseTransition = new PauseTransition(Duration.seconds(duration));
 
@@ -162,13 +154,12 @@ public class InfoMessage {
         fadeTransition.setToValue(0);
 
         TranslateTransition hideTransition = new TranslateTransition(Duration.millis(300), paneNotification);
-        hideTransition.setFromX(rootAnchorPane.getWidth() - paneNotification.getPrefWidth() - 50);
-        hideTransition.setToX(rootAnchorPane.getWidth());
+        hideTransition.setFromX(rootAnchorPane.getWidth() / 2 - paneNotification.getPrefWidth() / 2);
+        hideTransition.setToX(rootAnchorPane.getWidth() / 2);
 
 //        sequentialTransition.getChildren().addAll(showTransition, pauseTransition, hideTransition);
         sequentialTransition.getChildren().addAll(showTransition, pauseTransition, fadeTransition);
         sequentialTransition.play();
-
 
         Pane finalParent = parent;
         sequentialTransition.setOnFinished(event -> {

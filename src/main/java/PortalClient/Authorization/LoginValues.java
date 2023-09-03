@@ -1,22 +1,6 @@
 package PortalClient.Authorization;
 
-public class LoginValues{
-
-    private String login;
-    private String password;
-
-    public LoginValues(String login, String password){
-        this.login = login;
-        this.password = password;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+public record LoginValues(String login, String password) {
 
     @Override
     public String toString() {
@@ -25,4 +9,5 @@ public class LoginValues{
                 ", password=" + password +
                 '}';
     }
+
 }

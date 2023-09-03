@@ -2,12 +2,8 @@ package utils.MaterialSelectionWindow;
 
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
-import utils.MaterialSelectionWindow.ListCellItems.MaterialListCellItem;
-import utils.MaterialSelectionWindow.TreeViewItems.MaterialTreeCellItem;
 
 public class MaterialAnalogListCellFactory implements Callback<ListView<MaterialListCellItem>, ListCell<MaterialListCellItem>> {
 

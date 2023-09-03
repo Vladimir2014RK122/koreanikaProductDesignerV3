@@ -3,7 +3,7 @@ package PortalClient.Authorization;
 public class User {
 
     String login;
-    String Company;
+    String company;
     String role;
     String email;
 
@@ -14,7 +14,7 @@ public class User {
 
     public User(String login, String company, String role, String email) {
         this.login = login;
-        Company = company;
+        this.company = company;
         this.role = role;
         this.email = email;
     }
@@ -24,7 +24,7 @@ public class User {
     }
 
     public String getCompany() {
-        return Company;
+        return company;
     }
 
     public String getRole() {

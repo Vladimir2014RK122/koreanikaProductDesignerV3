@@ -2,12 +2,10 @@ package utils;
 
 public enum AppOwner {
 
-    ZETTA ("zetta"),
-    KOREANIKA ("koreanika"),
-    KOREANIKAMASTER ("koreanika master"),
-    PROMEBEL ("promebel");
-
-
+    ZETTA("zetta"),
+    KOREANIKA("koreanika"),
+    KOREANIKAMASTER("koreanika master"),
+    PROMEBEL("promebel");
 
     private String name;
 

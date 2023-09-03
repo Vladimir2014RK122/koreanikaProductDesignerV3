@@ -1,6 +1,0 @@
-@import url("rootTheme.css");
-
-#anchorPaneRoot {
-    -fx-padding: 0;
-    -fx-background-color: MAIN_COLOR_DARK;
-}

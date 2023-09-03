@@ -1,9 +1,8 @@
 package utils.MaterialSelectionWindow.TreeViewItems;
 
-public abstract class MaterialTreeCellItem {
+public interface MaterialTreeCellItem {
 
+    String getName();
 
-    public abstract String getName();
-
-    public abstract String getFullName();
+    String getFullName();
 }

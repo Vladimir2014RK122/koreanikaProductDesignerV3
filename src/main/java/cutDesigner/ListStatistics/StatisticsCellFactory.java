@@ -4,7 +4,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
-import utils.MaterialSelectionWindow.ListCellItems.MaterialListCellItem;
 
 public class StatisticsCellFactory  implements Callback<ListView<StatisticCellItem>, ListCell<StatisticCellItem>> {
 

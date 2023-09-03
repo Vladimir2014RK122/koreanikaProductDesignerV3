@@ -1,8 +1,8 @@
 package utils.MaterialSelectionWindow.TreeViewItems;
 
-public class FolderItem extends MaterialTreeCellItem {
+public class FolderItem implements MaterialTreeCellItem {
 
-    String name = "";
+    private final String name;
 
     public FolderItem(String name) {
         this.name = name;

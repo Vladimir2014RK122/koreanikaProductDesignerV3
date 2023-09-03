@@ -1,13 +1,10 @@
 package Common;
 
-
-import cutDesigner.CutDesigner;
 import javafx.geometry.Point2D;
 
 public class MyMath {
 
-    public static Point2D lineIntersection(Point2D line1p1, Point2D line1p2, Point2D line2p1, Point2D line2p2){
-
+    public static Point2D lineIntersection(Point2D line1p1, Point2D line1p2, Point2D line2p1, Point2D line2p2) {
         //line 1
         double x1 = line1p1.getX();
         double y1 = line1p1.getY();
@@ -23,17 +20,18 @@ public class MyMath {
         double x = 0;
         double y = 0;
 
-        double p = (x1 - x2) * (y3 - y4) - (y1-y2)*(x3-x4);
+        double p = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
         //line are parallel each other
-        if(p == 0){
+        if (p == 0) {
             System.out.println("line are parallel");
             return null;
-        }else{
-            x = ((x1*y2 - y1*x2)*(x3 - x4) - (x1-x2)*(x3*y4 - y3*x4))/p;
-            y = ((x1*y2 - y1*x2)*(y3 - y4) - (y1-y2)*(x3*y4 - y3*x4))/p;
+        } else {
+            x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / p;
+            y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / p;
         }
 
         return new Point2D(x, y);
     }
+
 }

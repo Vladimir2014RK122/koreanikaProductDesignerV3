@@ -1,14 +1,11 @@
 package utils;
 
-import PortalClient.Authorization.AppType;
-import PortalClient.Authorization.Authorization;
-import PortalClient.Maintance.MaintanceMessageWindow;
+import PortalClient.Maintenance.MaintenanceMessageWindow;
 import Preferences.UserPreferences;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.collections.SetChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -21,12 +18,11 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import tableDesigner.TableDesigner;
 import utils.Currency.UserCurrency;
 import utils.MainSettings.MainSettings;
+import utils.MaterialSelectionWindow.MaterialSelectionEventHandler;
 import utils.MaterialSelectionWindow.MaterialSelectionWindow;
 import utils.News.NewsController;
-import utils.Receipt.ReceiptManager;
 import utils.Updater.UpdateChecker;
 import utils.Updater.UpdateManager;
 
@@ -348,7 +344,7 @@ public class MainWindowDecorator {
 
     private void initControlsLogic(){
 
-        MaterialSelectionWindow.getInstance().setMaterialSelectionEventHandler(new MaterialSelectionWindow.MaterialSelectionEventHandler() {
+        MaterialSelectionWindow.getInstance().setMaterialSelectionEventHandler(new MaterialSelectionEventHandler() {
             @Override
             public void apply() {
                 toggleGroup.selectToggle(btnTableView);
@@ -360,8 +356,7 @@ public class MainWindowDecorator {
             }
         });
 
-
-        mainWindow.setChangeView((MainWindow.ViewType viewType)->{
+        mainWindow.setChangeView((MainWindow.ViewType viewType) -> {
             refreshControls();
             System.out.println("CHANGE VIEW");
         });
@@ -370,17 +365,19 @@ public class MainWindowDecorator {
             mainWindow.createProject();
             refreshControls();
         });
+
         btnOpenProject.setOnMouseClicked(mouseEvent -> {
             mainWindow.openProject();
             refreshControls();
         });
+
         btnSaveProject.setOnMouseClicked(mouseEvent -> mainWindow.saveProject());
+
         btnSaveAsProject.setOnMouseClicked(mouseEvent -> mainWindow.saveAsProject());
 
         btnBack.setOnAction(actionEvent -> {
             btnTableView.fire();
         });
-
 
         toggleGroup.selectedToggleProperty().addListener((observableValue, oldValue, newValue) -> {
             if(newValue == null){
@@ -422,7 +419,7 @@ public class MainWindowDecorator {
 
         btnUpdater.setOnMouseClicked(mouseEvent -> UpdateManager.show(STAGE.getScene()));
         btnNews.setOnMouseClicked(mouseEvent -> mainWindow.toggleNews());
-        btnMaintance.setOnMouseClicked(mouseEvent -> MaintanceMessageWindow.getInstance().show(STAGE.getScene()));
+        btnMaintance.setOnMouseClicked(mouseEvent -> MaintenanceMessageWindow.getInstance().show(STAGE.getScene()));
 
 
         //News button

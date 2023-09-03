@@ -1,13 +1,9 @@
 package PortalClient.Authorization;
 
-import PortalClient.UserEventHandler.UserEventService;
 import Preferences.UserPreferences;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -17,18 +13,22 @@ import org.apache.hc.client5.http.async.methods.*;
 import org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClients;
 import org.apache.hc.core5.concurrent.FutureCallback;
-import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.message.StatusLine;
 import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.apache.hc.core5.util.Timeout;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import utils.*;
-import utils.News.NewsController;
+import utils.InfoMessage;
+import utils.Main;
+import utils.MainWindow;
+import utils.ProjectHandler;
 
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -47,27 +47,26 @@ public class Authorization {
     private Set<AppType> availableAppTypes = new LinkedHashSet<>();
 
 
-    private Authorization(){
+    private Authorization() {
 
 
         loginWindow.setOnLoginClicked(actionEvent -> {
             //accessPermitted.set(true);
             System.out.println(loginWindow.getLoginValues());
             try {
-                sendLoginRequest(loginWindow.getLoginValues().getLogin(), loginWindow.getLoginValues().getPassword());
+                sendLoginRequest(loginWindow.getLoginValues().login(), loginWindow.getLoginValues().password());
             } catch (InterruptedException e) {
                 System.err.println("Login request CRASHES/ INTERRUPT EXCEPTION");
                 MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "При авторизации произошла ошибка");
-            } catch(ExecutionException e){
+            } catch (ExecutionException e) {
                 System.err.println("Login request CRASHES/ SERVER UNAVAILABLE");
-
                 MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает");
             }
         });
 
         loginWindow.setOnCloseClicked(actionEvent -> {
 
-            if(!accessPermitted.get()){
+            if (!accessPermitted.get()) {
 //                ((Stage)(Main.getMainScene().getWindow())).getOnCloseRequest().handle();
 //                ((Stage)(Main.getMainScene().getWindow())).close();
 
@@ -90,9 +89,9 @@ public class Authorization {
 
                 alert.getButtonTypes().setAll(buttonTypeNo, buttonTypeYes, buttonTypeCancel);
 
-                if(ProjectHandler.getUserProject() == null){
+                if (ProjectHandler.getUserProject() == null) {
                     loginWindow.close();
-                    ((Stage)(Main.getMainScene().getWindow())).close();
+                    ((Stage) (Main.getMainScene().getWindow())).close();
                     //event.consume();
                     return;
                 }
@@ -100,17 +99,17 @@ public class Authorization {
                 if (result.get() == buttonTypeNo) {
                     // ... user chose "NO"
                     loginWindow.close();
-                    ((Stage)(Main.getMainScene().getWindow())).close();
+                    ((Stage) (Main.getMainScene().getWindow())).close();
                 } else if (result.get() == buttonTypeYes) {
                     // ... user chose "YES"
                     ProjectHandler.saveProject(ProjectHandler.getCurProjectPath(), ProjectHandler.getCurProjectName());
                     loginWindow.close();
-                    ((Stage)(Main.getMainScene().getWindow())).close();
+                    ((Stage) (Main.getMainScene().getWindow())).close();
                 } else if (result.get() == buttonTypeCancel) {
                     // ... user chose "Three"
                     System.out.println("CANCEL");
                 }
-            }else{
+            } else {
                 loginWindow.close();
             }
 
@@ -119,12 +118,12 @@ public class Authorization {
     }
 
 
-    private void setAvailableAppTypes(Set<AppType> newSet){
+    private void setAvailableAppTypes(Set<AppType> newSet) {
         availableAppTypes.clear();
         availableAppTypes.addAll(newSet);
         System.out.println("Availables Apps = " + availableAppTypes);
 
-        if(!availableAppTypes.contains(UserPreferences.getInstance().getSelectedApp())){
+        if (!availableAppTypes.contains(UserPreferences.getInstance().getSelectedApp())) {
             UserPreferences.getInstance().saveSelectedApp(availableAppTypes.stream().toList().get(0));
         }
         System.out.println("SELECTED APP = " + UserPreferences.getInstance().getSelectedApp());
@@ -136,13 +135,13 @@ public class Authorization {
     }
 
     public static Authorization getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new Authorization();
         }
         return instance;
     }
 
-    public void startApp(){
+    public void startApp() {
 
         //send request and if token wrong:
 
@@ -152,95 +151,94 @@ public class Authorization {
     }
 
 
-
     private void sendLoginRequest(String login, String password) throws InterruptedException, ExecutionException {
 
-            JSONObject obj = new JSONObject();
-            obj.put("login", login);
-            obj.put("password", password);
+        JSONObject obj = new JSONObject();
+        obj.put("login", login);
+        obj.put("password", password);
 
-            String payload = obj.toString();
+        String payload = obj.toString();
 
-            final IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
-                    .setSoTimeout(Timeout.ofSeconds(5)).build();
+        final IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
+                .setSoTimeout(Timeout.ofSeconds(5)).build();
 
-            final CloseableHttpAsyncClient client = HttpAsyncClients.custom()
-                    .setIOReactorConfig(ioReactorConfig).build();
+        final CloseableHttpAsyncClient client = HttpAsyncClients.custom()
+                .setIOReactorConfig(ioReactorConfig).build();
 
-            client.start();
+        client.start();
 
-            final SimpleHttpRequest request = SimpleRequestBuilder.post()
-                    .setUri(Main.getProperty("server.host") + "/auth")
-                    .setBody(payload, ContentType.APPLICATION_JSON)
-                    .build();
+        final SimpleHttpRequest request = SimpleRequestBuilder.post()
+                .setUri(Main.getProperty("server.host") + "/auth")
+                .setBody(payload, ContentType.APPLICATION_JSON)
+                .build();
 
-            System.out.println("Executing request " + request);
+        System.out.println("Executing request " + request);
 
-            final Future<SimpleHttpResponse> future = client.execute(
-                    SimpleRequestProducer.create(request),
-                    SimpleResponseConsumer.create(),
-                    new FutureCallback<SimpleHttpResponse>() {
+        final Future<SimpleHttpResponse> future = client.execute(
+                SimpleRequestProducer.create(request),
+                SimpleResponseConsumer.create(),
+                new FutureCallback<SimpleHttpResponse>() {
 
-                        @Override
-                        public void completed(final SimpleHttpResponse response) {
+                    @Override
+                    public void completed(final SimpleHttpResponse response) {
 
-                            if(response.getCode() == 200){
+                        if (response.getCode() == 200) {
 
-                                try {
-                                    JSONObject jsonObject = (JSONObject) new JSONParser().parse(response.getBody().getBodyText());
-                                    String accessToken = (String) jsonObject.get("accessToken");
-                                    String refreshToken = (String) jsonObject.get("refreshToken");
-                                    System.out.println("accessToken = " + accessToken);
-                                    System.out.println("refreshToken = " + refreshToken);
-                                    UserPreferences.getInstance().saveAccessToken(accessToken);
-                                    UserPreferences.getInstance().saveRefreshToken(refreshToken);
+                            try {
+                                JSONObject jsonObject = (JSONObject) new JSONParser().parse(response.getBody().getBodyText());
+                                String accessToken = (String) jsonObject.get("accessToken");
+                                String refreshToken = (String) jsonObject.get("refreshToken");
+                                System.out.println("accessToken = " + accessToken);
+                                System.out.println("refreshToken = " + refreshToken);
+                                UserPreferences.getInstance().saveAccessToken(accessToken);
+                                UserPreferences.getInstance().saveRefreshToken(refreshToken);
 
 //                                    String userLogin = (String)jsonObject.get("login");
 //                                    String userRole = (String)jsonObject.get("roleName");
 //                                    setUser(userLogin, userRole);
 
-                                    Authorization.getInstance().sendAccessRequest();
+                                Authorization.getInstance().sendAccessRequest();
 
-                                    accessPermitted.set(true);
-                                    Platform.runLater(()->{ closeLoginWindow();});
-                                } catch (ParseException e) {
-                                    System.err.println("Cant parse Auth response");
-                                    Platform.runLater(()->{
-                                        MainWindow.showInfoMessage(
-                                                InfoMessage.MessageType.ERROR,
-                                                "Сервер авторизации ответил некорректно");
-                                    });
-                                }
-
-                            }else{
-
-                                System.out.println(request + "->" + new StatusLine(response));
-                                System.err.println("Response body: " + response.getBody().getBodyText());
-
-
-
-                                Platform.runLater(()->{
-
-
+                                accessPermitted.set(true);
+                                Platform.runLater(() -> {
+                                    closeLoginWindow();
+                                });
+                            } catch (ParseException e) {
+                                System.err.println("Cant parse Auth response");
+                                Platform.runLater(() -> {
                                     MainWindow.showInfoMessage(
                                             InfoMessage.MessageType.ERROR,
-                                            "Неверный логин или пароль");
+                                            "Сервер авторизации ответил некорректно"
+                                    );
                                 });
                             }
-                        }
 
-                        @Override
-                        public void failed(final Exception ex) {
-                            System.out.println(request + "->" + ex);
-                        }
+                        } else {
 
-                        @Override
-                        public void cancelled() {
-                            System.out.println(request + " cancelled");
-                        }
+                            System.out.println(request + "->" + new StatusLine(response));
+                            System.err.println("Response body: " + response.getBody().getBodyText());
 
-                    });
-            future.get();
+                            Platform.runLater(() -> {
+                                MainWindow.showInfoMessage(
+                                        InfoMessage.MessageType.ERROR,
+                                        "Неверный логин или пароль"
+                                );
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void failed(final Exception ex) {
+                        System.out.println(request + "->" + ex);
+                    }
+
+                    @Override
+                    public void cancelled() {
+                        System.out.println(request + " cancelled");
+                    }
+
+                });
+        future.get();
     }
 
 
@@ -251,7 +249,9 @@ public class Authorization {
 //            showLoginWindow();
 //            return;
 //        }
-        if(accessToken == null){ accessToken = "default";}
+        if (accessToken == null) {
+            accessToken = "default";
+        }
 
 
         final IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
@@ -277,14 +277,14 @@ public class Authorization {
                     @Override
                     public void completed(final SimpleHttpResponse response) {
 
-                        if(response.getCode() == 200){
+                        if (response.getCode() == 200) {
 
                             try {
                                 JSONObject jsonObject = (JSONObject) new JSONParser().parse(response.getBody().getBodyText());
                                 System.out.println("payload = " + jsonObject);
 
-                                String userLogin = (String)jsonObject.get("login");
-                                String userRole = (String)jsonObject.get("roleName");
+                                String userLogin = (String) jsonObject.get("login");
+                                String userRole = (String) jsonObject.get("roleName");
                                 setUser(userLogin, userRole);
 
 
@@ -292,7 +292,7 @@ public class Authorization {
                                 System.out.println("-=ACCESS PERMITTED=-");
 
                                 Set apps = new LinkedHashSet();
-                                for(String appShortName : ((String)jsonObject.get("appAccess")).split(",")){
+                                for (String appShortName : ((String) jsonObject.get("appAccess")).split(",")) {
                                     apps.add(AppType.getByShortName(appShortName));
                                 }
 
@@ -302,17 +302,19 @@ public class Authorization {
                                 System.out.println("********************************************************\r\n");
 
                                 accessPermitted.set(true);
-                                Platform.runLater(()->{ closeLoginWindow();});
+                                Platform.runLater(() -> {
+                                    closeLoginWindow();
+                                });
                             } catch (ParseException e) {
-                                System.err.println("Cant parse "+ uri + " response");
-                                Platform.runLater(()->{
+                                System.err.println("Cant parse " + uri + " response");
+                                Platform.runLater(() -> {
                                     MainWindow.showInfoMessage(
                                             InfoMessage.MessageType.ERROR,
                                             "Сервер авторизации ответил некорректно");
                                 });
                             }
 
-                        }else{
+                        } else {
 
                             System.out.println(request + "->" + new StatusLine(response));
                             System.err.println("Response body: " + response.getBody().getBodyText());
@@ -342,8 +344,12 @@ public class Authorization {
     private void sendUpdateAccessTokenRequest(String uri, String accessToken, String refreshToken) throws InterruptedException, ExecutionException {
 
         //if(refreshToken == null) return;
-        if(accessToken == null){ accessToken = "default";}
-        if(refreshToken == null){ refreshToken = "default";}
+        if (accessToken == null) {
+            accessToken = "default";
+        }
+        if (refreshToken == null) {
+            refreshToken = "default";
+        }
 
         JSONObject obj = new JSONObject();
         obj.put("refreshToken", refreshToken);
@@ -374,28 +380,32 @@ public class Authorization {
                     @Override
                     public void completed(final SimpleHttpResponse response) {
 
-                        if(response.getCode() == 200){
+                        if (response.getCode() == 200) {
 
                             try {
                                 JSONObject jsonObject = (JSONObject) new JSONParser().parse(response.getBody().getBodyText());
                                 String accessToken = (String) jsonObject.get("accessToken");
                                 String refreshToken = (String) jsonObject.get("refreshToken");
 
-                                if(accessToken == null){ accessToken = "default";}
-                                if(refreshToken == null){ refreshToken = "default";}
+                                if (accessToken == null) {
+                                    accessToken = "default";
+                                }
+                                if (refreshToken == null) {
+                                    refreshToken = "default";
+                                }
 
-                               UserPreferences.getInstance().saveAccessToken(accessToken);
+                                UserPreferences.getInstance().saveAccessToken(accessToken);
 
                                 System.out.println("accessToken = " + accessToken);
                                 System.out.println("refreshToken = " + refreshToken);
 
-                                if(accessToken == null || accessToken.equals("null") || accessToken.equals("default")){
+                                if (accessToken == null || accessToken.equals("null") || accessToken.equals("default")) {
                                     accessPermitted.set(false);
                                     System.out.println("-=ACCESS DENIED=-");
                                     showLoginWindow();
 
                                     System.out.println("-=FAILED REFRESH ACCESS TOKEN=-");
-                                }else{
+                                } else {
                                     System.out.println("-=SUCCESS REFRESH ACCESS TOKEN=-");
                                     accessPermitted.set(true);
                                     sendAccessRequest();//for update user name
@@ -403,19 +413,19 @@ public class Authorization {
                                 }
 
                             } catch (ParseException e) {
-                                System.err.println("Cant parse "+ uri + " response");
-                                Platform.runLater(()->{
+                                System.err.println("Cant parse " + uri + " response");
+                                Platform.runLater(() -> {
                                     MainWindow.showInfoMessage(
                                             InfoMessage.MessageType.ERROR,
                                             "Сервер авторизации ответил некорректно");
                                 });
                             }
 
-                        }else{
+                        } else {
                             System.out.println("-=FAILED REFRESH ACCESS TOKEN=-");
                             System.out.println(request + "->" + new StatusLine(response));
                             //System.out.println("refreshToken = " + refreshToken);
-                            System.out.println(request .getBody().getBodyText());
+                            System.out.println(request.getBody().getBodyText());
                             System.err.println("Response body: " + response.getBody().getBodyText());
 
                             accessPermitted.set(false);
@@ -441,8 +451,12 @@ public class Authorization {
 
     private void sendUpdateRefreshTokenRequest(String uri, String accessToken, String refreshToken) throws InterruptedException, ExecutionException {
 
-        if(accessToken == null){ accessToken = "default";}
-        if(refreshToken == null){ refreshToken = "default";}
+        if (accessToken == null) {
+            accessToken = "default";
+        }
+        if (refreshToken == null) {
+            refreshToken = "default";
+        }
 
         JSONObject obj = new JSONObject();
         obj.put("refreshToken", refreshToken);
@@ -473,7 +487,7 @@ public class Authorization {
                     @Override
                     public void completed(final SimpleHttpResponse response) {
 
-                        if(response.getCode() == 200 && response.getContentType() == ContentType.APPLICATION_JSON){
+                        if (response.getCode() == 200 && response.getContentType() == ContentType.APPLICATION_JSON) {
 
                             try {
                                 JSONObject jsonObject = (JSONObject) new JSONParser().parse(response.getBody().getBodyText());
@@ -487,19 +501,19 @@ public class Authorization {
                                 System.out.println("-=SUCCESS REFRESH REFRESH TOKEN=-");
 
                             } catch (ParseException e) {
-                                System.err.println("Cant parse "+ uri + " response");
-                                Platform.runLater(()->{
+                                System.err.println("Cant parse " + uri + " response");
+                                Platform.runLater(() -> {
                                     MainWindow.showInfoMessage(
                                             InfoMessage.MessageType.ERROR,
                                             "Сервер авторизации ответил некорректно");
                                 });
                             }
 
-                        }else{
+                        } else {
                             System.out.println("-=FAILED REFRESH REFRESH TOKEN=-");
                             System.out.println(request + "->" + new StatusLine(response));
                             //System.out.println("refreshToken = " + refreshToken);
-                            System.out.println(request .getBody().getBodyText());
+                            System.out.println(request.getBody().getBodyText());
                             System.err.println("Response body: " + response.getBody().getBodyText());
                         }
                     }
@@ -521,42 +535,42 @@ public class Authorization {
 
 
     int accessFailCounter = 0;
-    public void sendAccessRequest(){
+
+    public void sendAccessRequest() {
 
         try {
-            if(UserPreferences.getInstance().getAccessToken() != null){
+            if (UserPreferences.getInstance().getAccessToken() != null) {
                 sendAccessRequest(
                         Main.getProperty("server.host") + "/me",
                         UserPreferences.getInstance().getAccessToken());
 
                 accessFailCounter = 0;
-            }else{
+            } else {
 
                 accessFailCounter++;
 
 
-                if(accessFailCounter >= 3){
+                if (accessFailCounter >= 3) {
                     accessPermitted.set(false);
                     showLoginWindow();
                 }
             }
 
 
-
         } catch (InterruptedException e) {
             System.err.println("check auth request CRASHES/ INTERRUPT EXCEPTION");
 
-                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "При авторизации произошла ошибка");
+            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "При авторизации произошла ошибка");
 
         } catch (ExecutionException e) {
             System.err.println("check auth request CRASHES/ SERVER UNAVAILABLE");
 
-                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает");
+            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает");
 
         }
     }
 
-    public void sendUpdateAccessTokenRequest(){
+    public void sendUpdateAccessTokenRequest() {
 
         try {
             sendUpdateAccessTokenRequest(
@@ -573,10 +587,10 @@ public class Authorization {
         }
     }
 
-    public void sendUpdateRefreshTokenRequest(){
+    public void sendUpdateRefreshTokenRequest() {
 
         try {
-            if(UserPreferences.getInstance().getAccessToken() != null){
+            if (UserPreferences.getInstance().getAccessToken() != null) {
                 sendUpdateRefreshTokenRequest(
                         Main.getProperty("server.host") + "/api/refreshToken",
                         UserPreferences.getInstance().getAccessToken(),
@@ -592,7 +606,7 @@ public class Authorization {
         }
     }
 
-    public void logout(){
+    public void logout() {
 
         UserPreferences.getInstance().removeAccessToken();
         UserPreferences.getInstance().removeRefreshToken();
@@ -603,13 +617,13 @@ public class Authorization {
     }
 
 
-    public void showLoginWindow(){
+    public void showLoginWindow() {
         clearUser();
 
-        Platform.runLater(()->LoginWindow.getInstance().show(Main.getMainScene()));
+        Platform.runLater(() -> LoginWindow.getInstance().show(Main.getMainScene()));
     }
 
-    public void closeLoginWindow(){
+    public void closeLoginWindow() {
         LoginWindow.getInstance().close();
     }
 
@@ -622,23 +636,23 @@ public class Authorization {
         return accessPermitted;
     }
 
-    public void setUser(String login, String role){
+    public void setUser(String login, String role) {
         System.out.println("SET USER = " + login);
 
         boolean sendEvent = false;
-        if(user == null){
+        if (user == null) {
             sendEvent = true;
         }
 
         user = new User(login, role);
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             //MainWindow.setUser(user);
             Main.getMainWindowDecorator().setUserName(user.getLogin() + "/" + UserPreferences.getInstance().getSelectedApp().getShortName());
         });
 
 
-        if(sendEvent){
+        if (sendEvent) {
             //JSONObject jsonObject = new JSONObject();
             //jsonObject.put("type", "app started");
             //UserEventService.getInstance().sendEventRequest(jsonObject);
@@ -646,10 +660,10 @@ public class Authorization {
 
     }
 
-    public void clearUser(){
+    public void clearUser() {
         user = null;
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             Main.getMainWindowDecorator().setUserName("none");
         });
 

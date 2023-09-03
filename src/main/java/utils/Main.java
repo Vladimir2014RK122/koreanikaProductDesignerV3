@@ -1,8 +1,8 @@
 package utils;
 
-import PortalClient.Authorization.AppType;
-import PortalClient.Maintance.ClimeType;
-import PortalClient.Maintance.MaintanceMessage;
+import PortalClient.Authorization.Authorization;
+import PortalClient.Maintenance.ClimeType;
+import PortalClient.Maintenance.MaintenanceMessage;
 import PortalClient.Status.PortalStatus;
 import PortalClient.Update.UpdateService;
 import Preferences.UserPreferences;
@@ -19,13 +19,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import PortalClient.Authorization.Authorization;
 import javafx.stage.StageStyle;
 import utils.Currency.BankCurrency;
 import utils.Currency.UserCurrency;
 import utils.News.NewsController;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -54,57 +56,37 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-
-
         System.out.println("ТЕСТ КИРИЛЛИЦЫ");
 
         try {
             ProjectHandler.projectHandlerInit();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
         //int R = 100;
         int v1 = 10;
         int v2 = 60;
 
-        for(int R=100;R<=1000;R +=100){
-            int b = (int)(R * Math.pow(2, 0.5) + 2* v1 * Math.pow(2, 0.5) + 5);
+        for (int R = 100; R <= 1000; R += 100) {
+            int b = (int) (R * Math.pow(2, 0.5) + 2 * v1 * Math.pow(2, 0.5) + 5);
             //length *= count;
-            int a = (int)((R - R*Math.pow(0.5, 0.5)) + v1 + (v2* Math.pow(2, 0.5)) + 5);
+            int a = (int) ((R - R * Math.pow(0.5, 0.5)) + v1 + (v2 * Math.pow(2, 0.5)) + 5);
             System.out.println("R= " + R + " a = " + a + " b = " + b);
         }
 
-
-
         initMainProperties();
-
 
         appVersion = getActualVersion(".//");
 //        primaryStage.setTitle(appType.getName().toUpperCase() + " " + appVersion);
 
         Font.loadFont("file:resources/fonts/MinionPro-Regular.ttf", 10);
-
         Font.loadFont("file:resources/fonts/OpenSans-Regular.ttf", 10);
         Font.loadFont("file:resources/fonts/OpenSans-Bold.ttf", 10);
 
         //System.setProperty("prism.lcdtext", "true");
         //System.setProperty("prism.allowhidpi", "true");
         //-Dglass.win.minHiDPI=1 //vm option for hidpi
-
-
-
-
-
-
-
-
-
-
-
 
         mainWindow = new MainWindow();
         mainWindowDecorator = new MainWindowDecorator(primaryStage, mainWindow);
@@ -131,14 +113,12 @@ public class Main extends Application {
 //            alert.show();
         });
         mainScene.getRoot().setOnDragOver(event -> {
-
             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             event.consume();
-
         });
 
         mainScene.getRoot().setOnDragDropped(event -> {
-            if(event.getDragboard().hasFiles()){
+            if (event.getDragboard().hasFiles()) {
                 System.out.println("path: " + event.getDragboard().getFiles().get(0).getPath());
                 System.out.println("name: " + event.getDragboard().getFiles().get(0).getName());
 
@@ -146,15 +126,12 @@ public class Main extends Application {
 
                 event.setDropCompleted(true);
             }
-
             event.consume();
-
         });
 
         //mainScene.getWindow().setOnShown(windowEvent ->{
 
         //});
-
 
 
         primaryStage.getIcons().add(new Image(this.getClass().getResource("/styles/icons/koreanika_icon_3.png").toString()));
@@ -178,7 +155,7 @@ public class Main extends Application {
 
             alert.getButtonTypes().setAll(buttonTypeNo, buttonTypeYes, buttonTypeCancel);
 
-            if(ProjectHandler.getUserProject() == null){
+            if (ProjectHandler.getUserProject() == null) {
                 primaryStage.close();
                 event.consume();
                 return;
@@ -214,7 +191,6 @@ public class Main extends Application {
                 for (StackTraceElement s : e.getStackTrace()) {
                     System.err.println(s.toString());
                     stackTrace += s.toString() + "\n";
-
                 }
 
                 String finalStackTrace = stackTrace;
@@ -230,9 +206,9 @@ public class Main extends Application {
                     }
                 });
 
-                MaintanceMessage maintanceMessage = new MaintanceMessage(finalStackTrace);
+                MaintenanceMessage maintenanceMessage = new MaintenanceMessage(finalStackTrace);
                 try {
-                    maintanceMessage.sendMessageToPortal(ClimeType.ERROR);
+                    maintenanceMessage.sendMessageToPortal(ClimeType.ERROR);
                 } catch (ExecutionException ex) {
 //                    ex.printStackTrace();
                 } catch (InterruptedException ex) {
@@ -241,23 +217,18 @@ public class Main extends Application {
             }
         });
 
-
         String accessToken = UserPreferences.getInstance().getAccessToken();
         String refreshToken = UserPreferences.getInstance().getRefreshToken();
         System.out.println("accessToken = " + accessToken);
         System.out.println("refreshToken = " + refreshToken);
         PortalStatus.getInstance().startMonitoring(getProperty("server.host"));
 
-
         PortalStatus.getInstance().portalAvailableProperty().addListener((observableValue, aBoolean, newValue) -> {
-            if(newValue.booleanValue()){
+            if (newValue.booleanValue()) {
                 System.out.println("PORTAL AVAILABLE");
                 Platform.runLater(() -> Authorization.getInstance().startApp());
-
-
-            }else{
+            } else {
                 //portal offline
-
                 System.out.println("PORTAL UNAVAILABLE");
                 Authorization.getInstance().accessPermittedProperty().set(false);
                 Platform.runLater(() -> Authorization.getInstance().showLoginWindow());
@@ -269,7 +240,7 @@ public class Main extends Application {
             public void run() {
                 try {
                     Thread.sleep(1000);
-                    if(!PortalStatus.getInstance().isPortalAvailable()){
+                    if (!PortalStatus.getInstance().isPortalAvailable()) {
                         Platform.runLater(() -> Authorization.getInstance().showLoginWindow());
                     }
                 } catch (InterruptedException e) {
@@ -279,14 +250,12 @@ public class Main extends Application {
         }).start();
 
 
-
-
         Authorization.getInstance().accessPermittedProperty().addListener((observableValue, aBoolean, newValue) -> {
 
 
-            Platform.runLater(()->{
+            Platform.runLater(() -> {
 
-                if(newValue.booleanValue()){
+                if (newValue.booleanValue()) {
 
                     //start Update check Thread:
                     //UpdateChecker.startCheckUpdates();
@@ -297,7 +266,7 @@ public class Main extends Application {
 
                         BankCurrency.getInstance().startMonitor();
 
-                        BankCurrency.getInstance().setFirstCurrencyServerAnswer(()->{
+                        BankCurrency.getInstance().setFirstCurrencyServerAnswer(() -> {
 
                             UserCurrency.getInstance().updateCurrencyValue();
                         });
@@ -305,14 +274,12 @@ public class Main extends Application {
 
                     //open project from double click on file:
                     Parameters params = getParameters();
-                    if(params.getRaw().size() != 0){
+                    if (params.getRaw().size() != 0) {
                         File file = new File(params.getRaw().get(0));
                         MainWindow.projectOpenedLogic(file);
                         mainWindowDecorator.refreshControls();
 //                        ProjectHandler.openProjectFromArguments(params.getRaw().get(0));
                     }
-
-
 
                     new Thread(new Runnable() {
                         @Override
@@ -325,7 +292,7 @@ public class Main extends Application {
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(NewsController.getNewsController().isHaveNotSeenCards()) NewsController.show();
+                                    if (NewsController.getNewsController().isHaveNotSeenCards()) NewsController.show();
                                 }
                             });
                         }
@@ -338,15 +305,14 @@ public class Main extends Application {
         });
     }
 
-
     public static MainWindowDecorator getMainWindowDecorator() {
         return mainWindowDecorator;
     }
 
-    private static String getActualVersion(String appPath){
+    private static String getActualVersion(String appPath) {
         String version = "*dev version";
         try {
-            version = new String (Files.readAllBytes(Paths.get(appPath + "/version")));
+            version = new String(Files.readAllBytes(Paths.get(appPath + "/version")));
         } catch (IOException e) {
 //            File fileVersion = new File(appPath + "/version");
 //            try {
@@ -362,7 +328,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-
         launch(args);
     }
 
@@ -387,7 +352,6 @@ public class Main extends Application {
             System.exit(1);
             return;
         }
-
 
         try {
             updaterProperties.load(fis);
@@ -415,7 +379,6 @@ public class Main extends Application {
 
         /* coefficients */
         {
-
             if (updaterProperties.getProperty("mainCoefficient") == null) {
                 updaterProperties.put("mainCoefficient", "" + PriceCoefficientsWindow.getMinMainCoefficient());
                 needToSave = true;
@@ -426,18 +389,17 @@ public class Main extends Application {
                 needToSave = true;
             }
 
-
-            try{
+            try {
                 materialCoefficient = Double.valueOf(updaterProperties.getProperty("materialCoefficient"));
-            }catch (NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 System.err.println("PROPERTIES ERROR. materialCoefficient wrong value!");
                 updaterProperties.put("materialCoefficient", "" + PriceCoefficientsWindow.getMinMaterialCoefficient());
                 needToSave = true;
             }
 
-            try{
+            try {
                 mainCoefficient = Double.valueOf(updaterProperties.getProperty("mainCoefficient"));
-            }catch (NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 System.err.println("PROPERTIES ERROR. mainCoefficient wrong value!");
                 updaterProperties.put("mainCoefficient", "" + PriceCoefficientsWindow.getMinMainCoefficient());
                 needToSave = true;
@@ -448,15 +410,11 @@ public class Main extends Application {
 //                needToSave = true;
 //            }
 
-
-
-
             System.out.println("mainCoefficient = " + mainCoefficient);
             System.out.println("materialCoefficient = " + materialCoefficient);
 
             ProjectHandler.setPriceMainCoefficient(mainCoefficient);
             ProjectHandler.setPriceMaterialCoefficient(materialCoefficient);
-
         }
 
         //company address:
@@ -489,17 +447,14 @@ public class Main extends Application {
                 updaterProperties.put("server.host", "portal.koreanika.ru");
                 needToSave = true;
             }
-
         }
 
-
-
-        if(needToSave){
+        if (needToSave) {
             saveProperties();
         }
     }
 
-    private static synchronized void saveProperties(){
+    private static synchronized void saveProperties() {
         try {
             updaterProperties.store(new FileOutputStream(UPDATER_PROPERTIES_FILENAME), null);
         } catch (IOException e) {
@@ -507,16 +462,16 @@ public class Main extends Application {
         }
     }
 
-    public static String getProperty(String key){
+    public static String getProperty(String key) {
         return updaterProperties.getProperty(key);
     }
 
-    public static synchronized void updateFieldInProperties(String key, String value){
+    public static synchronized void updateFieldInProperties(String key, String value) {
         updaterProperties.put(key, value);
         saveProperties();
     }
 
-    public static synchronized void updateCoefficientProperties(double mainCoeff, double materialCoeff){
+    public static synchronized void updateCoefficientProperties(double mainCoeff, double materialCoeff) {
         mainCoefficient = mainCoeff;
         materialCoefficient = materialCoeff;
         updaterProperties.put("mainCoefficient", "" + mainCoefficient);

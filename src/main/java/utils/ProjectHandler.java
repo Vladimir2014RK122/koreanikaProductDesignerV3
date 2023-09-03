@@ -2173,9 +2173,15 @@ public class ProjectHandler {
                     String[] values = row.getCell(cell).getStringCellValue().split("##");
                     material.getVisualProperties().clear();
 
-                    if(values.length >= 1){material.getVisualProperties().put(Material.VIS_PROP_COLOR, values[0]);}
-                    if(values.length >= 2){material.getVisualProperties().put(Material.VIS_PROP_TEXTURE, values[1]);}
-                    if(values.length >= 3){material.getVisualProperties().put(Material.VIS_PROP_SURFACE, values[2]);}
+                    if (values.length >= 1) {
+                        material.getVisualProperties().put(Material.VIS_PROP_COLOR, values[0]);
+                    }
+                    if (values.length >= 2) {
+                        material.getVisualProperties().put(Material.VIS_PROP_TEXTURE, values[1]);
+                    }
+                    if (values.length >= 3) {
+                        material.getVisualProperties().put(Material.VIS_PROP_SURFACE, values[2]);
+                    }
 
                 }else{
                     material.getVisualProperties().clear();

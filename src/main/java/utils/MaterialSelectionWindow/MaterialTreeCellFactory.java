@@ -7,38 +7,29 @@ import javafx.util.Callback;
 import utils.MaterialSelectionWindow.TreeViewItems.MaterialTreeCellItem;
 
 public class MaterialTreeCellFactory implements Callback<TreeView<MaterialTreeCellItem>, TreeCell<MaterialTreeCellItem>> {
-
     @Override
     public TreeCell<MaterialTreeCellItem> call(TreeView<MaterialTreeCellItem> param) {
-
-        TreeCell<MaterialTreeCellItem> cell = new TreeCell<MaterialTreeCellItem>() {
+        TreeCell<MaterialTreeCellItem> cell = new TreeCell<>() {
             @Override
             protected void updateItem(MaterialTreeCellItem item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setText(null);
                     setGraphic(null);
                 } else {
                     setText(item.getName());
-                    //setGraphic(item);
                 }
             }
         };
-
-
-        cell.setOnMousePressed(event -> onMousePressed(event));
-
+        cell.setOnMousePressed(this::onMousePressed);
         return cell;
     }
 
     public void onMousePressed(MouseEvent event) {
-
         System.out.println("event.getClickCount() = " + event.getClickCount());
         if (event.getClickCount() == 2) {
             MaterialSelectionWindow.getBtnToProject().fire();
-           //MaterialSelectionWindow.getMaterialSelectionWindow().addMaterialToProjectListView(MaterialSelectionWindow.getSelectedMaterials());
         }
-
     }
+
 }

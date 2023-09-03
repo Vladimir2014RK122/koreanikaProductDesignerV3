@@ -1,8 +1,5 @@
 package PortalClient.Authorization;
 
-import com.sun.javafx.application.HostServicesDelegate;
-import cutDesigner.CutDesigner;
-import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -47,11 +44,10 @@ public class LoginWindow {
     PasswordField passwordField;
     TextField textFieldLogin;
 
-    private LoginWindow(){
-
-        try{
+    private LoginWindow() {
+        try {
             rootAnchorPaneLogin = FXMLLoader.load(getClass().getResource("/fxmls/Authorization/LoginWindow.fxml"));
-        }catch (IOException ex){
+        } catch (IOException ex) {
 
         }
         scene = new Scene(rootAnchorPaneLogin);
@@ -60,15 +56,13 @@ public class LoginWindow {
     }
 
     public static LoginWindow getInstance() {
-
-        if(instance == null){
+        if (instance == null) {
             instance = new LoginWindow();
         }
         return instance;
     }
 
-    private void initControls(){
-
+    private void initControls() {
         btnWindowClose = (Button) rootAnchorPaneLogin.lookup("#btnWindowClose");
         btnWindowMaxMin = (Button) rootAnchorPaneLogin.lookup("#btnWindowMaxMin");
         btnWindowSubtract = (Button) rootAnchorPaneLogin.lookup("#btnWindowSubtract");
@@ -80,24 +74,20 @@ public class LoginWindow {
 
         btnLogin = (Button) rootAnchorPaneLogin.lookup("#btnLogin");
 
-
         btnWindowMaxMin.setDisable(true);
         btnWindowSubtract.setDisable(true);
         btnWindowMaxMin.setVisible(false);
         btnWindowSubtract.setVisible(false);
     }
 
-    private void initControlsLogic(){
-
+    private void initControlsLogic() {
         rootAnchorPaneLogin.setOnKeyPressed(keyEvent -> {
-            if(keyEvent.getCode() == KeyCode.ENTER){
+            if (keyEvent.getCode() == KeyCode.ENTER) {
                 btnLogin.fire();
             }
         });
 
         linkForgetPassword.setOnMouseClicked(mouseEvent -> {
-
-
             try {
                 Desktop.getDesktop().browse(new URI("http://portal.koreanika.ru/forgotPassword"));
             } catch (IOException e) {
@@ -107,38 +97,36 @@ public class LoginWindow {
             }
         });
 
-
         rootAnchorPaneLogin.setOnMousePressed((MouseEvent event) -> {
             xOffset = event.getSceneX();
             yOffset = event.getSceneY();
         });
+
         rootAnchorPaneLogin.setOnMouseDragged((MouseEvent event) -> {
             stage.setX(event.getScreenX() - xOffset);
             stage.setY(event.getScreenY() - yOffset);
         });
-
     }
 
-    protected void setOnLoginClicked(EventHandler<ActionEvent> var1){
+    protected void setOnLoginClicked(EventHandler<ActionEvent> var1) {
         btnLogin.setOnAction(var1);
     }
 
-    protected void setOnCloseClicked(EventHandler<ActionEvent> var1){
+    protected void setOnCloseClicked(EventHandler<ActionEvent> var1) {
         btnWindowClose.setOnAction(var1);
     }
 
-
-    public LoginValues getLoginValues(){
+    public LoginValues getLoginValues() {
         return new LoginValues(textFieldLogin.getText(), passwordField.getText());
     }
 
-    protected void show(Scene parentScene){
-
-        if(stage!= null && stage.isShowing())return;
+    protected void show(Scene parentScene) {
+        if (stage != null && stage.isShowing()) {
+            return;
+        }
 
         this.mainScene = parentScene;
         mainScene.getRoot().setDisable(true);
-
 
         stage = new Stage();
         stage.setScene(scene);
@@ -148,16 +136,11 @@ public class LoginWindow {
         stage.initStyle(StageStyle.UNDECORATED);
 
         stage.show();
-        stage.setOnHiding(windowEvent -> {
-            mainScene.getRoot().setDisable(false);
-        });
+        stage.setOnHiding(windowEvent -> mainScene.getRoot().setDisable(false));
     }
 
-    protected void close(){
-
-        if(stage != null) stage.close();
-
+    protected void close() {
+        if (stage != null) stage.close();
     }
-
 
 }
