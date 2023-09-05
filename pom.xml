@@ -16,6 +16,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>7.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
@@ -96,7 +101,7 @@
             <!--                <configuration>-->
             <!--                    <archive>-->
             <!--                        <manifest>-->
-            <!--                            <mainClass>utils.Main</mainClass>-->
+            <!--                            <mainClass>ru.koreanika.utils.Main</mainClass>-->
             <!--                        </manifest>-->
             <!--                    </archive>-->
             <!--                </configuration>-->
@@ -118,7 +123,7 @@
                 <configuration>
                     <jlinkImageName>koreanikaDesignerRuntime</jlinkImageName>
                     <launcher>launcher</launcher>
-                    <mainClass>utils.Main</mainClass>
+                    <mainClass>ru.koreanika.utils.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>

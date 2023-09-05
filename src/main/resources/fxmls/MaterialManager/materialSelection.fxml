@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="rootAnchorPane" prefHeight="700.0" prefWidth="1188.0" styleClass="materialWindowRoot" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="rootAnchorPane" fx:id="rootAnchorPane" prefHeight="700.0" prefWidth="1188.0" styleClass="materialWindowRoot" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <TreeView id="treeViewAvailable" layoutX="21.0" layoutY="250.0" prefHeight="440.0" prefWidth="330.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="250.0" />
         <ListView id="listViewInProject" layoutX="322.0" layoutY="50.0" prefHeight="261.0" prefWidth="571.0" AnchorPane.bottomAnchor="347.0" AnchorPane.leftAnchor="375.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="66.0" />
@@ -70,12 +70,12 @@
             <Font size="11.0" />
          </font>
       </Label>
-      <Label id="labelSearchInfo" layoutX="26.0" layoutY="165.0" prefHeight="27.0" text="По поверхности:" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="165.0">
+      <Label id="labelSearchInfo" layoutX="20.0" layoutY="165.0" prefHeight="27.0" text="По поверхности:" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="165.0">
          <font>
             <Font size="11.0" />
          </font>
       </Label>
-      <Label layoutX="18.0" layoutY="210.0" prefHeight="16.0" prefWidth="87.0" text="Участие в акции:">
+      <Label layoutX="14.0" layoutY="204.0" prefHeight="27.0" text="Участие в акции:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="204.0">
          <font>
             <Font size="11.0" />
          </font></Label>
@@ -91,6 +91,6 @@
     <stylesheets>
         <URL value="@../../styles/rootTheme.css" />
         <URL value="@../../styles/materialSelection.css" />
-      <URL value="@../../styles/colorsKoreanika.css" />
+        <URL value="@../../styles/colorsKoreanika.css" />
     </stylesheets>
 </AnchorPane>
