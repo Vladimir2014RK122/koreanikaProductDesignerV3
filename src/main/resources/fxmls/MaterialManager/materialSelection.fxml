@@ -87,6 +87,11 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
         </content>
       </TitledPane>
+      <Button id="btnFiltersReset" layoutX="116.0" layoutY="11.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="98.0" text="Сбросить всё" textAlignment="CENTER">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Button>
     </children>
     <stylesheets>
         <URL value="@../../styles/rootTheme.css" />

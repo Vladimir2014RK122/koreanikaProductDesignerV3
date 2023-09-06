@@ -45,6 +45,8 @@ public class MaterialSelectionWindow {
     private static TreeView<MaterialTreeCellItem> treeViewAvailable;
     private static ListView<MaterialListCellItem> listViewInProject;
 
+    private static Button btnFiltersReset;
+
     /* Filter fields: */
     private static TextField textFieldFilterName;
     private static TitledPane titledPaneFilterColor;
@@ -91,6 +93,8 @@ public class MaterialSelectionWindow {
         rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/rootTheme.css").toExternalForm());
         rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/materialSelection.css").toExternalForm());
 
+        btnFiltersReset = (Button) rootAnchorPane.lookup("#btnFiltersReset");
+
         btnToProject = (Button) rootAnchorPane.lookup("#btnToProject");
         btnFromProject = (Button) rootAnchorPane.lookup("#btnFromProject");
         btnApply = (Button) rootAnchorPane.lookup("#btnApply");
@@ -134,6 +138,14 @@ public class MaterialSelectionWindow {
 
         listViewAnalog.setCellFactory(new MaterialAnalogListCellFactory());
         listViewInProject.setCellFactory(new MaterialListCellFactory());
+
+        btnFiltersReset.setOnMouseClicked(event -> {
+            listViewFilterColors.getItems().forEach(checkBox -> checkBox.setSelected(false));
+            listViewFilterTexture.getItems().forEach(checkBox -> checkBox.setSelected(false));
+            listViewFilterSurface.getItems().forEach(checkBox -> checkBox.setSelected(false));
+            listViewFilterPromotion.getItems().forEach(checkBox -> checkBox.setSelected(false));
+            filterFieldsUpdated();
+        });
 
         initFilterFields();
         initFilterLogic();
@@ -463,10 +475,10 @@ public class MaterialSelectionWindow {
             filterFieldsUpdated();
         });
 
-        listViewFilterColors.getItems().forEach(i -> i.setOnAction(e -> filterFieldsUpdated()));
-        listViewFilterTexture.getItems().forEach(i -> i.setOnAction(e -> filterFieldsUpdated()));
-        listViewFilterSurface.getItems().forEach(i -> i.setOnAction(e -> filterFieldsUpdated()));
-        listViewFilterPromotion.getItems().forEach(i -> i.setOnAction(e -> filterFieldsUpdated()));
+        listViewFilterColors.getItems().forEach(checkBox -> checkBox.setOnAction(e -> filterFieldsUpdated()));
+        listViewFilterTexture.getItems().forEach(checkBox -> checkBox.setOnAction(e -> filterFieldsUpdated()));
+        listViewFilterSurface.getItems().forEach(checkBox -> checkBox.setOnAction(e -> filterFieldsUpdated()));
+        listViewFilterPromotion.getItems().forEach(checkBox -> checkBox.setOnAction(e -> filterFieldsUpdated()));
     }
 
     private void filterFieldsUpdated() {
