@@ -1,4 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: utils.MainJFX17
-
-
+Main-Class: ru.koreanika.utils.Main
