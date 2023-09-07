@@ -6,7 +6,7 @@
 #define MyAppPublisher "KoreanikaMv3"
 #define MyAppURL "https://www.koreanika.ru/"
 #define MyAppExeName "koreanika.exe"
-#define MyAppCurrentUpdateVersion "3.0.67"
+#define MyAppCurrentUpdateVersion "3.0.68"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -37,9 +37,9 @@ DisableReadyPage=yes
 DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputDir=C:\Users\06718\YandexDisk\Programming\ComercialProjects\KoreanikaProductDesigner\KoreanikaProductDesigner\out\artifacts\KoreanikaProductDesigner_jar\innosetup
+OutputDir=C:\Users\06718\Koreanika\koreanikaProductDesignerV3\out\artifacts\KoreanikaProductDesigner_jar\innosetup
 OutputBaseFilename=KoreanikaMSetup {#MyAppVersion} upd {#MyAppCurrentUpdateVersion}
-SetupIconFile=C:\Users\06718\YandexDisk\Programming\ComercialProjects\KoreanikaProductDesigner\KoreanikaProductDesigner\out\artifacts\KoreanikaProductDesigner_jar\exeWrapper\forKPDBuild\koreanika_icon_2.ico
+SetupIconFile=C:\Users\06718\Koreanika\koreanikaProductDesignerV3\out\artifacts\KoreanikaProductDesigner_jar\exeWrapper\forKPDBuild\koreanika_icon_2.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -136,9 +136,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 ;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\06718\YandexDisk\Programming\ComercialProjects\KoreanikaProductDesigner\KoreanikaProductDesigner\out\artifacts\KoreanikaProductDesigner_jar\filesForInnoSetupCommon\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\06718\YandexDisk\Programming\ComercialProjects\KoreanikaProductDesigner\KoreanikaProductDesigner\out\artifacts\KoreanikaProductDesigner_jar\filesForInnoSetupCommon\*"; Excludes: "updater.properties, version"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\06718\YandexDisk\Programming\ComercialProjects\KoreanikaProductDesigner\KoreanikaProductDesigner\out\artifacts\KoreanikaProductDesigner_jar\filesForInnoSetupKoreanikaMaster\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\06718\Koreanika\koreanikaProductDesignerV3\out\artifacts\KoreanikaProductDesigner_jar\filesForInnoSetupCommon\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\06718\Koreanika\koreanikaProductDesignerV3\out\artifacts\KoreanikaProductDesigner_jar\filesForInnoSetupCommon\*"; Excludes: "updater.properties, version"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\06718\Koreanika\koreanikaProductDesignerV3\out\artifacts\KoreanikaProductDesigner_jar\filesForInnoSetupKoreanikaMaster\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
