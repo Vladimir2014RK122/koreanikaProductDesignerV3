@@ -6,7 +6,7 @@
 #define MyAppPublisher "KoreanikaMv3"
 #define MyAppURL "https://www.koreanika.ru/"
 #define MyAppExeName "koreanika.exe"
-#define MyAppCurrentUpdateVersion "3.0.68"
+#define MyAppCurrentUpdateVersion "3.0.70"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
