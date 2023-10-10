@@ -1125,7 +1125,8 @@ public class ProjectHandler {
 
 
 //                if (depths.size() == 0) continue;
-                Material material = new Material(row.getCell(0).getStringCellValue(),
+                Material material = new Material(row.getCell(4).getStringCellValue(),
+                        row.getCell(0).getStringCellValue(),
                         row.getCell(1).getStringCellValue(),
                         row.getCell(2).getStringCellValue(),
                         row.getCell(3).getStringCellValue(), width, height, imgPath, depths);

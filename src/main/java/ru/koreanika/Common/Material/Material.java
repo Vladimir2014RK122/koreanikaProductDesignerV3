@@ -26,6 +26,7 @@ import java.util.*;
 
 public class Material {
 
+    private String id;
     private String mainType;
     private String subType;
     private String collection;
@@ -192,8 +193,8 @@ public class Material {
 
     private ArrayList<Material> analogsList = new ArrayList<>();
 
-    public Material(String mainType, String subType, String collection, String color, double width, double height, String imgPath, ArrayList<String> depthsList) {
-
+    public Material(String id, String mainType, String subType, String collection, String color, double width, double height, String imgPath, ArrayList<String> depthsList) {
+        this.id = id;
         this.mainType = mainType;
         this.subType = subType;
         this.collection = collection;
@@ -245,6 +246,13 @@ public class Material {
 //        materialImage = new MaterialImage();
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public MaterialImage getMaterialImage() {
         return materialImage;
@@ -1270,17 +1278,16 @@ public class Material {
 
 
     public Material copyMaterial(String color, double width, double height, String imgPath, ArrayList<String> depthsList){
-        return copyMaterial(this.mainType, this.subType, this.collection, color, width, height, imgPath, depthsList);
+        return copyMaterial(this.id, this.mainType, this.subType, this.collection, color, width, height, imgPath, depthsList);
     }
-    public Material copyMaterial(String mainType, String subType, String collection, String color, double width, double height, String imgPath, ArrayList<String> depthsList){
 
-
+    private Material copyMaterial(String id, String mainType, String subType, String collection, String color, double width, double height, String imgPath, ArrayList<String> depthsList){
         ArrayList<String> depthsCopy = new ArrayList<>();
         for(String s : depthsList){
             depthsCopy.add(new String(s));
         }
         //System.out.println("MATERIAL = " + this);
-        Material materialCopy = new Material(mainType, subType, collection, color, width, height, imgPath, depthsCopy);
+        Material materialCopy = new Material(id, mainType, subType, collection, color, width, height, imgPath, depthsCopy);
         //System.out.println("materialCopy = " + materialCopy);
         materialCopy.setCurrency("RUB");
 
@@ -1471,6 +1478,7 @@ public class Material {
     public JSONObject getJsonView(){
 
         JSONObject materialObject = new JSONObject();
+        materialObject.put("id", id);
         materialObject.put("name", name);
         materialObject.put("defaultDepth", getDefaultDepth());
         materialObject.put("useMainSheets", isUseMainSheets());
@@ -1495,61 +1503,63 @@ public class Material {
         return  materialObject;
     }
 
-    public static Material getFromJson(JSONObject materialObject){
-
+    public static Material getFromJson(JSONObject materialObject) {
         Material material = null;
-        //check material from template or not
-        String name = (String)(materialObject.get("name"));
-        int defaultDepth = ((Long)(materialObject.get("defaultDepth"))).intValue();
-        int availableMainSheetsCount = ((Long)(materialObject.get("availableMainSheetsCount"))).intValue();
-        boolean useMainSheets = ((Boolean)(materialObject.get("useMainSheets"))).booleanValue();
-        boolean useAdditionalSheets = ((Boolean)(materialObject.get("useAdditionalSheets"))).booleanValue();
 
+        String id = (String) materialObject.get("id");
+
+        //check material from template or not
+        String name = (String) materialObject.get("name");
+        int defaultDepth = ((Long) materialObject.get("defaultDepth")).intValue();
+        int availableMainSheetsCount = ((Long) materialObject.get("availableMainSheetsCount")).intValue();
+        boolean useMainSheets = (Boolean) materialObject.get("useMainSheets");
+        boolean useAdditionalSheets = (Boolean) materialObject.get("useAdditionalSheets");
 
         ArrayList<String> depthsList = new ArrayList<>();
         JSONArray additionalSheetsJsonArray = (JSONArray) materialObject.get("additionalSheets");
-        for(Object obj : additionalSheetsJsonArray){
+        for (Object obj : additionalSheetsJsonArray) {
             JSONObject sheetObject = (JSONObject) obj;
             int sheetDepth = ((Long) (sheetObject.get("depth"))).intValue();
-            if(!depthsList.contains("" + sheetDepth))depthsList.add("" + sheetDepth);
-
+            if (!depthsList.contains("" + sheetDepth)) depthsList.add("" + sheetDepth);
         }
 
-
-        if(availableMainSheetsCount == 0){
+        if (availableMainSheetsCount == 0) {
             //created from template
             Material templateMaterial = null;
             boolean foundTemplate = false;
-            for(Material m : ProjectHandler.getMaterialsListAvailable()){
+            for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+                // try to resolve material template based on Material ID
+                if (m.getId() != null && id != null && !id.isEmpty() && m.getId().equals(id)) {
+                    System.out.println("DEBUG: [1] Material template resolved by ID, id = " + id);
+                    templateMaterial = m;
+                    foundTemplate = true;
+                    break;
+                }
+
+                // otherwise attempt name-based resolution
                 String condName = name.split("\\$")[0] + "$" + name.split("\\$")[1] + "$" + name.split("\\$")[2] + "$" + name.split("\\$")[3] + "$" + name.split("\\$")[4] + "$" + name.split("\\$")[5];
-                if((m.getMainType() + "$" + m.getSubType() + "$" + m.getCollection() + "$" + m.getColor()).equals(condName)){
+                if ((m.getMainType() + "$" + m.getSubType() + "$" + m.getCollection() + "$" + m.getColor()).equals(condName)) {
+                    System.out.println("DEBUG: [1] Material template resolved by name, name = " + condName);
                     templateMaterial = m;
                     foundTemplate = true;
                     break;
                 }
             }
-            if(!foundTemplate){
-                for(Material m : ProjectHandler.getMaterialsListAvailable()){
-
+            if (!foundTemplate) {
+                for (Material m : ProjectHandler.getMaterialsListAvailable()) {
                     String condName = name.split("\\$")[0] + "$" + name.split("\\$")[1] + "$" + name.split("\\$")[2] + "$" + "Другой";
-                    if((m.getMainType() + "$" + m.getSubType() + "$" + m.getCollection() + "$" + m.getColor()).equalsIgnoreCase(condName)){
+                    if ((m.getMainType() + "$" + m.getSubType() + "$" + m.getCollection() + "$" + m.getColor()).equalsIgnoreCase(condName)) {
                         templateMaterial = m;
                         foundTemplate = true;
                         break;
                     }
-
-//                    System.out.println("\n" + (m.getMainType() + "$" + m.getSubType() + "$" + m.getCollection() + "$" + m.getColor()));
-//                    System.out.println(condName);
                 }
-
-
             }
 
-            if(!foundTemplate){
+            if (!foundTemplate) {
                 System.out.println("MATERIAL DOESNT PARSED FROM JSON!!!! (" + name + ")");
                 return null;
             }
-
 
 
             //depthsList
@@ -1564,7 +1574,7 @@ public class Material {
             material.getWindowSillDepthsAndPrices().clear();
             material.getFootDepthsAndPrices().clear();
 
-            for(String d : material.getDepths()){
+            for (String d : material.getDepths()) {
 
                 material.getTableTopDepthsAndPrices().put(Integer.parseInt(d), 100000);
                 material.getWallPanelDepthsAndPrices().put(Integer.parseInt(d), 100000);
@@ -1572,13 +1582,22 @@ public class Material {
                 material.getFootDepthsAndPrices().put(Integer.parseInt(d), 100000);
             }
 
-        }else{
+        } else {
             //from availableList
             boolean foundTemplate = false;
 
-            for(Material m : ProjectHandler.getMaterialsListAvailable()){
+            for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+                // try to resolve material template based on Material ID
+                if (m.getId() != null && id != null && !id.isEmpty() && m.getId().equals(id)) {
+                    System.out.println("DEBUG: [2] Material template resolved by ID, id = " + id);
+                    material = m;
+                    foundTemplate = true;
+                    break;
+                }
 
-                if(m.getName().equals(name)){
+                // otherwise attempt name-based resolution
+                if (m.getName().equals(name)) {
+                    System.out.println("DEBUG: [2] Material template resolved by name, name = " + name);
                     material = m;
                     foundTemplate = true;
                     break;
@@ -1586,7 +1605,7 @@ public class Material {
 //                System.out.println(m.getName());
             }
 
-            if(!foundTemplate){
+            if (!foundTemplate) {
                 System.out.println("MATERIAL DOESNT PARSED FROM JSON!!!! (" + name + ")");
                 return null;
             }
@@ -1596,13 +1615,13 @@ public class Material {
 
         material.getAvailableAdditionalSheets().clear();
 
-        for(Object obj : additionalSheetsJsonArray){
+        for (Object obj : additionalSheetsJsonArray) {
             JSONObject sheetObject = (JSONObject) obj;
 
-            double sheetWidth = ((Double)(sheetObject.get("width"))).doubleValue();
-            double sheetHeight = ((Double)(sheetObject.get("height"))).doubleValue();
-            int sheetDepth = ((Long)(sheetObject.get("depth"))).intValue();
-            double sheetCustomPriceForMeter = ((Double)(sheetObject.get("priceForMeter"))).doubleValue();
+            double sheetWidth = ((Double) (sheetObject.get("width"))).doubleValue();
+            double sheetHeight = ((Double) (sheetObject.get("height"))).doubleValue();
+            int sheetDepth = ((Long) (sheetObject.get("depth"))).intValue();
+            double sheetCustomPriceForMeter = ((Double) (sheetObject.get("priceForMeter"))).doubleValue();
             String currency = (String) (sheetObject.get("currency"));
 
             material.createAdditionalMaterialSheet(sheetDepth, sheetWidth, sheetHeight, sheetWidth, sheetHeight, sheetCustomPriceForMeter, currency);
