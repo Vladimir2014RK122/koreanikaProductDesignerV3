@@ -16,11 +16,14 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.utils.ProjectHandler;
 
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.*;
 
@@ -205,20 +208,17 @@ public class Material {
         this.depthsList = depthsList;
 
 
-        if(mainType.equalsIgnoreCase("Акриловый камень")) availableMainSheetsCount = Integer.MAX_VALUE;
-        if(mainType.equalsIgnoreCase("Полиэфирный камень")) availableMainSheetsCount = Integer.MAX_VALUE;
-        if(mainType.equalsIgnoreCase("Кварцевый агломерат")) availableMainSheetsCount = Integer.MAX_VALUE;
-        if(mainType.equalsIgnoreCase("Dektone")) availableMainSheetsCount = Integer.MAX_VALUE;
-        if(mainType.equalsIgnoreCase("Кварцекерамический камень")) availableMainSheetsCount = Integer.MAX_VALUE;
-        if(mainType.equalsIgnoreCase("Мраморный агломерат")) availableMainSheetsCount = Integer.MAX_VALUE;
-        if(mainType.equalsIgnoreCase("Массив")) availableMainSheetsCount = Integer.MAX_VALUE;
-        if(mainType.equalsIgnoreCase("Массив_шпон")) availableMainSheetsCount = Integer.MAX_VALUE;
-        if(mainType.equalsIgnoreCase("Натуральный камень")) availableMainSheetsCount = 0;
+        if (mainType.equalsIgnoreCase("Акриловый камень")) availableMainSheetsCount = Integer.MAX_VALUE;
+        if (mainType.equalsIgnoreCase("Полиэфирный камень")) availableMainSheetsCount = Integer.MAX_VALUE;
+        if (mainType.equalsIgnoreCase("Кварцевый агломерат")) availableMainSheetsCount = Integer.MAX_VALUE;
+        if (mainType.equalsIgnoreCase("Dektone")) availableMainSheetsCount = Integer.MAX_VALUE;
+        if (mainType.equalsIgnoreCase("Кварцекерамический камень")) availableMainSheetsCount = Integer.MAX_VALUE;
+        if (mainType.equalsIgnoreCase("Мраморный агломерат")) availableMainSheetsCount = Integer.MAX_VALUE;
+        if (mainType.equalsIgnoreCase("Массив")) availableMainSheetsCount = Integer.MAX_VALUE;
+        if (mainType.equalsIgnoreCase("Массив_шпон")) availableMainSheetsCount = Integer.MAX_VALUE;
+        if (mainType.equalsIgnoreCase("Натуральный камень")) availableMainSheetsCount = 0;
 
-
-//        System.out.println("depthsList.size() = " + depthsList);
-//        System.out.println("depthsList = " + depths);
-        if(depthsList.size()!=0){
+        if (depthsList.size() != 0) {
             for (String s : depthsList) {
                 this.depths.add(s);
                 depthsString += s + ",";
@@ -229,21 +229,21 @@ public class Material {
             defaultDepth = Integer.parseInt(depths.get(0));
         }
 
-        if(color.equalsIgnoreCase("другой") || depthsList.size() == 0){
+        if (color.equalsIgnoreCase("другой") || depthsList.size() == 0) {
             template = true;
             useMainSheets = false;
             availableMainSheetsCount = 0;
         }
 
-//        System.out.println("defaultDepth = " + defaultDepth);
-
         name = mainType + "$" + subType + "$" + collection + "$" + color + "$" + width + "$" + height + "$" + imgPath + "$" + depthsString;
 
-
-        //System.out.println("name = " + name);
-
-        materialImage = new MaterialImage(this.mainType, this.subType, this.collection, this.color);
-//        materialImage = new MaterialImage();
+        if (this.id == null || this.id.isEmpty()) {
+            // Old approach (no material IDs, resolving images by names, crazy caching logic)
+            materialImage = new MaterialImage(this.mainType, this.subType, this.collection, this.color);
+        } else {
+            // New approach (using material IDs, pre-collected image index, caching image loader and lazy initialization)
+            materialImage = null;
+        }
     }
 
     public String getId() {
@@ -255,6 +255,24 @@ public class Material {
     }
 
     public MaterialImage getMaterialImage() {
+        if (materialImage == null) {
+            ImageIndex imageIndex = ServiceLocator.getService("ImageIndex", ImageIndex.class);
+            List<String> remoteImagePaths = imageIndex.get(this.id);
+
+            if (remoteImagePaths == null || remoteImagePaths.isEmpty()) {
+                try {
+                    Image image = new Image(new FileInputStream("materials_resources/no_img.png"));
+                    materialImage = new MaterialImage(image);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                ImageLoader imageLoader = ServiceLocator.getService("ImageLoader", ImageLoader.class);
+                int imageCount = remoteImagePaths.size();
+                Image image = imageLoader.getImageByPath(remoteImagePaths.get(imageCount - 1));
+                materialImage = new MaterialImage(image);
+            }
+        }
         return materialImage;
     }
 
@@ -692,14 +710,14 @@ public class Material {
         return imgPath;
     }
 
-    /** Use this method for auto update image uafter it will be downloaded and cashed*/
-    public void updateCashImageView(ImageView imageView){
+    /** Use this method for auto update image after it will be downloaded and cashed*/
+    public void updateCashImageView(ImageView imageView) {
+        imageView.setImage(this.getMaterialImage().getImageMaterial());
 
-        if(materialImage.cashedProperty().get()){
+        /*
+        if (materialImage.cashedProperty().get()) {
             imageView.setImage(materialImage.getImageMaterial());
-        }else{
-
-
+        } else {
             final ImageView imgv = imageView;
             materialImage.cashedProperty().addListener((observableValue, aBoolean, t1) -> {
                 System.out.println("IMAGE UPDATED!!!!!");
@@ -713,7 +731,9 @@ public class Material {
                 e.printStackTrace();
             }
         }
+         */
     }
+
     public ImageView getImageView() {
 
 
