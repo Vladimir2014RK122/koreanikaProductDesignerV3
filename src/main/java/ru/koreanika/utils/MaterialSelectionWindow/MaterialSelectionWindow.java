@@ -4,10 +4,14 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import ru.koreanika.Common.Material.ImageIndex;
+import ru.koreanika.Common.Material.ImageLoader;
 import ru.koreanika.Common.Material.Material;
+import ru.koreanika.Common.Material.MaterialImage;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.Preferences.UserPreferences;
 import ru.koreanika.service.ServiceLocator;
@@ -25,6 +29,8 @@ import ru.koreanika.utils.ProjectHandler;
 import ru.koreanika.utils.ProjectType;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -77,6 +83,8 @@ public class MaterialSelectionWindow {
 
     boolean firstStartFlag = false;
     FirstStart firstStart;
+
+    private Timer currentMaterialImageSlideshowTimer;
 
     private MaterialSelectionWindow() {
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -391,7 +399,53 @@ public class MaterialSelectionWindow {
                 "коллекции выполняется по усмотрению производителя." : "";
         labelNotification2.setText(notification2Text);
 
-        material.updateCashImageView(imageViewSelectedMaterial);
+        if (material.getId() == null) {
+            material.updateCashImageView(imageViewSelectedMaterial);
+        } else {
+            ImageIndex imageIndex = ServiceLocator.getService("ImageIndex", ImageIndex.class);
+            List<String> remoteImagePaths = imageIndex.get(material.getId());
+
+            final List<Image> images = new ArrayList<>();
+
+            if (remoteImagePaths == null || remoteImagePaths.isEmpty()) {
+                try {
+                    Image image = new Image(new FileInputStream("materials_resources/no_img.png"));
+                    images.add(image);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                ImageLoader imageLoader = ServiceLocator.getService("ImageLoader", ImageLoader.class);
+                for (String remoteImagePath : remoteImagePaths) {
+                    Image image = imageLoader.getImageByPath(remoteImagePath);
+                    images.add(image);
+                }
+            }
+
+            // cancel all current jobs, if any
+            if (currentMaterialImageSlideshowTimer != null) {
+                currentMaterialImageSlideshowTimer.cancel();
+            }
+            currentMaterialImageSlideshowTimer = new Timer();
+
+            // iterate over images with a 2 sec delay 10 times then stop
+            int imageCount = images.size();
+            int maxRepetitions = 10;
+            long delay = 0;
+            long period = 2000;
+            currentMaterialImageSlideshowTimer.scheduleAtFixedRate(new TimerTask() {
+                int count = 0;
+
+                @Override
+                public void run() {
+                    imageViewSelectedMaterial.setImage(images.get(count % imageCount));
+                    count++;
+                    if (count >= imageCount * maxRepetitions) {
+                        cancel();
+                    }
+                }
+            }, delay, period);
+        }
     }
 
     private void initFilterFields() {

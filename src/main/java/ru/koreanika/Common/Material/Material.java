@@ -268,8 +268,7 @@ public class Material {
                 }
             } else {
                 ImageLoader imageLoader = ServiceLocator.getService("ImageLoader", ImageLoader.class);
-                int imageCount = remoteImagePaths.size();
-                Image image = imageLoader.getImageByPath(remoteImagePaths.get(imageCount - 1));
+                Image image = imageLoader.getImageByPath(remoteImagePaths.get(0));
                 materialImage = new MaterialImage(image);
             }
         }
