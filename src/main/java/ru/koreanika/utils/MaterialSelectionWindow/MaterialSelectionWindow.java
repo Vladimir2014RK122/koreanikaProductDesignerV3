@@ -37,7 +37,6 @@ public class MaterialSelectionWindow {
 
     private final MaterialImageModalWindowController modalWindowController;
     private final Stage materialImageModalStage;
-    private EventHandler<MouseEvent> currentMaterialImageClickHandler;
 
     MaterialSelectionEventHandler materialSelectionEventHandler;
 
