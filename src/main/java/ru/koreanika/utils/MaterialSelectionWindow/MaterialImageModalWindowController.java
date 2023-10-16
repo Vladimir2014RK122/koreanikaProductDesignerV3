@@ -56,13 +56,17 @@ public class MaterialImageModalWindowController {
         images = new ArrayList<>();
 
         this.leftButton.setOnMouseClicked(event -> {
-            currentImageIndex = (images.size() + currentImageIndex - 1) % images.size();
-            this.imageView.setImage(images.get(currentImageIndex));
+            if (!images.isEmpty()) {
+                currentImageIndex = (images.size() + currentImageIndex - 1) % images.size();
+                this.imageView.setImage(images.get(currentImageIndex));
+            }
         });
 
         this.rightButton.setOnMouseClicked(event -> {
-            currentImageIndex = (images.size() + currentImageIndex + 1) % images.size();
-            this.imageView.setImage(images.get(currentImageIndex));
+            if (!images.isEmpty()) {
+                currentImageIndex = (images.size() + currentImageIndex + 1) % images.size();
+                this.imageView.setImage(images.get(currentImageIndex));
+            }
         });
     }
 
