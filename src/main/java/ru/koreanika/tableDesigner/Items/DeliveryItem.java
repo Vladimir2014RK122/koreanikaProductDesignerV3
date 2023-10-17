@@ -97,10 +97,6 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
             receiptName += "/" + NAME_RECEIPT_LIFTING;
         }
 
-        if (handCarryPrice > 0) {
-            receiptName += "/" + NAME_RECEIPT_HAND_CARRY;
-        }
-
         return receiptName;
     }
 
@@ -111,6 +107,10 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
     public int getPriceForUnbox() {
         return priceForUnbox;
+    }
+
+    public int getHandCarryPrice() {
+        return handCarryPrice;
     }
 
     @Override
@@ -249,18 +249,19 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         labelQuantityCard.setText("" + quantity);
 
 
-
         labelName1Card.setText("Материал");
         labelValue1Card.setText(material.getReceiptName());
 
         labelName2Card.setText("Стоимость разгрузки");
-        labelValue2Card.setText("" + priceForUnbox + " руб.");
+        labelValue2Card.setText(priceForUnbox + " руб.");
 
-        labelName3Card.setText("Расстояние");
-        labelValue3Card.setText("" + (int)lengthOutsideMKAD + " км");
+        labelName3Card.setText("Стоимость проноса");
+        labelValue3Card.setText(handCarryPrice + " руб.");
 
-        labelName4Card.setText("Высота");
-        labelValue4Card.setText("-");
+//        labelName4Card.setText("Высота");
+//        labelValue4Card.setText("-");
+        labelName4Card.setText("Расстояние");
+        labelValue4Card.setText(lengthOutsideMKAD + " км");
 
         updateRowPrice();
     }
@@ -322,7 +323,8 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
      */
     private static AnchorPane anchorPaneSettingsView = null;
     private static Button btnAdd;
-    private static Button btnApply = new Button("OK"), btnCancel = new Button("Отмена");
+    private static Button btnApply = new Button("OK");
+    private static Button btnCancel = new Button("Отмена");
 
     private static TextField textFieldCount, textFieldLength, textFieldLifting;
     private static ChoiceBox<String> choiceBoxMaterial;
@@ -565,9 +567,17 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
         //get row data to settings
         choiceBoxMaterial.getSelectionModel().select(deliveryItem.material.getReceiptName());
-        textFieldCount.setText("" + deliveryItem.insideMKADCount);
-        textFieldLength.setText("" + deliveryItem.lengthOutsideMKAD);
-        textFieldLifting.setText("" + deliveryItem.priceForUnbox);
+        textFieldCount.setText(String.valueOf(deliveryItem.insideMKADCount));
+        textFieldLength.setText(String.valueOf( deliveryItem.lengthOutsideMKAD));
+        textFieldLifting.setText(String.valueOf(deliveryItem.priceForUnbox));
+
+        if (deliveryItem.handCarryPrice != 0) {
+            checkBoxHandCarry.setSelected(true);
+            textFieldHandCarry.setText(String.valueOf(deliveryItem.handCarryPrice));
+        } else {
+            checkBoxHandCarry.setSelected(false);
+            textFieldHandCarry.setText("0");
+        }
 
         //disable button "add"
         btnAdd.setVisible(false);
@@ -592,10 +602,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
             deliveryItem.removeThisItem();
         });
 
-        btnCancel.setOnAction(event -> {
-            exitFromEditMode(deliveryItem);
-
-        });
+        btnCancel.setOnAction(event -> exitFromEditMode(deliveryItem));
         //in listeners:
         //"apply". delete old row and create new row
         //"cancel". exit from edit mode
