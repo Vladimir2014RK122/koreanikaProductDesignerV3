@@ -1,13 +1,10 @@
 package ru.koreanika.tableDesigner.Items;
 
+import javafx.scene.control.*;
 import ru.koreanika.Common.Material.Material;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -32,8 +29,12 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
     public static final String NAME_RECEIPT_ROW = "Доставка";
     public static final String NAME_RECEIPT_DISTANCE = "Удаленность";
     public static final String NAME_RECEIPT_LIFTING = "Разгрузка";
+    public static final String NAME_RECEIPT_HAND_CARRY = "Ручной пронос";
+    public static final double HAND_CARRY_COEFFICIENT = 1.1;
 
     private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
+    private static TextField textFieldHandCarry;
+    private static CheckBox checkBoxHandCarry;
 
 
     Label labelRowNumber, labelName, labelMaterial, labelLifting, labelLength, labelNull2, labelQuantity, labelRowPrice;
@@ -45,6 +46,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
     int insideMKADCount;
     int lengthOutsideMKAD;
     int priceForUnbox;
+    int handCarryPrice;
 
     boolean userLifting = false;
     Image imageMain;
@@ -52,13 +54,14 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
     double priceForOne = 0;
 
 
-    public DeliveryItem(Material material, int quantity, int insideMKADCount, int lengthOutsideMKAD, int priceForUnbox) {
+    public DeliveryItem(Material material, int quantity, int insideMKADCount, int lengthOutsideMKAD, int priceForUnbox, int handCarryPrice) {
 
         this.material = material;
         this.quantity = quantity;
         this.insideMKADCount = insideMKADCount;
         this.lengthOutsideMKAD = lengthOutsideMKAD;
         this.priceForUnbox = priceForUnbox;
+        this.handCarryPrice = handCarryPrice;
 
 
         imageMain = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/DeliveryItem/delivery.png").toString()).getImage();
@@ -92,6 +95,10 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
         if(priceForUnbox > 0){
             receiptName += "/" + NAME_RECEIPT_LIFTING;
+        }
+
+        if (handCarryPrice > 0) {
+            receiptName += "/" + NAME_RECEIPT_HAND_CARRY;
         }
 
         return receiptName;
@@ -282,7 +289,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 //        }
 
 
-        priceForOne += insideMKADCount * priceForDelivery + priceForDeliveryKM * lengthOutsideMKAD + priceForUnbox;
+        priceForOne += insideMKADCount * priceForDelivery + priceForDeliveryKM * lengthOutsideMKAD + priceForUnbox + handCarryPrice;
 
 //        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
 
@@ -352,13 +359,18 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         textFieldLength = (TextField) anchorPaneSettingsView.lookup("#textFieldLength");
         textFieldLifting = (TextField) anchorPaneSettingsView.lookup("#textFieldLifting");
 
+        checkBoxHandCarry = (CheckBox) anchorPaneSettingsView.lookup("#checkBoxHandCarry");
+        checkBoxHandCarry.setSelected(false);
+        textFieldHandCarry = (TextField) anchorPaneSettingsView.lookup("#textFieldHandCarry");
+        textFieldHandCarry.setDisable(true);
+
         btnAdd = (Button) anchorPaneSettingsView.lookup("#btnAdd");
         labelPrice = (Label) anchorPaneSettingsView.lookup("#labelPrice");
 
         textFieldCount.setText("1");
         textFieldLength.setText("0");
         textFieldLength.setText("0");
-
+        textFieldHandCarry.setText("0");
     }
 
     private static void settingsControlElementsLogicInit() {
@@ -370,8 +382,8 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         choiceBoxMaterial.setOnAction(event -> {
             updatePriceInSettings();
         });
-        textFieldCount.textProperty().addListener((observable, oldValue, newValue) -> {
 
+        textFieldCount.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 Double.parseDouble(newValue);
             } catch (NumberFormatException ex) {
@@ -386,7 +398,6 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         });
 
         textFieldLength.textProperty().addListener((observable, oldValue, newValue) -> {
-
             try {
                 Double.parseDouble(newValue);
             } catch (NumberFormatException ex) {
@@ -401,7 +412,6 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         });
 
         textFieldLifting.textProperty().addListener((observable, oldValue, newValue) -> {
-
             try {
                 Double.parseDouble(newValue);
             } catch (NumberFormatException ex) {
@@ -412,6 +422,13 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
             textFieldLifting.setStyle("-fx-text-fill:#A8A8A8");
             liftingOk = true;
 
+            updatePriceInSettings();
+        });
+
+        checkBoxHandCarry.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                textFieldHandCarry.setText("0");
+            }
             updatePriceInSettings();
         });
 
@@ -450,17 +467,22 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
             return;
         }
 
+        int handCarry = 0;
+        try {
+            handCarry = Integer.parseInt(textFieldHandCarry.getText());
+        } catch (NumberFormatException ex) {
+            return;
+        }
+
 
 
 
         //if(index == -1 || tableDesignerItemsList.size() < index) index = 0;
-        tableDesignerItemsList.add(index, new DeliveryItem(material, quantity, insideMKADCount, length, lifting));
+        tableDesignerItemsList.add(index, new DeliveryItem(material, quantity, insideMKADCount, length, lifting, handCarry));
 
     }
 
     public static void settingsControlElementsRefresh() {
-
-
         choiceBoxMaterial.getItems().clear();
         for (Material material : ProjectHandler.getMaterialsListInProject()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
@@ -470,6 +492,8 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         textFieldCount.setText("1");
         textFieldLength.setText("0");
         textFieldLifting.setText("0");
+        checkBoxHandCarry.setSelected(false);
+        textFieldHandCarry.setText("0");
 
         updatePriceInSettings();
     }
@@ -495,21 +519,29 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
         int priceForUnBox = 0;
 
-        for(TableDesignerItem tableDesignerItem : TableDesigner.getTableDesignerMainItemsList()){
-            if(tableDesignerItem instanceof StoneProductItem){
+        for (TableDesignerItem tableDesignerItem : TableDesigner.getTableDesignerMainItemsList()) {
+            if (tableDesignerItem instanceof StoneProductItem) {
                 StoneProductItem stoneProductItem = (StoneProductItem) tableDesignerItem;
 
-                for(ArrayList<SketchShape> listOfShapes :  stoneProductItem.getSketchShapeArrayList()){
-                    for(SketchShape shape : listOfShapes){
-                        priceForUnBox += (stoneProductItem.getMaterial().getManualLiftingPrice() / 100) * (shape.getCutShape().getShapeSquare()/10000);
+                for (ArrayList<SketchShape> listOfShapes : stoneProductItem.getSketchShapeArrayList()) {
+                    for (SketchShape shape : listOfShapes) {
+                        priceForUnBox += (stoneProductItem.getMaterial().getManualLiftingPrice() / 100) * (shape.getCutShape().getShapeSquare() / 10000);
                     }
                 }
-
             }
         }
 
-        if(textFieldLifting.getText().equals("") || textFieldLifting.getText().equals("0")){
+        if (textFieldLifting.getText().equals("") || textFieldLifting.getText().equals("0")) {
             textFieldLifting.setText("" + priceForUnBox);
+        }
+
+        // стоимость ручного проноса изделия = кол. кв. м. * стоимость ручного подъема (руб/м^2) * коэфф. ручного проноса
+        int priceForHandCarry = 0;
+        if (!checkBoxHandCarry.isSelected()) {
+            textFieldHandCarry.setText("0");
+        } else if (textFieldHandCarry.getText().isEmpty() || textFieldHandCarry.getText().equals("0")) {
+            priceForHandCarry = (int) (priceForUnBox * HAND_CARRY_COEFFICIENT);
+            textFieldHandCarry.setText(String.valueOf(priceForHandCarry));
         }
 
         if (textFieldCount.getText().equals("")) return;
@@ -519,20 +551,17 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         int lengthCount = (int) Double.parseDouble(textFieldLength.getText());
 
         priceForUnBox = Integer.parseInt(textFieldLifting.getText());
+        priceForHandCarry = Integer.parseInt(textFieldHandCarry.getText());
 
-
-
-        priceForOne += deliveryCount * priceForDelivery + priceForDeliveryKM * lengthCount + priceForUnBox;
+        priceForOne += deliveryCount * priceForDelivery + priceForDeliveryKM * lengthCount + priceForUnBox + priceForHandCarry;
 
         priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
 
         labelPrice.setText(String.format(Locale.ENGLISH, "Цена: %.0f" + " " + currency + "/" + units, priceForOne));
-
     }
 
     private static void enterToEditMode(DeliveryItem deliveryItem){
         TableDesigner.openSettings(DeliveryItem.class);
-
 
         //get row data to settings
         choiceBoxMaterial.getSelectionModel().select(deliveryItem.material.getReceiptName());
@@ -542,6 +571,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
         //disable button "add"
         btnAdd.setVisible(false);
+
         //create buttons "apply" and "cancel"
         anchorPaneSettingsView.getChildren().remove(btnApply);
         anchorPaneSettingsView.getChildren().remove(btnCancel);
@@ -554,16 +584,14 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
-
             int index = getTableDesignerItemsList().indexOf(deliveryItem);
             if(index == -1) index = getTableDesignerItemsList().size();
             addItem(index, deliveryItem.quantity);
 
             exitFromEditMode(deliveryItem);
             deliveryItem.removeThisItem();
-
-
         });
+
         btnCancel.setOnAction(event -> {
             exitFromEditMode(deliveryItem);
 
@@ -588,7 +616,6 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
     @Override
     public JSONObject getJsonView() {
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("itemName", "DeliveryItem");
         jsonObject.put("quantity", quantity);
@@ -597,7 +624,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         jsonObject.put("insideMKADCount", insideMKADCount);
         jsonObject.put("length", lengthOutsideMKAD);
         jsonObject.put("lifting", priceForUnbox);
-
+        jsonObject.put("handCarryPrice", handCarryPrice);
 
         return jsonObject;
     }
@@ -623,9 +650,14 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         }
 
         int lifting = ((Long) jsonObject.get("lifting")).intValue();
-        int insideMKADCount = 0;
 
-        if(jsonObject.get("insideMKADCount") != null){
+        int handCarryPrice = 0;
+        if (jsonObject.get("handCarryPrice") != null) {
+            handCarryPrice = ((Long) jsonObject.get("handCarryPrice")).intValue();
+        }
+
+        int insideMKADCount = 0;
+        if (jsonObject.get("insideMKADCount") != null) {
             insideMKADCount = ((Long) jsonObject.get("insideMKADCount")).intValue();
         }
 
@@ -633,7 +665,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         for (Material m : ProjectHandler.getMaterialsListInProject()) {
             if (materialName.equals(m.getName())) {
 
-                DeliveryItem deliveryItem = new DeliveryItem(m, quantity, insideMKADCount, length, lifting);
+                DeliveryItem deliveryItem = new DeliveryItem(m, quantity, insideMKADCount, length, lifting, handCarryPrice);
                 deliveryItem.quantity = quantity;
                 deliveryItem.labelQuantity.setText("" + quantity);
                 deliveryItem.updateRowPrice();
@@ -689,7 +721,9 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         }
 
 
-        DeliveryItem newDeliveryItem = new DeliveryItem(newMaterial, oldDeliveryItem.quantity, oldDeliveryItem.insideMKADCount, oldDeliveryItem.lengthOutsideMKAD, oldDeliveryItem.priceForUnbox);
+        DeliveryItem newDeliveryItem = new DeliveryItem(newMaterial, oldDeliveryItem.quantity,
+                oldDeliveryItem.insideMKADCount, oldDeliveryItem.lengthOutsideMKAD, oldDeliveryItem.priceForUnbox,
+                oldDeliveryItem.handCarryPrice);
 
         oldDeliveryItem.removeThisItem();
         tableDesignerItemsList.add(newDeliveryItem);
