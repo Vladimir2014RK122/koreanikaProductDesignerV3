@@ -709,32 +709,7 @@ public class Material {
         return imgPath;
     }
 
-    /** Use this method for auto update image after it will be downloaded and cashed*/
-    public void updateCashImageView(ImageView imageView) {
-        imageView.setImage(this.getMaterialImage().getImageMaterial());
-
-        /*
-        if (materialImage.cashedProperty().get()) {
-            imageView.setImage(materialImage.getImageMaterial());
-        } else {
-            final ImageView imgv = imageView;
-            materialImage.cashedProperty().addListener((observableValue, aBoolean, t1) -> {
-                System.out.println("IMAGE UPDATED!!!!!");
-                updateCashImageView(imgv);
-            });
-            materialImage.startDownloadingImages();
-            try {
-                File file = new File("materials_resources/no_img.png");
-                imageView.setImage(new Image(file.toURI().toURL().toString()));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-         */
-    }
-
     public ImageView getImageView() {
-
 
         String imgPath = "test.png";
 //        String subType = row.getCell(1).getStringCellValue();

@@ -1084,8 +1084,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         labelHeaderCard.setText(name);
         tooltipNameCard.setText(name);
 
-        material.updateCashImageView(imageViewBackCard);
-//        imageViewBackCard.setImage(material.getImageView().getImage());
+        imageViewBackCard.setImage(material.getMaterialImage().getImageMaterial());
 
         imageViewCardLogo.setImage(material.getImageViewLogo().getImage());
 
