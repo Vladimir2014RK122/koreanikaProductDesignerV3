@@ -33,7 +33,8 @@ out/artifacts/KoreanikaProductDesigner_jar/files for innoSetup/jre/
 .idea/
 *.iml
 
-materials_resources/cashed/
 javaDocs/
 target/
 
+/materials_resources/cache/
+/materials_resources/cashed/

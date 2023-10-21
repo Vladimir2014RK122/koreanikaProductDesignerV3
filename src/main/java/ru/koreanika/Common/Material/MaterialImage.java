@@ -26,8 +26,8 @@ public class MaterialImage {
     String imageMaterialPath = "";
     String imageInteriorPath = "";
 
-    String localImageInteriorName = "";
-    String localImageMaterialName = "";
+    private String localImageInteriorName = "";
+    private String localImageMaterialName = "";
 
     Image imageMaterial = null;
     Image imageInterior = null;
@@ -35,16 +35,17 @@ public class MaterialImage {
     private BooleanProperty cashed = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty cashedError = new SimpleBooleanProperty(false);
 
+    public MaterialImage(Image imageMaterial) {
+        this.imageMaterial = imageMaterial;
+    }
+
     public MaterialImage(String mainType, String subType, String collection, String color){
         this.mainType = mainType;
         this.subType = subType;
         this.collection = collection;
         this.color = color;
 
-
-
         try {
-
             imageMaterialPath = URLEncoder.encode("material_images","utf-8") + "/" +
                     URLEncoder.encode(mainType,"utf-8") + "/" +
                     URLEncoder.encode(subType,"utf-8") + "/" +
@@ -67,12 +68,14 @@ public class MaterialImage {
         localImageInteriorName = color + " interior.png";
         localImageMaterialName = color + " material.png";
 
-
         File dir = new File(CASH_IMAGES_PATH);
         if(!dir.exists()){
             dir.mkdir();
         }
+    }
 
+    public String getImageParentPath() {
+        return "material_images/" + mainType + "/" + subType + "/" + collection + "/" + color;
     }
 
     public Image getImageMaterial() {
@@ -91,40 +94,33 @@ public class MaterialImage {
         return cashedError;
     }
 
-    public void downloadMaterialImage(){
-
+    @Deprecated
+    private void downloadMaterialImage(){
         String url = Main.getProperty("server.host") + ":8080" + PortalURI.PORTAL_URI_DOWNLOAD_MATERIAL_IMAGE + imageMaterialPath;
 
-        System.out.println(url);
-
-        try(InputStream in = new URL(url).openStream()){
+        try (InputStream in = new URL(url).openStream()) {
             Files.copy(in, Paths.get(CASH_IMAGES_PATH + localImageMaterialName));
             imageMaterial = new Image(new FileInputStream(CASH_IMAGES_PATH + localImageMaterialName));
             cashed.set(true);
-        }catch (MalformedURLException ex){
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
-        }catch (FileNotFoundException ex){
+        } catch (FileNotFoundException ex) {
             System.out.println("NO IMAGE ON SERVER FOR MATERIAL - > " + localImageMaterialName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-    public void startDownloadingImages(){
 
-
-        if(!(new File(CASH_IMAGES_PATH + localImageMaterialName).exists())){
-            Thread thread = new Thread(() ->{
-
+    @Deprecated
+    public void startDownloadingImages() {
+        if (!(new File(CASH_IMAGES_PATH + localImageMaterialName).exists())) {
+            Thread thread = new Thread(() -> {
                 downloadMaterialImage();
-
                 System.out.println("DOWNLOADING THREAD OUT<-------- cashed = " + cashed.get());
             });
-
             thread.setDaemon(true);
             thread.start();
-        }else{
-//            System.out.println(CASH_IMAGES_PATH + localImageMaterialName);
+        } else {
             try {
                 imageMaterial = new Image(new FileInputStream(new File(CASH_IMAGES_PATH + localImageMaterialName)));
             } catch (FileNotFoundException e) {
@@ -132,11 +128,6 @@ public class MaterialImage {
             }
             cashed.set(true);
         }
-
     }
-
-
-
-
 
 }

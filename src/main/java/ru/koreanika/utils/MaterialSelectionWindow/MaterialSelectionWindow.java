@@ -1,11 +1,16 @@
 package ru.koreanika.utils.MaterialSelectionWindow;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.PortalClient.Authorization.AppType;
@@ -29,6 +34,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class MaterialSelectionWindow {
+
+    private final MaterialImageModalWindowController modalWindowController;
+    private final Stage materialImageModalStage;
 
     MaterialSelectionEventHandler materialSelectionEventHandler;
 
@@ -77,6 +85,7 @@ public class MaterialSelectionWindow {
 
     boolean firstStartFlag = false;
     FirstStart firstStart;
+
 
     private MaterialSelectionWindow() {
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -174,6 +183,14 @@ public class MaterialSelectionWindow {
                 MainWindow.showInfoMessage(InfoMessage.MessageType.INFO, "Тип приложения был изменен");
             });
         });
+
+        // material images slideshow
+        modalWindowController = new MaterialImageModalWindowController();
+        materialImageModalStage = new Stage();
+        materialImageModalStage.setScene(new Scene(modalWindowController.getRootElement()));
+        materialImageModalStage.initOwner(null);
+        materialImageModalStage.initModality(Modality.APPLICATION_MODAL);
+        imageViewSelectedMaterial.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> materialImageModalStage.showAndWait());
     }
 
     public void setFirstStart(FirstStart firstStart) {
@@ -391,7 +408,8 @@ public class MaterialSelectionWindow {
                 "коллекции выполняется по усмотрению производителя." : "";
         labelNotification2.setText(notification2Text);
 
-        material.updateCashImageView(imageViewSelectedMaterial);
+        imageViewSelectedMaterial.setImage(material.getMaterialImage().getImageMaterial());
+        modalWindowController.setMaterial(material);
     }
 
     private void initFilterFields() {
