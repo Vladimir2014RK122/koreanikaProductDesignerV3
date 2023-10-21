@@ -3,7 +3,7 @@ package ru.koreanika.utils.Receipt;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.PortalClient.UserEventHandler.UserEventService;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.preferences.UserPreferences;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.Shapes.CutObject;
 import ru.koreanika.cutDesigner.Shapes.CutShape;

@@ -4,6 +4,7 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -12,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.event.NotificationEventHandler;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,6 +30,7 @@ public class InfoMessage {
     private static ImageView imageViewSuccess = new ImageView();
 
     private InfoMessage() {
+
     }
 
     private static Timer timer;
@@ -119,7 +123,6 @@ public class InfoMessage {
     }
 
     public static void showMessage(MessageType messageType, String message, Pane parent) {
-
         if (parent == null) {
             parent = rootAnchorPane;
         }

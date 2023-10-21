@@ -3,7 +3,7 @@ package ru.koreanika.utils;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.preferences.UserPreferences;
 import ru.koreanika.cutDesigner.CutDesigner;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
@@ -12,7 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.koreanika.service.ServiceLocator;
-import ru.koreanika.service.event.MouseClickedEvent;
+import ru.koreanika.service.event.*;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
@@ -27,7 +27,7 @@ import ru.koreanika.utils.Receipt.Zetta.ReceiptManagerZetta;
 
 import java.io.File;
 
-public class MainWindow {
+public class MainWindow implements NotificationEventHandler, ApplicationTypeChangeEventHandler {
 
     static AnchorPane rootAnchorPaneMainWindow;
 
@@ -45,6 +45,8 @@ public class MainWindow {
 
     public MainWindow() {
         EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        eventBus.addHandler(NotificationEvent.TYPE, this);
+        eventBus.addHandler(ApplicationTypeChangeEvent.TYPE, this);
 
         rootAnchorPaneMainWindow = new AnchorPane();
         rootAnchorPaneMainWindow.setId("rootAnchorPaneMainWindow");
@@ -55,7 +57,6 @@ public class MainWindow {
             eventBus.fireEvent(new MouseClickedEvent(source));
         });
 
-        initControlElementsLogic();
         newsController = NewsController.createNewsController(rootAnchorPaneMainWindow);
     }
 
@@ -101,10 +102,6 @@ public class MainWindow {
 
     public static ReceiptManager getReceiptManager() {
         return receiptManager;
-    }
-
-    public static void setReceiptManager(ReceiptManager receiptManager) {
-        MainWindow.receiptManager = receiptManager;
     }
 
     public static void setCutDesigner(CutDesigner cutDesigner) {
@@ -306,17 +303,16 @@ public class MainWindow {
         }
     }
 
-    private void initControlElementsLogic() {
-        UserPreferences.getInstance().addAppTypeChangeListener(change -> {
-            AppType appType = UserPreferences.getInstance().getSelectedApp();
-            if (appType == AppType.KOREANIKA || appType == AppType.KOREANIKAMASTER) {
-                receiptManager = new ReceiptManagerKoreanika();
-            } else if (appType == AppType.ZETTA) {
-                receiptManager = new ReceiptManagerZetta();
-            } else if (appType == AppType.PROMEBEL) {
-                receiptManager = new ReceiptManagerPromebel();
-            }
-        });
+    @Override
+    public void onEvent(ApplicationTypeChangeEvent e) {
+        AppType appType = e.getApplicationType();
+        if (appType == AppType.KOREANIKA || appType == AppType.KOREANIKAMASTER) {
+            receiptManager = new ReceiptManagerKoreanika();
+        } else if (appType == AppType.ZETTA) {
+            receiptManager = new ReceiptManagerZetta();
+        } else if (appType == AppType.PROMEBEL) {
+            receiptManager = new ReceiptManagerPromebel();
+        }
     }
 
     public static void closeProject() {
@@ -376,8 +372,17 @@ public class MainWindow {
         }
     }
 
+    @Deprecated
+    /**
+     * этот метод ещё используется в классах, наследующих sketchDesigner.Shapes
+     */
     public static void showInfoMessage(InfoMessage.MessageType msgType, String message) {
         Platform.runLater(() -> InfoMessage.showMessage(msgType, message, null));
+    }
+
+    @Override
+    public void onEvent(NotificationEvent e) {
+        Platform.runLater(() -> InfoMessage.showMessage(e.getMessageType(), e.getMessage(), null));
     }
 
     public enum ViewType {

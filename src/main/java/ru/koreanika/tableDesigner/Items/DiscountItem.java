@@ -1,7 +1,7 @@
 package ru.koreanika.tableDesigner.Items;
 
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.preferences.UserPreferences;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;

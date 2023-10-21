@@ -3,7 +3,7 @@ package ru.koreanika.PortalClient.Update;
 import ru.koreanika.PortalClient.Authorization.Authorization;
 import ru.koreanika.PortalClient.PortalURI;
 import ru.koreanika.PortalClient.Status.PortalStatus;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.preferences.UserPreferences;
 import org.apache.hc.client5.http.async.methods.*;
 import org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClients;

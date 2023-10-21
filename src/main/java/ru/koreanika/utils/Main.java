@@ -5,7 +5,7 @@ import ru.koreanika.PortalClient.Maintenance.ClimeType;
 import ru.koreanika.PortalClient.Maintenance.MaintenanceMessage;
 import ru.koreanika.PortalClient.Status.PortalStatus;
 import ru.koreanika.PortalClient.Update.UpdateService;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.preferences.UserPreferences;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;

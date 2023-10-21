@@ -3,7 +3,7 @@ package ru.koreanika.utils.MainSettings;
 
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.PortalClient.Authorization.Authorization;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.preferences.UserPreferences;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;

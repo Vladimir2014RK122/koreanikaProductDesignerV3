@@ -31,6 +31,9 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Dimensions.LinearDimension;
 import ru.koreanika.sketchDesigner.Features.AdditionalFeature;
 import ru.koreanika.sketchDesigner.Features.Sink;
@@ -48,6 +51,7 @@ public class CutPane extends Pane implements RepresentToJson {
     private static double cutPaneScale = 1;
     private static Scale scale = new Scale(1.0, 1.0);
     public static SimpleDoubleProperty cutSheetScaleProperty = new SimpleDoubleProperty();
+    private final EventBus eventBus;
 
     private double originalCutPaneWidth = 0;
     private double originalCutPaneHeight = 0;
@@ -62,6 +66,7 @@ public class CutPane extends Pane implements RepresentToJson {
     private static boolean externalStopAutoCutting = false;
 
     static CutDesigner cutDesigner;
+
     public CutPane(CutDesigner cutDesigner) {
         this.cutDesigner = cutDesigner;
         materialSheetsMap.clear();
@@ -73,6 +78,8 @@ public class CutPane extends Pane implements RepresentToJson {
         this.getTransforms().add(scale);
         initDragAndDrop();
         initZoom();
+
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
     }
 
     BooleanProperty finishedCuttingThread = new SimpleBooleanProperty(false);
@@ -452,14 +459,14 @@ public class CutPane extends Pane implements RepresentToJson {
             if (db.getContent(CutDesigner.CELL_FORMAT) != null) {
                 if (db.getContent(CutDesigner.CELL_FORMAT).equals(TreeCellCutShape.TREE_CELL_FORMAT)) {
 
-                    int shapeNumber = ((Integer) db.getContent(CutDesigner.SHAPE_NUMBER_DATA_FORMAT)).intValue();
+                    int shapeNumber = (Integer) db.getContent(CutDesigner.SHAPE_NUMBER_DATA_FORMAT);
                     ElementTypes elementType = (ElementTypes) db.getContent(CutDesigner.ELEMENT_DATA_FORMAT);
                     //System.out.println("ELEMENT TYPE: " + elementType);
                     if (elementType == ElementTypes.UNION) {
 
                         for (Integer n : cutDesigner.usedShapeUnionsNumberList) {
                             if (n.intValue() == shapeNumber) {
-                                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Элемент уже размещен");
+                                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Элемент уже размещен"));
                                 return;
                             }
                         }
@@ -512,7 +519,7 @@ public class CutPane extends Pane implements RepresentToJson {
                     } else {
                         for (Integer n : cutDesigner.usedShapesNumberList) {
                             if (n.intValue() == shapeNumber) {
-                                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Элемент уже размещен");
+                                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Элемент уже размещен"));
                                 return;
                             }
                         }
@@ -550,7 +557,7 @@ public class CutPane extends Pane implements RepresentToJson {
                         for (CutShapeAdditionalFeature cutShapeAdditionalFeature : sink.getCutShapes()) {
                             //if(this.getChildren().contains(cutShapeAdditionalFeature)) {
                             if (cutObjectsGroup.getChildren().contains(cutShapeAdditionalFeature)) {
-                                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Элемент уже размещен");
+                                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Элемент уже размещен"));
                                 break;
                             }
                             //System.out.println("cutShapeAdditionalFeature = " + cutShapeAdditionalFeature);

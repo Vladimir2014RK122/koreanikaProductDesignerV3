@@ -1,6 +1,6 @@
 package ru.koreanika.PortalClient.Status;
 
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.preferences.UserPreferences;
 import javafx.beans.property.BooleanProperty;
 import org.apache.hc.client5.http.async.methods.*;
 import org.apache.hc.client5.http.fluent.Request;

@@ -1,7 +1,6 @@
 package ru.koreanika.utils.MaterialSelectionWindow;
 
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -14,9 +13,12 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.preferences.UserPreferences;
 import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.ApplicationTypeChangeEvent;
+import ru.koreanika.service.event.ApplicationTypeChangeEventHandler;
 import ru.koreanika.service.event.MouseClickedEvent;
+import ru.koreanika.service.event.NotificationEvent;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.sketchDesigner.SketchDesigner;
@@ -33,10 +35,11 @@ import ru.koreanika.utils.Receipt.ReceiptManager;
 import java.io.IOException;
 import java.util.*;
 
-public class MaterialSelectionWindow {
+public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandler {
 
     private final MaterialImageModalWindowController modalWindowController;
     private final Stage materialImageModalStage;
+    private final EventBus eventBus;
 
     MaterialSelectionEventHandler materialSelectionEventHandler;
 
@@ -176,13 +179,8 @@ public class MaterialSelectionWindow {
         filterFieldsUpdated();
         initWindowLogic();
 
-        UserPreferences.getInstance().addAppTypeChangeListener(change -> {
-            Platform.runLater(() -> {
-                initTreeViewAvailable(ProjectHandler.getMaterialsListAvailable());
-                initWindowLogic();
-                MainWindow.showInfoMessage(InfoMessage.MessageType.INFO, "Тип приложения был изменен");
-            });
-        });
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        eventBus.addHandler(ApplicationTypeChangeEvent.TYPE, this);
 
         // material images slideshow
         modalWindowController = new MaterialImageModalWindowController();
@@ -191,6 +189,15 @@ public class MaterialSelectionWindow {
         materialImageModalStage.initOwner(null);
         materialImageModalStage.initModality(Modality.APPLICATION_MODAL);
         imageViewSelectedMaterial.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> materialImageModalStage.showAndWait());
+    }
+
+    @Override
+    public void onEvent(ApplicationTypeChangeEvent e) {
+        Platform.runLater(() -> {
+            initTreeViewAvailable(ProjectHandler.getMaterialsListAvailable());
+            initWindowLogic();
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.INFO, "Тип приложения был изменен"));
+        });
     }
 
     public void setFirstStart(FirstStart firstStart) {

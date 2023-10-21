@@ -27,6 +27,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Edge.Border;
 import ru.koreanika.sketchDesigner.Edge.Edge;
 import ru.koreanika.sketchDesigner.Features.AdditionalFeature;
@@ -107,6 +110,8 @@ public class ProjectHandler {
     public static double CUT_AREA_BORDER_WIDTH = 30;
 
     protected static double commonShapeScale = 0.1;
+
+    private static final EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
 
     public static void  projectHandlerInit() throws ParseXLSFileException {
         materialsListAvailable = fillMaterialsList(MATERIALS_LIST_PATH);
@@ -345,7 +350,7 @@ public class ProjectHandler {
         try {
 
             if (!projectName.matches(".+\\.krnkproj$") && !projectName.matches(".+\\.kproj$")) {
-                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Неизвестный тип файла!!!");
+                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Неизвестный тип файла!!!"));
                 return false;
             }
 
@@ -487,11 +492,11 @@ public class ProjectHandler {
 
 
             } catch (ParseException exio) {
-                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Поврежден mainInfo файл");
+                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Поврежден mainInfo файл"));
                 System.out.println("cant Parse project");
                 return false;
             } catch (IOException exio) {
-                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Ошибка контента");
+                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Ошибка контента"));
                 System.out.println("IOException");
                 return false;
             }
@@ -597,7 +602,7 @@ public class ProjectHandler {
 
         } catch (NullPointerException ex) {
             ex.printStackTrace();
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Проект поврежден! (" +  errorMessage + ")");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Проект поврежден! (" +  errorMessage + ")"));
             return false;
         }
 
@@ -841,11 +846,11 @@ public class ProjectHandler {
 
 
                 System.out.println("Save project path:" + curProjectPath);
-                MainWindow.showInfoMessage(InfoMessage.MessageType.SUCCESS, "Проект сохранен");
+                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.SUCCESS, "Проект сохранен"));
 
             } catch (IOException ex) {
                 System.out.println("CAN'T Save project path:" + curProjectPath);
-                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Ошибка дирректории");
+                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Ошибка директории"));
             }
 
 

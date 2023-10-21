@@ -1,7 +1,6 @@
 package ru.koreanika.utils;
 
 import ru.koreanika.PortalClient.Maintenance.MaintenanceMessageWindow;
-import ru.koreanika.Preferences.UserPreferences;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,6 +17,10 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.ApplicationTypeChangeEvent;
+import ru.koreanika.service.event.ApplicationTypeChangeEventHandler;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.Currency.UserCurrency;
 import ru.koreanika.utils.MainSettings.MainSettings;
 import ru.koreanika.utils.MaterialSelectionWindow.MaterialSelectionEventHandler;
@@ -31,7 +34,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Optional;
 
-public class MainWindowDecorator {
+public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
+    private final EventBus eventBus;
     private MainWindow mainWindow;
 
     AnchorPane anchorPaneWindowDecorator;
@@ -77,6 +81,8 @@ public class MainWindowDecorator {
      * rt    - The area (in px) where the user can resize the window.
      */
     public MainWindowDecorator(Stage stage, MainWindow mainWindow) {
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        eventBus.addHandler(ApplicationTypeChangeEvent.TYPE, this);
 
         this.mainWindow = mainWindow;
 
@@ -536,19 +542,14 @@ public class MainWindowDecorator {
             }
         });
 
+    }
 
-        UserPreferences.getInstance().addAppTypeChangeListener(change -> {
-//            System.out.println("MainWindowDecorator.class - APP CHANGED: " + change);
-            Platform.runLater(()->{
-
-                btnTableView.fire();
-
-                ProjectHandler.setPriceMainCoefficient(ProjectHandler.getPriceMainCoefficient().doubleValue());
-                ProjectHandler.setPriceMaterialCoefficient(ProjectHandler.getPriceMaterialCoefficient().doubleValue());
-
-            });
-
-
+    @Override
+    public void onEvent(ApplicationTypeChangeEvent e) {
+        Platform.runLater(()->{
+            btnTableView.fire();
+            ProjectHandler.setPriceMainCoefficient(ProjectHandler.getPriceMainCoefficient().doubleValue());
+            ProjectHandler.setPriceMaterialCoefficient(ProjectHandler.getPriceMaterialCoefficient().doubleValue());
         });
     }
 

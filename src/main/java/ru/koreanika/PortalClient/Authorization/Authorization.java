@@ -1,6 +1,6 @@
 package ru.koreanika.PortalClient.Authorization;
 
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.preferences.UserPreferences;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -20,9 +20,11 @@ import org.apache.hc.core5.util.Timeout;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.Main;
-import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
 
 import java.util.LinkedHashSet;
@@ -34,6 +36,7 @@ import java.util.concurrent.Future;
 
 public class Authorization {
 
+    private final EventBus eventBus;
     LoginWindow loginWindow = LoginWindow.getInstance();
 
     String serverHost = Main.getProperty("server.host");
@@ -48,7 +51,7 @@ public class Authorization {
 
 
     private Authorization() {
-
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
 
         loginWindow.setOnLoginClicked(actionEvent -> {
             //accessPermitted.set(true);
@@ -57,10 +60,10 @@ public class Authorization {
                 sendLoginRequest(loginWindow.getLoginValues().login(), loginWindow.getLoginValues().password());
             } catch (InterruptedException e) {
                 System.err.println("Login request CRASHES/ INTERRUPT EXCEPTION");
-                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "При авторизации произошла ошибка");
+                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "При авторизации произошла ошибка"));
             } catch (ExecutionException e) {
                 System.err.println("Login request CRASHES/ SERVER UNAVAILABLE");
-                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает");
+                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает"));
             }
         });
 
@@ -205,25 +208,12 @@ public class Authorization {
                                 });
                             } catch (ParseException e) {
                                 System.err.println("Cant parse Auth response");
-                                Platform.runLater(() -> {
-                                    MainWindow.showInfoMessage(
-                                            InfoMessage.MessageType.ERROR,
-                                            "Сервер авторизации ответил некорректно"
-                                    );
-                                });
+                                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Сервер авторизации ответил некорректно"));
                             }
-
                         } else {
-
                             System.out.println(request + "->" + new StatusLine(response));
                             System.err.println("Response body: " + response.getBody().getBodyText());
-
-                            Platform.runLater(() -> {
-                                MainWindow.showInfoMessage(
-                                        InfoMessage.MessageType.ERROR,
-                                        "Неверный логин или пароль"
-                                );
-                            });
+                            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Неверный логин или пароль"));
                         }
                     }
 
@@ -307,15 +297,9 @@ public class Authorization {
                                 });
                             } catch (ParseException e) {
                                 System.err.println("Cant parse " + uri + " response");
-                                Platform.runLater(() -> {
-                                    MainWindow.showInfoMessage(
-                                            InfoMessage.MessageType.ERROR,
-                                            "Сервер авторизации ответил некорректно");
-                                });
+                                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Сервер авторизации ответил некорректно"));
                             }
-
                         } else {
-
                             System.out.println(request + "->" + new StatusLine(response));
                             System.err.println("Response body: " + response.getBody().getBodyText());
                             sendUpdateAccessTokenRequest();
@@ -414,11 +398,7 @@ public class Authorization {
 
                             } catch (ParseException e) {
                                 System.err.println("Cant parse " + uri + " response");
-                                Platform.runLater(() -> {
-                                    MainWindow.showInfoMessage(
-                                            InfoMessage.MessageType.ERROR,
-                                            "Сервер авторизации ответил некорректно");
-                                });
+                                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Сервер авторизации ответил некорректно"));
                             }
 
                         } else {
@@ -502,11 +482,7 @@ public class Authorization {
 
                             } catch (ParseException e) {
                                 System.err.println("Cant parse " + uri + " response");
-                                Platform.runLater(() -> {
-                                    MainWindow.showInfoMessage(
-                                            InfoMessage.MessageType.ERROR,
-                                            "Сервер авторизации ответил некорректно");
-                                });
+                                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Сервер авторизации ответил некорректно"));
                             }
 
                         } else {
@@ -559,55 +535,48 @@ public class Authorization {
 
         } catch (InterruptedException e) {
             System.err.println("check auth request CRASHES/ INTERRUPT EXCEPTION");
-
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "При авторизации произошла ошибка");
-
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "При авторизации произошла ошибка"));
         } catch (ExecutionException e) {
             System.err.println("check auth request CRASHES/ SERVER UNAVAILABLE");
-
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает");
-
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает"));
         }
     }
 
     public void sendUpdateAccessTokenRequest() {
-
         try {
             sendUpdateAccessTokenRequest(
                     Main.getProperty("server.host") + "/token",
                     UserPreferences.getInstance().getAccessToken(),
-                    UserPreferences.getInstance().getRefreshToken());
-
+                    UserPreferences.getInstance().getRefreshToken()
+            );
         } catch (InterruptedException e) {
             System.err.println("check refresh token request CRASHES/ INTERRUPT EXCEPTION");
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "При обновлении токена произошла ошибка");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "При обновлении токена произошла ошибка"));
         } catch (ExecutionException e) {
             System.err.println("check refresh token request CRASHES/ SERVER UNAVAILABLE");
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает"));
         }
     }
 
     public void sendUpdateRefreshTokenRequest() {
-
         try {
             if (UserPreferences.getInstance().getAccessToken() != null) {
                 sendUpdateRefreshTokenRequest(
                         Main.getProperty("server.host") + "/api/refreshToken",
                         UserPreferences.getInstance().getAccessToken(),
-                        UserPreferences.getInstance().getRefreshToken());
+                        UserPreferences.getInstance().getRefreshToken()
+                );
             }
-
         } catch (InterruptedException e) {
             System.err.println("check refresh token request CRASHES/ INTERRUPT EXCEPTION");
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "При обновлении токена произошла ошибка");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "При обновлении токена произошла ошибка"));
         } catch (ExecutionException e) {
             System.err.println("check refresh token request CRASHES/ SERVER UNAVAILABLE");
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает"));
         }
     }
 
     public void logout() {
-
         UserPreferences.getInstance().removeAccessToken();
         UserPreferences.getInstance().removeRefreshToken();
         accessPermitted.set(false);
@@ -626,7 +595,6 @@ public class Authorization {
     public void closeLoginWindow() {
         LoginWindow.getInstance().close();
     }
-
 
     public boolean isAccessPermitted() {
         return accessPermitted.get();

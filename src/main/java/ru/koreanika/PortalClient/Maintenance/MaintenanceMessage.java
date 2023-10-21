@@ -1,6 +1,6 @@
 package ru.koreanika.PortalClient.Maintenance;
 
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.preferences.UserPreferences;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import org.apache.hc.client5.http.async.methods.*;

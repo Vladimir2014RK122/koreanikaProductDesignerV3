@@ -31,10 +31,12 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 
 import org.json.simple.JSONObject;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Dimensions.LinearDimension;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.PrinterHandler.PrinterDialog;
 import ru.koreanika.utils.ProjectHandler;
 
@@ -55,6 +57,7 @@ public class CutDesigner implements RepresentToJson {
 
 
     private static CutDesigner cutDesigner;
+    private final EventBus eventBus;
 
     private AnchorPane anchorPaneCutDesignerRoot;
     private AnchorPane anchorPaneRootCutShapeInfo;
@@ -158,6 +161,7 @@ public class CutDesigner implements RepresentToJson {
         //createNewTab();
         //initZoom();
 
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
     }
 
     public synchronized static CutDesigner getInstance() {
@@ -423,7 +427,7 @@ public class CutDesigner implements RepresentToJson {
 
             setAddDimensionsMode(true);
             dimensionType = LinearDimension.HORIZONTAL_TYPE;
-            MainWindow.showInfoMessage(InfoMessage.MessageType.INFO, "Выберите две точки привязки");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.INFO, "Выберите две точки привязки"));
             //show all connect points
             //select 2 points
             //addDimensionForTwoPoints
@@ -434,7 +438,7 @@ public class CutDesigner implements RepresentToJson {
             //addDimensionForTwoPoints
             setAddDimensionsMode(true);
             dimensionType = LinearDimension.VERTICAL_TYPE;
-            MainWindow.showInfoMessage(InfoMessage.MessageType.INFO, "Выберите две точки привязки");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.INFO, "Выберите две точки привязки"));
         });
 
         btnUpdateStatistics.setOnMouseClicked(event -> {
