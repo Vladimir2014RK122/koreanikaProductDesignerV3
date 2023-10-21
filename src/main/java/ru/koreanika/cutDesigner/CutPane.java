@@ -3,6 +3,7 @@ package ru.koreanika.cutDesigner;
 import ru.koreanika.Common.ConnectPoints.ConnectPoint;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.Common.RepresentToJson;
+import ru.koreanika.Main;
 import ru.koreanika.cutDesigner.ListStatistics.StatisticCellItem;
 import ru.koreanika.cutDesigner.Shapes.*;
 import ru.koreanika.cutDesigner.TreeViewProjectElements.TreeCellCutShape;
@@ -31,6 +32,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.ProjectType;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.NotificationEvent;
 import ru.koreanika.service.eventbus.EventBus;
@@ -1169,21 +1172,12 @@ public class CutPane extends Pane implements RepresentToJson {
                     }
 
                     if (invokeFromReceipt) {
-//                        if(Main.appOwner.toUpperCase().equals("KOREANIKA")){
-//                            MainWindow.getReceiptManager().show(Main.getMainScene());
-//                        }else if(Main.appOwner.toUpperCase().equals("ZETTA")){
-//                            ReceiptManagerZetta.show(Main.getMainScene());
-//                        }
                         Main.getMainWindow().showReceipt();
-
-                    }else{
-                        if(Boolean.parseBoolean(Main.getProperty("autosave.afterCut"))){
+                    } else {
+                        if (Boolean.parseBoolean(Main.getProperty("autosave.afterCut"))) {
                             ProjectHandler.saveProject(ProjectHandler.getCurProjectPath(), ProjectHandler.getCurProjectName());//save current project
                         }
                     }
-
-
-
 
                     cutDesigner.updateStatistics();
                 });

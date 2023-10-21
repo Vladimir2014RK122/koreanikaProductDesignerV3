@@ -26,7 +26,7 @@ import ru.koreanika.sketchDesigner.Shapes.SketchShapeRectangle;
 import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.File;

@@ -1,7 +1,7 @@
 package ru.koreanika.tableDesigner.Items;
 
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +14,7 @@ import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 
 
 import java.io.IOException;
@@ -324,15 +324,11 @@ public class MountingItem extends TableDesignerItem {
     }
 
     public static void settingsControlElementsRefresh() {
-
-//        if(Main.appOwner.toUpperCase().equals("ZETTA")){
-        if(UserPreferences.getInstance().getSelectedApp() == AppType.ZETTA){
+        if (UserPreferences.getInstance().getSelectedApp() == AppType.ZETTA) {
             textFieldPercent.setText("5");
-        }else{
+        } else {
             textFieldPercent.setText("10");
         }
-
-
     }
 
     private static void enterToEditMode(MountingItem mountingItem){

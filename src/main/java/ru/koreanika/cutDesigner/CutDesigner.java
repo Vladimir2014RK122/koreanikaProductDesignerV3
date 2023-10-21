@@ -38,7 +38,7 @@ import ru.koreanika.sketchDesigner.Dimensions.LinearDimension;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.PrinterHandler.PrinterDialog;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 
 import java.io.IOException;
 import java.util.*;

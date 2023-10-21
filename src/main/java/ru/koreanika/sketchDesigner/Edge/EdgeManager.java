@@ -12,7 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.sketchDesigner.SketchDesigner;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 
 import java.io.File;
 import java.io.IOException;

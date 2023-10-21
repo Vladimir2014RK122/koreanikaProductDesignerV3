@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import ru.koreanika.sketchDesigner.SketchDesigner;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 
 import java.util.ArrayList;
 

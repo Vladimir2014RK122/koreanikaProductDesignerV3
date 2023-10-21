@@ -2,8 +2,8 @@ package ru.koreanika.utils;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import ru.koreanika.Main;
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.preferences.UserPreferences;
 import ru.koreanika.cutDesigner.CutDesigner;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
@@ -11,6 +11,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.ProjectType;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.*;
 import ru.koreanika.service.eventbus.EventBus;

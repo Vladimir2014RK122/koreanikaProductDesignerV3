@@ -20,7 +20,7 @@ import ru.koreanika.sketchDesigner.Features.FeatureType;
 import ru.koreanika.sketchDesigner.Features.Sink;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;

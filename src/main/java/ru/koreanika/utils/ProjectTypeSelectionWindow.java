@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
+import ru.koreanika.project.ProjectType;
 
 import java.io.IOException;
 
@@ -18,8 +18,6 @@ public class ProjectTypeSelectionWindow {
     private static ProjectType projectType = ProjectType.TABLE_TYPE;
 
     public static Button show(Scene mainScene) {
-
-
         Stage selectTypeOfProjectStage;
         Scene selectTypeOfProjectScene;
         Window windowOwner = mainScene.getWindow();
@@ -39,23 +37,6 @@ public class ProjectTypeSelectionWindow {
         }
 
         if (anchorPaneRoot != null) {
-
-////            if(Main.appOwner.toUpperCase().equals("KOREANIKA")){
-//            if(Main.appType == AppType.KOREANIKA || Main.appType == AppType.KOREANIKAMASTER){
-//
-//                anchorPaneRoot.getStylesheets().add(ProjectTypeSelectionWindow.class.getResource("/styles/colorsKoreanika.css").toExternalForm());
-////            }else if(Main.appOwner.toUpperCase().equals("ZETTA")){
-//            }else if(Main.appType == AppType.ZETTA){
-//
-//                anchorPaneRoot.getStylesheets().add(ProjectTypeSelectionWindow.class.getResource("/styles/colorsZetta.css").toExternalForm());
-//            }else if(Main.appType == AppType.PROMEBEL){
-//
-//                anchorPaneRoot.getStylesheets().add(ProjectTypeSelectionWindow.class.getResource("/styles/colorsPromebel.css").toExternalForm());
-//            }
-//            anchorPaneRoot.getStylesheets().add(ProjectTypeSelectionWindow.class.getResource("/styles/rootTheme.css").toExternalForm());
-//            anchorPaneRoot.getStylesheets().add(ProjectTypeSelectionWindow.class.getResource("/styles/projectTypeSelectionWindow.css").toExternalForm());
-
-
             selectTypeOfProjectScene = new Scene(anchorPaneRoot);
 
             btnCreateProject = (Button) anchorPaneRoot.lookup("#btnCreateProject");
@@ -72,7 +53,6 @@ public class ProjectTypeSelectionWindow {
                 radioBtnTableProject.setSelected(true);
             }
 
-
             selectTypeOfProjectStage = new Stage();
             selectTypeOfProjectStage.setTitle("Создание проекта");
             selectTypeOfProjectStage.initOwner(windowOwner);
@@ -84,23 +64,15 @@ public class ProjectTypeSelectionWindow {
 
             selectTypeOfProjectStage.show();
 
-            radioBtnSketchProject.setOnMouseClicked(event -> {
-                projectType = ProjectType.SKETCH_TYPE;
-                //System.out.println(projectType);
-            });
-
-            radioBtnTableProject.setOnMouseClicked(event -> {
-                projectType = ProjectType.TABLE_TYPE;
-                //System.out.println(projectType);
-            });
-
+            radioBtnSketchProject.setOnMouseClicked(event -> projectType = ProjectType.SKETCH_TYPE);
+            radioBtnTableProject.setOnMouseClicked(event -> projectType = ProjectType.TABLE_TYPE);
         }
 
         return btnCreateProject;
-
     }
 
     public static ProjectType getProjectType() {
         return projectType;
     }
+
 }

@@ -1,9 +1,10 @@
 package ru.koreanika.utils.Receipt;
 
 import ru.koreanika.Common.Material.Material;
+import ru.koreanika.Main;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.PortalClient.UserEventHandler.UserEventService;
-import ru.koreanika.preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.Shapes.CutObject;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
@@ -34,6 +35,8 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.ProjectType;
 import ru.koreanika.sketchDesigner.Edge.Border;
 import ru.koreanika.sketchDesigner.Edge.Edge;
 import ru.koreanika.sketchDesigner.Edge.SketchEdge;

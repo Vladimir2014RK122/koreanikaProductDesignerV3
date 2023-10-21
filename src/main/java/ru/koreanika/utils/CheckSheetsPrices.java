@@ -30,8 +30,6 @@ public class CheckSheetsPrices {
 
         if(materialSheet.isAdditionalSheet()) return true;
 
-
-
         //check depths and prices:
         boolean equalsTableTopDepthAndPrices = material.getTableTopDepthsAndPrices().toString().equals(materialSheet.getTableTopDepthsAndPrices().toString());
         boolean equalsWallPanelDepthsAndPrices = material.getWallPanelDepthsAndPrices().toString().equals(materialSheet.getWallPanelDepthsAndPrices().toString());
@@ -68,16 +66,16 @@ public class CheckSheetsPrices {
         materialSheet.getFootDepthsAndPrices().clear();
 
         for(Map.Entry<Integer, Integer> entry : material.getTableTopDepthsAndPrices().entrySet()){
-            materialSheet.getTableTopDepthsAndPrices().put(new Integer(entry.getKey()), new Integer(entry.getValue()));
+            materialSheet.getTableTopDepthsAndPrices().put(entry.getKey(), entry.getValue());
         }
         for(Map.Entry<Integer, Integer> entry : material.getWallPanelDepthsAndPrices().entrySet()){
-            materialSheet.getWallPanelDepthsAndPrices().put(new Integer(entry.getKey()), new Integer(entry.getValue()));
+            materialSheet.getWallPanelDepthsAndPrices().put(entry.getKey(), entry.getValue());
         }
         for(Map.Entry<Integer, Integer> entry : material.getWindowSillDepthsAndPrices().entrySet()){
-            materialSheet.getWindowSillDepthsAndPrices().put(new Integer(entry.getKey()), new Integer(entry.getValue()));
+            materialSheet.getWindowSillDepthsAndPrices().put(entry.getKey(), entry.getValue());
         }
         for(Map.Entry<Integer, Integer> entry : material.getFootDepthsAndPrices().entrySet()){
-            materialSheet.getFootDepthsAndPrices().put(new Integer(entry.getKey()), new Integer(entry.getValue()));
+            materialSheet.getFootDepthsAndPrices().put(entry.getKey(), entry.getValue());
         }
 
         //set coefficients:
@@ -86,17 +84,17 @@ public class CheckSheetsPrices {
         materialSheet.getWindowSillCoefficientList().clear();
         materialSheet.getFootCoefficientList().clear();
 
-        for(Double coefficient : material.getTableTopCoefficientList()){
-            materialSheet.getTableTopCoefficientList().add(new Double(coefficient));
+        for (Double coefficient : material.getTableTopCoefficientList()) {
+            materialSheet.getTableTopCoefficientList().add(coefficient);
         }
-        for(Double coefficient : material.getWallPanelCoefficientList()){
-            materialSheet.getWallPanelCoefficientList().add(new Double(coefficient));
+        for (Double coefficient : material.getWallPanelCoefficientList()) {
+            materialSheet.getWallPanelCoefficientList().add(coefficient);
         }
-        for(Double coefficient : material.getWindowSillCoefficientList()){
-            materialSheet.getWindowSillCoefficientList().add(new Double(coefficient));
+        for (Double coefficient : material.getWindowSillCoefficientList()) {
+            materialSheet.getWindowSillCoefficientList().add(coefficient);
         }
-        for(Double coefficient : material.getFootCoefficientList()){
-            materialSheet.getFootCoefficientList().add(new Double(coefficient));
+        for (Double coefficient : material.getFootCoefficientList()) {
+            materialSheet.getFootCoefficientList().add(coefficient);
         }
         materialSheet.setActualPrice(true);
 
@@ -130,20 +128,6 @@ public class CheckSheetsPrices {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-
-////            if(Main.appOwner.toUpperCase().equals("KOREANIKA")){
-//            if(Main.appType == AppType.KOREANIKA || Main.appType == AppType.KOREANIKAMASTER){
-//                rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsKoreanika.css").toExternalForm());
-////            }else if(Main.appOwner.toUpperCase().equals("ZETTA")){
-//            }else if(Main.appType == AppType.ZETTA){
-//                rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsZetta.css").toExternalForm());
-//            }else if(Main.appType == AppType.PROMEBEL){
-//                rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsPromebel.css").toExternalForm());
-//            }
-//            rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/rootTheme.css").toExternalForm());
-            //rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/check.css").toExternalForm());
-
-
 
             checkerScene = new Scene(rootAnchorPane, rootAnchorPane.getPrefWidth(), rootAnchorPane.getPrefHeight());
 

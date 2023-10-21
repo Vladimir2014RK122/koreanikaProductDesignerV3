@@ -1,12 +1,15 @@
 package ru.koreanika.utils.Currency;
 
-import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.InfoMessage;
 
 public class BankCurrency {
 
+    private final EventBus eventBus;
     private SimpleBooleanProperty bankServerAvailable = new SimpleBooleanProperty(false);
 
     private SimpleDoubleProperty bankUSDValue = new SimpleDoubleProperty(-1.0);
@@ -15,25 +18,14 @@ public class BankCurrency {
     private static BankCurrency instance;
     private static BankCurrencyThread bankCurrencyThread;
 
-    private BankCurrency(){
+    private BankCurrency() {
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
 
         bankServerAvailable.addListener((observableValue, oldValue, newValue) -> {
-            if(newValue){
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        InfoMessage.showMessage(InfoMessage.MessageType.SUCCESS,
-                                "Удалось подключится к серверу валют.", null);
-                    }
-                });
-            }else{
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        InfoMessage.showMessage(InfoMessage.MessageType.ERROR,
-                                "Не удалось подключится к серверу валют.", null);
-                    }
-                });
+            if (newValue) {
+                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.SUCCESS, "Удалось подключится к серверу валют."));
+            } else {
+                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Не удалось подключится к серверу валют."));
             }
         });
 
@@ -46,20 +38,21 @@ public class BankCurrency {
         });
     }
 
-    public static BankCurrency getInstance(){
-        if (instance == null){
+    public static BankCurrency getInstance() {
+        if (instance == null) {
             instance = new BankCurrency();
         }
         return instance;
     }
 
-    public void startMonitor(){
+    public void startMonitor() {
         bankCurrencyThread = new BankCurrencyThread(bankServerAvailable, bankUSDValue, bankEURValue);
         bankCurrencyThread.setDaemon(true);
         bankCurrencyThread.start();
     }
-    public void stopMonitor(){
-        if(bankCurrencyThread != null && bankCurrencyThread.isAlive()){
+
+    public void stopMonitor() {
+        if (bankCurrencyThread != null && bankCurrencyThread.isAlive()) {
             bankCurrencyThread.interrupt();
             bankCurrencyThread = null;
         }
@@ -77,7 +70,7 @@ public class BankCurrency {
         return bankUSDValue.get();
     }
 
-    public boolean isValueActual(){
+    public boolean isValueActual() {
         return bankServerAvailable.get();
     }
 }

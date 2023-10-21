@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.IOException;

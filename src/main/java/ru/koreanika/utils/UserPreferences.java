@@ -1,4 +1,4 @@
-package ru.koreanika.preferences;
+package ru.koreanika.utils;
 
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.service.ServiceLocator;

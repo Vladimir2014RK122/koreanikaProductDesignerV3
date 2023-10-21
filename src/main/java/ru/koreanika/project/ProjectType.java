@@ -1,4 +1,4 @@
-package ru.koreanika.utils;
+package ru.koreanika.project;
 
 public enum ProjectType {
     SKETCH_TYPE,

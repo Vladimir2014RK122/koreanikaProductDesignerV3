@@ -2,7 +2,7 @@ package ru.koreanika.utils.News;
 
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
-import ru.koreanika.utils.Main;
+import ru.koreanika.Main;
 
 import java.io.*;
 import java.util.*;

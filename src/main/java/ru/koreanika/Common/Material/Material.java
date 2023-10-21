@@ -18,7 +18,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 
 
 import java.io.File;

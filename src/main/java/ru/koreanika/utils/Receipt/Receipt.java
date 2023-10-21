@@ -24,7 +24,7 @@ import ru.koreanika.utils.News.NewsCard;
 import ru.koreanika.utils.News.NewsCardStockCondition;
 import ru.koreanika.utils.News.NewsCardStockItem;
 import ru.koreanika.utils.News.NewsController;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 
 
 import java.util.*;

@@ -3,14 +3,14 @@ package ru.koreanika.PortalClient.Update;
 import ru.koreanika.PortalClient.Authorization.Authorization;
 import ru.koreanika.PortalClient.PortalURI;
 import ru.koreanika.PortalClient.Status.PortalStatus;
-import ru.koreanika.preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import org.apache.hc.client5.http.async.methods.*;
 import org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClients;
 import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.apache.hc.core5.util.Timeout;
-import ru.koreanika.utils.Main;
+import ru.koreanika.Main;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;

@@ -14,10 +14,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.koreanika.sketchDesigner.Features.*;
 import ru.koreanika.tableDesigner.Items.*;
-import ru.koreanika.utils.Main;
+import ru.koreanika.Main;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.ProjectHandler;
-import ru.koreanika.utils.ProjectType;
+import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.ProjectType;
 import ru.koreanika.utils.Receipt.ReceiptImageItem;
 import ru.koreanika.utils.Receipt.ReceiptItem;
 

@@ -1,6 +1,6 @@
 package ru.koreanika.PortalClient.Maintenance;
 
-import ru.koreanika.preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import org.apache.hc.client5.http.async.methods.*;
@@ -11,7 +11,7 @@ import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.apache.hc.core5.util.Timeout;
 import org.json.simple.JSONObject;
-import ru.koreanika.utils.Main;
+import ru.koreanika.Main;
 
 import java.util.Date;
 import java.util.concurrent.ExecutionException;

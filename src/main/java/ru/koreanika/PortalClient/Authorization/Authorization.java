@@ -1,6 +1,6 @@
 package ru.koreanika.PortalClient.Authorization;
 
-import ru.koreanika.preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -24,8 +24,8 @@ import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.NotificationEvent;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.Main;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.Main;
+import ru.koreanika.project.ProjectHandler;
 
 import java.util.LinkedHashSet;
 import java.util.List;

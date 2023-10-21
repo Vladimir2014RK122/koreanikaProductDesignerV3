@@ -5,7 +5,7 @@ import ru.koreanika.PortalClient.PortalURI;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.image.Image;
-import ru.koreanika.utils.Main;
+import ru.koreanika.Main;
 
 import java.io.*;
 import java.net.MalformedURLException;

@@ -18,7 +18,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import ru.koreanika.utils.LoadingProgressDialog;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

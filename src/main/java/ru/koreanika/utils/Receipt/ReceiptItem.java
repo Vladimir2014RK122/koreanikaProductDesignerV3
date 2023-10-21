@@ -2,7 +2,7 @@ package ru.koreanika.utils.Receipt;
 
 
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

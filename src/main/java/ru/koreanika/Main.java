@@ -1,11 +1,11 @@
-package ru.koreanika.utils;
+package ru.koreanika;
 
 import ru.koreanika.PortalClient.Authorization.Authorization;
 import ru.koreanika.PortalClient.Maintenance.ClimeType;
 import ru.koreanika.PortalClient.Maintenance.MaintenanceMessage;
 import ru.koreanika.PortalClient.Status.PortalStatus;
 import ru.koreanika.PortalClient.Update.UpdateService;
-import ru.koreanika.preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -20,6 +20,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.utils.*;
 import ru.koreanika.utils.Currency.BankCurrency;
 import ru.koreanika.utils.Currency.UserCurrency;
 import ru.koreanika.utils.News.NewsController;
@@ -44,9 +46,6 @@ public class Main extends Application {
     //private static String MAIN_PROPERTIES_FILENAME = "main.properties";
     private static String UPDATER_PROPERTIES_FILENAME = "updater.properties";
     private static Properties updaterProperties;
-    //public static String appOwner;
-//    public static AppOwner1 appOwner;
-//    public static AppType appType;
     public static String appVersion;
 
     public static double mainCoefficient;

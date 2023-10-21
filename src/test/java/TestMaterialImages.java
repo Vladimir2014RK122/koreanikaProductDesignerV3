@@ -1,12 +1,12 @@
 import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Exceptions.ParseXLSFileException;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ParseXLSFileException;
+import ru.koreanika.project.ProjectHandler;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static ru.koreanika.utils.ProjectHandler.projectHandlerInit;
+import static ru.koreanika.project.ProjectHandler.projectHandlerInit;
 
 public class TestMaterialImages {
 

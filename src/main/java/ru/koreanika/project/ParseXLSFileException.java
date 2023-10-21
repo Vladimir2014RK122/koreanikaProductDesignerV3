@@ -1,4 +1,4 @@
-package ru.koreanika.Exceptions;
+package ru.koreanika.project;
 
 public class ParseXLSFileException extends Exception{
 

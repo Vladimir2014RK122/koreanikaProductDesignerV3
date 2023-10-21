@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.ApplicationTypeChangeEvent;
 import ru.koreanika.service.event.ApplicationTypeChangeEventHandler;
@@ -129,7 +130,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
     }
 
 
-    AnchorPane getDecorator(){
+    public AnchorPane getDecorator(){
         return anchorPaneWindowDecorator;
     }
 

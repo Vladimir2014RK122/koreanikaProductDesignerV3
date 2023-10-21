@@ -3,7 +3,7 @@ package ru.koreanika.cutDesigner;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
 import javafx.geometry.Bounds;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectHandler;
 
 import java.util.*;
 

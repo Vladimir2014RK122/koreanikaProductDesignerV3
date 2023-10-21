@@ -7,8 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.ProjectHandler;
-//import ru.koreanika.utils.AppOwner1;
+import ru.koreanika.project.ProjectHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,21 +50,6 @@ public class MaterialSettings {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-//        rootAnchorPane.getStylesheets().clear();
-////        if(Main.appOwner.toUpperCase().equals("KOREANIKA")){
-//        if(Main.appType == AppType.KOREANIKA || Main.appType == AppType.KOREANIKAMASTER){
-//            rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsKoreanika.css").toExternalForm());
-////        }else if(Main.appOwner.toUpperCase().equals("ZETTA")){
-//        }else if(Main.appType == AppType.ZETTA){
-//            rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsZetta.css").toExternalForm());
-//        }else if(Main.appType == AppType.PROMEBEL){
-//            rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsPromebel.css").toExternalForm());
-//        }
-//        rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/rootTheme.css").toExternalForm());
-//        rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/materialSettings.css").toExternalForm());
-
-        //materialSettingsScene = new Scene(rootAnchorPane, rootAnchorPane.getPrefWidth(), rootAnchorPane.getPrefHeight());
 
         labelMainType = (Label) rootAnchorPane.lookup("#labelMainType");
         labelSubType = (Label) rootAnchorPane.lookup("#labelSubType");

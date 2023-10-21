@@ -1,7 +1,7 @@
 package ru.koreanika.utils;
 
+import ru.koreanika.Main;
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.preferences.UserPreferences;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import ru.koreanika.project.ProjectHandler;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -69,20 +70,6 @@ public class PriceCoefficientsWindow {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-//        anchorPaneRoot.getStylesheets().clear();
-////        if(Main.appOwner.toUpperCase().equals("KOREANIKA")){
-//        if(Main.appType == AppType.KOREANIKA || Main.appType == AppType.KOREANIKAMASTER){
-//            anchorPaneRoot.getStylesheets().add(getClass().getResource("/styles/colorsKoreanika.css").toExternalForm());
-////        }else if(Main.appOwner.toUpperCase().equals("ZETTA")){
-//        }else if(Main.appType == AppType.ZETTA){
-//            anchorPaneRoot.getStylesheets().add(getClass().getResource("/styles/colorsZetta.css").toExternalForm());
-//        }else if(Main.appType == AppType.PROMEBEL){
-//            anchorPaneRoot.getStylesheets().add(getClass().getResource("/styles/colorsPromebel.css").toExternalForm());
-//        }
-
-//        anchorPaneRoot.getStylesheets().add(getClass().getResource("/styles/rootTheme.css").toExternalForm());
-//        anchorPaneRoot.getStylesheets().add(getClass().getResource("/styles/priceCoefficients.css").toExternalForm());
 
         textFieldMaterialCoefficient = (TextField) anchorPaneRoot.lookup("#textFieldMaterialCoefficient");
         textFieldMainCoefficient = (TextField) anchorPaneRoot.lookup("#textFieldMainCoefficient");

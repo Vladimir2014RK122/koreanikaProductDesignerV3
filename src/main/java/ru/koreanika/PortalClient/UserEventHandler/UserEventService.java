@@ -1,7 +1,7 @@
 package ru.koreanika.PortalClient.UserEventHandler;
 
 import ru.koreanika.PortalClient.Authorization.Authorization;
-import ru.koreanika.preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import org.apache.hc.client5.http.async.methods.*;
 import org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClients;
@@ -14,7 +14,7 @@ import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.NotificationEvent;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.Main;
+import ru.koreanika.Main;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
