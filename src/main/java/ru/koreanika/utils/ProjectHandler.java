@@ -15,7 +15,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-//import javafx.embed.swing.SwingFXUtils;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.stage.Screen;
@@ -519,46 +518,31 @@ public class ProjectHandler {
             /** Materials */
             //fill materials in project:
             if(materialsNewList != null){
-
                 for (Object obj : materialsNewList) {
                     JSONObject materialObject = (JSONObject) obj;
 
                     Material material = Material.getFromJson(materialObject);
-                    if(material == null) errorMessage = "Ошибка распаковки материала " + materialObject.get("name");
-
-                    materialsListInProject.add(material);
-                    material.getMaterialImage().startDownloadingImages();
-
-//                    System.out.println("ADDED IN  PROJECT:");
-//                    System.out.println(material.getName());
+                    if (material != null) {
+                        materialsListInProject.add(material);
+                    } else {
+                        errorMessage = "Ошибка распаковки материала " + materialObject.get("name");
+                    }
                 }
-
-            }else{
+            } else {
                 for (Object str : materialsList) {
                     System.out.println("materialsList item = " + str);
-                    if(Material.parseMaterial((String) str) == null) errorMessage = "Материал не существует: " + str;
+                    if (Material.parseMaterial((String) str) == null) {
+                        errorMessage = "Материал не существует: " + str;
+                    }
                     materialsListInProject.add(Material.parseMaterial(((String) str)));
                 }
             }
 
-
-            //set default material:
-
-//            System.out.println("materialsListInProject = " + materialsListInProject);
-//            System.out.println("DEFAULT MATERIAL:");
-//            System.out.println((String) materialSettings.get("defaultMaterial"));
-
+            // set default material, if not specified in project
             for (Material material : materialsListInProject) {
-//                System.out.println(material);
-//                System.out.println(material.getName());
-//                System.out.println(materialSettings.get("defaultMaterial"));
-
-
-                if (((String) materialSettings.get("defaultMaterial")).indexOf(material.getName()) != -1) {
+                if (((String) materialSettings.get("defaultMaterial")).contains(material.getName())) {
                     defaultMaterial = material;
                 }
-
-//                System.out.println(material);
             }
 
             //project coefficients for price:

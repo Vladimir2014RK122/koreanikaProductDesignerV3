@@ -408,7 +408,7 @@ public class MaterialSelectionWindow {
                 "коллекции выполняется по усмотрению производителя." : "";
         labelNotification2.setText(notification2Text);
 
-        material.updateCashImageView(imageViewSelectedMaterial);
+        imageViewSelectedMaterial.setImage(material.getMaterialImage().getImageMaterial());
         modalWindowController.setMaterial(material);
     }
 
