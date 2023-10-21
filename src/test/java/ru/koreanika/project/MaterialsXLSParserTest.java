@@ -3,7 +3,6 @@ package ru.koreanika.project;
 import org.junit.Ignore;
 import org.junit.Test;
 import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Common.Material.MaterialImage;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
 
@@ -27,13 +26,6 @@ public class MaterialsXLSParserTest {
             parser.fillMaterialsList(materialsListAvailable, plumbingElementsList, availablePlumbingTypes,
                     materialsDeliveryFromManufacture);
             System.out.println(materialsListAvailable.size());
-
-            System.out.println("id,path");
-            for (Material material : materialsListAvailable) {
-                MaterialImage materialImage = material.getMaterialImage();
-                System.out.println(material.getId() + ",\"" + materialImage.getImageParentPath() + "\"");
-            }
-
         } catch (ParseXLSFileException e) {
             e.printStackTrace();
         }

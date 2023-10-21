@@ -365,16 +365,16 @@ public class Material {
         materialSheet.getFootCoefficientList().clear();
 
         for(Double coefficient : tableTopCoefficientList){
-            materialSheet.getTableTopCoefficientList().add(new Double(coefficient));
+            materialSheet.getTableTopCoefficientList().add(coefficient);
         }
         for(Double coefficient : wallPanelCoefficientList){
-            materialSheet.getWallPanelCoefficientList().add(new Double(coefficient));
+            materialSheet.getWallPanelCoefficientList().add(coefficient);
         }
         for(Double coefficient : windowSillCoefficientList){
-            materialSheet.getWindowSillCoefficientList().add(new Double(coefficient));
+            materialSheet.getWindowSillCoefficientList().add(coefficient);
         }
         for(Double coefficient : footCoefficientList){
-            materialSheet.getFootCoefficientList().add(new Double(coefficient));
+            materialSheet.getFootCoefficientList().add(coefficient);
         }
 
         return materialSheet;
@@ -1302,16 +1302,16 @@ public class Material {
 
         //coefficients:
         for(Double coefficient : tableTopCoefficientList){
-            materialCopy.getTableTopCoefficientList().add(new Double(coefficient));
+            materialCopy.getTableTopCoefficientList().add(coefficient);
         }
         for(Double coefficient : wallPanelCoefficientList){
-            materialCopy.getWallPanelCoefficientList().add(new Double(coefficient));
+            materialCopy.getWallPanelCoefficientList().add(coefficient);
         }
         for(Double coefficient : windowSillCoefficientList){
-            materialCopy.getWindowSillCoefficientList().add(new Double(coefficient));
+            materialCopy.getWindowSillCoefficientList().add(coefficient);
         }
         for(Double coefficient : footCoefficientList){
-            materialCopy.getFootCoefficientList().add(new Double(coefficient));
+            materialCopy.getFootCoefficientList().add(coefficient);
         }
 
         materialCopy.setCalculationType(calculationType);

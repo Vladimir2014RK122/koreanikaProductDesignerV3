@@ -1,7 +1,9 @@
 package ru.koreanika.project;
 
 import org.apache.poi.hssf.record.crypto.Biff8EncryptionKey;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -9,7 +11,6 @@ import ru.koreanika.Common.Material.Material;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,33 +28,32 @@ public class MaterialsXLSParser {
         this.analogsListPath = analogsListPath;
     }
 
-    public void fillMaterialsList(List<Material> materialsListAvailable,
-                                  List<PlumbingElement> plumbingElementsList,
+    public void fillMaterialsList(List<Material> materialsListAvailable, List<PlumbingElement> plumbingElementsList,
                                   Set<PlumbingType> availablePlumbingTypes,
                                   Map<String, Double> materialsDeliveryFromManufacture) throws ParseXLSFileException {
-
-        File xlsFile = new File(materialsListPath);
         Biff8EncryptionKey.setCurrentUserPassword(CURRENT_USER_PASSWORD);
 
-        HSSFWorkbook wb = null;
-        try (InputStream in = new FileInputStream(xlsFile)) {
-            wb = new HSSFWorkbook(in);
+        try (InputStream in = new FileInputStream(materialsListPath)) {
+            HSSFWorkbook workbook = new HSSFWorkbook(in);
+            fillPlumbingElements(plumbingElementsList, availablePlumbingTypes, workbook);
+            fillMaterialsAvailable(materialsListAvailable, workbook);
+            fillDeliveryFromManufacturer(materialsDeliveryFromManufacture, workbook);
+            workbook.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        materialsListAvailable.clear();
-        plumbingElementsList.clear();
-        availablePlumbingTypes.clear();
-        materialsDeliveryFromManufacture.clear();
-
-        plumbingElementsList.addAll(PlumbingElementXlsReader.fillDataFromXls(wb));
-
-        for (PlumbingElement pe : plumbingElementsList) {
-            if (pe.isAvailable()) {
-                availablePlumbingTypes.add(pe.getPlumbingType());
-            }
+        try (InputStream inputStream = new FileInputStream(analogsListPath)) {
+            HSSFWorkbook analogsWorkbook = new HSSFWorkbook(inputStream);
+            fillAnalogs(materialsListAvailable, analogsWorkbook);
+            analogsWorkbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    private static void fillMaterialsAvailable(List<Material> materialsListAvailable, HSSFWorkbook wb) {
+        materialsListAvailable.clear();
 
         Sheet sheet = wb.getSheetAt(0);
         Iterator<Row> it = sheet.iterator();
@@ -133,7 +133,21 @@ public class MaterialsXLSParser {
 
                 material.setCurrency(row.getCell(9).getStringCellValue().toUpperCase());
 
-                //prices:
+                // coefficients
+                for (int i : List.of(11, 12, 13, 14, 15)) {
+                    material.getTableTopCoefficientList().add(getNumericCellValueOrDefault(row.getCell(i), 1.0));
+                }
+                for (int i : List.of(16, 17, 18)) {
+                    material.getWallPanelCoefficientList().add(getNumericCellValueOrDefault(row.getCell(i), 1.0));
+                }
+                for (int i : List.of(19, 20, 21, 22, 23)) {
+                    material.getWindowSillCoefficientList().add(getNumericCellValueOrDefault(row.getCell(i), 1.0));
+                }
+                for (int i : List.of(24, 25, 26, 27, 28)) {
+                    material.getFootCoefficientList().add(getNumericCellValueOrDefault(row.getCell(i), 1.0));
+                }
+
+                // prices
                 Map<Integer, Integer> tableTopDepthsAndPricesMap = material.getTableTopDepthsAndPrices();
                 Map<Integer, Integer> wallPanelDepthsAndPricesMap = material.getWallPanelDepthsAndPrices();
                 Map<Integer, Integer> windowSillDepthsAndPricesMap = material.getWindowSillDepthsAndPrices();
@@ -143,129 +157,6 @@ public class MaterialsXLSParser {
                 wallPanelDepthsAndPricesMap.clear();
                 windowSillDepthsAndPricesMap.clear();
                 footDepthsAndPricesMap.clear();
-
-                List<Double> tableTopCoefficientList = material.getTableTopCoefficientList();
-                List<Double> wallPanelCoefficientList = material.getWallPanelCoefficientList();
-                List<Double> windowSillCoefficientList = material.getWindowSillCoefficientList();
-                List<Double> footCoefficientList = material.getFootCoefficientList();
-
-                tableTopCoefficientList.clear();
-                wallPanelCoefficientList.clear();
-                windowSillCoefficientList.clear();
-                footCoefficientList.clear();
-
-                // coefficient for TableTop:
-                if (row.getCell(11).getCellType() != CellType.NUMERIC) {
-                    tableTopCoefficientList.add(1.0);
-                } else {
-                    tableTopCoefficientList.add(row.getCell(11).getNumericCellValue());
-                }
-
-                if (row.getCell(12).getCellType() != CellType.NUMERIC) {
-                    tableTopCoefficientList.add(1.0);
-                } else {
-                    tableTopCoefficientList.add(row.getCell(12).getNumericCellValue());
-                }
-
-                if (row.getCell(13).getCellType() != CellType.NUMERIC) {
-                    tableTopCoefficientList.add(1.0);
-                } else {
-                    tableTopCoefficientList.add(row.getCell(13).getNumericCellValue());
-                }
-
-                if (row.getCell(14).getCellType() != CellType.NUMERIC) {
-                    tableTopCoefficientList.add(1.0);
-                } else {
-                    tableTopCoefficientList.add(row.getCell(14).getNumericCellValue());
-                }
-
-                if (row.getCell(15).getCellType() != CellType.NUMERIC) {
-                    tableTopCoefficientList.add(1.0);
-                } else {
-                    tableTopCoefficientList.add(row.getCell(15).getNumericCellValue());
-                }
-
-                // coefficient for WallPanel:
-
-                if (row.getCell(16).getCellType() != CellType.NUMERIC) {
-                    wallPanelCoefficientList.add(1.0);
-                } else {
-                    wallPanelCoefficientList.add(row.getCell(16).getNumericCellValue());
-                }
-
-                if (row.getCell(17).getCellType() != CellType.NUMERIC) {
-                    wallPanelCoefficientList.add(1.0);
-                } else {
-                    wallPanelCoefficientList.add(row.getCell(17).getNumericCellValue());
-                }
-
-                if (row.getCell(18).getCellType() != CellType.NUMERIC) {
-                    wallPanelCoefficientList.add(1.0);
-                } else {
-                    wallPanelCoefficientList.add(row.getCell(18).getNumericCellValue());
-                }
-
-                // coefficient for WindowSill:
-                if (row.getCell(19).getCellType() != CellType.NUMERIC) {
-                    windowSillCoefficientList.add(1.0);
-                } else {
-                    windowSillCoefficientList.add(row.getCell(19).getNumericCellValue());
-                }
-
-                if (row.getCell(20).getCellType() != CellType.NUMERIC) {
-                    windowSillCoefficientList.add(1.0);
-                } else {
-                    windowSillCoefficientList.add(row.getCell(20).getNumericCellValue());
-                }
-
-                if (row.getCell(21).getCellType() != CellType.NUMERIC) {
-                    windowSillCoefficientList.add(1.0);
-                } else {
-                    windowSillCoefficientList.add(row.getCell(21).getNumericCellValue());
-                }
-
-                if (row.getCell(22).getCellType() != CellType.NUMERIC) {
-                    windowSillCoefficientList.add(1.0);
-                } else {
-                    windowSillCoefficientList.add(row.getCell(22).getNumericCellValue());
-                }
-
-                if (row.getCell(23).getCellType() != CellType.NUMERIC) {
-                    windowSillCoefficientList.add(1.0);
-                } else {
-                    windowSillCoefficientList.add(row.getCell(23).getNumericCellValue());
-                }
-
-                // coefficient for Foot:
-                if (row.getCell(24).getCellType() != CellType.NUMERIC) {
-                    footCoefficientList.add(1.0);
-                } else {
-                    footCoefficientList.add(row.getCell(24).getNumericCellValue());
-                }
-
-                if (row.getCell(25).getCellType() != CellType.NUMERIC) {
-                    footCoefficientList.add(1.0);
-                } else {
-                    footCoefficientList.add(row.getCell(25).getNumericCellValue());
-                }
-
-                if (row.getCell(26).getCellType() != CellType.NUMERIC) {
-                    footCoefficientList.add(1.0);
-                } else {
-                    footCoefficientList.add(row.getCell(26).getNumericCellValue());
-                }
-
-                if (row.getCell(27).getCellType() != CellType.NUMERIC) {
-                    footCoefficientList.add(1.0);
-                } else {
-                    footCoefficientList.add(row.getCell(27).getNumericCellValue());
-                }
-
-                if (row.getCell(28).getCellType() != CellType.NUMERIC) {
-                    footCoefficientList.add(1.0);
-                } else {
-                    footCoefficientList.add(row.getCell(28).getNumericCellValue());
-                }
 
                 if (!row.getCell(5).getStringCellValue().equals("-")) {
                     if (material.getMainType().contains("Кварцевый агломерат") ||
@@ -288,8 +179,7 @@ public class MaterialsXLSParser {
                             windowSillDepthsAndPricesMap.put(depth, price);
                             footDepthsAndPricesMap.put(depth, price);
                         }
-                    } else if (material.getMainType().contains("Массив") ||
-                            material.getMainType().contains("Массив_шпон")) {
+                    } else if (material.getMainType().contains("Массив") || material.getMainType().contains("Массив_шпон")) {
 
                         //for TableTop:
                         if (!row.getCell(11).getStringCellValue().equals("-")) {
@@ -413,45 +303,9 @@ public class MaterialsXLSParser {
                     material.getAvailableSinkModels().put(model, (int) (price * 100));
                 }
 
-                {
-                    int type = 16;
-                    double price = 0;
-                    String currency = "RUB";
-
-                    material.getSinkCommonTypesAndPrices().put(type, (int) price);
-                    material.getSinkCommonCurrency().put(type, currency);
-                }
-                {
-                    int type = 17;
-                    double price = 0;
-                    String currency = "RUB";
-
-                    material.getSinkCommonTypesAndPrices().put(type, (int) price);
-                    material.getSinkCommonCurrency().put(type, currency);
-                }
-                {
-                    int type = 19;
-                    double price = 0;
-                    String currency = "RUB";
-
-                    material.getSinkCommonTypesAndPrices().put(type, (int) price);
-                    material.getSinkCommonCurrency().put(type, currency);
-                }
-                {
-                    int type = 20;
-                    double price = 0;
-                    String currency = "RUB";
-
-                    material.getSinkCommonTypesAndPrices().put(type, (int) price);
-                    material.getSinkCommonCurrency().put(type, currency);
-                }
-                {
-                    int type = 21;
-                    double price = 0;
-                    String currency = "RUB";
-
-                    material.getSinkCommonTypesAndPrices().put(type, (int) price);
-                    material.getSinkCommonCurrency().put(type, currency);
+                for (int type : List.of(16, 17, 19, 20, 21)) {
+                    material.getSinkCommonTypesAndPrices().put(type, 0);
+                    material.getSinkCommonCurrency().put(type, "RUB");
                 }
 
                 /** Pallets: */
@@ -480,7 +334,6 @@ public class MaterialsXLSParser {
                     if (row.getCell(i).getStringCellValue().equals("-")) {
                         price = 0;
                         currency = "RUB";
-
                     } else {
                         String priceStr = row.getCell(i).getStringCellValue();
                         priceStr = priceStr.replaceAll(",", ".");
@@ -590,20 +443,9 @@ public class MaterialsXLSParser {
 
                     //cutout for radiator
                     {
-                        double price = 0;
-                        String currency = "RUB";
-                        if (row.getCell(174).getStringCellValue().equals("-")) {
-                            price = 0;
-                            currency = "RUB";
-                        } else {
-                            String priceStr = row.getCell(174).getStringCellValue();
-                            priceStr = priceStr.replaceAll(",", ".");
-                            price = Double.parseDouble(priceStr.split("=")[1]);
-                            currency = priceStr.split("=")[0];
-                        }
-
-                        material.setCutoutCurrency(currency.toUpperCase());
-                        material.getCutoutTypesAndPrices().put(7, (int) (price * 100));
+                        Price price = parsePriceCell(row.getCell(174));
+                        material.setCutoutCurrency(price.currency);
+                        material.getCutoutTypesAndPrices().put(7, (int) (price.price * 100));
                     }
                 }
 
@@ -634,250 +476,49 @@ public class MaterialsXLSParser {
                 //add sinks installTypes:
                 material.getSinkInstallTypesAndPrices().clear();
                 for (int i = 180; i <= 181; i++) {
-
-                    if (row.getCell(i).getStringCellValue().equals("-")) continue;
-
-                    String priceStr = row.getCell(i).getStringCellValue();
-                    priceStr = priceStr.replaceAll(",", ".");
-                    double price = Double.parseDouble(priceStr.split("=")[1]);
-                    String currency = priceStr.split("=")[0];
-                    material.setSinkInstallTypeCurrency(currency.toUpperCase());
-                    material.getSinkInstallTypesAndPrices().put(i - 180, (int) (price * 100));
+                    if (row.getCell(i).getStringCellValue().equals("-")) {
+                        continue;
+                    }
+                    Price price = parsePriceCell(row.getCell(i));
+                    material.setSinkInstallTypeCurrency(price.currency);
+                    material.getSinkInstallTypesAndPrices().put(i - 180, (int) (price.price * 100));
                 }
 
                 /** add sinks edge Types: */
                 material.getSinkEdgeTypesRectangleAndPrices().clear();
                 for (int i = 169; i <= 170; i++) {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(i).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(i).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setSinkEdgeTypeCurrency(currency.toUpperCase());
-                    material.getSinkEdgeTypesRectangleAndPrices().put(i - 169, (int) (price * 100));
+                    Price price = parsePriceCell(row.getCell(i));
+                    material.setSinkEdgeTypeCurrency(price.currency);
+                    material.getSinkEdgeTypesRectangleAndPrices().put(i - 169, (int) (price.price * 100));
                 }
 
                 material.getSinkEdgeTypesCircleAndPrices().clear();
                 for (int i = 171; i <= 172; i++) {
-
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(i).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-
-                    } else {
-                        String priceStr = row.getCell(i).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-                    material.setSinkEdgeTypeCurrency(currency.toUpperCase());
-                    material.getSinkEdgeTypesCircleAndPrices().put(i - 171, (int) (price * 100));
+                    Price price = parsePriceCell(row.getCell(i));
+                    material.setSinkEdgeTypeCurrency(price.currency);
+                    material.getSinkEdgeTypesCircleAndPrices().put(i - 171, (int) (price.price * 100));
                 }
 
-                /** add cutout Types: */
+                // add cutout types
+                Map<Integer, Integer> indexToCell = new HashMap<>();
+                indexToCell.put(1, 161);
+                indexToCell.put(2, 160);
+                indexToCell.put(3, 167);
+                indexToCell.put(4, 162);
+                indexToCell.put(5, 168);
+                indexToCell.put(6, 173);
+                indexToCell.put(7, 174);
+                indexToCell.put(8, 167);
+                indexToCell.put(13, 186);
+                indexToCell.put(14, 187);
+                indexToCell.put(15, 193);
+                indexToCell.put(16, 194);
+
                 material.getCutoutTypesAndPrices().clear();
-
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(161).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(161).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(1, (int) (price * 100));
-                }
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(160).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(160).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(2, (int) (price * 100));
-                }
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(167).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(167).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(3, (int) (price * 100));
-                }
-
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(162).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(162).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(4, (int) (price * 100));
-                }
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(168).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(168).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(5, (int) (price * 100));
-                }
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(173).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(173).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(6, (int) (price * 100));
-                }
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(174).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(174).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(7, (int) (price * 100));
-                }
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(167).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(167).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(8, (int) (price * 100));
-                }
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(186).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(186).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(13, (int) (price * 100));
-                }
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(187).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(187).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(14, (int) (price * 100));
-                }
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(193).getStringCellValue().equals("-") || row.getCell(193).getStringCellValue().isEmpty()) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(193).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(15, (int) (price * 100));
-                }
-                {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(194).getStringCellValue().equals("-") || row.getCell(194).getStringCellValue().isEmpty()) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(194).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setCutoutCurrency(currency.toUpperCase());
-                    material.getCutoutTypesAndPrices().put(16, (int) (price * 100));
+                for (Map.Entry<Integer, Integer> entry : indexToCell.entrySet()) {
+                    Price price = parsePriceCell(row.getCell(entry.getValue()));
+                    material.setCutoutCurrency(price.currency);
+                    material.getCutoutTypesAndPrices().put(entry.getKey(), (int) (price.price * 100));
                 }
 
                 /** add siphons: (unavailable in this tab)*/
@@ -889,212 +530,90 @@ public class MaterialsXLSParser {
                 /** add joints: */
                 material.getJointsTypesAndPrices().clear();
                 for (int i = 163; i <= 164; i++) {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(i).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(i).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-                    material.setJointsCurrency(currency.toUpperCase());
-                    material.getJointsTypesAndPrices().put(i - 163, (int) (price * 100));
+                    Price price = parsePriceCell(row.getCell(i));
+                    material.setJointsCurrency(price.currency);
+                    material.getJointsTypesAndPrices().put(i - 163, (int) (price.price * 100));
                 }
 
                 /** add plywoods: */
                 material.getPlywoodPrices().clear();
                 for (int i = 165; i <= 166; i++) {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(i).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(i).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-                    material.getPlywoodCurrency().add(currency.toUpperCase());
-                    material.getPlywoodPrices().add((int) (price * 100));
+                    Price price = parsePriceCell(row.getCell(i));
+                    material.getPlywoodCurrency().add(price.currency);
+                    material.getPlywoodPrices().add((int) (price.price * 100));
                 }
 
                 //add stonePolishing element:
                 {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(178).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(178).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setStonePolishingCurrency(currency.toUpperCase());
-                    material.setStonePolishingPrice((int) (price * 100));
+                    Price price = parsePriceCell(row.getCell(178));
+                    material.setStonePolishingCurrency(price.currency);
+                    material.setStonePolishingPrice((int) (price.price * 100));
                 }
 
                 //add metalFooting element:
                 {
                     material.getMetalFootingPrices().clear();
                     for (int i = 176; i <= 177; i++) {
-                        double price = 0;
-                        String currency = "RUB";
-                        if (row.getCell(i).getStringCellValue().equals("-")) {
-                            price = 0;
-                            currency = "RUB";
-                        } else {
-                            String priceStr = row.getCell(i).getStringCellValue();
-                            priceStr = priceStr.replaceAll(",", ".");
-                            price = Double.parseDouble(priceStr.split("=")[1]);
-                            currency = priceStr.split("=")[0];
-                        }
-                        material.getMetalFootingCurrency().add(currency.toUpperCase());
-                        material.getMetalFootingPrices().add((int) (price * 100));
+                        Price price = parsePriceCell(row.getCell(i));
+                        material.getMetalFootingCurrency().add(price.currency);
+                        material.getMetalFootingPrices().add((int) (price.price * 100));
                     }
                 }
 
                 //add radius element:
                 {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(179).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(179).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-                    material.setRadiusElementCurrency(currency.toUpperCase());
-                    material.setRadiusElementPrice((int) (price * 100));
+                    Price price = parsePriceCell(row.getCell(179));
+                    material.setRadiusElementCurrency(price.currency);
+                    material.setRadiusElementPrice((int) (price.price * 100));
                 }
 
                 //add stone hem element:
                 {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(182).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(182).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-
-                    material.setStoneHemCurrency(currency.toUpperCase());
-                    material.setStoneHemPrice((int) (price * 100));
+                    Price price = parsePriceCell(row.getCell(182));
+                    material.setStoneHemCurrency(price.currency);
+                    material.setStoneHemPrice((int) (price.price * 100));
                 }
 
                 //add leakGroove element:
                 {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(175).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(175).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-                    material.setLeakGrooveCurrency(currency.toUpperCase());
-                    material.setLeakGroovePrice((int) (price * 100));
+                    Price price = parsePriceCell(row.getCell(175));
+                    material.setLeakGrooveCurrency(price.currency);
+                    material.setLeakGroovePrice((int) (price.price * 100));
                 }
 
                 //add manual lifting:
                 {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(183).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(183).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-                    material.setManualLiftingCurrency(currency.toUpperCase());
-                    material.setManualLiftingPrice((int) (price * 100));
+                    Price price = parsePriceCell(row.getCell(183));
+                    material.setManualLiftingCurrency(price.currency);
+                    material.setManualLiftingPrice((int) (price.price * 100));
                 }
 
                 //add delivery price for inside MKAD:
                 {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(190).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(190).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-                    material.setDeliveryInsideMKADCurrency(currency.toUpperCase());
-                    material.setDeliveryInsideMKADPrice((int) (price));
+                    Price price = parsePriceCell(row.getCell(190));
+                    material.setDeliveryInsideMKADCurrency(price.currency);
+                    material.setDeliveryInsideMKADPrice((int) (price.price));
                 }
 
                 //add measurer:
                 {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(188).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(188).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-                    material.setMeasurerCurrency(currency.toUpperCase());
-                    material.setMeasurerPrice((int) (price));
+                    Price price = parsePriceCell(row.getCell(188));
+                    material.setMeasurerCurrency(price.currency);
+                    material.setMeasurerPrice((int) (price.price));
                 }
 
                 //add measurer price for km  outside MKAD:
                 {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(189).getStringCellValue().equals("-")) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(189).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-                    material.setMeasurerKMCurrency(currency.toUpperCase());
-                    material.setMeasurerKMPrice((int) (price));
+                    Price price = parsePriceCell(row.getCell(189));
+                    material.setMeasurerKMCurrency(price.currency);
+                    material.setMeasurerKMPrice((int) (price.price));
                 }
 
                 //add delivery price from manufacture
                 {
-                    double price = 0;
-                    String currency = "RUB";
-                    if (row.getCell(191).getStringCellValue().equals("-") || row.getCell(191).getStringCellValue().isEmpty()) {
-                        price = 0;
-                        currency = "RUB";
-                    } else {
-                        String priceStr = row.getCell(191).getStringCellValue();
-                        priceStr = priceStr.replaceAll(",", ".");
-                        price = Double.parseDouble(priceStr.split("=")[1]);
-                        currency = priceStr.split("=")[0];
-                    }
-                    material.setDeliveryFromManufactureCurrency(currency.toUpperCase());
-                    material.setDeliveryFromManufacture((int) (price));
+                    Price price = parsePriceCell(row.getCell(191));
+                    material.setDeliveryFromManufactureCurrency(price.currency);
+                    material.setDeliveryFromManufacture((int) (price.price));
                 }
 
                 //add sheet cutting price from manufacture
@@ -1151,11 +670,27 @@ public class MaterialsXLSParser {
             System.err.println("Error in Materials File pos:" + position);
             e.printStackTrace();
         }
-        /** set prices without depency of MATERIAL */
+    }
 
-        /** fill delivery from manufacture*/
-        sheet = wb.getSheet("delivery");
-        it = sheet.iterator();
+    private static void fillPlumbingElements(List<PlumbingElement> plumbingElementsList,
+                                             Set<PlumbingType> availablePlumbingTypes, HSSFWorkbook wb) throws ParseXLSFileException {
+        plumbingElementsList.clear();
+        availablePlumbingTypes.clear();
+
+        plumbingElementsList.addAll(PlumbingElementXlsReader.fillDataFromXls(wb));
+
+        for (PlumbingElement pe : plumbingElementsList) {
+            if (pe.isAvailable()) {
+                availablePlumbingTypes.add(pe.getPlumbingType());
+            }
+        }
+    }
+
+    private static void fillDeliveryFromManufacturer(Map<String, Double> materialsDeliveryFromManufacture, HSSFWorkbook workbook) {
+        materialsDeliveryFromManufacture.clear();
+
+        HSSFSheet sheet = workbook.getSheet("delivery");
+        Iterator<Row> it = sheet.iterator();
         it.next();
         while (it.hasNext()) {
             Row row = it.next();
@@ -1166,97 +701,102 @@ public class MaterialsXLSParser {
             Double price = row.getCell(2).getNumericCellValue();
             materialsDeliveryFromManufacture.put(groupName, price);
         }
+    }
 
-        /** fill analogs for materials: */
-        {
-            HSSFWorkbook hssfWorkbook = null;
-            try {
-                InputStream inputStream = new FileInputStream(analogsListPath);
-                hssfWorkbook = new HSSFWorkbook(inputStream);
-            } catch (IOException e) {
-                e.printStackTrace();
+    private static void fillAnalogs(List<Material> materialsListAvailable, HSSFWorkbook workbook) {
+        // for acrylic stone
+        Sheet sheetAnalogs = workbook.getSheetAt(0);
+        Iterator<Row> iterator = sheetAnalogs.iterator();
+        iterator.next();
+
+        while (iterator.hasNext()) {
+            Row row = iterator.next();
+
+            ArrayList<String> localListAnalogs = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                if (row.getCell(i * 5 + 1) == null || row.getCell(i * 5 + 2) == null || row.getCell(i * 5 + 3) == null || row.getCell(i * 5 + 4) == null) {
+                    continue;
+                }
+                String materialName = row.getCell(i * 5 + 1).getStringCellValue() + "$" + row.getCell(i * 5 + 2).getStringCellValue() + "$" +
+                        row.getCell(i * 5 + 3).getStringCellValue() + "$" + row.getCell(i * 5 + 4).getStringCellValue() + "$";
+                localListAnalogs.add(materialName);
             }
 
-            //for acrylic stone:
-            Sheet sheetAnalogs = hssfWorkbook.getSheetAt(0);
-            Iterator<Row> iterator = sheetAnalogs.iterator();
-            iterator.next();
-
-            while (iterator.hasNext()) {
-                Row row = iterator.next();
-
-                ArrayList<String> localListAnalogs = new ArrayList<>();
-                for (int i = 0; i < 20; i++) {
-                    if (row.getCell(i * 5 + 1) == null || row.getCell(i * 5 + 2) == null || row.getCell(i * 5 + 3) == null || row.getCell(i * 5 + 4) == null) {
-                        continue;
-                    }
-                    String materialName = row.getCell(i * 5 + 1).getStringCellValue() + "$" + row.getCell(i * 5 + 2).getStringCellValue() + "$" +
-                            row.getCell(i * 5 + 3).getStringCellValue() + "$" + row.getCell(i * 5 + 4).getStringCellValue() + "$";
-                    localListAnalogs.add(materialName);
-                }
-
-                //add Analogs to materials instances:
-                for (String analogName : localListAnalogs) {
-                    for (Material m : materialsListAvailable) {
-                        if (m.getName().contains(analogName)) {
-                            //add analogs to material:
-                            m.getAnalogsList().clear();
-                            for (String analogNameForAdd : localListAnalogs) {
-                                //getMaterial by name:
-                                for (Material mForAdd : materialsListAvailable) {
-                                    if (mForAdd.getName().contains(analogNameForAdd)) {
-                                        //add analog material:
-                                        m.getAnalogsList().add(mForAdd);
-                                    }
+            //add Analogs to materials instances:
+            for (String analogName : localListAnalogs) {
+                for (Material m : materialsListAvailable) {
+                    if (m.getName().contains(analogName)) {
+                        //add analogs to material:
+                        m.getAnalogsList().clear();
+                        for (String analogNameForAdd : localListAnalogs) {
+                            //getMaterial by name:
+                            for (Material mForAdd : materialsListAvailable) {
+                                if (mForAdd.getName().contains(analogNameForAdd)) {
+                                    //add analog material:
+                                    m.getAnalogsList().add(mForAdd);
                                 }
                             }
                         }
                     }
                 }
             }
-
-            //for quarz stone:
-            Sheet sheetAnalogs1 = hssfWorkbook.getSheetAt(1);
-            Iterator<Row> iterator1 = sheetAnalogs1.iterator();
-            iterator1.next();
-
-            while (iterator1.hasNext()) {
-                Row row = iterator1.next();
-
-                ArrayList<String> localListAnalogs = new ArrayList<>();
-                for (int i = 0; i < 20; i++) {
-                    if (row.getCell(i * 5 + 1) == null || row.getCell(i * 5 + 2) == null || row.getCell(i * 5 + 3) == null || row.getCell(i * 5 + 4) == null) {
-                        continue;
-                    }
-                    String materialName = row.getCell(i * 5 + 1).getStringCellValue() + "$" + row.getCell(i * 5 + 2).getStringCellValue() + "$" +
-                            row.getCell(i * 5 + 3).getStringCellValue() + "$" + row.getCell(i * 5 + 4).getStringCellValue() + "$";
-                    localListAnalogs.add(materialName);
-                }
-
-                //add Analogs to materials instances:
-                for (String analogName : localListAnalogs) {
-
-                    for (Material m : materialsListAvailable) {
-                        if (m.getName().contains(analogName)) {
-                            //add analogs to material:
-                            m.getAnalogsList().clear();
-                            for (String analogNameForAdd : localListAnalogs) {
-                                //getMaterial by name:
-                                for (Material mForAdd : materialsListAvailable) {
-                                    if (mForAdd.getName().contains(analogNameForAdd)) {
-                                        //add analog material:
-                                        m.getAnalogsList().add(mForAdd);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            sheet = wb.getSheetAt(0);
         }
 
+        // for quarz stone
+        Sheet sheetAnalogs1 = workbook.getSheetAt(1);
+        Iterator<Row> it = sheetAnalogs1.iterator();
+        it.next();
+
+        while (it.hasNext()) {
+            Row row = it.next();
+
+            ArrayList<String> localListAnalogs = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                if (row.getCell(i * 5 + 1) == null || row.getCell(i * 5 + 2) == null || row.getCell(i * 5 + 3) == null || row.getCell(i * 5 + 4) == null) {
+                    continue;
+                }
+                String materialName = row.getCell(i * 5 + 1).getStringCellValue() + "$" + row.getCell(i * 5 + 2).getStringCellValue() + "$" +
+                        row.getCell(i * 5 + 3).getStringCellValue() + "$" + row.getCell(i * 5 + 4).getStringCellValue() + "$";
+                localListAnalogs.add(materialName);
+            }
+
+            // add Analogs to materials instances:
+            for (String analogName : localListAnalogs) {
+                for (Material m : materialsListAvailable) {
+                    if (m.getName().contains(analogName)) {
+                        //add analogs to material:
+                        m.getAnalogsList().clear();
+                        for (String analogNameForAdd : localListAnalogs) {
+                            //getMaterial by name:
+                            for (Material mForAdd : materialsListAvailable) {
+                                if (mForAdd.getName().contains(analogNameForAdd)) {
+                                    //add analog material:
+                                    m.getAnalogsList().add(mForAdd);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private record Price(String currency, double price) {
+    }
+
+    private static Price parsePriceCell(Cell cell) {
+        String cellValue = cell.getStringCellValue();
+        if (cellValue.isEmpty() || cellValue.equals("-")) {
+            return new Price("RUB", 0.0);
+        } else {
+            String[] chunks = cellValue.replaceAll(",", ".").split("=");
+            return new Price(chunks[0].toUpperCase(), Double.parseDouble(chunks[1]));
+        }
+    }
+
+    private static double getNumericCellValueOrDefault(Cell cell, double defaultValue) {
+        return (cell.getCellType() == CellType.NUMERIC ? cell.getNumericCellValue() : defaultValue);
     }
 
 }
