@@ -783,18 +783,18 @@ public class TableDesigner {
         for (TableDesignerItem item : DeliveryItem.getTableDesignerItemsList()) {
             if (item instanceof DeliveryItem) {
                 DeliveryItem deliveryItem = (DeliveryItem) item;
-                Material material = deliveryItem.getMaterial();
-
                 String name = deliveryItem.getReceiptName();
                 String units = "";
                 double count = deliveryItem.getQuantity();
                 String currency = "RUB";
                 double priceForOne = deliveryItem.getPriceForOne();
 
-                System.out.println("DELIVERY ITEM PRICE FOR ONE = " + priceForOne);
-
-                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne);
-                deliveryReceiptItems.add(receiptItem);
+                if (deliveryItem.getHandCarryPrice() != 0) {
+                    deliveryReceiptItems.add(new ReceiptItem(name, units, count, currency, priceForOne - deliveryItem.getHandCarryPrice()));
+                    deliveryReceiptItems.add(new ReceiptItem("Ручной пронос изделия", units, count, currency, deliveryItem.getHandCarryPrice()));
+                } else {
+                    deliveryReceiptItems.add(new ReceiptItem(name, units, count, currency, priceForOne));
+                }
             }
         }
 
