@@ -21,14 +21,9 @@ public class MaterialsXLSParserTest {
         Set<PlumbingType> availablePlumbingTypes = new LinkedHashSet<>();
         Map<String, Double> materialsDeliveryFromManufacture = new HashMap<>();
 
-        try {
-            MaterialsXLSParser parser = new MaterialsXLSParser(MATERIALS_LIST_PATH, ANALOGS_LIST_PATH);
-            parser.fillMaterialsList(materialsListAvailable, plumbingElementsList, availablePlumbingTypes,
-                    materialsDeliveryFromManufacture);
-            System.out.println(materialsListAvailable.size());
-        } catch (ParseXLSFileException e) {
-            e.printStackTrace();
-        }
+        FacadeXLSParser parser = new FacadeXLSParser(MATERIALS_LIST_PATH, ANALOGS_LIST_PATH);
+        parser.populateLists(materialsListAvailable, plumbingElementsList, availablePlumbingTypes, materialsDeliveryFromManufacture);
+        System.out.println(materialsListAvailable.size());
     }
 
 }

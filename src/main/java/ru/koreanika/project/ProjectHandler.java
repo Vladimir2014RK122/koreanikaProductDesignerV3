@@ -49,8 +49,8 @@ public class ProjectHandler {
      * PROJECT UTILS
      */
 
-    public static final String MATERIALS_LIST_PATH = "materials_1_2004.xls";
-    public static final String ANALOGS_LIST_PATH = "material_analogs.xls";
+    public static final String MATERIALS_XLS_PATH = "materials_1_2004.xls";
+    public static final String ANALOGS_XLS_PATH = "material_analogs.xls";
     public static final String MATERIALS_IMG_PATH = "materials_resources/";
     public static final String DEPTHS_IMG_PATH = "depths_resources/";
     public static final String BORDERS_IMG_PATH = "borders_resources/";
@@ -64,7 +64,7 @@ public class ProjectHandler {
 
     private static BooleanProperty projectOpened = new SimpleBooleanProperty(false);
 
-    private static Map<String, Double> materialsDeliveryFromManufacture = new LinkedHashMap<>();// <Group name, Price in rub>
+    private static Map<String, Double> materialsDeliveryFromManufacturer = new LinkedHashMap<>();// <Group name, Price in rub>
     private static List<Material> materialsListAvailable = new ArrayList<>();
     private static List<Material> materialsListInProject = new ArrayList<>();
     private static Material defaultMaterial = null;
@@ -106,10 +106,10 @@ public class ProjectHandler {
 
     private static final EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
 
-    public static void projectHandlerInit() throws ParseXLSFileException {
-        MaterialsXLSParser parser = new MaterialsXLSParser(MATERIALS_LIST_PATH, ANALOGS_LIST_PATH);
-        parser.fillMaterialsList(materialsListAvailable, plumbingElementsList, availablePlumbingTypes,
-                materialsDeliveryFromManufacture);
+    public static void projectHandlerInit() {
+        FacadeXLSParser parser = new FacadeXLSParser(MATERIALS_XLS_PATH, ANALOGS_XLS_PATH);
+        parser.populateLists(materialsListAvailable, plumbingElementsList, availablePlumbingTypes,
+                materialsDeliveryFromManufacturer);
     }
 
     public static DoubleProperty getPriceMainCoefficient() {
@@ -892,8 +892,8 @@ public class ProjectHandler {
         return defaultMaterial;
     }
 
-    public static Map<String, Double> getMaterialsDeliveryFromManufacture() {
-        return materialsDeliveryFromManufacture;
+    public static Map<String, Double> getMaterialsDeliveryFromManufacturer() {
+        return materialsDeliveryFromManufacturer;
     }
 
     public static void setDefaultMaterialRAW(Material defaultMaterial) {

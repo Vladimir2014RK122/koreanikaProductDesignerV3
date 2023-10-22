@@ -583,9 +583,9 @@ public class Receipt {
 
 
                     double deliveryPrice = 0;
-                    if (ProjectHandler.getMaterialsDeliveryFromManufacture().get(material.getSubType()) != null) {
+                    if (ProjectHandler.getMaterialsDeliveryFromManufacturer().get(material.getSubType()) != null) {
 
-                        double deliveryCommonPrice = ProjectHandler.getMaterialsDeliveryFromManufacture().get(material.getSubType()).doubleValue();
+                        double deliveryCommonPrice = ProjectHandler.getMaterialsDeliveryFromManufacturer().get(material.getSubType()).doubleValue();
                         int shapesNumber = materialAndNumberOfShapes.get(material);
                         deliveryPrice = deliveryCommonPrice / shapesNumber;//in RUR
                         if (currency.equals("USD")) {

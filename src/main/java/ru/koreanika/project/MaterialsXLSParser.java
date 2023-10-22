@@ -1,6 +1,5 @@
 package ru.koreanika.project;
 
-import org.apache.poi.hssf.record.crypto.Biff8EncryptionKey;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -18,44 +17,28 @@ import java.util.*;
 
 public class MaterialsXLSParser {
 
-    public static final String CURRENT_USER_PASSWORD = "9031713970";
+    private final String materialsXLSPath;
 
-    private final String materialsListPath;
-    private final String analogsListPath;
-
-    public MaterialsXLSParser(String materialsListPath, String analogsListPath) {
-        this.materialsListPath = materialsListPath;
-        this.analogsListPath = analogsListPath;
+    public MaterialsXLSParser(String materialsXLSPath) {
+        this.materialsXLSPath = materialsXLSPath;
     }
 
-    public void fillMaterialsList(List<Material> materialsListAvailable, List<PlumbingElement> plumbingElementsList,
-                                  Set<PlumbingType> availablePlumbingTypes,
-                                  Map<String, Double> materialsDeliveryFromManufacture) throws ParseXLSFileException {
-        Biff8EncryptionKey.setCurrentUserPassword(CURRENT_USER_PASSWORD);
-
-        try (InputStream in = new FileInputStream(materialsListPath)) {
-            HSSFWorkbook workbook = new HSSFWorkbook(in);
-            fillPlumbingElements(plumbingElementsList, availablePlumbingTypes, workbook);
-            fillMaterialsAvailable(materialsListAvailable, workbook);
-            fillDeliveryFromManufacturer(materialsDeliveryFromManufacture, workbook);
-            workbook.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try (InputStream inputStream = new FileInputStream(analogsListPath)) {
-            HSSFWorkbook analogsWorkbook = new HSSFWorkbook(inputStream);
-            fillAnalogs(materialsListAvailable, analogsWorkbook);
-            analogsWorkbook.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void populateLists(List<Material> materialsListAvailable, List<PlumbingElement> plumbingElementsList,
+                              Set<PlumbingType> availablePlumbingTypes,
+                              Map<String, Double> materialsDeliveryFromManufacturer) throws IOException {
+        try (InputStream in = new FileInputStream(materialsXLSPath)) {
+            try (HSSFWorkbook workbook = new HSSFWorkbook(in)) {
+                fillMaterialsAvailable(materialsListAvailable, workbook);
+                fillPlumbingElements(plumbingElementsList, availablePlumbingTypes, workbook);
+                fillDeliveryFromManufacturer(materialsDeliveryFromManufacturer, workbook);
+            }
         }
     }
 
-    private static void fillMaterialsAvailable(List<Material> materialsListAvailable, HSSFWorkbook wb) {
+    private void fillMaterialsAvailable(List<Material> materialsListAvailable, HSSFWorkbook workbook) {
         materialsListAvailable.clear();
 
-        Sheet sheet = wb.getSheetAt(0);
+        Sheet sheet = workbook.getSheetAt(0);
         Iterator<Row> it = sheet.iterator();
         it.next();
         it.next();
@@ -672,21 +655,45 @@ public class MaterialsXLSParser {
         }
     }
 
-    private static void fillPlumbingElements(List<PlumbingElement> plumbingElementsList,
-                                             Set<PlumbingType> availablePlumbingTypes, HSSFWorkbook wb) throws ParseXLSFileException {
+    private void fillPlumbingElements(List<PlumbingElement> plumbingElementsList,
+                                      Set<PlumbingType> availablePlumbingTypes, HSSFWorkbook workbook) {
         plumbingElementsList.clear();
         availablePlumbingTypes.clear();
 
-        plumbingElementsList.addAll(PlumbingElementXlsReader.fillDataFromXls(wb));
+        Sheet sheet = workbook.getSheet("ExternalElement");
+        Iterator<Row> it = sheet.iterator();
+        it.next();
 
-        for (PlumbingElement pe : plumbingElementsList) {
-            if (pe.isAvailable()) {
-                availablePlumbingTypes.add(pe.getPlumbingType());
+        while (it.hasNext()) {
+            Row row = it.next();
+
+            if (getPlumbingCellByName(row, "id").getCellType() != CellType.NUMERIC) {
+                System.err.println("WARNING: [PlumbingElementXLSReader] Skipping plumbing element in row " +
+                        row.getRowNum() + ", id non-numeric");
+                break;
             }
+
+            int id = getPlumbingIntegerByName(row, "id");
+
+            String name = getPlumbingStringByName(row, "name");
+            List<String> models = Arrays.asList(getPlumbingStringByName(row, "models").split(","));
+            List<String> sizes = Arrays.asList(getPlumbingStringByName(row, "sizes").split(","));
+            String currency = getPlumbingStringByName(row, "currency").toUpperCase();
+
+            String[] chunks = getPlumbingStringByName(row, "prices").split(",");
+            List<Double> prices = Arrays.stream(chunks).map(Double::parseDouble).toList();
+
+            PlumbingType type = PlumbingType.getByNumber(getPlumbingIntegerByName(row, "type"));
+            boolean available = getPlumbingIntegerByName(row, "available") != 0;
+
+            if (available) {
+                availablePlumbingTypes.add(type);
+            }
+            plumbingElementsList.add(new PlumbingElement(id, type, available, name, models, sizes, currency, prices));
         }
     }
 
-    private static void fillDeliveryFromManufacturer(Map<String, Double> materialsDeliveryFromManufacture, HSSFWorkbook workbook) {
+    private void fillDeliveryFromManufacturer(Map<String, Double> materialsDeliveryFromManufacture, HSSFWorkbook workbook) {
         materialsDeliveryFromManufacture.clear();
 
         HSSFSheet sheet = workbook.getSheet("delivery");
@@ -701,85 +708,6 @@ public class MaterialsXLSParser {
             Double price = row.getCell(2).getNumericCellValue();
             materialsDeliveryFromManufacture.put(groupName, price);
         }
-    }
-
-    private static void fillAnalogs(List<Material> materialsListAvailable, HSSFWorkbook workbook) {
-        // for acrylic stone
-        Sheet sheetAnalogs = workbook.getSheetAt(0);
-        Iterator<Row> iterator = sheetAnalogs.iterator();
-        iterator.next();
-
-        while (iterator.hasNext()) {
-            Row row = iterator.next();
-
-            ArrayList<String> localListAnalogs = new ArrayList<>();
-            for (int i = 0; i < 20; i++) {
-                if (row.getCell(i * 5 + 1) == null || row.getCell(i * 5 + 2) == null || row.getCell(i * 5 + 3) == null || row.getCell(i * 5 + 4) == null) {
-                    continue;
-                }
-                String materialName = row.getCell(i * 5 + 1).getStringCellValue() + "$" + row.getCell(i * 5 + 2).getStringCellValue() + "$" +
-                        row.getCell(i * 5 + 3).getStringCellValue() + "$" + row.getCell(i * 5 + 4).getStringCellValue() + "$";
-                localListAnalogs.add(materialName);
-            }
-
-            //add Analogs to materials instances:
-            for (String analogName : localListAnalogs) {
-                for (Material m : materialsListAvailable) {
-                    if (m.getName().contains(analogName)) {
-                        //add analogs to material:
-                        m.getAnalogsList().clear();
-                        for (String analogNameForAdd : localListAnalogs) {
-                            //getMaterial by name:
-                            for (Material mForAdd : materialsListAvailable) {
-                                if (mForAdd.getName().contains(analogNameForAdd)) {
-                                    //add analog material:
-                                    m.getAnalogsList().add(mForAdd);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // for quarz stone
-        Sheet sheetAnalogs1 = workbook.getSheetAt(1);
-        Iterator<Row> it = sheetAnalogs1.iterator();
-        it.next();
-
-        while (it.hasNext()) {
-            Row row = it.next();
-
-            ArrayList<String> localListAnalogs = new ArrayList<>();
-            for (int i = 0; i < 20; i++) {
-                if (row.getCell(i * 5 + 1) == null || row.getCell(i * 5 + 2) == null || row.getCell(i * 5 + 3) == null || row.getCell(i * 5 + 4) == null) {
-                    continue;
-                }
-                String materialName = row.getCell(i * 5 + 1).getStringCellValue() + "$" + row.getCell(i * 5 + 2).getStringCellValue() + "$" +
-                        row.getCell(i * 5 + 3).getStringCellValue() + "$" + row.getCell(i * 5 + 4).getStringCellValue() + "$";
-                localListAnalogs.add(materialName);
-            }
-
-            // add Analogs to materials instances:
-            for (String analogName : localListAnalogs) {
-                for (Material m : materialsListAvailable) {
-                    if (m.getName().contains(analogName)) {
-                        //add analogs to material:
-                        m.getAnalogsList().clear();
-                        for (String analogNameForAdd : localListAnalogs) {
-                            //getMaterial by name:
-                            for (Material mForAdd : materialsListAvailable) {
-                                if (mForAdd.getName().contains(analogNameForAdd)) {
-                                    //add analog material:
-                                    m.getAnalogsList().add(mForAdd);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
     }
 
     private record Price(String currency, double price) {
@@ -797,6 +725,28 @@ public class MaterialsXLSParser {
 
     private static double getNumericCellValueOrDefault(Cell cell, double defaultValue) {
         return (cell.getCellType() == CellType.NUMERIC ? cell.getNumericCellValue() : defaultValue);
+    }
+
+    private static int getPlumbingIntegerByName(Row row, String columName) {
+        return (int) getPlumbingCellByName(row, columName).getNumericCellValue();
+    }
+
+    private static String getPlumbingStringByName(Row row, String columName) {
+        return getPlumbingCellByName(row, columName).getStringCellValue();
+    }
+
+    private static Cell getPlumbingCellByName(Row row, String columnName) {
+        return switch (columnName) {
+            case "id" -> row.getCell(0);
+            case "type" -> row.getCell(1);
+            case "available" -> row.getCell(2);
+            case "name" -> row.getCell(3);
+            case "models" -> row.getCell(4);
+            case "sizes" -> row.getCell(5);
+            case "prices" -> row.getCell(6);
+            case "currency" -> row.getCell(7);
+            default -> null;
+        };
     }
 
 }
