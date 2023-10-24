@@ -9,6 +9,7 @@ import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
 import ru.koreanika.service.ServiceLocator;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class MaterialsXLSParserTest {
@@ -43,11 +44,13 @@ public class MaterialsXLSParserTest {
 
         ImageIndex imageIndex = ServiceLocator.getService("ImageIndex", ImageIndex.class);
 
-        System.out.println("id;name");
-        for (Material material : materialsListAvailable) {
-            String id = material.getId();
-            if (!imageIndex.containsKey(id)) {
-                System.out.println(id + ";\"" + material.getName() + "\"");
+        try (PrintWriter writer = new PrintWriter("materials_without_image.csv", "CP1251")) {
+            writer.write("id;name\r\n");
+            for (Material material : materialsListAvailable) {
+                String id = material.getId();
+                if (!imageIndex.containsKey(id)) {
+                    writer.write(id + ";\"" + material.getName() + "\"\r\n");
+                }
             }
         }
     }
