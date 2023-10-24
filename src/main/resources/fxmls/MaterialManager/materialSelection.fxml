@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -18,7 +19,12 @@
          </font></Label>
         <ChoiceBox id="choiceBoxDefault" layoutX="417.0" layoutY="352.0" AnchorPane.bottomAnchor="312.0" AnchorPane.leftAnchor="375.0" AnchorPane.rightAnchor="350.0" />
         <Button id="btnApply" layoutX="912.0" layoutY="376.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="114.0" text="Применить" AnchorPane.bottomAnchor="274.0" AnchorPane.rightAnchor="350.0" />
-        <ImageView id="imageViewSelectedMaterial" fitHeight="134.0" fitWidth="134.0" layoutX="305.0" layoutY="422.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="118.0" AnchorPane.leftAnchor="370.0" />
+
+        <Group layoutX="305.0" layoutY="422.0" AnchorPane.bottomAnchor="118.0" AnchorPane.leftAnchor="370.0">
+            <ImageView id="imageViewSelectedMaterial" fitHeight="134.0" fitWidth="134.0" layoutX="305.0" layoutY="422.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="118.0" AnchorPane.leftAnchor="370.0" />
+            <ImageView id="imageViewSelectedMaterialOverlay" fitHeight="50.0" fitWidth="48.0" layoutX="391.0" layoutY="422.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="118.0" AnchorPane.leftAnchor="370.0" />
+        </Group>
+
         <Label id="labelAnalog" layoutX="799.0" layoutY="14.0" prefHeight="21.0" prefWidth="67.0" text="Аналоги:" AnchorPane.rightAnchor="260.0" AnchorPane.topAnchor="21.0">
          <font>
             <Font size="14.0" />
