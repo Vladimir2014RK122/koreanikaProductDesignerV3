@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
-import ru.koreanika.Main;
+import ru.koreanika.utils.Main;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

@@ -188,7 +188,10 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
         materialImageModalStage.setScene(new Scene(modalWindowController.getRootElement()));
         materialImageModalStage.initOwner(null);
         materialImageModalStage.initModality(Modality.APPLICATION_MODAL);
-        imageViewSelectedMaterial.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> materialImageModalStage.showAndWait());
+        imageViewSelectedMaterial.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            materialImageModalStage.showAndWait();
+            materialImageModalStage.toFront();
+        });
     }
 
     @Override

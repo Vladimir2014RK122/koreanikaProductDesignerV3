@@ -22,7 +22,7 @@ import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.NotificationEvent;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.Main;
+import ru.koreanika.utils.Main;
 import ru.koreanika.utils.Updater.UpdateChecker;
 import ru.koreanika.utils.Updater.UpdateManager;
 

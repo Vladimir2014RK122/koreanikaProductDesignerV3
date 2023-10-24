@@ -11,7 +11,7 @@ import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.apache.hc.core5.util.Timeout;
 import org.json.simple.JSONObject;
-import ru.koreanika.Main;
+import ru.koreanika.utils.Main;
 
 import java.util.Date;
 import java.util.concurrent.ExecutionException;

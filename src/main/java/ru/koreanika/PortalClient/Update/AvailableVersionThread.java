@@ -10,7 +10,7 @@ import org.apache.hc.client5.http.impl.async.HttpAsyncClients;
 import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.apache.hc.core5.util.Timeout;
-import ru.koreanika.Main;
+import ru.koreanika.utils.Main;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;

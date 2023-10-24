@@ -8,7 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import ru.koreanika.Main;
+import ru.koreanika.utils.Main;
 
 import java.io.IOException;
 import java.util.List;

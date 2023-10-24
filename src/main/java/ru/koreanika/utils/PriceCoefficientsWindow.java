@@ -1,6 +1,5 @@
 package ru.koreanika.utils;
 
-import ru.koreanika.Main;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

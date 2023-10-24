@@ -1,4 +1,4 @@
-package ru.koreanika;
+package ru.koreanika.utils;
 
 import ru.koreanika.PortalClient.Authorization.Authorization;
 import ru.koreanika.PortalClient.Maintenance.ClimeType;

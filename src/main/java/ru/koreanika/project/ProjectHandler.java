@@ -15,7 +15,7 @@ import org.json.simple.parser.ParseException;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
-import ru.koreanika.Main;
+import ru.koreanika.utils.Main;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.NotificationEvent;

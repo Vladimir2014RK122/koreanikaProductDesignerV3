@@ -1,6 +1,6 @@
 package ru.koreanika.utils.Updater;
 
-import ru.koreanika.Main;
+import ru.koreanika.utils.Main;
 import ru.koreanika.PortalClient.Update.UpdateService;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

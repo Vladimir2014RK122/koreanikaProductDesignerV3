@@ -2,7 +2,6 @@ package ru.koreanika.utils;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import ru.koreanika.Main;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.cutDesigner.CutDesigner;
 import javafx.application.Platform;

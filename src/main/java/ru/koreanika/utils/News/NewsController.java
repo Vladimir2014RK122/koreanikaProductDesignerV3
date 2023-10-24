@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
-import ru.koreanika.Main;
+import ru.koreanika.utils.Main;
 
 import java.io.*;
 import java.util.*;

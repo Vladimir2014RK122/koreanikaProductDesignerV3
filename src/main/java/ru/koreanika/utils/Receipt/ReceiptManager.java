@@ -1,7 +1,7 @@
 package ru.koreanika.utils.Receipt;
 
 import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Main;
+import ru.koreanika.utils.Main;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.PortalClient.UserEventHandler.UserEventService;
 import ru.koreanika.utils.UserPreferences;

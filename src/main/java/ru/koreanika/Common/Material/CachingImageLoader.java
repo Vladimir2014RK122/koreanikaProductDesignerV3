@@ -2,7 +2,7 @@ package ru.koreanika.Common.Material;
 
 import javafx.scene.image.Image;
 import ru.koreanika.PortalClient.PortalURI;
-import ru.koreanika.Main;
+import ru.koreanika.utils.Main;
 
 import java.io.*;
 import java.net.URL;
