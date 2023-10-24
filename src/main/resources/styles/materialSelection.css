@@ -406,9 +406,8 @@
 }
 
 #imageViewSelectedMaterialOverlay {
-    -fx-image: url(images/magnifier.png);
-    -fx-blend-mode: src-over;
-    -fx-opacity: 0.9;
+    -fx-image: url(images/magnifying_glass.png);
+    -fx-opacity: 0.6;
 }
 #imageViewSelectedMaterial:hover {
     -fx-cursor: hand;
