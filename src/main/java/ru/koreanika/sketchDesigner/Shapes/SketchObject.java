@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import ru.koreanika.sketchDesigner.SketchDesigner;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.util.ArrayList;
 
@@ -43,7 +43,7 @@ public abstract class SketchObject extends Pane implements Connectible {
     ContextMenu shapeContextMenu = new ContextMenu();
 
 
-    double commonShapeScale = ProjectHandler.getCommonShapeScale();
+    double commonShapeScale = Project.getCommonShapeScale();
 
     public abstract void refreshCutShapeView();
 

@@ -14,7 +14,7 @@ import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class MountingItem extends TableDesignerItem {
 
         this.quantity = quantity;
 
-        imageMain = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/MountingItem/mountingItem.png").toString()).getImage();
+        imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/MountingItem/mountingItem.png").toString()).getImage();
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(

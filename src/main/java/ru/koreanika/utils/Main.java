@@ -5,7 +5,6 @@ import ru.koreanika.PortalClient.Maintenance.ClimeType;
 import ru.koreanika.PortalClient.Maintenance.MaintenanceMessage;
 import ru.koreanika.PortalClient.Status.PortalStatus;
 import ru.koreanika.PortalClient.Update.UpdateService;
-import ru.koreanika.utils.UserPreferences;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -20,8 +19,9 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import ru.koreanika.project.Project;
 import ru.koreanika.project.ProjectHandler;
-import ru.koreanika.utils.*;
+import ru.koreanika.project.ProjectWriter;
 import ru.koreanika.utils.Currency.BankCurrency;
 import ru.koreanika.utils.Currency.UserCurrency;
 import ru.koreanika.utils.News.NewsController;
@@ -58,7 +58,7 @@ public class Main extends Application {
         System.out.println("ТЕСТ КИРИЛЛИЦЫ");
 
         try {
-            ProjectHandler.projectHandlerInit();
+            ProjectHandler.init();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -121,7 +121,8 @@ public class Main extends Application {
                 System.out.println("path: " + event.getDragboard().getFiles().get(0).getPath());
                 System.out.println("name: " + event.getDragboard().getFiles().get(0).getName());
 
-                ProjectHandler.openProjectFromArguments(event.getDragboard().getFiles().get(0).getPath());
+                File file = new File(event.getDragboard().getFiles().get(0).getPath());
+                MainWindow.projectOpenedLogic(file);
 
                 event.setDropCompleted(true);
             }
@@ -154,7 +155,7 @@ public class Main extends Application {
 
             alert.getButtonTypes().setAll(buttonTypeNo, buttonTypeYes, buttonTypeCancel);
 
-            if (ProjectHandler.getUserProject() == null) {
+            if (Project.getUserProject() == null) {
                 primaryStage.close();
                 event.consume();
                 return;
@@ -165,7 +166,7 @@ public class Main extends Application {
                 primaryStage.close();
             } else if (result.get() == buttonTypeYes) {
                 // ... user chose "YES"
-                ProjectHandler.saveProject(ProjectHandler.getCurProjectPath(), ProjectHandler.getCurProjectName());
+                ProjectWriter.saveProject(Project.getCurProjectPath(), Project.getCurProjectName());
                 primaryStage.close();
             } else if (result.get() == buttonTypeCancel) {
                 // ... user chose "Three"
@@ -412,8 +413,8 @@ public class Main extends Application {
             System.out.println("mainCoefficient = " + mainCoefficient);
             System.out.println("materialCoefficient = " + materialCoefficient);
 
-            ProjectHandler.setPriceMainCoefficient(mainCoefficient);
-            ProjectHandler.setPriceMaterialCoefficient(materialCoefficient);
+            Project.setPriceMainCoefficient(mainCoefficient);
+            Project.setPriceMaterialCoefficient(materialCoefficient);
         }
 
         //company address:

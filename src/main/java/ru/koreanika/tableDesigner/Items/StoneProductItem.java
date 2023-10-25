@@ -20,7 +20,7 @@ import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.IOException;
@@ -119,7 +119,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
         updateItemView();
 
-        ProjectHandler.getMaterialsUsesInProjectObservable().add(material.getName() + "#" + depth);
+        Project.getMaterialsUsesInProjectObservable().add(material.getName() + "#" + depth);
 
         //create depend on Radius element:
         if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS || shapeType == ShapeType.RECTANGLE_WITH_RADIUS_INTO) {
@@ -308,16 +308,16 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         StoneProductItem oldStoneProductItem = item;
 
         Material newMaterial = null;
-        Material defaultMaterial = ProjectHandler.getDefaultMaterial();
+        Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (ProjectHandler.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterialsListInProject().contains(item.getMaterial())) {
             newMaterial = oldStoneProductItem.material;
         } else {
             if (defaultMaterial.getMainType().equals(item.getMaterial().getMainType()) && defaultMaterial.getDepths().contains("" + oldStoneProductItem.depth)) {
-                newMaterial = ProjectHandler.getDefaultMaterial();
+                newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : ProjectHandler.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterialsListInProject()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType()) && material.getDepths().contains("" + oldStoneProductItem.depth)) {
                         newMaterial = material;
@@ -983,7 +983,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
         imageView.setImage(material.getImageViewLogo().getImage());
         if (shapeType == ShapeType.RECTANGLE) {
-            imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_1.png").toString()));
+            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_1.png").toString()));
 //            if (stoneProductType == StoneProductType.TABLETOP)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon_tabletop.png").toString()));
 //            else if (stoneProductType == StoneProductType.WALL_PANEL)
@@ -993,7 +993,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 //            else if (stoneProductType == StoneProductType.FOOT)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon.png").toString()));
         } else if (shapeType == ShapeType.RECTANGLE_WITH_CORNER) {
-            imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_corner_1.png").toString()));
+            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_corner_1.png").toString()));
 //            if (stoneProductType == StoneProductType.TABLETOP)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon_tabletop.png").toString()));
 //            else if (stoneProductType == StoneProductType.WALL_PANEL)
@@ -1003,7 +1003,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 //            else if (stoneProductType == StoneProductType.FOOT)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon.png").toString()));
         } else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS) {
-            imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_1.png").toString()));
+            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_1.png").toString()));
 //            if (stoneProductType == StoneProductType.TABLETOP)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon_tabletop.png").toString()));
 //            else if (stoneProductType == StoneProductType.WALL_PANEL)
@@ -1013,7 +1013,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 //            else if (stoneProductType == StoneProductType.FOOT)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon.png").toString()));
         } else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS_INTO) {
-            imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_1.png").toString()));
+            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_1.png").toString()));
 //            if (stoneProductType == StoneProductType.TABLETOP)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon_tabletop.png").toString()));
 //            else if (stoneProductType == StoneProductType.WALL_PANEL)
@@ -1024,7 +1024,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon.png").toString()));
         } else if (shapeType == ShapeType.TRIANGLE) {
 
-            imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/triangle_1.png").toString()));
+            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/triangle_1.png").toString()));
 //            if (stoneProductType == StoneProductType.TABLETOP)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/triangleShape_icon_tabletop.png").toString()));
 //            else if (stoneProductType == StoneProductType.WALL_PANEL)
@@ -1034,7 +1034,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 //            else if (stoneProductType == StoneProductType.FOOT)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/triangleShape_icon.png").toString()));
         } else if (shapeType == ShapeType.CIRCLE_HALF) {
-            imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/circle_half_1.png").toString()));
+            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/circle_half_1.png").toString()));
 //            if (stoneProductType == StoneProductType.TABLETOP)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon_tabletop.png").toString()));
 //            else if (stoneProductType == StoneProductType.WALL_PANEL)
@@ -1044,7 +1044,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 //            else if (stoneProductType == StoneProductType.FOOT)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon.png").toString()));
         } else if (shapeType == ShapeType.CIRCLE) {
-            imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/circle_1.png").toString()));
+            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/circle_1.png").toString()));
 //            if (stoneProductType == StoneProductType.TABLETOP)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleShape_icon_tabletop.png").toString()));
 //            else if (stoneProductType == StoneProductType.WALL_PANEL)
@@ -1054,7 +1054,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 //            else if (stoneProductType == StoneProductType.FOOT)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleShape_icon.png").toString()));
         } else if (shapeType == ShapeType.TRAPEZE) {
-            imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/trapeze_1.png").toString()));
+            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/trapeze_1.png").toString()));
 //            if (stoneProductType == StoneProductType.TABLETOP)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon_tabletop.png").toString()));
 //            else if (stoneProductType == StoneProductType.WALL_PANEL)
@@ -1064,7 +1064,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 //            else if (stoneProductType == StoneProductType.FOOT)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon.png").toString()));
         } else if (shapeType == ShapeType.RHOMBUS) {
-            imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rhombus_1.png").toString()));
+            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rhombus_1.png").toString()));
 //            if (stoneProductType == StoneProductType.TABLETOP)
 //                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rhombusShape_icon_tabletop.png").toString()));
 //            else if (stoneProductType == StoneProductType.WALL_PANEL)
@@ -1090,55 +1090,55 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
         if (shapeType == ShapeType.RECTANGLE) {
             imageViewFrontCard.setImage(
-                    new Image(ProjectHandler
+                    new Image(Project
                             .class
                             .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_1.png")
                             .toString()));
         }else if (shapeType == ShapeType.RECTANGLE_WITH_CORNER) {
             imageViewFrontCard.setImage(
-                    new Image(ProjectHandler
+                    new Image(Project
                             .class
                             .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_corner_1.png")
                             .toString()));
         }else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS) {
             imageViewFrontCard.setImage(
-                    new Image(ProjectHandler
+                    new Image(Project
                             .class
                             .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_1.png")
                             .toString()));
         }else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS_INTO) {
             imageViewFrontCard.setImage(
-                    new Image(ProjectHandler
+                    new Image(Project
                             .class
                             .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_1.png")
                             .toString()));
         }else if (shapeType == ShapeType.TRIANGLE) {
             imageViewFrontCard.setImage(
-                    new Image(ProjectHandler
+                    new Image(Project
                             .class
                             .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/triangle_1.png")
                             .toString()));
         }else if (shapeType == ShapeType.TRAPEZE) {
             imageViewFrontCard.setImage(
-                    new Image(ProjectHandler
+                    new Image(Project
                             .class
                             .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/trapeze_1.png")
                             .toString()));
         }else if (shapeType == ShapeType.RHOMBUS) {
             imageViewFrontCard.setImage(
-                    new Image(ProjectHandler
+                    new Image(Project
                             .class
                             .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rhombus_1.png")
                             .toString()));
         }else if (shapeType == ShapeType.CIRCLE) {
             imageViewFrontCard.setImage(
-                    new Image(ProjectHandler
+                    new Image(Project
                             .class
                             .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/circle_1.png")
                             .toString()));
         }else if (shapeType == ShapeType.CIRCLE_HALF) {
             imageViewFrontCard.setImage(
-                    new Image(ProjectHandler
+                    new Image(Project
                             .class
                             .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/circle_half_1.png")
                             .toString()));
@@ -1260,13 +1260,13 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 StoneProductType.FOOT.getName());
         choiceBoxElementType.getSelectionModel().select(0);
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterialsListInProject()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
-        System.out.println("\n\nDEFAULT FROM : " + ProjectHandler.getDefaultMaterial());
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        System.out.println("\n\nDEFAULT FROM : " + Project.getDefaultMaterial());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
-        choiceBoxDepth.getItems().addAll(ProjectHandler.getDefaultMaterial().getDepths());
+        choiceBoxDepth.getItems().addAll(Project.getDefaultMaterial().getDepths());
         choiceBoxDepth.getSelectionModel().select(0);
 
         toggleButtonShape1.setToggleGroup(toggleGroupShapes);
@@ -1356,7 +1356,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 toggleButtonShape8.setDisable(false);
                 toggleButtonShape9.setDisable(false);
 
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
 
             } else if (choiceBoxElementType.getSelectionModel().getSelectedIndex() == 1) {
                 toggleGroupShapes.selectToggle(toggleButtonShape1);
@@ -1370,7 +1370,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 toggleButtonShape8.setDisable(true);
                 toggleButtonShape9.setDisable(true);
 
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
 
             } else if (choiceBoxElementType.getSelectionModel().getSelectedIndex() == 2) {  //windowsill
 
@@ -1384,7 +1384,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 toggleButtonShape8.setDisable(false);
                 toggleButtonShape9.setDisable(false);
 
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
 
             } else if (choiceBoxElementType.getSelectionModel().getSelectedIndex() == 3) {
                 toggleGroupShapes.selectToggle(toggleButtonShape1);
@@ -1398,7 +1398,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 toggleButtonShape8.setDisable(true);
                 toggleButtonShape9.setDisable(true);
 
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
 
 
             }
@@ -1475,7 +1475,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
             labelD.setText("D:");
 
             if (newValue == toggleButtonShape1) {
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
 
                 textFieldSizeA.setText("600");
                 textFieldSizeB.setText("600");
@@ -1487,7 +1487,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 textFieldSizeC.setDisable(true);
                 textFieldSizeD.setDisable(true);
             } else if (newValue == toggleButtonShape2) {
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle_corner.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle_corner.png").toString()));
 
                 textFieldSizeA.setText("900");
                 textFieldSizeB.setText("900");
@@ -1498,7 +1498,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 textFieldSizeC.setDisable(false);
                 textFieldSizeD.setDisable(false);
             } else if (newValue == toggleButtonShape3) {
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle_circle.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle_circle.png").toString()));
 
                 labelC_R.setText("R:");
                 textFieldSizeA.setText("600");
@@ -1510,7 +1510,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 textFieldSizeC.setDisable(false);
                 textFieldSizeD.setDisable(true);
             } else if (newValue == toggleButtonShape4) {
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle_circle_into.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle_circle_into.png").toString()));
 
                 labelC_R.setText("R:");
                 textFieldSizeA.setText("600");
@@ -1523,7 +1523,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 textFieldSizeC.setDisable(false);
                 textFieldSizeD.setDisable(true);
             } else if (newValue == toggleButtonShape5) {
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/triangle.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/triangle.png").toString()));
 
                 textFieldSizeA.setText("600");
                 textFieldSizeB.setText("600");
@@ -1535,7 +1535,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 textFieldSizeC.setDisable(true);
                 textFieldSizeD.setDisable(true);
             } else if (newValue == toggleButtonShape6) {
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/circle_half.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/circle_half.png").toString()));
 
                 labelC_R.setText("R:");
                 textFieldSizeA.setText("0");
@@ -1548,7 +1548,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 textFieldSizeC.setDisable(false);
                 textFieldSizeD.setDisable(true);
             } else if (newValue == toggleButtonShape7) {
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/circle.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/circle.png").toString()));
 
                 labelC_R.setText("R:");
                 textFieldSizeA.setText("0");
@@ -1561,7 +1561,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 textFieldSizeC.setDisable(false);
                 textFieldSizeD.setDisable(true);
             } else if (newValue == toggleButtonShape8) {
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/trapeze.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/trapeze.png").toString()));
 
                 textFieldSizeA.setText("1000");
                 textFieldSizeB.setText("600");
@@ -1576,7 +1576,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 textFieldSizeC.setDisable(false);
                 textFieldSizeD.setDisable(false);
             } else if (newValue == toggleButtonShape9) {
-                imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rhombus.png").toString()));
+                imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rhombus.png").toString()));
 
                 textFieldSizeA.setText("1000");
                 textFieldSizeB.setText("600");
@@ -1619,7 +1619,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         else if (toggleButtonShape9.isSelected()) shapeType = ShapeType.RHOMBUS;
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterialsListInProject()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -1946,7 +1946,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
         choiceBoxDepth.getItems().clear();
         Material selectedMaterial = null;
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterialsListInProject()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
                 selectedMaterial = material;
             }
@@ -2072,13 +2072,13 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterialsListInProject()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
         choiceBoxDepth.getItems().clear();
-        Material defaultMaterial = ProjectHandler.getDefaultMaterial();
+        Material defaultMaterial = Project.getDefaultMaterial();
         if (defaultMaterial.getMainType().equals("Кварцевый агломерат") || defaultMaterial.getMainType().equals("Натуральный камень")) {
             for (String str : defaultMaterial.getDepths()) {
                 int depth = Integer.parseInt(str);
@@ -2152,13 +2152,13 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 }
             }
         } else {
-            for(String s : ProjectHandler.getDefaultMaterial().getDepths()){
+            for(String s : Project.getDefaultMaterial().getDepths()){
                 choiceBoxDepth.getItems().add("d" + s);
             }
         }
 
 
-        int defDep = ProjectHandler.getDefaultMaterial().getDefaultDepth();
+        int defDep = Project.getDefaultMaterial().getDefaultDepth();
         for(String s : choiceBoxDepth.getItems()){
             if(s.indexOf("d"+ defDep) != -1) choiceBoxDepth.getSelectionModel().select(s);
         }
@@ -2172,7 +2172,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
 
         toggleButtonShape1.setSelected(true);
-        imageViewShape.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
+        imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
 
 //        ImageView image1 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon_tabletop.png").toString());
 //        ImageView image2 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon_tabletop.png").toString());
@@ -2215,7 +2215,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         if (choiceBoxElementType.getSelectionModel().getSelectedItem() == null) return;
         if (choiceBoxDepth.getSelectionModel().getSelectedItem() == null) return;
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterialsListInProject()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = material.getCurrency();
@@ -2441,7 +2441,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         ShapeType shapeType = ShapeType.valueOf((String) jsonObject.get("shapeType"));
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterialsListInProject()) {
             if (materialName.equals(m.getName())) {
                 material = m;
                 break;

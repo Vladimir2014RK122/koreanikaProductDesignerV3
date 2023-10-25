@@ -10,9 +10,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.sketchDesigner.SketchDesigner;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.io.File;
 import java.io.IOException;
@@ -108,10 +109,10 @@ public class EdgeManager {
         radioBtnBorderCut3.setText("");
         radioBtnBorderCut4.setText("");
 
-        radioBtnBorderCut1.setGraphic(new ImageView(new Image(ProjectHandler.class.getResource("/styles/images/edgeManager/borderCut1.png").toString())));
-        radioBtnBorderCut2.setGraphic(new ImageView(new Image(ProjectHandler.class.getResource("/styles/images/edgeManager/borderCut2.png").toString())));
-        radioBtnBorderCut3.setGraphic(new ImageView(new Image(ProjectHandler.class.getResource("/styles/images/edgeManager/borderCut3.png").toString())));
-        radioBtnBorderCut4.setGraphic(new ImageView(new Image(ProjectHandler.class.getResource("/styles/images/edgeManager/borderCut4.png").toString())));
+        radioBtnBorderCut1.setGraphic(new ImageView(new Image(Project.class.getResource("/styles/images/edgeManager/borderCut1.png").toString())));
+        radioBtnBorderCut2.setGraphic(new ImageView(new Image(Project.class.getResource("/styles/images/edgeManager/borderCut2.png").toString())));
+        radioBtnBorderCut3.setGraphic(new ImageView(new Image(Project.class.getResource("/styles/images/edgeManager/borderCut3.png").toString())));
+        radioBtnBorderCut4.setGraphic(new ImageView(new Image(Project.class.getResource("/styles/images/edgeManager/borderCut4.png").toString())));
 
 
         radioBtnBorderSideCut1.getStyleClass().remove("radio-button");
@@ -122,8 +123,8 @@ public class EdgeManager {
         radioBtnBorderSideCut1.setText("");
         radioBtnBorderSideCut2.setText("");
 
-        radioBtnBorderSideCut1.setGraphic(new ImageView(new Image(ProjectHandler.class.getResource("/styles/images/edgeManager/borderSideCut1.png").toString())));
-        radioBtnBorderSideCut2.setGraphic(new ImageView(new Image(ProjectHandler.class.getResource("/styles/images/edgeManager/borderSideCut2.png").toString())));
+        radioBtnBorderSideCut1.setGraphic(new ImageView(new Image(Project.class.getResource("/styles/images/edgeManager/borderSideCut1.png").toString())));
+        radioBtnBorderSideCut2.setGraphic(new ImageView(new Image(Project.class.getResource("/styles/images/edgeManager/borderSideCut2.png").toString())));
         //radioBtnBorderCut1.set
 
         borderSettingsGroup.getChildren().addAll(

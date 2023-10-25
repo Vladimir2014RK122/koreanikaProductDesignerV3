@@ -2,7 +2,7 @@ package ru.koreanika.utils.Receipt;
 
 
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -36,7 +36,7 @@ public class ReceiptItem {
 
         this.name = name;
         this.units = units;
-        this.priceForOne = priceForOne * ProjectHandler.getPriceMainCoefficient().doubleValue();
+        this.priceForOne = priceForOne * Project.getPriceMainCoefficient().doubleValue();
         this.currency = currency;
         this.count = count;
 

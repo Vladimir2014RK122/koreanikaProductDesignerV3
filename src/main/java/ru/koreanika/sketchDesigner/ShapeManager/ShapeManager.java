@@ -20,7 +20,7 @@ import ru.koreanika.sketchDesigner.Features.FeatureType;
 import ru.koreanika.sketchDesigner.Features.Sink;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -298,21 +298,21 @@ public class ShapeManager {
             if (textFieldToLeft.focusedProperty().get() == false) {
 
                 if (leftAnchorOk == false) {
-                    textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / ProjectHandler.getCommonShapeScale()));
+                    textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / Project.getCommonShapeScale()));
                 }
             } else {
-                textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / ProjectHandler.getCommonShapeScale()));
-                textFieldToRight.setText("" + (int) ((shapePolygon.getBoundsInLocal().getWidth() - (selectedFeature.getTranslateX() + selectedFeature.getBoundsInLocal().getWidth())) / ProjectHandler.getCommonShapeScale()));
+                textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / Project.getCommonShapeScale()));
+                textFieldToRight.setText("" + (int) ((shapePolygon.getBoundsInLocal().getWidth() - (selectedFeature.getTranslateX() + selectedFeature.getBoundsInLocal().getWidth())) / Project.getCommonShapeScale()));
             }
         });
         textFieldToLeft.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 shapePane.requestFocus();
                 if (leftAnchorOk == false) {
-                    textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / ProjectHandler.getCommonShapeScale()));
+                    textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / Project.getCommonShapeScale()));
                 } else {
-                    selectedFeature.setTranslateX(Double.parseDouble(textFieldToLeft.getText()) * ProjectHandler.getCommonShapeScale());
-                    textFieldToRight.setText("" + (int) ((shapePolygon.getBoundsInLocal().getWidth() - (selectedFeature.getTranslateX() + selectedFeature.getBoundsInLocal().getWidth())) / ProjectHandler.getCommonShapeScale()));
+                    selectedFeature.setTranslateX(Double.parseDouble(textFieldToLeft.getText()) * Project.getCommonShapeScale());
+                    textFieldToRight.setText("" + (int) ((shapePolygon.getBoundsInLocal().getWidth() - (selectedFeature.getTranslateX() + selectedFeature.getBoundsInLocal().getWidth())) / Project.getCommonShapeScale()));
                 }
             }
         });
@@ -323,13 +323,13 @@ public class ShapeManager {
             if (textFieldToRight.focusedProperty().get() == false) {
 
                 if (rightAnchorOk == false) {
-                    textFieldToRight.setText("" + (int) ((shapePolygon.getBoundsInLocal().getWidth() - (selectedFeature.getTranslateX() + selectedFeature.getBoundsInLocal().getWidth())) / ProjectHandler.getCommonShapeScale()));
+                    textFieldToRight.setText("" + (int) ((shapePolygon.getBoundsInLocal().getWidth() - (selectedFeature.getTranslateX() + selectedFeature.getBoundsInLocal().getWidth())) / Project.getCommonShapeScale()));
                 } else {
                     //selectedFeature.setTranslateX(shapePane.getBoundsInLocal().getWidth() - Double.parseDouble(textFieldToRight.getText()) * ProjectHandler.getCommonShapeScale() + selectedFeature.getBoundsInLocal().getWidth());
                 }
             } else {
-                textFieldToRight.setText("" + (int) ((shapePolygon.getBoundsInLocal().getWidth() - (selectedFeature.getTranslateX() + selectedFeature.getBoundsInLocal().getWidth())) / ProjectHandler.getCommonShapeScale()));
-                textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / ProjectHandler.getCommonShapeScale()));
+                textFieldToRight.setText("" + (int) ((shapePolygon.getBoundsInLocal().getWidth() - (selectedFeature.getTranslateX() + selectedFeature.getBoundsInLocal().getWidth())) / Project.getCommonShapeScale()));
+                textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / Project.getCommonShapeScale()));
                 //textFieldToLeft.setText("");
             }
         });
@@ -337,10 +337,10 @@ public class ShapeManager {
             if (event.getCode() == KeyCode.ENTER) {
                 shapePane.requestFocus();
                 if (rightAnchorOk == false) {
-                    textFieldToRight.setText("" + (int) (selectedFeature.getTranslateX() / ProjectHandler.getCommonShapeScale()));
+                    textFieldToRight.setText("" + (int) (selectedFeature.getTranslateX() / Project.getCommonShapeScale()));
                 } else {
-                    selectedFeature.setTranslateX(shapePolygon.getBoundsInLocal().getWidth() - (Double.parseDouble(textFieldToRight.getText()) * ProjectHandler.getCommonShapeScale() + selectedFeature.getBoundsInLocal().getWidth()));
-                    textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / ProjectHandler.getCommonShapeScale()));
+                    selectedFeature.setTranslateX(shapePolygon.getBoundsInLocal().getWidth() - (Double.parseDouble(textFieldToRight.getText()) * Project.getCommonShapeScale() + selectedFeature.getBoundsInLocal().getWidth()));
+                    textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / Project.getCommonShapeScale()));
                 }
             }
         });
@@ -351,21 +351,21 @@ public class ShapeManager {
             if (textFieldToTop.focusedProperty().get() == false) {
 
                 if (topAnchorOk == false) {
-                    textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / ProjectHandler.getCommonShapeScale()));
+                    textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / Project.getCommonShapeScale()));
                 }
             } else {
-                textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / ProjectHandler.getCommonShapeScale()));
-                textFieldToBottom.setText("" + (int) ((shapePolygon.getBoundsInLocal().getHeight() - ((selectedFeature.getTranslateY() + selectedFeature.getBoundsInLocal().getHeight()))) / ProjectHandler.getCommonShapeScale()));
+                textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / Project.getCommonShapeScale()));
+                textFieldToBottom.setText("" + (int) ((shapePolygon.getBoundsInLocal().getHeight() - ((selectedFeature.getTranslateY() + selectedFeature.getBoundsInLocal().getHeight()))) / Project.getCommonShapeScale()));
             }
         });
         textFieldToTop.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 shapePane.requestFocus();
                 if (topAnchorOk == false) {
-                    textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / ProjectHandler.getCommonShapeScale()));
+                    textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / Project.getCommonShapeScale()));
                 } else {
-                    selectedFeature.setTranslateY(Double.parseDouble(textFieldToTop.getText()) * ProjectHandler.getCommonShapeScale());
-                    textFieldToBottom.setText("" + (int) ((shapePolygon.getBoundsInLocal().getHeight() - ((selectedFeature.getTranslateY() + selectedFeature.getBoundsInLocal().getHeight()))) / ProjectHandler.getCommonShapeScale()));
+                    selectedFeature.setTranslateY(Double.parseDouble(textFieldToTop.getText()) * Project.getCommonShapeScale());
+                    textFieldToBottom.setText("" + (int) ((shapePolygon.getBoundsInLocal().getHeight() - ((selectedFeature.getTranslateY() + selectedFeature.getBoundsInLocal().getHeight()))) / Project.getCommonShapeScale()));
                 }
             }
         });
@@ -376,13 +376,13 @@ public class ShapeManager {
             if (textFieldToBottom.focusedProperty().get() == false) {
 
                 if (bottomAnchorOk == false) {
-                    textFieldToBottom.setText("" + (int) ((shapePolygon.getBoundsInLocal().getHeight() - ((selectedFeature.getTranslateY() + selectedFeature.getBoundsInLocal().getHeight()))) / ProjectHandler.getCommonShapeScale()));
+                    textFieldToBottom.setText("" + (int) ((shapePolygon.getBoundsInLocal().getHeight() - ((selectedFeature.getTranslateY() + selectedFeature.getBoundsInLocal().getHeight()))) / Project.getCommonShapeScale()));
                 } else {
                     //selectedFeature.setTranslateX(shapePane.getBoundsInLocal().getWidth() - Double.parseDouble(textFieldToRight.getText()) * ProjectHandler.getCommonShapeScale() + selectedFeature.getBoundsInLocal().getWidth());
                 }
             } else {
-                textFieldToBottom.setText("" + (int) ((shapePolygon.getBoundsInLocal().getHeight() - ((selectedFeature.getTranslateY() + selectedFeature.getBoundsInLocal().getHeight()))) / ProjectHandler.getCommonShapeScale()));
-                textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / ProjectHandler.getCommonShapeScale()));
+                textFieldToBottom.setText("" + (int) ((shapePolygon.getBoundsInLocal().getHeight() - ((selectedFeature.getTranslateY() + selectedFeature.getBoundsInLocal().getHeight()))) / Project.getCommonShapeScale()));
+                textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / Project.getCommonShapeScale()));
                 //textFieldToLeft.setText("");
             }
         });
@@ -390,10 +390,10 @@ public class ShapeManager {
             if (event.getCode() == KeyCode.ENTER) {
                 shapePane.requestFocus();
                 if (bottomAnchorOk == false) {
-                    textFieldToBottom.setText("" + (int) (selectedFeature.getTranslateY() / ProjectHandler.getCommonShapeScale()));
+                    textFieldToBottom.setText("" + (int) (selectedFeature.getTranslateY() / Project.getCommonShapeScale()));
                 } else {
-                    selectedFeature.setTranslateY(shapePolygon.getBoundsInLocal().getHeight() - (Double.parseDouble(textFieldToBottom.getText()) * ProjectHandler.getCommonShapeScale() + selectedFeature.getBoundsInLocal().getHeight()));
-                    textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / ProjectHandler.getCommonShapeScale()));
+                    selectedFeature.setTranslateY(shapePolygon.getBoundsInLocal().getHeight() - (Double.parseDouble(textFieldToBottom.getText()) * Project.getCommonShapeScale() + selectedFeature.getBoundsInLocal().getHeight()));
+                    textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / Project.getCommonShapeScale()));
                 }
             }
         });
@@ -527,10 +527,10 @@ public class ShapeManager {
             shapeManager.textFieldToTop.setDisable(false);
             shapeManager.textFieldToBottom.setDisable(false);
 
-            shapeManager.textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / ProjectHandler.getCommonShapeScale()));
-            shapeManager.textFieldToRight.setText("" + (int) ((shapeManager.shapePolygon.getBoundsInLocal().getWidth() - (selectedFeature.getTranslateX() + selectedFeature.getBoundsInLocal().getWidth())) / ProjectHandler.getCommonShapeScale()));
-            shapeManager.textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / ProjectHandler.getCommonShapeScale()));
-            shapeManager.textFieldToBottom.setText("" + (int) ((shapeManager.shapePolygon.getBoundsInLocal().getHeight() - ((selectedFeature.getTranslateY() + selectedFeature.getBoundsInLocal().getHeight()))) / ProjectHandler.getCommonShapeScale()));
+            shapeManager.textFieldToLeft.setText("" + (int) (selectedFeature.getTranslateX() / Project.getCommonShapeScale()));
+            shapeManager.textFieldToRight.setText("" + (int) ((shapeManager.shapePolygon.getBoundsInLocal().getWidth() - (selectedFeature.getTranslateX() + selectedFeature.getBoundsInLocal().getWidth())) / Project.getCommonShapeScale()));
+            shapeManager.textFieldToTop.setText("" + (int) (selectedFeature.getTranslateY() / Project.getCommonShapeScale()));
+            shapeManager.textFieldToBottom.setText("" + (int) ((shapeManager.shapePolygon.getBoundsInLocal().getHeight() - ((selectedFeature.getTranslateY() + selectedFeature.getBoundsInLocal().getHeight()))) / Project.getCommonShapeScale()));
         }
 
         for (AdditionalFeature f : shapeManager.shapeFeatureArrayList) {

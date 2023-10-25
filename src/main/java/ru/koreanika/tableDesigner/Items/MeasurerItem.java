@@ -12,7 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
 
         this.quantity = quantity;
 
-        imageMain = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/MeasurerItem/measurer.png").toString()).getImage();
+        imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/MeasurerItem/measurer.png").toString()).getImage();
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(
@@ -232,7 +232,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
     public void updateRowPrice() {
 
         double priceForOne = (material.getMeasurerPrice() + material.getMeasurerKMPrice() * length);
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + ReceiptManager.RUR_SYMBOL);
 
@@ -342,7 +342,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
         if (!(lengthOk && countOk)) return;
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterialsListInProject()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -369,10 +369,10 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
     public static void settingsControlElementsRefresh() {
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterialsListInProject()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
         textFieldCount.setText("1");
         textFieldLength.setText("0");
@@ -388,7 +388,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
         double priceForOne = -1.0;
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterialsListInProject()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -403,7 +403,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
 
         priceForOne = (material.getMeasurerPrice() + len * KMPriceForOne) * quantity;
 
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
         labelPrice.setText(String.format(Locale.ENGLISH, "Цена: %.0f" + " " + currency + "/" + units, priceForOne));
 
 
@@ -484,7 +484,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
         double length = ((Double) jsonObject.get("length")).doubleValue();
 
         String materialName = (String) jsonObject.get("material");
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterialsListInProject()) {
             if (materialName.equals(m.getName())) {
 
                 MeasurerItem measurerItem = new MeasurerItem(m, quantity, length);
@@ -513,17 +513,17 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
         MeasurerItem oldMeasurerItem = item;
 
         Material newMaterial = null;
-        Material defaultMaterial = ProjectHandler.getDefaultMaterial();
+        Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (ProjectHandler.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterialsListInProject().contains(item.getMaterial())) {
             newMaterial = oldMeasurerItem.material;
         } else {
 
             if (defaultMaterial.getMainType().equals(item.getMaterial().getMainType())) {
-                newMaterial = ProjectHandler.getDefaultMaterial();
+                newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : ProjectHandler.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterialsListInProject()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType())) {
                         newMaterial = material;

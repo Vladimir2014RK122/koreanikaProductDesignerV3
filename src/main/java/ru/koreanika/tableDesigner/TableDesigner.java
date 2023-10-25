@@ -16,7 +16,7 @@ import ru.koreanika.sketchDesigner.Features.*;
 import ru.koreanika.tableDesigner.Items.*;
 import ru.koreanika.utils.Main;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.project.ProjectType;
 import ru.koreanika.utils.Receipt.ReceiptImageItem;
 import ru.koreanika.utils.Receipt.ReceiptItem;
@@ -108,11 +108,11 @@ public class TableDesigner {
             updatePriceInRows();
         });
 
-        ProjectHandler.getPriceMainCoefficient().addListener((observable, oldValue, newValue) -> {
+        Project.getPriceMainCoefficient().addListener((observable, oldValue, newValue) -> {
             TableDesigner.updatePriceInRows();
 
-            if (ProjectHandler.getProjectType() == ProjectType.TABLE_TYPE) {
-                if(ProjectHandler.getDefaultMaterial() == null) return;
+            if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
+                if(Project.getDefaultMaterial() == null) return;
                 //update prices in settings
                 BorderItem.updatePriceInSettings();
                 CutoutItem.updatePriceInSettings();
@@ -651,7 +651,7 @@ public class TableDesigner {
                 String units = "м.п.";
                 double count = (metalFootingItem.getLength()/1000.0) * metalFootingItem.getQuantity();
                 String currency = "RUB";
-                double priceForOne = ((metalFootingItem.getPaintingType() == 1) ? ProjectHandler.getDefaultMaterial().getMetalFootingPrices().get(0)/100  : ProjectHandler.getDefaultMaterial().getMetalFootingPrices().get(1)/100);
+                double priceForOne = ((metalFootingItem.getPaintingType() == 1) ? Project.getDefaultMaterial().getMetalFootingPrices().get(0)/100  : Project.getDefaultMaterial().getMetalFootingPrices().get(1)/100);
 
                 ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne);
                 metalFootReceiptItems.add(receiptItem);
@@ -742,8 +742,8 @@ public class TableDesigner {
                 String currency = "RUB";
 //                double priceForOne = ((siphonItem.getType() == 1) ? 700 : 1000);
                 double priceForOne = ((siphonItem.getType() == 1)?
-                        ProjectHandler.getDefaultMaterial().getSiphonsTypesAndPrices().get(0)/100 :
-                        ProjectHandler.getDefaultMaterial().getSiphonsTypesAndPrices().get(1)/100);
+                        Project.getDefaultMaterial().getSiphonsTypesAndPrices().get(0)/100 :
+                        Project.getDefaultMaterial().getSiphonsTypesAndPrices().get(1)/100);
 
                 ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne);
                 siphonReceiptItems.add(receiptItem);
@@ -815,7 +815,7 @@ public class TableDesigner {
                 String currency = "RUB";
                 double priceForOne = mountingItem.getPercent();
 
-                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne / ProjectHandler.getPriceMainCoefficient().doubleValue());
+                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne / Project.getPriceMainCoefficient().doubleValue());
                 mountingReceiptItems.add(receiptItem);
             }
         }
@@ -837,7 +837,7 @@ public class TableDesigner {
                 String currency = "RUB";
                 double priceForOne = plumbingAlveusItem.getPriceForOne();
 
-                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne/ProjectHandler.getPriceMainCoefficient().doubleValue());
+                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne/ Project.getPriceMainCoefficient().doubleValue());
                 PlumbingAlveusReceiptItems.add(receiptItem);
             }
         }
@@ -859,7 +859,7 @@ public class TableDesigner {
                 String currency = "RUB";
                 double priceForOne = plumbingItem.getPriceForOne();
 
-                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne/ProjectHandler.getPriceMainCoefficient().doubleValue());
+                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne/ Project.getPriceMainCoefficient().doubleValue());
                 plumbingReceiptItems.add(receiptItem);
             }
         }
@@ -881,7 +881,7 @@ public class TableDesigner {
                 String currency = "RUB";
                 double priceForOne = palletItem.getPriceForOne();
 
-                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne/ProjectHandler.getPriceMainCoefficient().doubleValue());
+                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne/ Project.getPriceMainCoefficient().doubleValue());
                 palletReceiptItems.add(receiptItem);
             }
         }
@@ -903,7 +903,7 @@ public class TableDesigner {
                 String currency = "RUB";
                 double priceForOne = customItem.getPrice();
 
-                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne/ProjectHandler.getPriceMainCoefficient().doubleValue());
+                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne/ Project.getPriceMainCoefficient().doubleValue());
                 customReceiptItems.add(receiptItem);
             }
         }
@@ -925,7 +925,7 @@ public class TableDesigner {
                 String currency = "RUB";
                 double priceForOne = discountItem.getPercent();
 
-                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne / ProjectHandler.getPriceMainCoefficient().doubleValue());
+                ReceiptItem receiptItem = new ReceiptItem(name, units, count, currency, priceForOne / Project.getPriceMainCoefficient().doubleValue());
                 customReceiptItems.add(receiptItem);
             }
         }
@@ -1027,7 +1027,7 @@ public class TableDesigner {
         allItems.addAll(tableDesignerAdditionalWorkItemsList);
 
 
-        if(ProjectHandler.getDefaultMaterial() == null) return;
+        if(Project.getDefaultMaterial() == null) return;
         for (TableDesignerItem item : allItems) {
 
             item.updateRowPrice();

@@ -14,7 +14,7 @@ import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         this.subType = subType;
 
         //System.out.println("SubType=" + subType);
-        imageMain = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()).getImage();
+        imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()).getImage();
 
         FXMLLoader fxmlLoader = new FXMLLoader(
                 this.getClass().getResource("/fxmls/TableDesigner/TableItems/JointRow.fxml")
@@ -83,17 +83,17 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         JointItem oldJointItem = item;
 
         Material newMaterial = null;
-        Material defaultMaterial = ProjectHandler.getDefaultMaterial();
+        Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (ProjectHandler.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterialsListInProject().contains(item.getMaterial())) {
             newMaterial = oldJointItem.material;
         } else {
 
             if (defaultMaterial.getMainType().equals(item.getMaterial().getMainType())) {
-                newMaterial = ProjectHandler.getDefaultMaterial();
+                newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : ProjectHandler.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterialsListInProject()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType())) {
                         newMaterial = material;
@@ -132,8 +132,8 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
     public Map<String, ImageView> getMainImageView() {
         Map<String, ImageView> imagesList = new LinkedHashMap<>();
         String imgPath = "/styles/images/TableDesigner/Joint/jointItemType" + subType + ".png";
-        if(type == 1)imagesList.put("Стык прямой#" + imgPath, new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()));
-        else if(type == 2)imagesList.put("Стык косой#" + imgPath, new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()));
+        if(type == 1)imagesList.put("Стык прямой#" + imgPath, new ImageView(Project.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()));
+        else if(type == 2)imagesList.put("Стык косой#" + imgPath, new ImageView(Project.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()));
 
         return imagesList;
     }
@@ -297,7 +297,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         else if (currency.equals("RUB")) multiplier = 1;
 
         priceForOne *= multiplier;
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + ReceiptManager.RUR_SYMBOL);
 
@@ -360,10 +360,10 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         labelPrice = (Label) anchorPaneSettingsView.lookup("#labelPrice");
         labelPrice.setText("Цена: 0 RUB/м.п.");
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterialsListInProject()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
         toggleButtonJointType1.setToggleGroup(toggleGroupJointType);
         toggleButtonJointType2.setToggleGroup(toggleGroupJointType);
@@ -434,7 +434,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         if (!lengthOk) return;
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterialsListInProject()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -470,10 +470,10 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
     public static void settingsControlElementsRefresh() {
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterialsListInProject()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
         toggleButtonJointType1.setSelected(false);
         toggleButtonJointType2.setSelected(false);
@@ -490,7 +490,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
     public static void updatePriceInSettings() {
 
         if (toggleGroupJointType.getSelectedToggle() == null) return;
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterialsListInProject()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = material.getJointsCurrency();
@@ -518,7 +518,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
 
                 priceForOne /= 100.0;
 
-                priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+                priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
                 labelPrice.setText(String.format(Locale.ENGLISH, "Цена: %.0f" + " " + currency + "/" + units, priceForOne));
                 break;
@@ -612,7 +612,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         String materialName = (String) jsonObject.get("material");
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterialsListInProject()) {
             if (materialName.equals(m.getName())) {
                 material = m;
                 break;

@@ -3,7 +3,7 @@ package ru.koreanika.cutDesigner;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
 import javafx.geometry.Bounds;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.util.*;
 
@@ -21,8 +21,8 @@ public class CutShapesPacking {
         double sheetX = materialSheet.getTranslateX();
         double sheetY = materialSheet.getTranslateY();
 
-        double sheetWidth = materialSheet.getSheetWidth() * ProjectHandler.getCommonShapeScale();
-        double sheetHeight = materialSheet.getSheetHeight() * ProjectHandler.getCommonShapeScale();
+        double sheetWidth = materialSheet.getSheetWidth() * Project.getCommonShapeScale();
+        double sheetHeight = materialSheet.getSheetHeight() * Project.getCommonShapeScale();
 
 
 
@@ -376,8 +376,8 @@ public class CutShapesPacking {
         double sheetX = materialSheet.getTranslateX();
         double sheetY = materialSheet.getTranslateY();
 
-        double sheetWidth = materialSheet.getSheetWidth() * ProjectHandler.getCommonShapeScale();
-        double sheetHeight = materialSheet.getSheetHeight() * ProjectHandler.getCommonShapeScale();
+        double sheetWidth = materialSheet.getSheetWidth() * Project.getCommonShapeScale();
+        double sheetHeight = materialSheet.getSheetHeight() * Project.getCommonShapeScale();
 
 
 
@@ -738,8 +738,8 @@ public class CutShapesPacking {
         double sheetX = materialSheet.getTranslateX();
         double sheetY = materialSheet.getTranslateY();
 
-        double sheetWidth = materialSheet.getSheetWidth() * ProjectHandler.getCommonShapeScale();
-        double sheetHeight = materialSheet.getSheetHeight() * ProjectHandler.getCommonShapeScale();
+        double sheetWidth = materialSheet.getSheetWidth() * Project.getCommonShapeScale();
+        double sheetHeight = materialSheet.getSheetHeight() * Project.getCommonShapeScale();
 
 
 
@@ -1104,8 +1104,8 @@ public class CutShapesPacking {
         double sheetX = materialSheet.getTranslateX();
         double sheetY = materialSheet.getTranslateY();
 
-        double sheetWidth = materialSheet.getSheetWidth() * ProjectHandler.getCommonShapeScale();
-        double sheetHeight = materialSheet.getSheetHeight() * ProjectHandler.getCommonShapeScale();
+        double sheetWidth = materialSheet.getSheetWidth() * Project.getCommonShapeScale();
+        double sheetHeight = materialSheet.getSheetHeight() * Project.getCommonShapeScale();
 
 
 

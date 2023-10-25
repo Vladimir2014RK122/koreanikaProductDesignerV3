@@ -35,7 +35,7 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.project.ProjectType;
 import ru.koreanika.sketchDesigner.Edge.Border;
 import ru.koreanika.sketchDesigner.Edge.Edge;
@@ -360,8 +360,8 @@ public class ReceiptManager {
         //label Slab Count and coefficients:
         {
             double usesSlabs = Receipt.getUsesSlabs();
-            double coeffMaterial = ProjectHandler.getPriceMaterialCoefficient().doubleValue();
-            double coeffMain = ProjectHandler.getPriceMainCoefficient().doubleValue();
+            double coeffMaterial = Project.getPriceMaterialCoefficient().doubleValue();
+            double coeffMain = Project.getPriceMainCoefficient().doubleValue();
             double allSquare = Receipt.getAllSquare();
             labelCutoutInfo.setText("S:" + usesSlabs + " K:" +
                     String.format(Locale.ENGLISH, "%.1f", coeffMain) + " P:" +
@@ -3423,9 +3423,9 @@ public class ReceiptManager {
 
             if(imageViewSketch != null ){
                 heightFieldForSketch = 280;
-            }else if(ProjectHandler.getReceiptManagerSketchImage() != null){
+            }else if(Project.getReceiptManagerSketchImage() != null){
                 heightFieldForSketch = 280;
-                imageViewSketch = new ImageView(ProjectHandler.getReceiptManagerSketchImage());
+                imageViewSketch = new ImageView(Project.getReceiptManagerSketchImage());
             }
 
             if(imageViewSketch != null ){
@@ -3475,14 +3475,14 @@ public class ReceiptManager {
                         new FileChooser.ExtensionFilter("Эскизы", "*.png", "*.jpeg", "*.jpg"));
 
 
-                if (ProjectHandler.getCurProjectPath() != null) {
+                if (Project.getCurProjectPath() != null) {
 
-                    String[] pathArr = ProjectHandler.getCurProjectPath().split("\\\\");
+                    String[] pathArr = Project.getCurProjectPath().split("\\\\");
                     String path1 = "";
                     for (int i = 0; i < pathArr.length - 1; i++) {
                         path1 += "/" + pathArr[i];
                     }
-                    System.out.println(ProjectHandler.getCurProjectPath());
+                    System.out.println(Project.getCurProjectPath());
                     System.out.println(path1);
 
                     fileChooser.setInitialDirectory(new File(path1));
@@ -3512,7 +3512,7 @@ public class ReceiptManager {
 
             btnDelete.setOnAction(event -> {
                 imageViewSketch = null;
-                ProjectHandler.setReceiptManagerSketchImage(null);
+                Project.setReceiptManagerSketchImage(null);
                 btnDelete.setVisible(false);
                 updateReceiptTable();
 //                sketchPane.setCenter(imageViewSketch);
@@ -7518,8 +7518,8 @@ public class ReceiptManager {
 
     protected void createResultPart() {
 
-        double forEventMaterialCoeff = ProjectHandler.getPriceMaterialCoefficient().doubleValue();
-        double forEventMainCoeff = ProjectHandler.getPriceMainCoefficient().doubleValue();
+        double forEventMaterialCoeff = Project.getPriceMaterialCoefficient().doubleValue();
+        double forEventMainCoeff = Project.getPriceMainCoefficient().doubleValue();
         double forEventStonePriceRUR = 0;
         double forEventAddPriceRUR = 0;
         double forEventResultPriceRUR = 0;
@@ -7625,7 +7625,7 @@ public class ReceiptManager {
 
         /** MOUNT */
         {
-            if (ProjectHandler.getProjectType() == ProjectType.SKETCH_TYPE) {
+            if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
                 RowConstraints row2 = new RowConstraints(40);
                 gridPaneTop.getRowConstraints().add(row2);
                 rowIndex = gridPaneTop.getRowConstraints().size() - 1;
@@ -8163,13 +8163,13 @@ public class ReceiptManager {
             updateReceiptTable();
         });
 
-        ProjectHandler.getPriceMainCoefficient().addListener((observableValue, number, t1) -> {
+        Project.getPriceMainCoefficient().addListener((observableValue, number, t1) -> {
             Receipt.calculateMaterials();
 //            Receipt.calculateItemsStocks();
             updateReceiptTable();
         });
 
-        ProjectHandler.getPriceMaterialCoefficient().addListener((observableValue, number, t1) -> {
+        Project.getPriceMaterialCoefficient().addListener((observableValue, number, t1) -> {
             Receipt.calculateMaterials();
 //            Receipt.calculateItemsStocks();
             updateReceiptTable();
@@ -8491,7 +8491,7 @@ public class ReceiptManager {
 
         //receiptManager.createTopPartGridPane();
         createMaterialsPartGridPane();
-        if (ProjectHandler.getProjectType() == ProjectType.SKETCH_TYPE) {
+        if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
 
             createImagesPartGridPane();
             createEdgesAndBordersPartGridPane();

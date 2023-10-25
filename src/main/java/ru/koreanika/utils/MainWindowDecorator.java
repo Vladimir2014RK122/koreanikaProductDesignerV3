@@ -17,7 +17,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
+import ru.koreanika.project.ProjectWriter;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.ApplicationTypeChangeEvent;
 import ru.koreanika.service.event.ApplicationTypeChangeEventHandler;
@@ -193,7 +194,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
 
                 alert.getButtonTypes().setAll(buttonTypeNo, buttonTypeYes, buttonTypeCancel);
 
-                if(ProjectHandler.getUserProject() == null){
+                if(Project.getUserProject() == null){
                     ((Stage)(anchorPaneWindowDecorator.getScene().getWindow())).close();
                     actionEvent.consume();
                     return;
@@ -204,7 +205,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
                     ((Stage)(anchorPaneWindowDecorator.getScene().getWindow())).close();
                 } else if (result.get() == buttonTypeYes) {
                     // ... user chose "YES"
-                    ProjectHandler.saveProject(ProjectHandler.getCurProjectPath(), ProjectHandler.getCurProjectName());
+                    ProjectWriter.saveProject(Project.getCurProjectPath(), Project.getCurProjectName());
                     ((Stage)(anchorPaneWindowDecorator.getScene().getWindow())).close();
                 } else if (result.get() == buttonTypeCancel) {
                     // ... user chose "Three"
@@ -549,8 +550,8 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
     public void onEvent(ApplicationTypeChangeEvent e) {
         Platform.runLater(()->{
             btnTableView.fire();
-            ProjectHandler.setPriceMainCoefficient(ProjectHandler.getPriceMainCoefficient().doubleValue());
-            ProjectHandler.setPriceMaterialCoefficient(ProjectHandler.getPriceMaterialCoefficient().doubleValue());
+            Project.setPriceMainCoefficient(Project.getPriceMainCoefficient().doubleValue());
+            Project.setPriceMaterialCoefficient(Project.getPriceMaterialCoefficient().doubleValue());
         });
     }
 
@@ -580,7 +581,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
 //        btnShowCutViewBottom.toFront();
 //        btnShowReceiptBottom.toFront();
 
-        if(ProjectHandler.getUserProject() == null || MaterialSelectionWindow.getInstance().isFirstStartFlag()){
+        if(Project.getUserProject() == null || MaterialSelectionWindow.getInstance().isFirstStartFlag()){
             btnBack.setDisable(true);
             btnSaveProject.setDisable(true);
             btnSaveAsProject.setDisable(true);
@@ -594,7 +595,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
             btnShowCutViewBottom.setVisible(false);
             btnShowReceiptBottom.setVisible(false);
         }else{
-            labelProjectName.setText(ProjectHandler.getCurProjectName());
+            labelProjectName.setText(Project.getCurProjectName());
             btnBack.setDisable(false);
             btnSaveProject.setDisable(false);
             btnSaveAsProject.setDisable(false);

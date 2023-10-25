@@ -14,7 +14,7 @@ import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -37,7 +37,7 @@ public class DiscountItem extends TableDesignerItem {
         this.percent = percent;
         this.quantity = quantity;
 
-        imageMain = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/DiscountItem/discountItem.png").toString()).getImage();
+        imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/DiscountItem/discountItem.png").toString()).getImage();
 
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/DiscountRow.fxml"));
         try {

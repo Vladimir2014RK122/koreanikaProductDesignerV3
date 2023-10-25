@@ -24,7 +24,7 @@ import ru.koreanika.utils.News.NewsCard;
 import ru.koreanika.utils.News.NewsCardStockCondition;
 import ru.koreanika.utils.News.NewsCardStockItem;
 import ru.koreanika.utils.News.NewsController;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 
 import java.util.*;
@@ -453,7 +453,7 @@ public class Receipt {
                 if (cutShape.getMaterial().getCalculationType() == 2) continue;
                 double S = cutShape.getShapeSquare();
                 //System.out.println(cutShape + "S=" + S);
-                S = Math.ceil(S / Math.pow(ProjectHandler.getCommonShapeScale(), 2));
+                S = Math.ceil(S / Math.pow(Project.getCommonShapeScale(), 2));
                 S = S / 1000000;//mm^2 to m^2
                 allSquare += S;
                 cutObjectsAndSquareCalcType1.put(cutShape, Double.valueOf(S));
@@ -583,9 +583,9 @@ public class Receipt {
 
 
                     double deliveryPrice = 0;
-                    if (ProjectHandler.getMaterialsDeliveryFromManufacturer().get(material.getSubType()) != null) {
+                    if (Project.getMaterialsDeliveryFromManufacturer().get(material.getSubType()) != null) {
 
-                        double deliveryCommonPrice = ProjectHandler.getMaterialsDeliveryFromManufacturer().get(material.getSubType()).doubleValue();
+                        double deliveryCommonPrice = Project.getMaterialsDeliveryFromManufacturer().get(material.getSubType()).doubleValue();
                         int shapesNumber = materialAndNumberOfShapes.get(material);
                         deliveryPrice = deliveryCommonPrice / shapesNumber;//in RUR
                         if (currency.equals("USD")) {
@@ -894,14 +894,14 @@ public class Receipt {
             if (cutShape.getMaterial().getCalculationType() == 2) continue;
             double S = cutShape.getShapeSquare();
             System.out.println(cutShape + "S=" + S);
-            S = Math.ceil(S / Math.pow(ProjectHandler.getCommonShapeScale(), 2));
+            S = Math.ceil(S / Math.pow(Project.getCommonShapeScale(), 2));
             S = S / 1000000;//mm^2 to m^2
             cutObjectsAndSquareCalcType1.put(cutShape, Double.valueOf(S));
         }
         for (CutShapeAdditionalFeature cutShapeAdditionalFeature : CutDesigner.getInstance().getCutShapeAdditionalFeaturesList()) {
             if (cutShapeAdditionalFeature.getMaterial().getCalculationType() == 2) continue;
             double S = cutShapeAdditionalFeature.getShapeSquare();
-            S = Math.ceil(S / Math.pow(ProjectHandler.getCommonShapeScale(), 2));
+            S = Math.ceil(S / Math.pow(Project.getCommonShapeScale(), 2));
             S = S / 1000000;//mm^2 to m^2
             cutObjectsAndSquareCalcType1.put(cutShapeAdditionalFeature, Double.valueOf(S));
         }
@@ -957,7 +957,7 @@ public class Receipt {
             if (cutShape.getElementType() != elementTypes) continue;
 
             double cutShapeSquare = cutShape.getShapeSquare();
-            cutShapeSquare = Math.ceil(cutShapeSquare / Math.pow(ProjectHandler.getCommonShapeScale(), 2));
+            cutShapeSquare = Math.ceil(cutShapeSquare / Math.pow(Project.getCommonShapeScale(), 2));
             cutShapeSquare = cutShapeSquare / 1000000;//mm^2 to m^2
 
             Map<Integer, Double> depthsAndSquare = map.get(cutShape.getMaterial());
@@ -1183,11 +1183,11 @@ public class Receipt {
                     currency = material.getJointsCurrency();
                     if (joint.getType() == Joint.JointType.STRAIGHT) {
 
-                        countStraight += (joint.getLen() / ProjectHandler.getCommonShapeScale()) / 1000;
+                        countStraight += (joint.getLen() / Project.getCommonShapeScale()) / 1000;
 
                     } else {
 
-                        countAngles += (joint.getLen() / ProjectHandler.getCommonShapeScale()) / 1000;
+                        countAngles += (joint.getLen() / Project.getCommonShapeScale()) / 1000;
                     }
 
                     priceForOne = (material.getJointsTypesAndPrices().get(joint.getType().ordinal())) / 100;
@@ -1441,11 +1441,11 @@ public class Receipt {
         }
 
         for (Integer integer : borderTopCutTypes) {
-            ImageView imageView = new ImageView(new Image(ProjectHandler.class.getResource("/styles/images/edgeManager/borderCut" + integer.intValue() + ".png").toString()));
+            ImageView imageView = new ImageView(new Image(Project.class.getResource("/styles/images/edgeManager/borderCut" + integer.intValue() + ".png").toString()));
             receiptImageItemsList.add(new ReceiptImageItem("Грань бортика", imageView));
         }
         for (Integer integer : borderSideCutTypes) {
-            ImageView imageView = new ImageView(new Image(ProjectHandler.class.getResource("/styles/images/edgeManager/borderSideCut" + integer.intValue() + ".png").toString()));
+            ImageView imageView = new ImageView(new Image(Project.class.getResource("/styles/images/edgeManager/borderSideCut" + integer.intValue() + ".png").toString()));
             receiptImageItemsList.add(new ReceiptImageItem("Запил бортика", imageView));
         }
 

@@ -18,7 +18,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 
 import java.io.File;
@@ -393,7 +393,7 @@ public class Material {
         //set coefficients from "ANother material":
         if(!isTemplate()){
             Material anotherMaterialTemplate = null;
-            for(Material m : ProjectHandler.getMaterialsListAvailable()){
+            for(Material m : Project.getMaterialsListAvailable()){
                 if(m.getName().indexOf(getMainType() + "$" + getSubType() + "$" + getCollection() + "$" + "Другой") != -1){
                     anotherMaterialTemplate = m;
                     break;
@@ -858,8 +858,8 @@ public class Material {
 
         //price = depthsAndPrices.get(new Integer(depth)).doubleValue() / 100.0;
 
-        double materialCoefficient = ProjectHandler.getPriceMaterialCoefficient().doubleValue();
-        double commonCoefficient = ProjectHandler.getPriceMainCoefficient().doubleValue();
+        double materialCoefficient = Project.getPriceMaterialCoefficient().doubleValue();
+        double commonCoefficient = Project.getPriceMainCoefficient().doubleValue();
 
         price = price * materialCoefficient * commonCoefficient;
         return price;
@@ -899,8 +899,8 @@ public class Material {
 
         //price = depthsAndPrices.get(new Integer(depth)).doubleValue() / 100.0;
 
-        double materialCoefficient = ProjectHandler.getPriceMaterialCoefficient().doubleValue();
-        double commonCoefficient = ProjectHandler.getPriceMainCoefficient().doubleValue();
+        double materialCoefficient = Project.getPriceMaterialCoefficient().doubleValue();
+        double commonCoefficient = Project.getPriceMainCoefficient().doubleValue();
 
         //price = price * materialCoefficient * commonCoefficient;
         return price;
@@ -1154,11 +1154,11 @@ public class Material {
 
         //System.out.println("ProjectHandler.getMaterialsListAvailable().size() = " + ProjectHandler.getMaterialsListAvailable().size());
 
-        for(Material m : ProjectHandler.getMaterialsListAvailable()){
+        for(Material m : Project.getMaterialsListAvailable()){
 
 
             if(m.getName().indexOf(nameForFind) != -1){
-                index = ProjectHandler.getMaterialsListAvailable().indexOf(m);
+                index = Project.getMaterialsListAvailable().indexOf(m);
 
 
             }
@@ -1167,7 +1167,7 @@ public class Material {
         //int index = ProjectHandler.getMaterialsListAvailable().indexOf(material);
         //System.out.println(index);
         if(index == -1) return null;
-        return ProjectHandler.getMaterialsListAvailable().get(index);
+        return Project.getMaterialsListAvailable().get(index);
     }
 
 //    @Override
@@ -1521,7 +1521,7 @@ public class Material {
             //created from template
             Material templateMaterial = null;
             boolean foundTemplate = false;
-            for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+            for (Material m : Project.getMaterialsListAvailable()) {
                 // try to resolve material template based on Material ID
                 if (m.getId() != null && id != null && !id.isEmpty() && m.getId().equals(id)) {
                     System.out.println("DEBUG: [1] Material template resolved by ID, id = " + id);
@@ -1540,7 +1540,7 @@ public class Material {
                 }
             }
             if (!foundTemplate) {
-                for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+                for (Material m : Project.getMaterialsListAvailable()) {
                     String condName = name.split("\\$")[0] + "$" + name.split("\\$")[1] + "$" + name.split("\\$")[2] + "$" + "Другой";
                     if ((m.getMainType() + "$" + m.getSubType() + "$" + m.getCollection() + "$" + m.getColor()).equalsIgnoreCase(condName)) {
                         templateMaterial = m;
@@ -1580,7 +1580,7 @@ public class Material {
             //from availableList
             boolean foundTemplate = false;
 
-            for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+            for (Material m : Project.getMaterialsListAvailable()) {
                 // try to resolve material template based on Material ID
                 if (m.getId() != null && id != null && !id.isEmpty() && m.getId().equals(id)) {
                     System.out.println("DEBUG: [2] Material template resolved by ID, id = " + id);
@@ -2151,8 +2151,8 @@ public class Material {
 
             double price = getPriceRaw(elementType, depth);
 
-            double materialCoefficient = ProjectHandler.getPriceMaterialCoefficient().doubleValue();
-            double commonCoefficient = ProjectHandler.getPriceMainCoefficient().doubleValue();
+            double materialCoefficient = Project.getPriceMaterialCoefficient().doubleValue();
+            double commonCoefficient = Project.getPriceMainCoefficient().doubleValue();
 
             price = price * materialCoefficient * commonCoefficient;
             return price;

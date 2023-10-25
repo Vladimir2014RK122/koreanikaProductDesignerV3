@@ -3,6 +3,7 @@ package ru.koreanika.cutDesigner;
 import ru.koreanika.Common.ConnectPoints.ConnectPoint;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.Common.RepresentToJson;
+import ru.koreanika.project.ProjectWriter;
 import ru.koreanika.utils.Main;
 import ru.koreanika.cutDesigner.ListStatistics.StatisticCellItem;
 import ru.koreanika.cutDesigner.Shapes.*;
@@ -32,7 +33,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.project.ProjectType;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.NotificationEvent;
@@ -689,7 +690,7 @@ public class CutPane extends Pane implements RepresentToJson {
         double vValue = cutDesigner.getScrollPaneWorkPane().getVvalue();
         //nameMaterial = nameMaterial.split("-")[0];
         //System.out.println("add new sheet Material : " + nameMaterial);
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterialsListInProject()) {
             String nameM = material.getName();
             String nameF = nameMaterial.split("#")[0];
 
@@ -850,7 +851,7 @@ public class CutPane extends Pane implements RepresentToJson {
             Material material = null;
             int depth = Integer.parseInt(entry.getKey().split("#")[1]);
 
-            for (Material m : ProjectHandler.getMaterialsListInProject()) {
+            for (Material m : Project.getMaterialsListInProject()) {
                 if (m.getName().equals(entry.getKey().split("#")[0])) {
                     material = m;
                     break;
@@ -930,7 +931,7 @@ public class CutPane extends Pane implements RepresentToJson {
         for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             Material material = null;
 
-            for (Material m : ProjectHandler.getMaterialsListInProject()) {
+            for (Material m : Project.getMaterialsListInProject()) {
                 if (m.getName().equals(entry.getKey().split("#")[0])) {
                     material = m;
                     break;
@@ -986,11 +987,11 @@ public class CutPane extends Pane implements RepresentToJson {
 
             double previousX = 10;
             double maxHeight = 0;
-            double maxWidth = 5000 * ProjectHandler.getCommonShapeScale() * 2 + 50;
+            double maxWidth = 5000 * Project.getCommonShapeScale() * 2 + 50;
             for (Material.MaterialSheet ms : entry.getValue()){
                 if(maxHeight<ms.getSheetHeight())maxHeight = ms.getSheetHeight();
             }
-            maxHeight *= ProjectHandler.getCommonShapeScale();
+            maxHeight *= Project.getCommonShapeScale();
 
             //System.out.println("cutObjectsGroup.getChildren() = " + cutObjectsGroup.getChildren());
             //System.out.println("entry.getValue() = " + entry.getValue());
@@ -1008,14 +1009,14 @@ public class CutPane extends Pane implements RepresentToJson {
                 }
                 cutObjectsGroup.getChildren().add(materialSheet);
 
-                if (this.getPrefWidth() < material.getMaterialWidth() * ProjectHandler.getCommonShapeScale() * 2 + 50) {
-                    originalCutPaneWidth = (material.getMaterialWidth() * ProjectHandler.getCommonShapeScale() * 2 + 50);
-                    this.setPrefWidth(material.getMaterialWidth() * ProjectHandler.getCommonShapeScale() * 2 + 50);
-                    this.setMinWidth(material.getMaterialWidth() * ProjectHandler.getCommonShapeScale() * 2 + 50);
+                if (this.getPrefWidth() < material.getMaterialWidth() * Project.getCommonShapeScale() * 2 + 50) {
+                    originalCutPaneWidth = (material.getMaterialWidth() * Project.getCommonShapeScale() * 2 + 50);
+                    this.setPrefWidth(material.getMaterialWidth() * Project.getCommonShapeScale() * 2 + 50);
+                    this.setMinWidth(material.getMaterialWidth() * Project.getCommonShapeScale() * 2 + 50);
                 }
                 //System.out.println("originalCutPaneWidth = " + maxWidth);
                 //System.out.println("previousX + ms.getSheetWidth()*ProjectHandler.getCommonShapeScale() = " + (previousX + ms.getSheetWidth()*ProjectHandler.getCommonShapeScale()));
-                if(previousX + ms.getSheetWidth()*ProjectHandler.getCommonShapeScale() > maxWidth){
+                if(previousX + ms.getSheetWidth()* Project.getCommonShapeScale() > maxWidth){
                     previousX = 10;
                     lastY += maxHeight + 50;
                     ms.setTranslateX(previousX);
@@ -1026,7 +1027,7 @@ public class CutPane extends Pane implements RepresentToJson {
                 }
                 //ms.setTranslateX((index % 2 == 0) ? 10 : (material.getMaterialWidth() * ProjectHandler.getCommonShapeScale() + 20));
                // ms.setTranslateY((index / 2) * (material.getMaterialHeight() * ProjectHandler.getCommonShapeScale() + 10) + 10 + lastY);
-                previousX += ms.getSheetWidth()*ProjectHandler.getCommonShapeScale() + 10;
+                previousX += ms.getSheetWidth()* Project.getCommonShapeScale() + 10;
                 index++;
 
 //                System.out.println("ms.getBoundsInParent().getMaxY() = " + ms.getBoundsInParent().getMaxY());
@@ -1175,7 +1176,7 @@ public class CutPane extends Pane implements RepresentToJson {
                         Main.getMainWindow().showReceipt();
                     } else {
                         if (Boolean.parseBoolean(Main.getProperty("autosave.afterCut"))) {
-                            ProjectHandler.saveProject(ProjectHandler.getCurProjectPath(), ProjectHandler.getCurProjectName());//save current project
+                            ProjectWriter.saveProject(Project.getCurProjectPath(), Project.getCurProjectName());//save current project
                         }
                     }
 
@@ -1325,7 +1326,7 @@ public class CutPane extends Pane implements RepresentToJson {
         for (CutObject cutObject : cutDesigner.getCutShapesList()) {
             if(cutObject instanceof CutShape){
                 CutShape cutShape = (CutShape) cutObject;
-                shapesSquare += cutShape.getShapeSquare()/Math.pow(ProjectHandler.getCommonShapeScale(), 2);
+                shapesSquare += cutShape.getShapeSquare()/Math.pow(Project.getCommonShapeScale(), 2);
             }
         }
 
@@ -4265,7 +4266,7 @@ public class CutPane extends Pane implements RepresentToJson {
         }
 
         ArrayList<CutShape> savedList = new ArrayList<>(cutDesigner.getCutShapesList());
-        if (ProjectHandler.getProjectType() == ProjectType.TABLE_TYPE) {
+        if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
             cutDesigner.getCutShapesList().clear();
         }
 
@@ -4298,7 +4299,7 @@ public class CutPane extends Pane implements RepresentToJson {
         //jsonObject.put("cutPaneScale", cutPaneScale);
 
 
-        if (ProjectHandler.getProjectType() == ProjectType.TABLE_TYPE) {
+        if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
             cutDesigner.getCutShapesList().addAll(savedList);
         }
 

@@ -38,7 +38,7 @@ import ru.koreanika.sketchDesigner.Dimensions.LinearDimension;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.PrinterHandler.PrinterDialog;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.io.IOException;
 import java.util.*;
@@ -53,7 +53,7 @@ public class CutDesigner implements RepresentToJson {
     public static final DataFormat SHAPE_OWNER_DF = new DataFormat("SHAPE_OWNER_DF");
     public static final DataFormat FEATURE_NUMBER_DF = new DataFormat("FEATURE_NUMBER_DF");
 
-    public static double CUT_SHAPES_CUTSHIFT = 2.0 * ProjectHandler.getCommonShapeScale();//shift between cut shapes for cutting it
+    public static double CUT_SHAPES_CUTSHIFT = 2.0 * Project.getCommonShapeScale();//shift between cut shapes for cutting it
 
 
     private static CutDesigner cutDesigner;
@@ -335,7 +335,7 @@ public class CutDesigner implements RepresentToJson {
 //            }
 
 
-            for (String materialName : ProjectHandler.getMaterialsUsesInProjectObservable()) {
+            for (String materialName : Project.getMaterialsUsesInProjectObservable()) {
                 String[] nameDepth = materialName.split("#");
                 String[] nameArray = nameDepth[0].split("\\$");
                 if (choiceBoxAddMaterialSheet.getSelectionModel().getSelectedItem().equals(nameArray[2] + " " + nameArray[3] + " - " + nameDepth[1] + "мм")) {
@@ -780,7 +780,7 @@ public class CutDesigner implements RepresentToJson {
         choiceBoxAddMaterialSheet.getItems().clear();
         Set<String> materialSet = new LinkedHashSet<>();
 
-        for (String nameMaterial : ProjectHandler.getMaterialsUsesInProjectObservable()) {
+        for (String nameMaterial : Project.getMaterialsUsesInProjectObservable()) {
             String[] nameDepth = nameMaterial.split("#");
             String[] nameArray = nameDepth[0].split("\\$");
             materialSet.add(nameArray[2] + " " + nameArray[3] + " - " + nameDepth[1] + "мм");

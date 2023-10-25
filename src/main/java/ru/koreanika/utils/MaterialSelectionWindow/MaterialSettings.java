@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -108,8 +108,8 @@ public class MaterialSettings {
         double RURToUSD = MainWindow.getUSDValue().get();
         double RURToEUR = MainWindow.getEURValue().get();
 
-        double materialCoefficient = ProjectHandler.getPriceMaterialCoefficient().doubleValue();
-        double commonCoefficient = ProjectHandler.getPriceMainCoefficient().doubleValue();
+        double materialCoefficient = Project.getPriceMaterialCoefficient().doubleValue();
+        double commonCoefficient = Project.getPriceMainCoefficient().doubleValue();
 
         if(materialTemplate.getAvailableMainSheetsCount() != 0){
 

@@ -28,7 +28,7 @@ import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems.FolderItem;
 import ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems.MaterialItem;
 import ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems.MaterialTreeCellItem;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.project.ProjectType;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
@@ -162,7 +162,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
         initFilterFields();
         initFilterLogic();
 
-        allAvailableMaterialsList = ProjectHandler.getMaterialsListAvailable().stream().filter(material -> {
+        allAvailableMaterialsList = Project.getMaterialsListAvailable().stream().filter(material -> {
             if (UserPreferences.getInstance().getSelectedApp() != AppType.KOREANIKAMASTER) {
                 if (material.getMainType().equals("Натуральный камень")
                         || material.getMainType().equals("Массив")
@@ -197,7 +197,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
     @Override
     public void onEvent(ApplicationTypeChangeEvent e) {
         Platform.runLater(() -> {
-            initTreeViewAvailable(ProjectHandler.getMaterialsListAvailable());
+            initTreeViewAvailable(Project.getMaterialsListAvailable());
             initWindowLogic();
             eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.INFO, "Тип приложения был изменен"));
         });
@@ -257,21 +257,21 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
             for (Material material : materialsInProject) {
                 System.out.println(material.getReceiptName());
                 if ((material.getSubType() + ", " + material.getCollection() + ", " + material.getColor()).equals(defaultMaterialName)) {
-                    ProjectHandler.setDefaultMaterialRAW(material);
+                    Project.setDefaultMaterialRAW(material);
                 }
             }
 
-            ProjectHandler.setMaterialsListInProject(materialsInProject);
-            ProjectHandler.getMaterialsUsesInProjectObservable().clear();
+            Project.setMaterialsListInProject(materialsInProject);
+            Project.getMaterialsUsesInProjectObservable().clear();
             SketchDesigner.getSketchShapesList().forEach(sketchShape -> {
-                ProjectHandler.getMaterialsUsesInProjectObservable().add(sketchShape.getMaterial().getName() + "#" + sketchShape.getShapeDepth());
+                Project.getMaterialsUsesInProjectObservable().add(sketchShape.getMaterial().getName() + "#" + sketchShape.getShapeDepth());
             });
 
             System.out.println("\n\n******DEFAULT FROM CHOICE BOX: " + defaultMaterialName);
 
-            if (ProjectHandler.getProjectType() == ProjectType.SKETCH_TYPE) {
+            if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
                 if (MainWindow.getSketchDesigner() != null) SketchDesigner.updateMaterialsInProject();
-            } else if (ProjectHandler.getProjectType() == ProjectType.TABLE_TYPE) {
+            } else if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
                 if (MainWindow.getTableDesigner() != null) TableDesigner.updateMaterialsInProject();
             }
 
@@ -291,7 +291,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
             TreeItem<MaterialTreeCellItem> item = newValue;
             if (item.isLeaf()) {
                 String name = item.getValue().getFullName();
-                for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+                for (Material m : Project.getMaterialsListAvailable()) {
                     if (m.getName().equals(name)) {
                         showInfo(m);
                         break;
@@ -343,7 +343,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
 
             MaterialListCellItem cellItem = newValue;
 
-            for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+            for (Material m : Project.getMaterialsListAvailable()) {
                 if (m.getReceiptName().equals(cellItem.getMaterial().getReceiptName())) {
                     showInfo(m);
                     break;
@@ -429,7 +429,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
         Set<String> availableTextures = new LinkedHashSet<>();
         Set<String> availableSurfaces = new LinkedHashSet<>();
 
-        for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+        for (Material m : Project.getMaterialsListAvailable()) {
             String color = m.getVisualProperties().get(Material.VIS_PROP_COLOR);
             String texture = m.getVisualProperties().get(Material.VIS_PROP_TEXTURE);
             String surface = m.getVisualProperties().get(Material.VIS_PROP_SURFACE);
@@ -891,14 +891,14 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
     }
 
     private void refreshView() {
-        if (ProjectHandler.getDefaultMaterial() != null) {
+        if (Project.getDefaultMaterial() != null) {
             listViewInProject.getItems().clear();
             choiceBoxDefault.getItems().clear();
-            for (Material material : ProjectHandler.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterialsListInProject()) {
                 listViewInProject.getItems().add(new MaterialListCellItem(material));
                 choiceBoxDefault.getItems().add(material.getSubType() + ", " + material.getCollection() + ", " + material.getColor());
             }
-            choiceBoxDefault.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getSubType() + ", " + ProjectHandler.getDefaultMaterial().getCollection() + ", " + ProjectHandler.getDefaultMaterial().getColor());
+            choiceBoxDefault.getSelectionModel().select(Project.getDefaultMaterial().getSubType() + ", " + Project.getDefaultMaterial().getCollection() + ", " + Project.getDefaultMaterial().getColor());
         }
     }
 

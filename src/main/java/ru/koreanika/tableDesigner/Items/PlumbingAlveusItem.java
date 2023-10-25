@@ -19,7 +19,7 @@ import javafx.util.Callback;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.*;
@@ -51,7 +51,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
 
     public PlumbingAlveusItem(int id, String model, int quantity) {
 
-        plumbingElement = ProjectHandler.getPlumbingElementsList()
+        plumbingElement = Project.getPlumbingElementsList()
                 .stream()
                 .filter(c -> c.getId() == id)
                 .collect(Collectors.toList())
@@ -291,7 +291,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
 
         priceForOne *= multiplier;
 
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + ReceiptManager.RUR_SYMBOL);
 
@@ -352,7 +352,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
         btnCancel.getStyleClass().add("btnBrown");
 
 //        System.out.println("ProjectHandler.getExternalElementsList() = ");
-        ProjectHandler.getPlumbingElementsList().forEach(System.out::println);
+        Project.getPlumbingElementsList().forEach(System.out::println);
 
         comboBoxType = (ComboBox<PlumbingAlveusType>) anchorPaneSettingsView.lookup("#comboBoxType");
         choiceBoxModel = (ChoiceBox<String>) anchorPaneSettingsView.lookup("#choiceBoxModel");
@@ -399,7 +399,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
             }
         });
 
-        ProjectHandler.getPlumbingElementsList().forEach(e->{
+        Project.getPlumbingElementsList().forEach(e->{
 
             comboBoxType.getItems().add(new PlumbingAlveusType(e.getId()));
         });
@@ -408,7 +408,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
         comboBoxType.setTooltip(comboBoxType.getSelectionModel().getSelectedItem().getTooltip());
 
         int id = comboBoxType.getSelectionModel().getSelectedItem().getId();
-        PlumbingElement plumbingElement = ProjectHandler.getPlumbingElementsList()
+        PlumbingElement plumbingElement = Project.getPlumbingElementsList()
                 .stream()
                 .filter(e->e.getId() == id)
                 .collect(Collectors.toList()).get(0);
@@ -449,7 +449,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
                 return;
 
             int id = comboBoxType.getSelectionModel().getSelectedItem().getId();
-            PlumbingElement plumbingElement = ProjectHandler.getPlumbingElementsList()
+            PlumbingElement plumbingElement = Project.getPlumbingElementsList()
                     .stream()
                     .filter(e->e.getId() == id)
                     .collect(Collectors.toList()).get(0);
@@ -498,7 +498,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
 
     public static void settingsControlElementsRefresh() {
         comboBoxType.getItems().clear();
-        ProjectHandler.getPlumbingElementsList().forEach(e->{
+        Project.getPlumbingElementsList().forEach(e->{
             comboBoxType.getItems().add(new PlumbingAlveusType(e.getId()));
         });
 
@@ -506,7 +506,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
         comboBoxType.setTooltip(comboBoxType.getSelectionModel().getSelectedItem().getTooltip());
 
         int id = comboBoxType.getSelectionModel().getSelectedItem().getId();
-        PlumbingElement plumbingElement = ProjectHandler.getPlumbingElementsList()
+        PlumbingElement plumbingElement = Project.getPlumbingElementsList()
                 .stream()
                 .filter(e->e.getId() == id)
                 .collect(Collectors.toList()).get(0);
@@ -536,7 +536,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
         if (comboBoxType.getSelectionModel().getSelectedItem() == null) return;
 
         int id = comboBoxType.getSelectionModel().getSelectedItem().getId();
-        PlumbingElement plumbingElement = ProjectHandler.getPlumbingElementsList()
+        PlumbingElement plumbingElement = Project.getPlumbingElementsList()
                 .stream()
                 .filter(e->e.getId() == id)
                 .collect(Collectors.toList()).get(0);
@@ -551,7 +551,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
 
         priceForOne = plumbingElement.getPrice(model);
 
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelPrice.setText(String.format(Locale.ENGLISH, "Цена: %.0f" + " " + currency + "/" + units, priceForOne));
     }
@@ -682,7 +682,7 @@ class PlumbingAlveusType {
         image.setFitWidth(100);
         image.setFitHeight(100);
 
-        String brief = ProjectHandler.getPlumbingElementsList()
+        String brief = Project.getPlumbingElementsList()
                 .stream()
                 .filter(e-> e.getId() == id)
                 .collect(Collectors.toList())
@@ -716,7 +716,7 @@ class PlumbingAlveusType {
         tooltipImage.setFitWidth(250);
         tooltipImage.setFitHeight(250);
 
-        String brief = ProjectHandler.getPlumbingElementsList()
+        String brief = Project.getPlumbingElementsList()
                 .stream()
                 .filter(e-> e.getId() == id)
                 .collect(Collectors.toList())

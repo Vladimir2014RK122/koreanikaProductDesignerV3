@@ -1,23 +1,22 @@
 import ru.koreanika.Common.Material.Material;
+import ru.koreanika.project.Project;
 import ru.koreanika.project.ProjectHandler;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static ru.koreanika.project.ProjectHandler.projectHandlerInit;
-
 public class TestMaterialImages {
 
     public static void main(String[] args) {
-        projectHandlerInit();
+        ProjectHandler.init();
 
-        ProjectHandler.getMaterialsListAvailable();
+        Project.getMaterialsListAvailable();
 
         String resultOut = "";
         int countLostImages = 0;
 
-        for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+        for (Material m : Project.getMaterialsListAvailable()) {
             String name = m.getMainType() + "/" +
                     m.getSubType() + "/" +
                     m.getCollection() + "/" +

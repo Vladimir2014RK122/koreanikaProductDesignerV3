@@ -13,7 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -150,8 +150,8 @@ public class PriceCoefficientsWindow {
                 String mainS = String.format(Locale.ENGLISH, "%.2f", mainD);
                 String materialS = String.format(Locale.ENGLISH, "%.2f", materialD);
 
-                ProjectHandler.setPriceMainCoefficient(Double.parseDouble(mainS));
-                ProjectHandler.setPriceMaterialCoefficient(Double.parseDouble(materialS));
+                Project.setPriceMainCoefficient(Double.parseDouble(mainS));
+                Project.setPriceMaterialCoefficient(Double.parseDouble(materialS));
 
                 Main.updateCoefficientProperties(Double.parseDouble(mainS), Double.parseDouble(materialS));
 
@@ -277,8 +277,8 @@ public class PriceCoefficientsWindow {
 
         priceCoefficientsWindow.refreshView();
 
-        priceCoefficientsWindow.textFieldMaterialCoefficient.setText(String.format(Locale.ENGLISH, "%.2f", ProjectHandler.getPriceMaterialCoefficient().get()));
-        priceCoefficientsWindow.textFieldMainCoefficient.setText(String.format(Locale.ENGLISH, "%.2f", ProjectHandler.getPriceMainCoefficient().get()));
+        priceCoefficientsWindow.textFieldMaterialCoefficient.setText(String.format(Locale.ENGLISH, "%.2f", Project.getPriceMaterialCoefficient().get()));
+        priceCoefficientsWindow.textFieldMainCoefficient.setText(String.format(Locale.ENGLISH, "%.2f", Project.getPriceMainCoefficient().get()));
 
 
 
