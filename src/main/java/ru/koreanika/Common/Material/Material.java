@@ -4,6 +4,7 @@ import ru.koreanika.Common.ConnectPoints.ConnectPoint;
 import ru.koreanika.Common.ConnectPoints.CornerConnectPoint;
 import ru.koreanika.Common.Connectible;
 //import ru.koreanika.cutDesigner.CutSheet;
+import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -393,7 +394,7 @@ public class Material {
         //set coefficients from "ANother material":
         if(!isTemplate()){
             Material anotherMaterialTemplate = null;
-            for(Material m : Project.getMaterialsListAvailable()){
+            for(Material m : Catalogs.getMaterialsListAvailable()){
                 if(m.getName().indexOf(getMainType() + "$" + getSubType() + "$" + getCollection() + "$" + "Другой") != -1){
                     anotherMaterialTemplate = m;
                     break;
@@ -1154,11 +1155,11 @@ public class Material {
 
         //System.out.println("ProjectHandler.getMaterialsListAvailable().size() = " + ProjectHandler.getMaterialsListAvailable().size());
 
-        for(Material m : Project.getMaterialsListAvailable()){
+        for(Material m : Catalogs.getMaterialsListAvailable()){
 
 
             if(m.getName().indexOf(nameForFind) != -1){
-                index = Project.getMaterialsListAvailable().indexOf(m);
+                index = Catalogs.getMaterialsListAvailable().indexOf(m);
 
 
             }
@@ -1167,7 +1168,7 @@ public class Material {
         //int index = ProjectHandler.getMaterialsListAvailable().indexOf(material);
         //System.out.println(index);
         if(index == -1) return null;
-        return Project.getMaterialsListAvailable().get(index);
+        return Catalogs.getMaterialsListAvailable().get(index);
     }
 
 //    @Override
@@ -1521,7 +1522,7 @@ public class Material {
             //created from template
             Material templateMaterial = null;
             boolean foundTemplate = false;
-            for (Material m : Project.getMaterialsListAvailable()) {
+            for (Material m : Catalogs.getMaterialsListAvailable()) {
                 // try to resolve material template based on Material ID
                 if (m.getId() != null && id != null && !id.isEmpty() && m.getId().equals(id)) {
                     System.out.println("DEBUG: [1] Material template resolved by ID, id = " + id);
@@ -1540,7 +1541,7 @@ public class Material {
                 }
             }
             if (!foundTemplate) {
-                for (Material m : Project.getMaterialsListAvailable()) {
+                for (Material m : Catalogs.getMaterialsListAvailable()) {
                     String condName = name.split("\\$")[0] + "$" + name.split("\\$")[1] + "$" + name.split("\\$")[2] + "$" + "Другой";
                     if ((m.getMainType() + "$" + m.getSubType() + "$" + m.getCollection() + "$" + m.getColor()).equalsIgnoreCase(condName)) {
                         templateMaterial = m;
@@ -1580,7 +1581,7 @@ public class Material {
             //from availableList
             boolean foundTemplate = false;
 
-            for (Material m : Project.getMaterialsListAvailable()) {
+            for (Material m : Catalogs.getMaterialsListAvailable()) {
                 // try to resolve material template based on Material ID
                 if (m.getId() != null && id != null && !id.isEmpty() && m.getId().equals(id)) {
                     System.out.println("DEBUG: [2] Material template resolved by ID, id = " + id);

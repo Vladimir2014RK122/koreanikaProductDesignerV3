@@ -25,10 +25,16 @@ import java.util.zip.ZipOutputStream;
 
 public class ProjectWriter {
 
-    private static final EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+    private final ProjectHandler projectHandler;
+    private final EventBus eventBus;
 
-    static void saveProject(String projectPath, String projectName) {
-        if (ProjectHandler.userProject != null) {
+    ProjectWriter(ProjectHandler projectHandler) {
+        this.projectHandler = projectHandler;
+        this.eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+    }
+
+    void saveProject(String projectPath, String projectName) {
+        if (projectHandler.getProjectJSONObject() != null) {
             if (projectName.matches(".+\\.krnkproj$")) {
                 projectName = projectName.replace("\\.krnkproj", ".kproj");
             }
@@ -38,8 +44,8 @@ public class ProjectWriter {
             if (!projectPath.matches(".+\\.kproj$")) {
                 projectPath += ".kproj";
             }
-            ProjectHandler.setCurProjectName(projectName);
-            ProjectHandler.setCurProjectPath(projectPath);
+            projectHandler.setCurrentProjectName(projectName);
+            projectHandler.setCurrentProjectPath(projectPath);
 
             /** System data: */
             //window size:
@@ -48,14 +54,14 @@ public class ProjectWriter {
             double windowPosX = Main.getMainScene().getWindow().getX();
             double windowPosY = Main.getMainScene().getWindow().getY();
 
-            ((JSONObject) ProjectHandler.userProject.get("info")).put("windowWidth", windowWidth);
-            ((JSONObject) ProjectHandler.userProject.get("info")).put("windowHeight", windowHeight);
-            ((JSONObject) ProjectHandler.userProject.get("info")).put("windowPosX", windowPosX);
-            ((JSONObject) ProjectHandler.userProject.get("info")).put("windowPosY", windowPosY);
+            ((JSONObject) projectHandler.getProjectJSONObject().get("info")).put("windowWidth", windowWidth);
+            ((JSONObject) projectHandler.getProjectJSONObject().get("info")).put("windowHeight", windowHeight);
+            ((JSONObject) projectHandler.getProjectJSONObject().get("info")).put("windowPosX", windowPosX);
+            ((JSONObject) projectHandler.getProjectJSONObject().get("info")).put("windowPosY", windowPosY);
 
             //date and time:
-            ((JSONObject) ProjectHandler.userProject.get("info")).put("editDate", LocalDateTime.now().toString());
-            ((JSONObject) ProjectHandler.userProject.get("info")).put("name", projectName);
+            ((JSONObject) projectHandler.getProjectJSONObject().get("info")).put("editDate", LocalDateTime.now().toString());
+            ((JSONObject) projectHandler.getProjectJSONObject().get("info")).put("name", projectName);
 
             /** Project settings*/
             JSONObject projectSettings = new JSONObject();
@@ -84,13 +90,13 @@ public class ProjectWriter {
             materialSettings.put("defaultMaterial", Project.defaultMaterial.getName() + "#" + Project.defaultMaterial.getDefaultDepth());
             projectSettings.put("materialSettings", materialSettings);
 
-            ProjectHandler.userProject.put("ProjectSettings", projectSettings);
+            projectHandler.getProjectJSONObject().put("ProjectSettings", projectSettings);
 
 
             /** Table Designer*/
             if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
                 JSONObject tableDesignerJSONObject = MainWindow.getTableDesigner().getJsonView();
-                ProjectHandler.userProject.put("TableDesigner", tableDesignerJSONObject);
+                projectHandler.getProjectJSONObject().put("TableDesigner", tableDesignerJSONObject);
             } else if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
                 /** Sketch designer*/
                 JSONObject sketchDesigner = new JSONObject();
@@ -111,23 +117,23 @@ public class ProjectWriter {
                 sketchDesigner.put("elements", sketchDesignerElements);
                 sketchDesigner.put("unions", sketchDesignerUnions);
                 sketchDesigner.put("dimensions", sketchDesignerDimensions);
-                ProjectHandler.userProject.put("SketchDesigner", sketchDesigner);
+                projectHandler.getProjectJSONObject().put("SketchDesigner", sketchDesigner);
             }
 
             /** Cut designer*/
-            ProjectHandler.userProject.put("CutDesigner", MainWindow.getCutDesigner().getJsonView());
+            projectHandler.getProjectJSONObject().put("CutDesigner", MainWindow.getCutDesigner().getJsonView());
 
             /** Receipt manager*/
-            ProjectHandler.userProject.put("receiptManager", MainWindow.getReceiptManager().getJsonViewForSaveData());
+            projectHandler.getProjectJSONObject().put("receiptManager", MainWindow.getReceiptManager().getJsonViewForSaveData());
 
             try {
                 //create .zip
                 {
-                    FileOutputStream fileOutputStream = new FileOutputStream(ProjectHandler.getCurProjectPath());
+                    FileOutputStream fileOutputStream = new FileOutputStream(projectHandler.getCurrentProjectPath());
                     ZipOutputStream zos = new ZipOutputStream(fileOutputStream);
 
                     zos.putNextEntry(new ZipEntry("mainInfo.json"));
-                    zos.write(ProjectHandler.userProject.toJSONString().getBytes(StandardCharsets.UTF_8));
+                    zos.write(projectHandler.getProjectJSONObject().toJSONString().getBytes(StandardCharsets.UTF_8));
 
                     //save sketchImage from ReceiptImage
                     ReceiptManager receiptManager = MainWindow.getReceiptManager();
@@ -144,7 +150,7 @@ public class ProjectWriter {
 
                 /* ADD CUSTOM ENCRYPT */
                 {
-                    FileInputStream fileInputStream = new FileInputStream(ProjectHandler.getCurProjectPath());
+                    FileInputStream fileInputStream = new FileInputStream(projectHandler.getCurrentProjectPath());
 
                     byte[] buf = new byte[fileInputStream.available()];
                     fileInputStream.read(buf);
@@ -154,17 +160,17 @@ public class ProjectWriter {
                         buf[i] += 76;
                     }
 
-                    FileOutputStream fileOutputStream = new FileOutputStream(ProjectHandler.getCurProjectPath());
+                    FileOutputStream fileOutputStream = new FileOutputStream(projectHandler.getCurrentProjectPath());
                     fileOutputStream.write(buf);
 
                     fileOutputStream.close();
                 }
 
-                System.out.println("Save project path:" + ProjectHandler.getCurProjectPath());
+                System.out.println("Save project path:" + projectHandler.getCurrentProjectPath());
                 eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.SUCCESS, "Проект сохранен"));
 
             } catch (IOException ex) {
-                System.out.println("CAN'T Save project path:" + ProjectHandler.getCurProjectPath());
+                System.out.println("CAN'T Save project path:" + projectHandler.getCurrentProjectPath());
                 eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Ошибка директории"));
             }
         } else {

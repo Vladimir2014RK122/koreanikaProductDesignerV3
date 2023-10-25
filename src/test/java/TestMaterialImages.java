@@ -1,22 +1,35 @@
 import ru.koreanika.Common.Material.Material;
-import ru.koreanika.project.Project;
+import ru.koreanika.catalog.Catalogs;
+import ru.koreanika.catalog.FacadeXLSParser;
 import ru.koreanika.project.ProjectHandler;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+@Deprecated
 public class TestMaterialImages {
 
-    public static void main(String[] args) {
-        ProjectHandler.init();
+    private static final String MATERIALS_XLS_PATH = "materials_1_2004.xls";
+    private static final String ANALOGS_XLS_PATH = "material_analogs.xls";
 
-        Project.getMaterialsListAvailable();
+    public static void main(String[] args) {
+        try {
+            FacadeXLSParser parser = new FacadeXLSParser(MATERIALS_XLS_PATH, ANALOGS_XLS_PATH);
+            parser.populateCatalogs(
+                    Catalogs.materialsListAvailable,
+                    Catalogs.plumbingElementsList,
+                    Catalogs.availablePlumbingTypes,
+                    Catalogs.materialsDeliveryFromManufacturer
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         String resultOut = "";
         int countLostImages = 0;
 
-        for (Material m : Project.getMaterialsListAvailable()) {
+        for (Material m : Catalogs.getMaterialsListAvailable()) {
             String name = m.getMainType() + "/" +
                     m.getSubType() + "/" +
                     m.getCollection() + "/" +

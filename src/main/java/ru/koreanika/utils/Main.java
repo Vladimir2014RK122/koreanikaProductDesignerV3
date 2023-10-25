@@ -19,8 +19,13 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import ru.koreanika.catalog.Catalogs;
+import ru.koreanika.catalog.FacadeXLSParser;
 import ru.koreanika.project.Project;
 import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.ProjectOpenedEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.Currency.BankCurrency;
 import ru.koreanika.utils.Currency.UserCurrency;
 import ru.koreanika.utils.News.NewsController;
@@ -38,6 +43,10 @@ import java.util.concurrent.ExecutionException;
 public class Main extends Application {
 
     public static String actualAppVersion = "1.0.1 RELEASE";
+
+    private static final String MATERIALS_XLS_PATH = "materials_1_2004.xls";
+    private static final String ANALOGS_XLS_PATH = "material_analogs.xls";
+
     private static Scene mainScene;
     private static MainWindow mainWindow;
     private static MainWindowDecorator mainWindowDecorator;
@@ -52,15 +61,25 @@ public class Main extends Application {
 
     int portalUnavailableCounter = 0;
 
+    private final EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         System.out.println("ТЕСТ КИРИЛЛИЦЫ");
 
         try {
-            ProjectHandler.init();
+            FacadeXLSParser parser = new FacadeXLSParser(MATERIALS_XLS_PATH, ANALOGS_XLS_PATH);
+            parser.populateCatalogs(
+                    Catalogs.materialsListAvailable,
+                    Catalogs.plumbingElementsList,
+                    Catalogs.availablePlumbingTypes,
+                    Catalogs.materialsDeliveryFromManufacturer
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        ProjectHandler projectHandler = ServiceLocator.getService("ProjectHandler", ProjectHandler.class);
 
         //int R = 100;
         int v1 = 10;
@@ -121,7 +140,7 @@ public class Main extends Application {
                 System.out.println("name: " + event.getDragboard().getFiles().get(0).getName());
 
                 File file = new File(event.getDragboard().getFiles().get(0).getPath());
-                MainWindow.projectOpenedLogic(file);
+                eventBus.fireEvent(new ProjectOpenedEvent(file));
 
                 event.setDropCompleted(true);
             }
@@ -154,7 +173,7 @@ public class Main extends Application {
 
             alert.getButtonTypes().setAll(buttonTypeNo, buttonTypeYes, buttonTypeCancel);
 
-            if (ProjectHandler.getUserProject() == null) {
+            if (!projectHandler.projectSelected()) {
                 primaryStage.close();
                 event.consume();
                 return;
@@ -165,7 +184,7 @@ public class Main extends Application {
                 primaryStage.close();
             } else if (result.get() == buttonTypeYes) {
                 // ... user chose "YES"
-                ProjectHandler.saveProject();
+                projectHandler.saveProject();
                 primaryStage.close();
             } else if (result.get() == buttonTypeCancel) {
                 // ... user chose "Three"
@@ -275,9 +294,8 @@ public class Main extends Application {
                     Parameters params = getParameters();
                     if (params.getRaw().size() != 0) {
                         File file = new File(params.getRaw().get(0));
-                        MainWindow.projectOpenedLogic(file);
-                        mainWindowDecorator.refreshControls();
-//                        ProjectHandler.openProjectFromArguments(params.getRaw().get(0));
+                        eventBus.fireEvent(new ProjectOpenedEvent(file));
+                        mainWindowDecorator.refreshControls(); // TODO maybe runLater?
                     }
 
                     new Thread(new Runnable() {

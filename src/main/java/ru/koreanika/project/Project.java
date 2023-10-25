@@ -6,8 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
-import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
 import ru.koreanika.sketchDesigner.Edge.Border;
 import ru.koreanika.sketchDesigner.Edge.Edge;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
@@ -21,8 +19,6 @@ public class Project {
 
     private static ProjectType projectType = ProjectType.TABLE_TYPE;
 
-    static Map<String, Double> materialsDeliveryFromManufacturer = new LinkedHashMap<>();// <Group name, Price in rub>
-    static List<Material> materialsListAvailable = new ArrayList<>();
     static List<Material> materialsListInProject = new ArrayList<>();
     static Material defaultMaterial = null;
 
@@ -51,9 +47,7 @@ public class Project {
     private static ObservableList<String> bordersHeightsUsesInProjectObservable = FXCollections.observableList(bordersHeightsUsesInProject);
 
 
-    static List<PlumbingElement> plumbingElementsList = new ArrayList<>();
-    static LinkedHashSet<PlumbingType> availablePlumbingTypes = new LinkedHashSet<>();
-//    private static int defaultEdgeHeight = 20;
+    //    private static int defaultEdgeHeight = 20;
 //    private static int defaultBorderHeight = 20;
 
     public static double CUT_AREA_EDGE_WIDTH = 50;
@@ -115,18 +109,6 @@ public class Project {
         Project.receiptManagerSketchImage = receiptManagerSketchImage;
     }
 
-    public static List<PlumbingElement> getPlumbingElementsList() {
-        return plumbingElementsList;
-    }
-
-    public static LinkedHashSet<PlumbingType> getAvailablePlumbingTypes() {
-        return availablePlumbingTypes;
-    }
-
-    public static List<Material> getMaterialsListAvailable() {
-        return materialsListAvailable;
-    }
-
     public static List<Material> getMaterialsListInProject() {
         return materialsListInProject;
     }
@@ -165,10 +147,6 @@ public class Project {
 
     public static Material getDefaultMaterial() {
         return defaultMaterial;
-    }
-
-    public static Map<String, Double> getMaterialsDeliveryFromManufacturer() {
-        return materialsDeliveryFromManufacturer;
     }
 
     public static void setDefaultMaterialRAW(Material defaultMaterial) {

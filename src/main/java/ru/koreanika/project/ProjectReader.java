@@ -18,6 +18,7 @@ import ru.koreanika.utils.Main;
 import ru.koreanika.utils.MainWindow;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.zip.ZipEntry;
@@ -26,9 +27,15 @@ import java.util.zip.ZipInputStream;
 
 public class ProjectReader {
 
-    private static final EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+    private final ProjectHandler projectHandler;
+    private final EventBus eventBus;
 
-    public static boolean openProject(String projectPath, String projectName) {
+    ProjectReader(ProjectHandler projectHandler) {
+        this.projectHandler = projectHandler;
+        this.eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+    }
+
+    boolean read(String projectPath, String projectName) {
         double windowWidth = 0;
         double windowHeight = 0;
         double windowPosX = 0;
@@ -44,8 +51,8 @@ public class ProjectReader {
             JSONObject parsedProject = null;
             JSONParser jsonParser = new JSONParser();
 
-            ProjectHandler.setCurProjectName(projectName);
-            ProjectHandler.setCurProjectPath(projectPath);
+            projectHandler.setCurrentProjectName(projectName);
+            projectHandler.setCurrentProjectPath(projectPath);
 
             try {
                 boolean isZipProject = false;
@@ -84,7 +91,7 @@ public class ProjectReader {
                     //open old type project .json
                     {
                         File file = new File(projectPath);
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
 
                         parsedProject = (JSONObject) jsonParser.parse(bufferedReader);
 
@@ -98,13 +105,13 @@ public class ProjectReader {
                     //open .zip
                     {
                         FileInputStream fileInputStream = new FileInputStream(projectPath);
-                        ZipInputStream zis = new ZipInputStream(fileInputStream);
+                        ZipInputStream zis = new ZipInputStream(fileInputStream, StandardCharsets.UTF_8);
                         BufferedInputStream bis = new BufferedInputStream(zis);
                         ZipEntry zipEntry;
                         while ((zipEntry = zis.getNextEntry()) != null) {
 
                             if (zipEntry.getName().equals("mainInfo.json")) {
-                                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zis, "UTF8"));
+                                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zis, StandardCharsets.UTF_8));
                                 parsedProject = (JSONObject) jsonParser.parse(bufferedReader);
 
                                 String s = changeDektoneNameInProject(parsedProject.toString());
@@ -261,7 +268,7 @@ public class ProjectReader {
             JSONObject jsonObjectReceiptManager = (JSONObject) parsedProject.get("receiptManager");
             MainWindow.getReceiptManager().initFromJsonObject(jsonObjectReceiptManager);
 
-            ProjectHandler.userProject = parsedProject;
+            projectHandler.setProjectJSONObject(parsedProject);
         } catch (NullPointerException ex) {
             ex.printStackTrace();
             eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Проект поврежден! (" + errorMessage + ")"));
@@ -295,7 +302,6 @@ public class ProjectReader {
             CheckSheetsPrices.showInfoWindow(Main.getMainScene(), differenceMap);
         }
 
-        ProjectWriter.saveProject(projectPath, projectName);
         return true;
     }
 
@@ -308,6 +314,5 @@ public class ProjectReader {
         System.out.println("AFTER : " + res);
         return res;
     }
-
 
 }

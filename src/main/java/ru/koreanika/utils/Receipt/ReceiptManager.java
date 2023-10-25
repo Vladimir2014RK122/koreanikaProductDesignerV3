@@ -2,6 +2,7 @@ package ru.koreanika.utils.Receipt;
 
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.utils.Main;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.PortalClient.UserEventHandler.UserEventService;
@@ -62,6 +63,7 @@ import java.util.*;
 
 public class ReceiptManager {
 
+    private final ProjectHandler projectHandler = ServiceLocator.getService("ProjectHandler", ProjectHandler.class);
 
     //private static ReceiptManager receiptManager;
 
@@ -3476,14 +3478,14 @@ public class ReceiptManager {
                         new FileChooser.ExtensionFilter("Эскизы", "*.png", "*.jpeg", "*.jpg"));
 
 
-                if (ProjectHandler.getCurProjectPath() != null) {
+                if (projectHandler.getCurrentProjectPath() != null) {
 
-                    String[] pathArr = ProjectHandler.getCurProjectPath().split("\\\\");
+                    String[] pathArr = projectHandler.getCurrentProjectPath().split("\\\\");
                     String path1 = "";
                     for (int i = 0; i < pathArr.length - 1; i++) {
                         path1 += "/" + pathArr[i];
                     }
-                    System.out.println(ProjectHandler.getCurProjectPath());
+                    System.out.println(projectHandler.getCurrentProjectPath());
                     System.out.println(path1);
 
                     fileChooser.setInitialDirectory(new File(path1));

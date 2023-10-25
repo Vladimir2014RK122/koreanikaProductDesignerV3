@@ -11,29 +11,29 @@ import java.time.LocalDateTime;
 
 public class ProjectHandler {
 
-    private static final String MATERIALS_XLS_PATH = "materials_1_2004.xls";
-    private static final String ANALOGS_XLS_PATH = "material_analogs.xls";
-
     public static final String BORDERS_IMG_PATH = "borders_resources/";
     public static final String EDGES_IMG_PATH = "edges_resources/";
 
-    static JSONObject userProject;
-    static String curProjectPath;
-    static String curProjectName;
+    private JSONObject projectJSONObject;
 
-    public static void init() {
-        FacadeXLSParser parser = new FacadeXLSParser(MATERIALS_XLS_PATH, ANALOGS_XLS_PATH);
-        parser.populateLists(Project.materialsListAvailable, Project.plumbingElementsList, Project.availablePlumbingTypes,
-                Project.materialsDeliveryFromManufacturer);
+    private String currentProjectPath;
+    private String currentProjectName;
+
+    private final ProjectWriter projectWriter;
+    private final ProjectReader projectReader;
+
+    public ProjectHandler() {
+        this.projectWriter = new ProjectWriter(this);
+        this.projectReader = new ProjectReader(this);
     }
 
-    public static void createProject(String projectName, String projectPath, ProjectType projectType) {
+    public void createProject(String projectName, String projectPath, ProjectType projectType) {
         Project.setProjectType(projectType);
 
         Project.materialsListInProject.clear();
         Project.defaultMaterial = null;
 
-        userProject = new JSONObject();
+        projectJSONObject = new JSONObject();
 
         if (!projectName.matches(".+\\.krnkproj$") && !projectName.matches(".+\\.kproj$")) {
             projectName += ".kproj";
@@ -45,8 +45,8 @@ public class ProjectHandler {
         if (projectPath.matches(".+\\.krnkproj$")) {
             projectPath = projectPath.replace("\\.krnkproj", ".kproj");
         }
-        curProjectName = projectName;
-        curProjectPath = projectPath;
+        currentProjectName = projectName;
+        currentProjectPath = projectPath;
 
         JSONObject info = new JSONObject();
 
@@ -67,7 +67,7 @@ public class ProjectHandler {
         info.put("windowPosX", windowPosX);
         info.put("windowPosY", windowPosY);
 
-        userProject.put("info", info);
+        projectJSONObject.put("info", info);
 
         /** Project settings*/
         JSONObject projectSettings = new JSONObject();
@@ -96,39 +96,49 @@ public class ProjectHandler {
         materialSettings.put("depthForWallPanel", 20);
         projectSettings.put("materialSettings", materialSettings);
 
-        userProject.put("ProjectSettings", projectSettings);
+        projectJSONObject.put("ProjectSettings", projectSettings);
 
         /** Sketch designer*/
         JSONObject sketchDesigner = new JSONObject();
         JSONArray sketchDesignerElements = new JSONArray();
 
         sketchDesigner.put("elements", sketchDesignerElements);
-        userProject.put("SketchDesigner", sketchDesigner);
+        projectJSONObject.put("SketchDesigner", sketchDesigner);
 
 
         /** Cut designer*/
         JSONObject cutDesigner = new JSONObject();
-        userProject.put("cutDesigner", cutDesigner);
+        projectJSONObject.put("cutDesigner", cutDesigner);
     }
 
-    public static void saveProjectNewName(String projectPath, String projectName) {
-        ProjectWriter.saveProject(projectPath, projectName);
+    public void saveProjectNewName(String projectPath, String projectName) {
+        projectWriter.saveProject(projectPath, projectName);
     }
 
-    public static void saveProject() {
-        ProjectWriter.saveProject(curProjectPath, curProjectName);
+    public void saveProject() {
+        projectWriter.saveProject(currentProjectPath, currentProjectName);
     }
 
-    public static void closeProject() {
+    public boolean openProject(String projectPath, String projectName) {
+        boolean success = projectReader.read(projectPath, projectName);
+        if (success) {
+            projectWriter.saveProject(projectPath, projectName);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void closeProject() {
         saveProject();
 
-        if (userProject != null) {
-            userProject.clear();
+        if (projectJSONObject != null) {
+            projectJSONObject.clear();
         }
 
         MainWindow.setCutDesigner(null);
         MainWindow.setSketchDesigner(null);
-        userProject = null;
+        projectJSONObject = null;
 
         Project.clearCollections();
 
@@ -137,23 +147,32 @@ public class ProjectHandler {
         Project.defaultMaterial = null;
     }
 
-    public static JSONObject getUserProject() {
-        return userProject;
+    public boolean projectSelected() {
+        return projectJSONObject != null;
     }
 
-    public static String getCurProjectName() {
-        return curProjectName;
+    JSONObject getProjectJSONObject() {
+        return projectJSONObject;
     }
 
-    public static String getCurProjectPath() {
-        return curProjectPath;
+    public void setProjectJSONObject(JSONObject projectJSONObject) {
+        this.projectJSONObject = projectJSONObject;
     }
 
-    public static void setCurProjectPath(String curProjectPath) {
-        ProjectHandler.curProjectPath = curProjectPath;
+    public String getCurrentProjectName() {
+        return currentProjectName;
     }
 
-    public static void setCurProjectName(String curProjectName) {
-        ProjectHandler.curProjectName = curProjectName;
+    public String getCurrentProjectPath() {
+        return currentProjectPath;
     }
+
+    public void setCurrentProjectPath(String currentProjectPath) {
+        this.currentProjectPath = currentProjectPath;
+    }
+
+    public void setCurrentProjectName(String currentProjectName) {
+        this.currentProjectName = currentProjectName;
+    }
+
 }

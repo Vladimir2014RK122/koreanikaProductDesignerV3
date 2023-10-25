@@ -2,6 +2,7 @@ package ru.koreanika.utils.Receipt;
 
 import ru.koreanika.Common.Material.Material;
 
+import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.Shapes.CutObject;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
@@ -583,9 +584,9 @@ public class Receipt {
 
 
                     double deliveryPrice = 0;
-                    if (Project.getMaterialsDeliveryFromManufacturer().get(material.getSubType()) != null) {
+                    if (Catalogs.getMaterialsDeliveryFromManufacturer().get(material.getSubType()) != null) {
 
-                        double deliveryCommonPrice = Project.getMaterialsDeliveryFromManufacturer().get(material.getSubType()).doubleValue();
+                        double deliveryCommonPrice = Catalogs.getMaterialsDeliveryFromManufacturer().get(material.getSubType()).doubleValue();
                         int shapesNumber = materialAndNumberOfShapes.get(material);
                         deliveryPrice = deliveryCommonPrice / shapesNumber;//in RUR
                         if (currency.equals("USD")) {

@@ -37,6 +37,8 @@ import java.util.concurrent.Future;
 public class Authorization {
 
     private final EventBus eventBus;
+    private final ProjectHandler projectHandler;
+
     LoginWindow loginWindow = LoginWindow.getInstance();
 
     String serverHost = Main.getProperty("server.host");
@@ -52,6 +54,7 @@ public class Authorization {
 
     private Authorization() {
         eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        projectHandler = ServiceLocator.getService("ProjectHandler", ProjectHandler.class);
 
         loginWindow.setOnLoginClicked(actionEvent -> {
             //accessPermitted.set(true);
@@ -92,7 +95,7 @@ public class Authorization {
 
                 alert.getButtonTypes().setAll(buttonTypeNo, buttonTypeYes, buttonTypeCancel);
 
-                if (ProjectHandler.getUserProject() == null) {
+                if (!projectHandler.projectSelected()) {
                     loginWindow.close();
                     ((Stage) (Main.getMainScene().getWindow())).close();
                     //event.consume();
@@ -105,7 +108,7 @@ public class Authorization {
                     ((Stage) (Main.getMainScene().getWindow())).close();
                 } else if (result.get() == buttonTypeYes) {
                     // ... user chose "YES"
-                    ProjectHandler.saveProject();
+                    projectHandler.saveProject();
                     loginWindow.close();
                     ((Stage) (Main.getMainScene().getWindow())).close();
                 } else if (result.get() == buttonTypeCancel) {

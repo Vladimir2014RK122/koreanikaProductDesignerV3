@@ -55,7 +55,9 @@ public class CutPane extends Pane implements RepresentToJson {
     private static double cutPaneScale = 1;
     private static Scale scale = new Scale(1.0, 1.0);
     public static SimpleDoubleProperty cutSheetScaleProperty = new SimpleDoubleProperty();
+
     private final EventBus eventBus;
+    private final ProjectHandler projectHandler;
 
     private double originalCutPaneWidth = 0;
     private double originalCutPaneHeight = 0;
@@ -84,6 +86,7 @@ public class CutPane extends Pane implements RepresentToJson {
         initZoom();
 
         eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        projectHandler = ServiceLocator.getService("ProjectHandler", ProjectHandler.class);
     }
 
     BooleanProperty finishedCuttingThread = new SimpleBooleanProperty(false);
@@ -1176,7 +1179,7 @@ public class CutPane extends Pane implements RepresentToJson {
                         Main.getMainWindow().showReceipt();
                     } else {
                         if (Boolean.parseBoolean(Main.getProperty("autosave.afterCut"))) {
-                            ProjectHandler.saveProject();
+                            projectHandler.saveProject();
                         }
                     }
 

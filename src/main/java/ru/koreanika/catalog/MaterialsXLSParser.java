@@ -1,4 +1,4 @@
-package ru.koreanika.project;
+package ru.koreanika.catalog;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -23,9 +23,9 @@ public class MaterialsXLSParser {
         this.materialsXLSPath = materialsXLSPath;
     }
 
-    public void populateLists(List<Material> materialsListAvailable, List<PlumbingElement> plumbingElementsList,
-                              Set<PlumbingType> availablePlumbingTypes,
-                              Map<String, Double> materialsDeliveryFromManufacturer) throws IOException {
+    public void populateCatalogs(List<Material> materialsListAvailable, List<PlumbingElement> plumbingElementsList,
+                                 Set<PlumbingType> availablePlumbingTypes,
+                                 Map<String, Double> materialsDeliveryFromManufacturer) throws IOException {
         try (InputStream in = new FileInputStream(materialsXLSPath)) {
             try (HSSFWorkbook workbook = new HSSFWorkbook(in)) {
                 fillMaterialsAvailable(materialsListAvailable, workbook);

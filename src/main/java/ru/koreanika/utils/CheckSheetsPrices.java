@@ -13,6 +13,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.ProjectClosedEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.Receipt.ReceiptManager;
@@ -216,7 +219,9 @@ public class CheckSheetsPrices {
             ((Stage) (checkerScene.getWindow())).setOnCloseRequest(event -> {
                 System.out.println("close checker");
                 mainScene.getRoot().setDisable(false);
-                MainWindow.closeProject();
+
+                EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+                eventBus.fireEvent(new ProjectClosedEvent());
             });
         }
 

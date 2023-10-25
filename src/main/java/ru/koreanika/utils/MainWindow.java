@@ -27,9 +27,13 @@ import ru.koreanika.utils.Receipt.Zetta.ReceiptManagerZetta;
 
 import java.io.File;
 
-public class MainWindow implements NotificationEventHandler, ApplicationTypeChangeEventHandler {
+public class MainWindow implements NotificationEventHandler, ApplicationTypeChangeEventHandler,
+        ProjectOpenedEventHandler, ProjectClosedEventHandler {
 
     static AnchorPane rootAnchorPaneMainWindow;
+
+    private final EventBus eventBus;
+    private final ProjectHandler projectHandler;
 
     ChangeViewListener changeView;
 
@@ -44,9 +48,13 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
     NewsController newsController;
 
     public MainWindow() {
-        EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
         eventBus.addHandler(NotificationEvent.TYPE, this);
         eventBus.addHandler(ApplicationTypeChangeEvent.TYPE, this);
+        eventBus.addHandler(ProjectOpenedEvent.TYPE, this);
+        eventBus.addHandler(ProjectClosedEvent.TYPE, this);
+
+        projectHandler = ServiceLocator.getService("ProjectHandler", ProjectHandler.class);
 
         rootAnchorPaneMainWindow = new AnchorPane();
         rootAnchorPaneMainWindow.setId("rootAnchorPaneMainWindow");
@@ -126,13 +134,13 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
         File file = fileChooser.showSaveDialog(rootAnchorPaneMainWindow.getScene().getWindow());
 
         if (file != null) {
-            ProjectHandler.saveProject();
-            ProjectHandler.closeProject();
+            projectHandler.saveProject();
+            projectHandler.closeProject();
             rootAnchorPaneMainWindow.getChildren().clear();
 
             String path = file.getPath();
             String projName = file.getName();
-            ProjectHandler.createProject(projName, path, ProjectType.TABLE_TYPE);
+            projectHandler.createProject(projName, path, ProjectType.TABLE_TYPE);
 
             MaterialSelectionWindow.getInstance().setFirstStartFlag(true);
             MaterialSelectionWindow.clear();
@@ -172,21 +180,21 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
                 new FileChooser.ExtensionFilter("Koreanika projects", "*.krnkproj", "*.kproj")
         );
 
-        if (ProjectHandler.getCurProjectPath() != null) {
-            String[] pathArr = ProjectHandler.getCurProjectPath().split("\\\\");
+        if (projectHandler.getCurrentProjectPath() != null) {
+            String[] pathArr = projectHandler.getCurrentProjectPath().split("\\\\");
             String path1 = "";
             for (int i = 0; i < pathArr.length - 1; i++) {
                 path1 += "/" + pathArr[i];
             }
-            System.out.println(ProjectHandler.getCurProjectPath());
+            System.out.println(projectHandler.getCurrentProjectPath());
             System.out.println(path1);
 
             fileChooser.setInitialDirectory(new File(path1));
         }
 
         File file = fileChooser.showOpenDialog(rootAnchorPaneMainWindow.getScene().getWindow());
+        eventBus.fireEvent(new ProjectOpenedEvent(file));
 
-        projectOpenedLogic(file);
         UserCurrency.getInstance().updateCurrencyValueWithRequest();
     }
 
@@ -194,25 +202,25 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Some Files");
 
-        if (ProjectHandler.getCurProjectPath() != null) {
-            String[] pathArr = ProjectHandler.getCurProjectPath().split("\\\\");
+        if (projectHandler.getCurrentProjectPath() != null) {
+            String[] pathArr = projectHandler.getCurrentProjectPath().split("\\\\");
             String path1 = "";
             for (int i = 0; i < pathArr.length - 1; i++) {
                 path1 += "/" + pathArr[i];
             }
-            System.out.println(ProjectHandler.getCurProjectPath());
+            System.out.println(projectHandler.getCurrentProjectPath());
             System.out.println(path1);
 
             fileChooser.setInitialDirectory(new File(path1));
-            fileChooser.setInitialFileName(ProjectHandler.getCurProjectName());
+            fileChooser.setInitialFileName(projectHandler.getCurrentProjectName());
         }
 
         File file = fileChooser.showSaveDialog(rootAnchorPaneMainWindow.getScene().getWindow());
         if (file != null) {
             String path = file.getPath();
             String projName = file.getName();
-            ProjectHandler.saveProjectNewName(path, projName);  // TODO Refac: ProjectHandler.curProjectPath is changed as a side effect when writing a file
-            ((Stage) rootAnchorPaneMainWindow.getScene().getWindow()).setTitle("Koreanika: " + ProjectHandler.getCurProjectPath());
+            projectHandler.saveProjectNewName(path, projName);  // TODO Refac: ProjectHandler.curProjectPath is changed as a side effect when writing a file
+            ((Stage) rootAnchorPaneMainWindow.getScene().getWindow()).setTitle("Koreanika: " + projectHandler.getCurrentProjectPath());
         }
 
     }
@@ -265,7 +273,7 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
 
     protected void showReceiptWithCutting() {
         if (Boolean.parseBoolean(Main.getProperty("autosave.afterReceipt"))) {
-            ProjectHandler.saveProject();
+            projectHandler.saveProject();
         }
         System.out.println("ShowReceipt");
         CutDesigner.getInstance().autoCutting(true);
@@ -309,19 +317,23 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
         }
     }
 
-    public static void closeProject() {
-        ProjectHandler.closeProject();
+    @Override
+    public void onEvent(ProjectClosedEvent e) {
+        projectHandler.closeProject();
+
         rootAnchorPaneMainWindow.getChildren().clear();
         ((Stage) rootAnchorPaneMainWindow.getScene().getWindow()).setTitle("Koreanika " + Main.actualAppVersion);
     }
 
-    public static void projectOpenedLogic(File file) {
+    @Override
+    public void onEvent(ProjectOpenedEvent e) {
+        File file = e.getProjectFile();
         if (file != null) {
             String path = file.getPath();
             String projName = file.getName();
 
-            ProjectHandler.saveProject();
-            ProjectHandler.closeProject();
+            projectHandler.saveProject();
+            projectHandler.closeProject();
 
             sketchDesigner = new SketchDesigner();
             System.out.println(cutDesigner);
@@ -339,7 +351,7 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
                 receiptManager = new ReceiptManagerPromebel();
             }
 
-            if (!ProjectReader.openProject(path, projName)) {
+            if (!projectHandler.openProject(path, projName)) {
                 return;
             }
 

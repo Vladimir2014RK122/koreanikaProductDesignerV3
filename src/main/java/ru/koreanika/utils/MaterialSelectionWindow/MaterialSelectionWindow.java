@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.PortalClient.Authorization.AppType;
+import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.utils.UserPreferences;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.ApplicationTypeChangeEvent;
@@ -162,7 +163,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
         initFilterFields();
         initFilterLogic();
 
-        allAvailableMaterialsList = Project.getMaterialsListAvailable().stream().filter(material -> {
+        allAvailableMaterialsList = Catalogs.getMaterialsListAvailable().stream().filter(material -> {
             if (UserPreferences.getInstance().getSelectedApp() != AppType.KOREANIKAMASTER) {
                 if (material.getMainType().equals("Натуральный камень")
                         || material.getMainType().equals("Массив")
@@ -197,7 +198,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
     @Override
     public void onEvent(ApplicationTypeChangeEvent e) {
         Platform.runLater(() -> {
-            initTreeViewAvailable(Project.getMaterialsListAvailable());
+            initTreeViewAvailable(Catalogs.getMaterialsListAvailable());
             initWindowLogic();
             eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.INFO, "Тип приложения был изменен"));
         });
@@ -291,7 +292,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
             TreeItem<MaterialTreeCellItem> item = newValue;
             if (item.isLeaf()) {
                 String name = item.getValue().getFullName();
-                for (Material m : Project.getMaterialsListAvailable()) {
+                for (Material m : Catalogs.getMaterialsListAvailable()) {
                     if (m.getName().equals(name)) {
                         showInfo(m);
                         break;
@@ -343,7 +344,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
 
             MaterialListCellItem cellItem = newValue;
 
-            for (Material m : Project.getMaterialsListAvailable()) {
+            for (Material m : Catalogs.getMaterialsListAvailable()) {
                 if (m.getReceiptName().equals(cellItem.getMaterial().getReceiptName())) {
                     showInfo(m);
                     break;
@@ -429,7 +430,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
         Set<String> availableTextures = new LinkedHashSet<>();
         Set<String> availableSurfaces = new LinkedHashSet<>();
 
-        for (Material m : Project.getMaterialsListAvailable()) {
+        for (Material m : Catalogs.getMaterialsListAvailable()) {
             String color = m.getVisualProperties().get(Material.VIS_PROP_COLOR);
             String texture = m.getVisualProperties().get(Material.VIS_PROP_TEXTURE);
             String surface = m.getVisualProperties().get(Material.VIS_PROP_SURFACE);

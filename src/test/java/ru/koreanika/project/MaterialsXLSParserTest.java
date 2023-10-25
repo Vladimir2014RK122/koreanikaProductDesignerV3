@@ -6,6 +6,8 @@ import ru.koreanika.Common.Material.ImageIndex;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
+import ru.koreanika.catalog.FacadeXLSParser;
+import ru.koreanika.catalog.MaterialsXLSParser;
 import ru.koreanika.service.ServiceLocator;
 
 import java.io.IOException;
@@ -19,14 +21,14 @@ public class MaterialsXLSParserTest {
 
     @Test
     @Ignore
-    public void readAll() {
+    public void readAll() throws IOException {
         List<Material> materialsListAvailable = new ArrayList<>();
         List<PlumbingElement> plumbingElementsList = new ArrayList<>();
         Set<PlumbingType> availablePlumbingTypes = new LinkedHashSet<>();
         Map<String, Double> materialsDeliveryFromManufacture = new HashMap<>();
 
         FacadeXLSParser parser = new FacadeXLSParser(MATERIALS_XLS_PATH, ANALOGS_XLS_PATH);
-        parser.populateLists(materialsListAvailable, plumbingElementsList, availablePlumbingTypes, materialsDeliveryFromManufacture);
+        parser.populateCatalogs(materialsListAvailable, plumbingElementsList, availablePlumbingTypes, materialsDeliveryFromManufacture);
         System.out.println(materialsListAvailable.size());
     }
 
@@ -39,7 +41,7 @@ public class MaterialsXLSParserTest {
         Map<String, Double> materialsDeliveryFromManufacturer = new HashMap<>();
 
         MaterialsXLSParser materialsXLSParser = new MaterialsXLSParser(MATERIALS_XLS_PATH);
-        materialsXLSParser.populateLists(materialsListAvailable, plumbingElementsList, availablePlumbingTypes,
+        materialsXLSParser.populateCatalogs(materialsListAvailable, plumbingElementsList, availablePlumbingTypes,
                 materialsDeliveryFromManufacturer);
 
         ImageIndex imageIndex = ServiceLocator.getService("ImageIndex", ImageIndex.class);

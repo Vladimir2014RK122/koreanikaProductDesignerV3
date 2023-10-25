@@ -1,4 +1,4 @@
-package ru.koreanika.project;
+package ru.koreanika.catalog;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,7 +20,7 @@ public class AnalogsXLSParser {
         this.analogsXLSPath = analogsXLSPath;
     }
 
-    void populateLists(List<Material> materialsListAvailable) throws IOException {
+    void populateCatalogs(List<Material> materialsListAvailable) throws IOException {
         try (InputStream inputStream = new FileInputStream(analogsXLSPath)) {
             try (HSSFWorkbook workbook = new HSSFWorkbook(inputStream)) {
                 fillAcrylicStoneAnalogs(materialsListAvailable, workbook);

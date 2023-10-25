@@ -38,6 +38,8 @@ import java.util.Optional;
 
 public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
     private final EventBus eventBus;
+    private final ProjectHandler projectHandler;
+
     private MainWindow mainWindow;
 
     AnchorPane anchorPaneWindowDecorator;
@@ -85,6 +87,8 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
     public MainWindowDecorator(Stage stage, MainWindow mainWindow) {
         eventBus = ServiceLocator.getService("EventBus", EventBus.class);
         eventBus.addHandler(ApplicationTypeChangeEvent.TYPE, this);
+
+        projectHandler = ServiceLocator.getService("ProjectHandler", ProjectHandler.class);
 
         this.mainWindow = mainWindow;
 
@@ -194,7 +198,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
 
                 alert.getButtonTypes().setAll(buttonTypeNo, buttonTypeYes, buttonTypeCancel);
 
-                if(ProjectHandler.getUserProject() == null){
+                if(!projectHandler.projectSelected()){
                     ((Stage)(anchorPaneWindowDecorator.getScene().getWindow())).close();
                     actionEvent.consume();
                     return;
@@ -205,7 +209,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
                     ((Stage)(anchorPaneWindowDecorator.getScene().getWindow())).close();
                 } else if (result.get() == buttonTypeYes) {
                     // ... user chose "YES"
-                    ProjectHandler.saveProject();
+                    projectHandler.saveProject();
                     ((Stage)(anchorPaneWindowDecorator.getScene().getWindow())).close();
                 } else if (result.get() == buttonTypeCancel) {
                     // ... user chose "Three"
@@ -379,7 +383,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
             refreshControls();
         });
 
-        btnSaveProject.setOnMouseClicked(mouseEvent -> ProjectHandler.saveProject());
+        btnSaveProject.setOnMouseClicked(mouseEvent -> projectHandler.saveProject());
 
         btnSaveAsProject.setOnMouseClicked(mouseEvent -> mainWindow.saveAsProject());
 
@@ -581,7 +585,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
 //        btnShowCutViewBottom.toFront();
 //        btnShowReceiptBottom.toFront();
 
-        if(ProjectHandler.getUserProject() == null || MaterialSelectionWindow.getInstance().isFirstStartFlag()){
+        if (!projectHandler.projectSelected() || MaterialSelectionWindow.getInstance().isFirstStartFlag()) {
             btnBack.setDisable(true);
             btnSaveProject.setDisable(true);
             btnSaveAsProject.setDisable(true);
@@ -595,7 +599,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
             btnShowCutViewBottom.setVisible(false);
             btnShowReceiptBottom.setVisible(false);
         }else{
-            labelProjectName.setText(ProjectHandler.getCurProjectName());
+            labelProjectName.setText(projectHandler.getCurrentProjectName());
             btnBack.setDisable(false);
             btnSaveProject.setDisable(false);
             btnSaveAsProject.setDisable(false);
