@@ -21,7 +21,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import ru.koreanika.project.Project;
 import ru.koreanika.project.ProjectHandler;
-import ru.koreanika.project.ProjectWriter;
 import ru.koreanika.utils.Currency.BankCurrency;
 import ru.koreanika.utils.Currency.UserCurrency;
 import ru.koreanika.utils.News.NewsController;
@@ -155,7 +154,7 @@ public class Main extends Application {
 
             alert.getButtonTypes().setAll(buttonTypeNo, buttonTypeYes, buttonTypeCancel);
 
-            if (Project.getUserProject() == null) {
+            if (ProjectHandler.getUserProject() == null) {
                 primaryStage.close();
                 event.consume();
                 return;
@@ -166,7 +165,7 @@ public class Main extends Application {
                 primaryStage.close();
             } else if (result.get() == buttonTypeYes) {
                 // ... user chose "YES"
-                ProjectWriter.saveProject(Project.getCurProjectPath(), Project.getCurProjectName());
+                ProjectHandler.saveProject();
                 primaryStage.close();
             } else if (result.get() == buttonTypeCancel) {
                 // ... user chose "Three"

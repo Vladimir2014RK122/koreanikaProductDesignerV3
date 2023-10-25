@@ -1,6 +1,7 @@
 package ru.koreanika.utils.Receipt;
 
 import ru.koreanika.Common.Material.Material;
+import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.utils.Main;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.PortalClient.UserEventHandler.UserEventService;
@@ -3475,14 +3476,14 @@ public class ReceiptManager {
                         new FileChooser.ExtensionFilter("Эскизы", "*.png", "*.jpeg", "*.jpg"));
 
 
-                if (Project.getCurProjectPath() != null) {
+                if (ProjectHandler.getCurProjectPath() != null) {
 
-                    String[] pathArr = Project.getCurProjectPath().split("\\\\");
+                    String[] pathArr = ProjectHandler.getCurProjectPath().split("\\\\");
                     String path1 = "";
                     for (int i = 0; i < pathArr.length - 1; i++) {
                         path1 += "/" + pathArr[i];
                     }
-                    System.out.println(Project.getCurProjectPath());
+                    System.out.println(ProjectHandler.getCurProjectPath());
                     System.out.println(path1);
 
                     fileChooser.setInitialDirectory(new File(path1));

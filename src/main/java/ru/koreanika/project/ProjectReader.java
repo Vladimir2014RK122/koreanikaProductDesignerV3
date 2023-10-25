@@ -44,8 +44,8 @@ public class ProjectReader {
             JSONObject parsedProject = null;
             JSONParser jsonParser = new JSONParser();
 
-            Project.curProjectName = projectName;
-            Project.curProjectPath = projectPath;
+            ProjectHandler.setCurProjectName(projectName);
+            ProjectHandler.setCurProjectPath(projectPath);
 
             try {
                 boolean isZipProject = false;
@@ -55,7 +55,7 @@ public class ProjectReader {
                 //check if it .zip type of project:
                 {
                     try {
-                        ZipFile zipFile = new ZipFile(Project.curProjectPath);
+                        ZipFile zipFile = new ZipFile(projectPath);
                         zipFile.getName();
                         isZipProject = true;
                     } catch (IOException e) {
@@ -93,11 +93,11 @@ public class ProjectReader {
 
                         bufferedReader.close();
                     }
-                    System.out.println("Open project: " + Project.curProjectPath + " (OLD TEXT type)");
+                    System.out.println("Open project: " + projectPath + " (OLD TEXT type)");
                 } else if (isZipProject) {
                     //open .zip
                     {
-                        FileInputStream fileInputStream = new FileInputStream(Project.curProjectPath);
+                        FileInputStream fileInputStream = new FileInputStream(projectPath);
                         ZipInputStream zis = new ZipInputStream(fileInputStream);
                         BufferedInputStream bis = new BufferedInputStream(zis);
                         ZipEntry zipEntry;
@@ -118,12 +118,12 @@ public class ProjectReader {
                         bis.close();
                     }
 
-                    System.out.println("Open project: " + Project.curProjectPath + " (ZIP type)");
+                    System.out.println("Open project: " + projectPath + " (ZIP type)");
 
                 } else {
                     /* ADD CUSTOM DECRYPT */
                     {
-                        FileInputStream fileInputStream = new FileInputStream(Project.curProjectPath);
+                        FileInputStream fileInputStream = new FileInputStream(projectPath);
 
                         byte[] buf = new byte[fileInputStream.available()];
                         fileInputStream.read(buf);
@@ -133,7 +133,7 @@ public class ProjectReader {
                             buf[i] -= 76;
                         }
 
-                        FileOutputStream fileOutputStream = new FileOutputStream(Project.curProjectPath);
+                        FileOutputStream fileOutputStream = new FileOutputStream(projectPath);
                         fileOutputStream.write(buf);
 
                         fileOutputStream.close();
@@ -141,7 +141,7 @@ public class ProjectReader {
 
                     //open .zip
                     {
-                        FileInputStream fileInputStream = new FileInputStream(Project.curProjectPath);
+                        FileInputStream fileInputStream = new FileInputStream(projectPath);
                         ZipInputStream zis = new ZipInputStream(fileInputStream);
                         BufferedInputStream bis = new BufferedInputStream(zis);
                         ZipEntry zipEntry;
@@ -163,7 +163,7 @@ public class ProjectReader {
 
                     System.out.println("parsedproject = " + parsedProject);
                     System.out.println("parsedproject.toString() = " + parsedProject.toString());
-                    System.out.println("Open project: " + Project.curProjectPath + " (ZIP ENCRYPTED type)");
+                    System.out.println("Open project: " + projectPath + " (ZIP ENCRYPTED type)");
                 }
             } catch (ParseException exio) {
                 eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Поврежден mainInfo файл"));
@@ -261,7 +261,7 @@ public class ProjectReader {
             JSONObject jsonObjectReceiptManager = (JSONObject) parsedProject.get("receiptManager");
             MainWindow.getReceiptManager().initFromJsonObject(jsonObjectReceiptManager);
 
-            Project.userProject = parsedProject;
+            ProjectHandler.userProject = parsedProject;
         } catch (NullPointerException ex) {
             ex.printStackTrace();
             eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Проект поврежден! (" + errorMessage + ")"));

@@ -3,7 +3,7 @@ package ru.koreanika.cutDesigner;
 import ru.koreanika.Common.ConnectPoints.ConnectPoint;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.Common.RepresentToJson;
-import ru.koreanika.project.ProjectWriter;
+import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.utils.Main;
 import ru.koreanika.cutDesigner.ListStatistics.StatisticCellItem;
 import ru.koreanika.cutDesigner.Shapes.*;
@@ -1176,7 +1176,7 @@ public class CutPane extends Pane implements RepresentToJson {
                         Main.getMainWindow().showReceipt();
                     } else {
                         if (Boolean.parseBoolean(Main.getProperty("autosave.afterCut"))) {
-                            ProjectWriter.saveProject(Project.getCurProjectPath(), Project.getCurProjectName());//save current project
+                            ProjectHandler.saveProject();
                         }
                     }
 

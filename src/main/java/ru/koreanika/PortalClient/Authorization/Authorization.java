@@ -1,6 +1,6 @@
 package ru.koreanika.PortalClient.Authorization;
 
-import ru.koreanika.project.ProjectWriter;
+import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.utils.UserPreferences;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -26,7 +26,6 @@ import ru.koreanika.service.event.NotificationEvent;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.Main;
-import ru.koreanika.project.Project;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -93,7 +92,7 @@ public class Authorization {
 
                 alert.getButtonTypes().setAll(buttonTypeNo, buttonTypeYes, buttonTypeCancel);
 
-                if (Project.getUserProject() == null) {
+                if (ProjectHandler.getUserProject() == null) {
                     loginWindow.close();
                     ((Stage) (Main.getMainScene().getWindow())).close();
                     //event.consume();
@@ -106,7 +105,7 @@ public class Authorization {
                     ((Stage) (Main.getMainScene().getWindow())).close();
                 } else if (result.get() == buttonTypeYes) {
                     // ... user chose "YES"
-                    ProjectWriter.saveProject(Project.getCurProjectPath(), Project.getCurProjectName());
+                    ProjectHandler.saveProject();
                     loginWindow.close();
                     ((Stage) (Main.getMainScene().getWindow())).close();
                 } else if (result.get() == buttonTypeCancel) {

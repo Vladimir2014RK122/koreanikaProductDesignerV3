@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
-import org.json.simple.JSONObject;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
@@ -19,10 +18,6 @@ import ru.koreanika.utils.PriceCoefficientsWindow;
 import java.util.*;
 
 public class Project {
-
-    static String curProjectPath;
-    static String curProjectName;
-    static JSONObject userProject;
 
     private static ProjectType projectType = ProjectType.TABLE_TYPE;
 
@@ -100,18 +95,6 @@ public class Project {
 
     public static double getCommonShapeScale() {
         return commonShapeScale;
-    }
-
-    public static String getCurProjectName() {
-        return curProjectName;
-    }
-
-    public static String getCurProjectPath() {
-        return curProjectPath;
-    }
-
-    public static JSONObject getUserProject() {
-        return userProject;
     }
 
     public static void setProjectType(ProjectType projectType) {
@@ -230,4 +213,5 @@ public class Project {
         bordersHeightsUsesInProject.clear();
         bordersHeightsUsesInProjectObservable.clear();
     }
+
 }

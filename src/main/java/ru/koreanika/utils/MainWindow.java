@@ -126,9 +126,7 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
         File file = fileChooser.showSaveDialog(rootAnchorPaneMainWindow.getScene().getWindow());
 
         if (file != null) {
-            //save current project
-            ProjectWriter.saveProject(Project.getCurProjectPath(), Project.getCurProjectName());
-
+            ProjectHandler.saveProject();
             ProjectHandler.closeProject();
             rootAnchorPaneMainWindow.getChildren().clear();
 
@@ -174,13 +172,13 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
                 new FileChooser.ExtensionFilter("Koreanika projects", "*.krnkproj", "*.kproj")
         );
 
-        if (Project.getCurProjectPath() != null) {
-            String[] pathArr = Project.getCurProjectPath().split("\\\\");
+        if (ProjectHandler.getCurProjectPath() != null) {
+            String[] pathArr = ProjectHandler.getCurProjectPath().split("\\\\");
             String path1 = "";
             for (int i = 0; i < pathArr.length - 1; i++) {
                 path1 += "/" + pathArr[i];
             }
-            System.out.println(Project.getCurProjectPath());
+            System.out.println(ProjectHandler.getCurProjectPath());
             System.out.println(path1);
 
             fileChooser.setInitialDirectory(new File(path1));
@@ -192,33 +190,29 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
         UserCurrency.getInstance().updateCurrencyValueWithRequest();
     }
 
-    protected void saveProject() {
-        ProjectWriter.saveProject(Project.getCurProjectPath(), Project.getCurProjectName());
-    }
-
     protected void saveAsProject() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Some Files");
 
-        if (Project.getCurProjectPath() != null) {
-            String[] pathArr = Project.getCurProjectPath().split("\\\\");
+        if (ProjectHandler.getCurProjectPath() != null) {
+            String[] pathArr = ProjectHandler.getCurProjectPath().split("\\\\");
             String path1 = "";
             for (int i = 0; i < pathArr.length - 1; i++) {
                 path1 += "/" + pathArr[i];
             }
-            System.out.println(Project.getCurProjectPath());
+            System.out.println(ProjectHandler.getCurProjectPath());
             System.out.println(path1);
 
             fileChooser.setInitialDirectory(new File(path1));
-            fileChooser.setInitialFileName(Project.getCurProjectName());
+            fileChooser.setInitialFileName(ProjectHandler.getCurProjectName());
         }
 
         File file = fileChooser.showSaveDialog(rootAnchorPaneMainWindow.getScene().getWindow());
         if (file != null) {
             String path = file.getPath();
             String projName = file.getName();
-            ProjectWriter.saveProject(path, projName); //save new name project
-            ((Stage) rootAnchorPaneMainWindow.getScene().getWindow()).setTitle("Koreanika: " + Project.getCurProjectPath());
+            ProjectHandler.saveProjectNewName(path, projName);  // TODO Refac: ProjectHandler.curProjectPath is changed as a side effect when writing a file
+            ((Stage) rootAnchorPaneMainWindow.getScene().getWindow()).setTitle("Koreanika: " + ProjectHandler.getCurProjectPath());
         }
 
     }
@@ -271,7 +265,7 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
 
     protected void showReceiptWithCutting() {
         if (Boolean.parseBoolean(Main.getProperty("autosave.afterReceipt"))) {
-            ProjectWriter.saveProject(Project.getCurProjectPath(), Project.getCurProjectName());//save current project
+            ProjectHandler.saveProject();
         }
         System.out.println("ShowReceipt");
         CutDesigner.getInstance().autoCutting(true);
@@ -325,7 +319,8 @@ public class MainWindow implements NotificationEventHandler, ApplicationTypeChan
         if (file != null) {
             String path = file.getPath();
             String projName = file.getName();
-            ProjectWriter.saveProject(Project.getCurProjectPath(), Project.getCurProjectName());//save current project
+
+            ProjectHandler.saveProject();
             ProjectHandler.closeProject();
 
             sketchDesigner = new SketchDesigner();
