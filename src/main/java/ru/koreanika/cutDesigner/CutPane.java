@@ -693,7 +693,7 @@ public class CutPane extends Pane implements RepresentToJson {
         double vValue = cutDesigner.getScrollPaneWorkPane().getVvalue();
         //nameMaterial = nameMaterial.split("-")[0];
         //System.out.println("add new sheet Material : " + nameMaterial);
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             String nameM = material.getName();
             String nameF = nameMaterial.split("#")[0];
 
@@ -854,7 +854,7 @@ public class CutPane extends Pane implements RepresentToJson {
             Material material = null;
             int depth = Integer.parseInt(entry.getKey().split("#")[1]);
 
-            for (Material m : Project.getMaterialsListInProject()) {
+            for (Material m : Project.getMaterials()) {
                 if (m.getName().equals(entry.getKey().split("#")[0])) {
                     material = m;
                     break;
@@ -934,7 +934,7 @@ public class CutPane extends Pane implements RepresentToJson {
         for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             Material material = null;
 
-            for (Material m : Project.getMaterialsListInProject()) {
+            for (Material m : Project.getMaterials()) {
                 if (m.getName().equals(entry.getKey().split("#")[0])) {
                     material = m;
                     break;

@@ -575,34 +575,34 @@ public class MaterialsXLSParser {
                 {
                     Price price = parsePriceCell(row.getCell(190));
                     material.setDeliveryInsideMKADCurrency(price.currency);
-                    material.setDeliveryInsideMKADPrice((int) (price.price));
+                    material.setDeliveryInsideMKADPrice((int) price.price);
                 }
 
                 //add measurer:
                 {
                     Price price = parsePriceCell(row.getCell(188));
                     material.setMeasurerCurrency(price.currency);
-                    material.setMeasurerPrice((int) (price.price));
+                    material.setMeasurerPrice((int) price.price);
                 }
 
                 //add measurer price for km  outside MKAD:
                 {
                     Price price = parsePriceCell(row.getCell(189));
                     material.setMeasurerKMCurrency(price.currency);
-                    material.setMeasurerKMPrice((int) (price.price));
+                    material.setMeasurerKMPrice((int) price.price);
                 }
 
                 //add delivery price from manufacture
                 {
                     Price price = parsePriceCell(row.getCell(191));
                     material.setDeliveryFromManufactureCurrency(price.currency);
-                    material.setDeliveryFromManufacture((int) (price.price));
+                    material.setDeliveryFromManufacture((int) price.price);
                 }
 
                 //add sheet cutting price from manufacture
                 {
                     material.setSheetCuttingCurrency("RUB");
-                    material.setSheetCuttingPrice((int) (1000.0));
+                    material.setSheetCuttingPrice(1000);
                 }
 
                 /** add notification 1: */

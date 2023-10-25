@@ -246,7 +246,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
                 return;
             }
 
-            ArrayList<Material> materialsInProject = new ArrayList<>();
+            List<Material> materialsInProject = new ArrayList<>();
             for (MaterialListCellItem item : listViewInProject.getItems()) {
                 Material material = item.getMaterial();
                 materialsInProject.add(material);
@@ -257,23 +257,29 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
 
             for (Material material : materialsInProject) {
                 System.out.println(material.getReceiptName());
-                if ((material.getSubType() + ", " + material.getCollection() + ", " + material.getColor()).equals(defaultMaterialName)) {
-                    Project.setDefaultMaterialRAW(material);
+                String materialName = material.getSubType() + ", " + material.getCollection() + ", " + material.getColor();
+                if (materialName.equals(defaultMaterialName)) {
+                    Project.setDefaultMaterial(material);
+                    break;
                 }
             }
 
-            Project.setMaterialsListInProject(materialsInProject);
-            Project.getMaterialsUsesInProjectObservable().clear();
+            Project.setMaterials(materialsInProject);
+            Project.getMaterialsInUse().clear();
             SketchDesigner.getSketchShapesList().forEach(sketchShape -> {
-                Project.getMaterialsUsesInProjectObservable().add(sketchShape.getMaterial().getName() + "#" + sketchShape.getShapeDepth());
+                Project.getMaterialsInUse().add(sketchShape.getMaterial().getName() + "#" + sketchShape.getShapeDepth());
             });
 
             System.out.println("\n\n******DEFAULT FROM CHOICE BOX: " + defaultMaterialName);
 
             if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
-                if (MainWindow.getSketchDesigner() != null) SketchDesigner.updateMaterialsInProject();
+                if (MainWindow.getSketchDesigner() != null) {
+                    SketchDesigner.updateMaterialsInProject();
+                }
             } else if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
-                if (MainWindow.getTableDesigner() != null) TableDesigner.updateMaterialsInProject();
+                if (MainWindow.getTableDesigner() != null) {
+                    TableDesigner.updateMaterialsInProject();
+                }
             }
 
             if (firstStartFlag) {
@@ -895,7 +901,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
         if (Project.getDefaultMaterial() != null) {
             listViewInProject.getItems().clear();
             choiceBoxDefault.getItems().clear();
-            for (Material material : Project.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 listViewInProject.getItems().add(new MaterialListCellItem(material));
                 choiceBoxDefault.getItems().add(material.getSubType() + ", " + material.getCollection() + ", " + material.getColor());
             }

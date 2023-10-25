@@ -79,7 +79,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         Material newMaterial = null;
         Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (Project.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterials().contains(item.getMaterial())) {
             newMaterial = oldLeakGrooveItem.material;
         } else {
 
@@ -87,7 +87,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
                 newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : Project.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterials()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType())) {
                         newMaterial = material;
@@ -341,7 +341,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         btnAdd = (Button) anchorPaneSettingsView.lookup("#btnAdd");
         labelPrice = (Label) anchorPaneSettingsView.lookup("#labelPrice");
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
@@ -358,7 +358,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
 
             if(choiceBoxMaterial.getSelectionModel().getSelectedItem() != null){
                 Material material = null;
-                for (Material m : Project.getMaterialsListInProject()) {
+                for (Material m : Project.getMaterials()) {
                     if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                         material = m;
                     }
@@ -389,7 +389,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         if (!(lengthOk && widthOk)) return;
 
         Material material = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -410,7 +410,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     public static void settingsControlElementsRefresh() {
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
@@ -418,7 +418,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         textFieldLength.setText("1000");
 
         Material material = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -431,7 +431,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     public static void updatePriceInSettings() {
 
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = "";
@@ -524,7 +524,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         String materialName = (String) jsonObject.get("material");
 
         Material material = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (materialName.equals(m.getName())) {
                 material = m;
                 break;

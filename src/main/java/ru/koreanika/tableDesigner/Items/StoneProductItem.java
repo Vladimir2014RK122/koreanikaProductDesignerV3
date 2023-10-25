@@ -119,7 +119,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
         updateItemView();
 
-        Project.getMaterialsUsesInProjectObservable().add(material.getName() + "#" + depth);
+        Project.getMaterialsInUse().add(material.getName() + "#" + depth);
 
         //create depend on Radius element:
         if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS || shapeType == ShapeType.RECTANGLE_WITH_RADIUS_INTO) {
@@ -310,14 +310,14 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         Material newMaterial = null;
         Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (Project.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterials().contains(item.getMaterial())) {
             newMaterial = oldStoneProductItem.material;
         } else {
             if (defaultMaterial.getMainType().equals(item.getMaterial().getMainType()) && defaultMaterial.getDepths().contains("" + oldStoneProductItem.depth)) {
                 newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : Project.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterials()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType()) && material.getDepths().contains("" + oldStoneProductItem.depth)) {
                         newMaterial = material;
@@ -1260,7 +1260,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 StoneProductType.FOOT.getName());
         choiceBoxElementType.getSelectionModel().select(0);
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         System.out.println("\n\nDEFAULT FROM : " + Project.getDefaultMaterial());
@@ -1619,7 +1619,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         else if (toggleButtonShape9.isSelected()) shapeType = ShapeType.RHOMBUS;
 
         Material material = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -1946,7 +1946,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
         choiceBoxDepth.getItems().clear();
         Material selectedMaterial = null;
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
                 selectedMaterial = material;
             }
@@ -2072,7 +2072,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
@@ -2215,7 +2215,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         if (choiceBoxElementType.getSelectionModel().getSelectedItem() == null) return;
         if (choiceBoxDepth.getSelectionModel().getSelectedItem() == null) return;
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = material.getCurrency();
@@ -2441,7 +2441,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         ShapeType shapeType = ShapeType.valueOf((String) jsonObject.get("shapeType"));
 
         Material material = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (materialName.equals(m.getName())) {
                 material = m;
                 break;

@@ -30,8 +30,8 @@ public class ProjectHandler {
     public void createProject(String projectName, String projectPath, ProjectType projectType) {
         Project.setProjectType(projectType);
 
-        Project.materialsListInProject.clear();
-        Project.defaultMaterial = null;
+        Project.getMaterials().clear();
+        Project.setDefaultMaterial(null);
 
         projectJSONObject = new JSONObject();
 
@@ -78,8 +78,8 @@ public class ProjectHandler {
         //project coefficients for price:
         Project.setPriceMaterialCoefficient(Main.materialCoefficient);
         Project.setPriceMainCoefficient(Main.mainCoefficient);
-        projectSettings.put("priceMainCoefficient", Project.priceMainCoefficient.getValue());
-        projectSettings.put("priceMaterialCoefficient", Project.priceMaterialCoefficient.getValue());
+        projectSettings.put("priceMainCoefficient", Project.getPriceMainCoefficient().getValue());
+        projectSettings.put("priceMaterialCoefficient", Project.getPriceMaterialCoefficient().getValue());
 
         System.out.println("getPriceMaterialCoefficient() = " + Project.getPriceMaterialCoefficient().doubleValue());
         System.out.println("getPriceMainCoefficient() = " + Project.getPriceMainCoefficient().doubleValue());
@@ -87,7 +87,7 @@ public class ProjectHandler {
         //material settings
         JSONObject materialSettings = new JSONObject();
         JSONArray materialsList = new JSONArray();
-        for (Material material : Project.materialsListInProject) {
+        for (Material material : Project.getMaterials()) {
             materialsList.add(material.getName());
         }
         materialSettings.put("materialsList", materialsList);
@@ -144,7 +144,7 @@ public class ProjectHandler {
 
         AdditionalFeature.createdFeaturesNumbersList.clear();
 
-        Project.defaultMaterial = null;
+        Project.setDefaultMaterial(null);
     }
 
     public boolean projectSelected() {
@@ -155,7 +155,7 @@ public class ProjectHandler {
         return projectJSONObject;
     }
 
-    public void setProjectJSONObject(JSONObject projectJSONObject) {
+    void setProjectJSONObject(JSONObject projectJSONObject) {
         this.projectJSONObject = projectJSONObject;
     }
 
@@ -167,11 +167,11 @@ public class ProjectHandler {
         return currentProjectPath;
     }
 
-    public void setCurrentProjectPath(String currentProjectPath) {
+    void setCurrentProjectPath(String currentProjectPath) {
         this.currentProjectPath = currentProjectPath;
     }
 
-    public void setCurrentProjectName(String currentProjectName) {
+    void setCurrentProjectName(String currentProjectName) {
         this.currentProjectName = currentProjectName;
     }
 

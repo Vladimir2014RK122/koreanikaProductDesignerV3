@@ -195,7 +195,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
         Material newMaterial = null;
         Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (Project.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterials().contains(item.getMaterial())) {
             newMaterial = oldBorderItem.material;
         } else {
 
@@ -203,7 +203,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
                 newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : Project.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterials()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType()) && material.getDepths().contains("" + oldBorderItem.depth)) {
                         newMaterial = material;
@@ -710,7 +710,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
         labelPrice = (Label) anchorPaneSettingsView.lookup("#labelPrice");
 
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
 
@@ -841,7 +841,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
 
             comboBoxBorderType.getItems().clear();
 
-            for (Material material : Project.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
 
                     if (material.getName().indexOf("Акриловый камень") != -1 ||
@@ -950,7 +950,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
 
 
         Material material = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -1052,7 +1052,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
     public static void settingsControlElementsRefresh() {
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
@@ -1098,7 +1098,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
     public static void updatePriceInSettings() {
         if (!heightOk) return;
         if (comboBoxBorderType.getSelectionModel().getSelectedItem() == null) return;
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = material.getBorderCurrency();
@@ -1268,7 +1268,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
         String materialName = (String) jsonObject.get("material");
 
         Material material = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (materialName.equals(m.getName())) {
                 material = m;
                 break;

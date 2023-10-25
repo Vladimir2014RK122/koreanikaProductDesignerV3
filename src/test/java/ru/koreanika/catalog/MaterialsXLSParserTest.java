@@ -1,4 +1,4 @@
-package ru.koreanika.project;
+package ru.koreanika.catalog;
 
 import org.junit.Ignore;
 import org.junit.Test;

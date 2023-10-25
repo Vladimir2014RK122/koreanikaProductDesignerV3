@@ -335,7 +335,7 @@ public class CutDesigner implements RepresentToJson {
 //            }
 
 
-            for (String materialName : Project.getMaterialsUsesInProjectObservable()) {
+            for (String materialName : Project.getMaterialsInUse()) {
                 String[] nameDepth = materialName.split("#");
                 String[] nameArray = nameDepth[0].split("\\$");
                 if (choiceBoxAddMaterialSheet.getSelectionModel().getSelectedItem().equals(nameArray[2] + " " + nameArray[3] + " - " + nameDepth[1] + "мм")) {
@@ -780,13 +780,12 @@ public class CutDesigner implements RepresentToJson {
         choiceBoxAddMaterialSheet.getItems().clear();
         Set<String> materialSet = new LinkedHashSet<>();
 
-        for (String nameMaterial : Project.getMaterialsUsesInProjectObservable()) {
+        for (String nameMaterial : Project.getMaterialsInUse()) {
             String[] nameDepth = nameMaterial.split("#");
             String[] nameArray = nameDepth[0].split("\\$");
             materialSet.add(nameArray[2] + " " + nameArray[3] + " - " + nameDepth[1] + "мм");
         }
         for (String nameMaterial : materialSet) {
-            //choiceBoxAddMaterialSheet.getItems().add(nameMaterial);
             choiceBoxAddMaterialSheet.getItems().add(nameMaterial);
         }
         choiceBoxAddMaterialSheet.getSelectionModel().select(0);

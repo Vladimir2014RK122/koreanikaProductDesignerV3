@@ -2,64 +2,46 @@ package ru.koreanika.project;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.sketchDesigner.Edge.Border;
 import ru.koreanika.sketchDesigner.Edge.Edge;
-import ru.koreanika.sketchDesigner.Shapes.SketchShape;
-import ru.koreanika.sketchDesigner.SketchDesigner;
-import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.PriceCoefficientsWindow;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Project {
 
     private static ProjectType projectType = ProjectType.TABLE_TYPE;
 
-    static List<Material> materialsListInProject = new ArrayList<>();
-    static Material defaultMaterial = null;
+    /**
+     * Materials selected from catalog for use in project
+     */
+    private static final List<Material> materials = new ArrayList<>();
 
-    static DoubleProperty priceMainCoefficient = new SimpleDoubleProperty(1);
-    static DoubleProperty priceMaterialCoefficient = new SimpleDoubleProperty(1);
+    private static Material defaultMaterial = null;
+    private static Image receiptManagerSketchImage = null;
 
-    private static List<Edge> edgesUsesInProject = new ArrayList<>();
-    private static ObservableList<Edge> edgesUsesInProjectObservable = FXCollections.observableList(edgesUsesInProject);
+    private static final DoubleProperty priceMainCoefficient = new SimpleDoubleProperty(1.0);
+    private static final DoubleProperty priceMaterialCoefficient = new SimpleDoubleProperty(1.0);
 
-    private static List<Border> bordersUsesInProject = new ArrayList<>();
-    private static ObservableList<Border> bordersUsesInProjectObservable = FXCollections.observableList(bordersUsesInProject);
+    private static final List<Edge> edgesInUse = new ArrayList<>();
+    private static final List<Border> bordersInUse = new ArrayList<>();
+    private static final List<String> materialsInUse = new ArrayList<>();
+    private static final List<String> depthsTableTopsInUse = new ArrayList<>();
+    private static final List<String> depthsWallPanelsInUse = new ArrayList<>();
+    private static final List<String> edgesHeightsInUse = new ArrayList<>();
+    private static final List<String> bordersHeightsInUse = new ArrayList<>();
 
-    private static List<String> materialsUsesInProject = new ArrayList<>();
-    private static ObservableList<String> materialsUsesInProjectObservable = FXCollections.observableList(materialsUsesInProject);
-
-    private static List<String> depthsTableTopsUsesInProject = new ArrayList<>();
-    private static ObservableList<String> depthsTableTopsUsesInProjectObservable = FXCollections.observableList(depthsTableTopsUsesInProject);
-
-    private static List<String> depthsWallPanelsUsesInProject = new ArrayList<>();
-    private static ObservableList<String> depthsWallPanelsUsesInProjectObservable = FXCollections.observableList(depthsWallPanelsUsesInProject);
-
-    private static List<String> edgesHeightsUsesInProject = new ArrayList<>();
-    private static ObservableList<String> edgesHeightsUsesInProjectObservable = FXCollections.observableList(edgesHeightsUsesInProject);
-
-    private static List<String> bordersHeightsUsesInProject = new ArrayList<>();
-    private static ObservableList<String> bordersHeightsUsesInProjectObservable = FXCollections.observableList(bordersHeightsUsesInProject);
-
-
-    //    private static int defaultEdgeHeight = 20;
-//    private static int defaultBorderHeight = 20;
-
-    public static double CUT_AREA_EDGE_WIDTH = 50;
-    public static double CUT_AREA_BORDER_WIDTH = 30;
-
-    protected static double commonShapeScale = 0.1;
+    private static final double commonShapeScale = 0.1;
 
     public static DoubleProperty getPriceMainCoefficient() {
         return priceMainCoefficient;
     }
 
     public static void setPriceMainCoefficient(double newCoeff) {
+        // TODO refac: no access to UI controllers from domain models is allowed
         double minMainCoefficient = PriceCoefficientsWindow.getMinMainCoefficient();
         double maxMainCoefficient = PriceCoefficientsWindow.getMaxMainCoefficient();
 
@@ -75,6 +57,7 @@ public class Project {
     }
 
     public static void setPriceMaterialCoefficient(double newCoeff) {
+        // TODO refac: no access to UI controllers from domain models is allowed
         double minMaterialCoefficient = PriceCoefficientsWindow.getMinMaterialCoefficient();
         double maxMaterialCoefficient = PriceCoefficientsWindow.getMaxMaterialCoefficient();
 
@@ -99,8 +82,6 @@ public class Project {
         return Project.projectType;
     }
 
-    public static Image receiptManagerSketchImage = null;
-
     public static Image getReceiptManagerSketchImage() {
         return receiptManagerSketchImage;
     }
@@ -109,87 +90,60 @@ public class Project {
         Project.receiptManagerSketchImage = receiptManagerSketchImage;
     }
 
-    public static List<Material> getMaterialsListInProject() {
-        return materialsListInProject;
+    public static List<Material> getMaterials() {
+        return materials;
     }
 
-    public static ObservableList<Border> getBordersUsesInProjectObservable() {
-        return bordersUsesInProjectObservable;
+    public static List<Border> getBordersInUse() {
+        return bordersInUse;
     }
 
-    public static ObservableList<Edge> getEdgesUsesInProjectObservable() {
-        return edgesUsesInProjectObservable;
+    public static List<Edge> getEdgesInUse() {
+        return edgesInUse;
     }
 
-    public static ObservableList<String> getMaterialsUsesInProjectObservable() {
-        return materialsUsesInProjectObservable;
+    public static List<String> getMaterialsInUse() {
+        return materialsInUse;
     }
 
-    public static ObservableList<String> getDepthsTableTopsUsesInProjectObservable() {
-        return depthsTableTopsUsesInProjectObservable;
+    public static List<String> getDepthsTableTopsInUse() {
+        return depthsTableTopsInUse;
     }
 
-    public static ObservableList<String> getDepthsWallPanelsUsesInProjectObservable() {
-        return depthsWallPanelsUsesInProjectObservable;
+    public static List<String> getDepthsWallPanelsInUse() {
+        return depthsWallPanelsInUse;
     }
 
-    public static ObservableList<String> getEdgesHeightsUsesInProjectObservable() {
-        return edgesHeightsUsesInProjectObservable;
+    public static List<String> getEdgesHeightsInUse() {
+        return edgesHeightsInUse;
     }
 
-    public static ObservableList<String> getBordersHeightsUsesInProjectObservable() {
-        return bordersHeightsUsesInProjectObservable;
+    public static List<String> getBordersHeightsInUse() {
+        return bordersHeightsInUse;
     }
 
-    public static void setMaterialsListInProject(List<Material> materialsListInProject) {
-        Project.materialsListInProject = materialsListInProject;
+    public static void setMaterials(List<Material> materials) {
+        Project.materials.clear();
+        Project.materials.addAll(materials);
     }
 
     public static Material getDefaultMaterial() {
         return defaultMaterial;
     }
 
-    public static void setDefaultMaterialRAW(Material defaultMaterial) {
-        Project.defaultMaterial = defaultMaterial;
-    }
-
     public static void setDefaultMaterial(Material defaultMaterial) {
         Project.defaultMaterial = defaultMaterial;
-
-        for (SketchShape sketchShape : SketchDesigner.getSketchShapesList()) {
-            if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
-                sketchShape.shapeSettingsSaveBtnClicked();//this will update default materials
-            }
-        }
-
-        if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
-            TableDesigner.updateMaterialsInProject();
-        }
     }
 
     static void clearCollections() {
-        materialsListInProject.clear();
-
-        edgesUsesInProject.clear();
-        edgesUsesInProjectObservable.clear();
-
-        bordersUsesInProject.clear();
-        bordersUsesInProjectObservable.clear();
-
-        materialsUsesInProject.clear();
-        materialsUsesInProjectObservable.clear();
-
-        depthsTableTopsUsesInProject.clear();
-        depthsTableTopsUsesInProjectObservable.clear();
-
-        depthsWallPanelsUsesInProject.clear();
-        depthsWallPanelsUsesInProjectObservable.clear();
-
-        edgesHeightsUsesInProject.clear();
-        edgesHeightsUsesInProjectObservable.clear();
-
-        bordersHeightsUsesInProject.clear();
-        bordersHeightsUsesInProjectObservable.clear();
+        materials.clear();
+        edgesInUse.clear();
+        bordersInUse.clear();
+        materialsInUse.clear();
+        depthsTableTopsInUse.clear();
+        depthsWallPanelsInUse.clear();
+        edgesHeightsInUse.clear();
+        bordersHeightsInUse.clear();
     }
 
 }

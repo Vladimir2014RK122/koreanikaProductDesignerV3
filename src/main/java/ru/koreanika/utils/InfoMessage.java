@@ -4,7 +4,6 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -13,8 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import ru.koreanika.service.event.NotificationEvent;
-import ru.koreanika.service.event.NotificationEventHandler;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,7 +27,6 @@ public class InfoMessage {
     private static ImageView imageViewSuccess = new ImageView();
 
     private InfoMessage() {
-
     }
 
     private static Timer timer;
@@ -147,7 +143,7 @@ public class InfoMessage {
 
         TranslateTransition showTransition = new TranslateTransition(Duration.millis(300), paneNotification);
         showTransition.setFromX(rootAnchorPane.getWidth() / 2);
-        showTransition.setToX(rootAnchorPane.getWidth() / 2  - paneNotification.getPrefWidth() / 2);
+        showTransition.setToX(rootAnchorPane.getWidth() / 2 - paneNotification.getPrefWidth() / 2);
 
         PauseTransition pauseTransition = new PauseTransition(Duration.seconds(duration));
 

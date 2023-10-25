@@ -78,7 +78,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
         Material newMaterial = null;
         Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (Project.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterials().contains(item.getMaterial())) {
             newMaterial = oldRadiusItem.material;
         } else {
 
@@ -86,7 +86,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
                 newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : Project.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterials()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType())) {
                         newMaterial = material;
@@ -327,7 +327,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
         btnAdd = (Button) anchorPaneSettingsView.lookup("#btnAdd");
         labelPrice = (Label) anchorPaneSettingsView.lookup("#labelPrice");
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
@@ -347,7 +347,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
     private static void addItem(int index, int quantity){
 
         Material material = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -359,7 +359,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
     public static void settingsControlElementsRefresh() {
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
@@ -369,7 +369,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
 
     public static void updatePriceInSettings() {
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = material.getRadiusElementCurrency();
@@ -497,7 +497,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
         int quantity = ((Long) jsonObject.get("quantity")).intValue();
 
         RadiusItem radiusItem = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (materialName.equals(m.getName())) {
                 radiusItem = new RadiusItem(m, quantity);
             }

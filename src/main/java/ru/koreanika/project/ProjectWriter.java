@@ -75,10 +75,10 @@ public class ProjectWriter {
             projectSettings.put("projectType", Project.getProjectType().toString());
 
             //project coefficients for price:
-            projectSettings.put("priceMainCoefficient", Project.priceMainCoefficient.getValue());
-            projectSettings.put("priceMaterialCoefficient", Project.priceMaterialCoefficient.getValue());
+            projectSettings.put("priceMainCoefficient", Project.getPriceMainCoefficient().getValue());
+            projectSettings.put("priceMaterialCoefficient", Project.getPriceMaterialCoefficient().getValue());
 
-            for (Material material : Project.materialsListInProject) {
+            for (Material material : Project.getMaterials()) {
                 materialsList.add(material.getName() + "#" + material.getDefaultDepth());//deprecated
 
                 JSONObject materialObject = material.getJsonView();
@@ -87,7 +87,7 @@ public class ProjectWriter {
 
             materialSettings.put("materialsList", materialsList);
             materialSettings.put("materialsNewList", materialsNewList);
-            materialSettings.put("defaultMaterial", Project.defaultMaterial.getName() + "#" + Project.defaultMaterial.getDefaultDepth());
+            materialSettings.put("defaultMaterial", Project.getDefaultMaterial().getName() + "#" + Project.getDefaultMaterial().getDefaultDepth());
             projectSettings.put("materialSettings", materialSettings);
 
             projectHandler.getProjectJSONObject().put("ProjectSettings", projectSettings);

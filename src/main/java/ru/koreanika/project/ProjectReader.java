@@ -74,7 +74,7 @@ public class ProjectReader {
                 {
                     try {
                         File file = new File(projectPath);
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
 
                         parsedProject = (JSONObject) jsonParser.parse(bufferedReader);
 
@@ -118,7 +118,7 @@ public class ProjectReader {
                                 parsedProject = (JSONObject) jsonParser.parse(s);
 
                             } else if (zipEntry.getName().equals("receiptManagerSketchImage.png")) {
-                                Project.receiptManagerSketchImage = new Image(zis);
+                                Project.setReceiptManagerSketchImage(new Image(zis));
                                 System.out.println("HAVE IMAGE");
                             }
                         }
@@ -155,14 +155,14 @@ public class ProjectReader {
                         while ((zipEntry = zis.getNextEntry()) != null) {
 
                             if (zipEntry.getName().equals("mainInfo.json")) {
-                                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zis, "UTF8"));
+                                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zis, StandardCharsets.UTF_8));
                                 parsedProject = (JSONObject) jsonParser.parse(bufferedReader);
 
                                 String s = changeDektoneNameInProject(parsedProject.toString());
                                 parsedProject = (JSONObject) jsonParser.parse(s);
 
                             } else if (zipEntry.getName().equals("receiptManagerSketchImage.png")) {
-                                Project.receiptManagerSketchImage = new Image(zis);
+                                Project.setReceiptManagerSketchImage(new Image(zis));
                             }
                         }
                         bis.close();
@@ -209,7 +209,7 @@ public class ProjectReader {
 
                     Material material = Material.getFromJson(materialObject);
                     if (material != null) {
-                        Project.materialsListInProject.add(material);
+                        Project.getMaterials().add(material);
                     } else {
                         errorMessage = "Ошибка распаковки материала " + materialObject.get("name");
                     }
@@ -220,14 +220,14 @@ public class ProjectReader {
                     if (Material.parseMaterial((String) str) == null) {
                         errorMessage = "Материал не существует: " + str;
                     }
-                    Project.materialsListInProject.add(Material.parseMaterial(((String) str)));
+                    Project.getMaterials().add(Material.parseMaterial(((String) str)));
                 }
             }
 
             // set default material, if not specified in project
-            for (Material material : Project.materialsListInProject) {
+            for (Material material : Project.getMaterials()) {
                 if (((String) materialSettings.get("defaultMaterial")).contains(material.getName())) {
-                    Project.defaultMaterial = material;
+                    Project.setDefaultMaterial(material);
                 }
             }
 
@@ -243,7 +243,7 @@ public class ProjectReader {
             }
 
 
-            System.out.println("Default material = " + Project.defaultMaterial.getName());
+            System.out.println("Default material = " + Project.getDefaultMaterial().getName());
 
             if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
                 /** Cut designer*/

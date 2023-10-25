@@ -432,7 +432,7 @@ public class SketchShapeRectangle extends SketchShape {
         checkBoxMaterialDefault.setSelected(materialDefault);
         checkBoxDefaultHeights.setSelected(edgesHeightsDefault);
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         choiceBoxMaterial.getSelectionModel().select(shapeMaterial.getReceiptName());
@@ -523,7 +523,7 @@ public class SketchShapeRectangle extends SketchShape {
             if (newValue == null) return;
             //if(!choiceBoxMaterial.getSelectionModel().getSelectedItem().equals(shapeMaterial.getReceiptName())){
 
-            for (Material m : Project.getMaterialsListInProject()) {
+            for (Material m : Project.getMaterials()) {
                 if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                     choiceBoxMaterialDepth.getItems().clear();
                     for (String s : m.getDepths()) {
@@ -683,7 +683,7 @@ public class SketchShapeRectangle extends SketchShape {
         checkBoxDefaultHeights.setSelected(edgesHeightsDefault);
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         if (!choiceBoxMaterial.getItems().contains(shapeMaterial.getReceiptName())) {
@@ -792,7 +792,7 @@ public class SketchShapeRectangle extends SketchShape {
                 choiceBoxMaterial.getSelectionModel().select(shapeMaterial.getReceiptName());
             }
         } else {
-            for (Material material : Project.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 if (choiceBoxMaterial.getSelectionModel().getSelectedItem().equals(material.getReceiptName())) {
                     setShapeMaterial(material, Integer.parseInt(choiceBoxMaterialDepth.getSelectionModel().getSelectedItem()));
                 }
@@ -925,14 +925,14 @@ public class SketchShapeRectangle extends SketchShape {
     @Override
     public void deleteShape() {
 
-        Project.getMaterialsUsesInProjectObservable().remove(shapeMaterial.getName() + "#" + shapeDepth);
+        Project.getMaterialsInUse().remove(shapeMaterial.getName() + "#" + shapeDepth);
         if (elementType == ElementTypes.TABLETOP)
-            Project.getDepthsTableTopsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().remove(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            Project.getDepthsWallPanelsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().remove(String.valueOf(shapeDepth));
 
-        Project.getEdgesHeightsUsesInProjectObservable().remove(String.valueOf(edgeHeight));
-        Project.getBordersHeightsUsesInProjectObservable().remove(String.valueOf(borderHeight));
+        Project.getEdgesHeightsInUse().remove(String.valueOf(edgeHeight));
+        Project.getBordersHeightsInUse().remove(String.valueOf(borderHeight));
 
         SketchDesigner.getSketchPane().getChildren().remove(this);
         SketchDesigner.getSketchShapesList().remove(this);
@@ -941,11 +941,11 @@ public class SketchShapeRectangle extends SketchShape {
         if (leftConnectedShape != null) leftConnectedShape.disconnectFromShape(this);
         if (rightConnectedShape != null) rightConnectedShape.disconnectFromShape(this);
 
-        for (String s : Project.getMaterialsUsesInProjectObservable()) {
+        for (String s : Project.getMaterialsInUse()) {
             System.out.println(s);
         }
 
-        for (String s : Project.getDepthsTableTopsUsesInProjectObservable()) {
+        for (String s : Project.getDepthsTableTopsInUse()) {
             System.out.println(s);
         }
 
@@ -1118,15 +1118,15 @@ public class SketchShapeRectangle extends SketchShape {
 
             if (!topEdge.getName().equals(newEdge.getName())) {
                 if (topEdge instanceof Edge) {
-                    Project.getEdgesUsesInProjectObservable().remove(topEdge);
+                    Project.getEdgesInUse().remove(topEdge);
                 } else if (topEdge instanceof Border) {
-                    Project.getBordersUsesInProjectObservable().remove(topEdge);
+                    Project.getBordersInUse().remove(topEdge);
                 }
 
                 if (newEdge instanceof Edge) {
-                    Project.getEdgesUsesInProjectObservable().add((Edge) newEdge);
+                    Project.getEdgesInUse().add((Edge) newEdge);
                 } else if (newEdge instanceof Border) {
-                    Project.getBordersUsesInProjectObservable().add((Border) newEdge);
+                    Project.getBordersInUse().add((Border) newEdge);
                 }
 
             }
@@ -1144,15 +1144,15 @@ public class SketchShapeRectangle extends SketchShape {
 
             if (!bottomEdge.getName().equals(newEdge.getName())) {
                 if (bottomEdge instanceof Edge) {
-                    Project.getEdgesUsesInProjectObservable().remove(bottomEdge);
+                    Project.getEdgesInUse().remove(bottomEdge);
                 } else if (bottomEdge instanceof Border) {
-                    Project.getBordersUsesInProjectObservable().remove(bottomEdge);
+                    Project.getBordersInUse().remove(bottomEdge);
                 }
 
                 if (newEdge instanceof Edge) {
-                    Project.getEdgesUsesInProjectObservable().add((Edge) newEdge);
+                    Project.getEdgesInUse().add((Edge) newEdge);
                 } else if (newEdge instanceof Border) {
-                    Project.getBordersUsesInProjectObservable().add((Border) newEdge);
+                    Project.getBordersInUse().add((Border) newEdge);
                 }
             }
 
@@ -1168,15 +1168,15 @@ public class SketchShapeRectangle extends SketchShape {
 
             if (!leftEdge.getName().equals(newEdge.getName())) {
                 if (leftEdge instanceof Edge) {
-                    Project.getEdgesUsesInProjectObservable().remove(leftEdge);
+                    Project.getEdgesInUse().remove(leftEdge);
                 } else if (leftEdge instanceof Border) {
-                    Project.getBordersUsesInProjectObservable().remove(leftEdge);
+                    Project.getBordersInUse().remove(leftEdge);
                 }
 
                 if (newEdge instanceof Edge) {
-                    Project.getEdgesUsesInProjectObservable().add((Edge) newEdge);
+                    Project.getEdgesInUse().add((Edge) newEdge);
                 } else if (newEdge instanceof Border) {
-                    Project.getBordersUsesInProjectObservable().add((Border) newEdge);
+                    Project.getBordersInUse().add((Border) newEdge);
                 }
             }
 
@@ -1192,15 +1192,15 @@ public class SketchShapeRectangle extends SketchShape {
 
             if (!rightEdge.getName().equals(newEdge.getName())) {
                 if (rightEdge instanceof Edge) {
-                    Project.getEdgesUsesInProjectObservable().remove(rightEdge);
+                    Project.getEdgesInUse().remove(rightEdge);
                 } else if (rightEdge instanceof Border) {
-                    Project.getBordersUsesInProjectObservable().remove(rightEdge);
+                    Project.getBordersInUse().remove(rightEdge);
                 }
 
                 if (newEdge instanceof Edge) {
-                    Project.getEdgesUsesInProjectObservable().add((Edge) newEdge);
+                    Project.getEdgesInUse().add((Edge) newEdge);
                 } else if (newEdge instanceof Border) {
-                    Project.getBordersUsesInProjectObservable().add((Border) newEdge);
+                    Project.getBordersInUse().add((Border) newEdge);
                 }
             }
 
@@ -1410,7 +1410,7 @@ public class SketchShapeRectangle extends SketchShape {
     @Override
     public void updateMaterialList() {
         choiceBoxMaterial.getItems().clear();
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         if (!choiceBoxMaterial.getItems().contains(shapeMaterial.getReceiptName())) {
@@ -1618,22 +1618,22 @@ public class SketchShapeRectangle extends SketchShape {
 
 
         if (shapeMaterial != null)
-            Project.getMaterialsUsesInProjectObservable().remove(shapeMaterial.getName() + "#" + shapeDepth);
+            Project.getMaterialsInUse().remove(shapeMaterial.getName() + "#" + shapeDepth);
 
         if (elementType == ElementTypes.TABLETOP)
-            Project.getDepthsTableTopsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().remove(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            Project.getDepthsWallPanelsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().remove(String.valueOf(shapeDepth));
 
         shapeMaterial = material;
         this.shapeDepth = depth;
 
-        Project.getMaterialsUsesInProjectObservable().add(shapeMaterial.getName() + "#" + shapeDepth);
+        Project.getMaterialsInUse().add(shapeMaterial.getName() + "#" + shapeDepth);
 
         if (elementType == ElementTypes.TABLETOP)
-            Project.getDepthsTableTopsUsesInProjectObservable().add(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().add(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            Project.getDepthsWallPanelsUsesInProjectObservable().add(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().add(String.valueOf(shapeDepth));
 
 
         if (checkBoxDefaultHeights.isSelected()) {
@@ -1720,8 +1720,8 @@ public class SketchShapeRectangle extends SketchShape {
 
         boolean haveBorder = true;
         if (!init) {
-            Project.getEdgesHeightsUsesInProjectObservable().remove("" + this.edgeHeight);
-            if (haveBorder) Project.getBordersHeightsUsesInProjectObservable().remove("" + this.borderHeight);
+            Project.getEdgesHeightsInUse().remove("" + this.edgeHeight);
+            if (haveBorder) Project.getBordersHeightsInUse().remove("" + this.borderHeight);
         }
 
         if (edgesHeightsDefault) {
@@ -1781,8 +1781,8 @@ public class SketchShapeRectangle extends SketchShape {
         if (textFieldEdgeHeight != null) textFieldEdgeHeight.setText("" + this.edgeHeight);
         this.borderHeight = borderHeight;
 
-        Project.getEdgesHeightsUsesInProjectObservable().add("" + this.edgeHeight);
-        if (haveBorder) Project.getBordersHeightsUsesInProjectObservable().add("" + this.borderHeight);
+        Project.getEdgesHeightsInUse().add("" + this.edgeHeight);
+        if (haveBorder) Project.getBordersHeightsInUse().add("" + this.borderHeight);
     }
 
     @Override
@@ -1790,17 +1790,17 @@ public class SketchShapeRectangle extends SketchShape {
         System.out.println("String.valueOf(shapeDepth)" + String.valueOf(shapeDepth));
 
         if (elementType == ElementTypes.TABLETOP)
-            Project.getDepthsTableTopsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().remove(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            Project.getDepthsWallPanelsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().remove(String.valueOf(shapeDepth));
         super.setShapeDepth(shapeDepth);
 
 
         // ProjectHandler.getDepthsTableTopsUsesInProjectObservable().add(String.valueOf(shapeDepth));
         if (elementType == ElementTypes.TABLETOP)
-            Project.getDepthsTableTopsUsesInProjectObservable().add(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().add(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            Project.getDepthsWallPanelsUsesInProjectObservable().add(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().add(String.valueOf(shapeDepth));
 
         if (shapeDepth > edgeHeight) {
             edgeHeight = shapeDepth;
@@ -3001,7 +3001,7 @@ public class SketchShapeRectangle extends SketchShape {
 
         //System.out.println("initFromJson shapeNumber = " + thisShapeNumber);
         String materialName = ((String) jsonObject.get("material"));
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (materialName.equals(material.getName())) {
                 //setShapeMaterial(material);
                 //shapeMaterial = material;

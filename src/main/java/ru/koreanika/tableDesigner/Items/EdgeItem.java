@@ -196,14 +196,14 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         Material newMaterial = null;
         Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (Project.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterials().contains(item.getMaterial())) {
             newMaterial = oldEdgeItem.material;
         } else {
             if (defaultMaterial.getMainType().equals(item.getMaterial().getMainType()) && defaultMaterial.getDepths().contains("" + oldEdgeItem.depth)) {
                 newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : Project.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterials()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType()) && material.getDepths().contains("" + oldEdgeItem.depth)) {
                         newMaterial = material;
@@ -642,7 +642,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         btnAdd = (Button) anchorPaneSettingsView.lookup("#btnAdd");
         labelPrice = (Label) anchorPaneSettingsView.lookup("#labelPrice");
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
 
@@ -779,7 +779,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
         Material selectedMaterial = null;
         int depth = Integer.parseInt(choiceBoxDepth.getSelectionModel().getSelectedItem());
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
                 selectedMaterial = material;
             }
@@ -811,7 +811,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
             comboBoxEdgeType.getItems().clear();
 
-            for (Material material : Project.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
 
                     selectedMaterial = material;
@@ -882,7 +882,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
             int edgeType = comboBoxEdgeType.getSelectionModel().getSelectedItem().getType();
 
             System.out.println("EDGE ITEM CHOICE BOX DEPTH");
-            for (Material material : Project.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
 
                     selectedMaterial = material;
@@ -972,7 +972,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         comboBoxShape.setOnAction(event -> {
 
             Material selectedMaterial = null;
-            for (Material material : Project.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
 
                     selectedMaterial = material;
@@ -1113,7 +1113,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         int depth = Integer.parseInt(choiceBoxDepth.getSelectionModel().getSelectedItem());
         int height = Integer.parseInt(textFieldHeight.getText());
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
                 selectedMaterial = material;
             }
@@ -1147,7 +1147,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         //int quantity = 1;
 
         Material material = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -1300,7 +1300,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
             System.out.println("MATERIALS IN PROJECT: "+material.getReceiptName());
         }
@@ -1357,7 +1357,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         System.out.println("choiceBoxMaterial.getValue() = " + choiceBoxMaterial.getValue());
         Material selectedMaterial = null;
         int depth = Integer.parseInt(choiceBoxDepth.getSelectionModel().getSelectedItem());
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             System.out.println(material.getReceiptName());
             if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
                 selectedMaterial = material;
@@ -1383,7 +1383,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         if (!heightOk) return;
         if (comboBoxEdgeType.getSelectionModel().getSelectedItem() == null) return;
 
-        for (Material material : Project.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = material.getEdgesCurrency();
@@ -1535,7 +1535,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         String materialName = (String) jsonObject.get("material");
 
         Material material = null;
-        for (Material m : Project.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (materialName.equals(m.getName())) {
                 material = m;
                 break;
