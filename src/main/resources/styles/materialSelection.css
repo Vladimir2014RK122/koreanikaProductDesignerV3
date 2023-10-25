@@ -404,3 +404,11 @@
 #btnFromProject {
     -fx-background-image: url(icons/MaterialSelectionWindow/arrow_left_brown.png);
 }
+
+#imageViewSelectedMaterialOverlay {
+    -fx-image: url(images/magnifying_glass.png);
+    -fx-opacity: 0.6;
+}
+#imageViewSelectedMaterial:hover {
+    -fx-cursor: hand;
+}
