@@ -3,6 +3,8 @@ package ru.koreanika.service;
 import ru.koreanika.Common.Material.CachingImageLoader;
 import ru.koreanika.service.eventbus.EventBus;
 
+import java.util.concurrent.Executors;
+
 public class InitialContext {
     public Object lookup(String serviceName) {
         if (serviceName.equalsIgnoreCase("EventBus")) {
@@ -13,6 +15,9 @@ public class InitialContext {
         }
         if (serviceName.equalsIgnoreCase("ImageLoader")) {
             return new CachingImageLoader();
+        }
+        if (serviceName.equalsIgnoreCase("ExecutorService")) {
+            return Executors.newSingleThreadExecutor();
         }
         return null;
     }

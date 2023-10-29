@@ -1,19 +1,24 @@
 package ru.koreanika.Common.Material;
 
 import javafx.scene.image.Image;
+import org.apache.commons.io.FileUtils;
 import ru.koreanika.PortalClient.PortalURI;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.ImageCachedEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.Main;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.concurrent.ExecutorService;
 
 public class CachingImageLoader implements ImageLoader {
 
     private static final String CACHE_PATH = "materials_resources/cache/";
+
+    private static final ExecutorService executor = ServiceLocator.getService("ExecutorService", ExecutorService.class);
+    private static final EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
 
     public CachingImageLoader() {
         File dir = new File(CACHE_PATH);
@@ -24,30 +29,60 @@ public class CachingImageLoader implements ImageLoader {
 
     @Override
     public Image getImageByPath(String remotePath) {
-        String localPath = remotePath.substring(remotePath.lastIndexOf("/") + 1);
-        File localFile = new File(CACHE_PATH + localPath);
+        String localPath = getLocalPath(remotePath);
 
-        if (!localFile.exists()) {
-            String remotePathEncoded = URLEncoder.encode(remotePath, StandardCharsets.UTF_8).replaceAll("%2F", "/");
-            String url = Main.getProperty("server.host") + ":8080" + PortalURI.PORTAL_URI_DOWNLOAD_MATERIAL_IMAGE + remotePathEncoded;
+        Image image = null;
+        try {
+            File localFile = new File(CACHE_PATH + localPath);
+            if (localFile.exists()) {
+                image = new Image(new FileInputStream(localFile));
+            } else {
+                executor.execute(new ImageDownloadTask(remotePath, localPath));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
-            try (InputStream in = new URL(url).openStream()) {
-                Files.copy(in, Paths.get(localFile.getPath()));
-            } catch (FileNotFoundException ex) {
+        return image;
+    }
+
+    private static String getLocalPath(String remotePath) {
+        return remotePath.substring(remotePath.lastIndexOf("/") + 1);
+    }
+
+    private static class ImageDownloadTask implements Runnable {
+        private final String remotePath;
+        private final String localPath;
+
+        public ImageDownloadTask(String remotePath, String localPath) {
+            this.remotePath = remotePath;
+            this.localPath = localPath;
+        }
+
+        @Override
+        public void run() {
+            File localFile = new File(CACHE_PATH + localPath);
+            if (localFile.exists()) {
+                return;
+            }
+
+            try (InputStream in = getImageURLEncoded().openStream()) {
+                FileUtils.copyInputStreamToFile(in, localFile);
+                eventBus.fireEvent(new ImageCachedEvent(remotePath, localPath));
+            } catch (URISyntaxException e) {
+                System.out.println("Invalid image URI");
+            } catch (FileNotFoundException e) {
                 System.out.println("NO IMAGE ON SERVER FOR MATERIAL - > " + remotePath);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        Image image = null;
-        try {
-            image = new Image(new FileInputStream(localFile));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        private URL getImageURLEncoded() throws URISyntaxException, MalformedURLException {
+            String remotePathEncoded = URLEncoder.encode(remotePath, StandardCharsets.UTF_8).replaceAll("%2F", "/");
+            String url = Main.getProperty("server.host") + ":8080" + PortalURI.PORTAL_URI_DOWNLOAD_MATERIAL_IMAGE + remotePathEncoded;
+            return new URI(url).toURL();
         }
-
-        return image;
     }
 
 }
