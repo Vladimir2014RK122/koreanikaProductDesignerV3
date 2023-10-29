@@ -194,7 +194,10 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
         materialImageModalStage.initModality(Modality.APPLICATION_MODAL);
         materialImageModalStage.initStyle(StageStyle.UNDECORATED);
         materialImageModalStage.setResizable(false);
-        imageViewSelectedMaterial.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> materialImageModalStage.showAndWait());
+        imageViewSelectedMaterial.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            materialImageModalStage.showAndWait();
+            materialImageModalStage.toFront();
+        });
     }
 
     public void setFirstStart(FirstStart firstStart) {

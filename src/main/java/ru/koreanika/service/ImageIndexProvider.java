@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -17,14 +18,14 @@ public class ImageIndexProvider implements Provider<ImageIndex> {
 
     @Override
     public ImageIndex get() {
-        try (ZipFile zipFile = new ZipFile(INDEX_ZIP_FILE)) {
+        try (ZipFile zipFile = new ZipFile(INDEX_ZIP_FILE, StandardCharsets.UTF_8)) {
             ImageIndex index = new ImageIndex();
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 if (!entry.isDirectory()) {
                     try (InputStream in = zipFile.getInputStream(entry)) {
-                        InputStreamReader inputStreamReader = new InputStreamReader(in);
+                        InputStreamReader inputStreamReader = new InputStreamReader(in, StandardCharsets.UTF_8);
                         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                         String line;
                         while ((line = bufferedReader.readLine()) != null) {
