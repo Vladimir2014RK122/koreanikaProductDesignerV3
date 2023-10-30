@@ -2,7 +2,7 @@ package ru.koreanika.cutDesigner;
 
 
 import ru.koreanika.Common.ConnectPoints.CornerConnectPoint;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.Common.Material.MaterialSheet;
 import ru.koreanika.Common.RepresentToJson;
 
 import ru.koreanika.cutDesigner.ListStatistics.StatisticCellItem;
@@ -339,7 +339,7 @@ public class CutDesigner implements RepresentToJson {
                 String[] nameDepth = materialName.split("#");
                 String[] nameArray = nameDepth[0].split("\\$");
                 if (choiceBoxAddMaterialSheet.getSelectionModel().getSelectedItem().equals(nameArray[2] + " " + nameArray[3] + " - " + nameDepth[1] + "мм")) {
-                    Material.MaterialSheet materialSheet = cutPane.addMaterialSheet(materialName);
+                    MaterialSheet materialSheet = cutPane.addMaterialSheet(materialName);
 
                     if(materialSheet == null){
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -518,7 +518,7 @@ public class CutDesigner implements RepresentToJson {
 
         double pixelScale = 2;
 
-        for (Material.MaterialSheet materialSheet : cutPane.getUsedMaterialSheetsList()) {
+        for (MaterialSheet materialSheet : cutPane.getUsedMaterialSheetsList()) {
 
             SnapshotParameters materialSheetSnapshotParameters = new SnapshotParameters();
             //materialSheetSnapshotParameters.setFill(Color.TRANSPARENT);

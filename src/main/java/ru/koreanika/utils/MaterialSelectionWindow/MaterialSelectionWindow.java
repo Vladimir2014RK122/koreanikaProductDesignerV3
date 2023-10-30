@@ -425,7 +425,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
                 "коллекции выполняется по усмотрению производителя." : "";
         labelNotification2.setText(notification2Text);
 
-        imageViewSelectedMaterial.setImage(material.getMaterialImage().getImageMaterial());
+        imageViewSelectedMaterial.setImage(material.getTextureImage());
         modalWindowController.setMaterial(material);
     }
 

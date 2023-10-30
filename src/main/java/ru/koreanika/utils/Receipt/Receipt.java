@@ -2,6 +2,7 @@ package ru.koreanika.utils.Receipt;
 
 import ru.koreanika.Common.Material.Material;
 
+import ru.koreanika.Common.Material.MaterialSheet;
 import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.Shapes.CutObject;
@@ -32,7 +33,7 @@ import java.util.*;
 
 public class Receipt {
 
-    private static Map<Material, ArrayList<Material.MaterialSheet>> materialAndSheets = new LinkedHashMap<>();
+    private static Map<Material, ArrayList<MaterialSheet>> materialAndSheets = new LinkedHashMap<>();
 
     private static Map<Material, Map<Integer, Double>> materialSquaresCalcType2 = new LinkedHashMap<>();
     private static Map<Material, Map<Integer, Double>> shapesSquaresCalcType2 = new LinkedHashMap<>();
@@ -153,13 +154,13 @@ public class Receipt {
         /** new calculate, more correct instead previous version:  START*/
         System.out.println("\n\n*** START calculate materials ***\n");
 
-        Map<Material.MaterialSheet, ArrayList<CutShape>> sheetsAndShapes = CutDesigner.getInstance().getCutPane().getSheetsAndShapesOnItMap();
-        Map<Material.MaterialSheet, Double> sheetsAndUsesSumSquare = new LinkedHashMap<>();
+        Map<MaterialSheet, ArrayList<CutShape>> sheetsAndShapes = CutDesigner.getInstance().getCutPane().getSheetsAndShapesOnItMap();
+        Map<MaterialSheet, Double> sheetsAndUsesSumSquare = new LinkedHashMap<>();
 
         Map<Material, Integer> materialAndNumberOfShapes = new LinkedHashMap<>();//need for calculate delivery
 
         System.out.println("Cut shapes on sheets:");
-        for (Map.Entry<Material.MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
+        for (Map.Entry<MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
 
             System.out.println("sheet: " + entry.getKey().getMaterial().getName().replace("$", " "));
 
@@ -171,7 +172,7 @@ public class Receipt {
         }
 
         System.out.println("Cut shapes into its sheets squares:");
-        for (Map.Entry<Material.MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
+        for (Map.Entry<MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
 
             System.out.println("sheet: " + entry.getKey().getMaterial().getName().replace("$", " "));
             double CutShapesSumSquare = 0;
@@ -205,7 +206,7 @@ public class Receipt {
         receiptLog = "";
         System.out.println(" \n*** Кварц/DECTONE/Натуральный камень ***");
         receiptLog += "CUARZ MATERIAL:";
-        for (Map.Entry<Material.MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
+        for (Map.Entry<MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
 
             //double Pm2Material = entry.getKey().getMaterial().getPrice(entry.getValue().get(0).getElementType(), entry.getKey().getDepth());//old
             double Pm2Material = entry.getKey().getPrice(entry.getValue().get(0).getElementType(), entry.getKey().getDepth());
@@ -490,7 +491,7 @@ public class Receipt {
 
             /** get Cutshape with the most cost: */
             CutShape expensiveCutShape = null;
-            for (Map.Entry<Material.MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
+            for (Map.Entry<MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
                 if (entry.getKey().getMaterial().getCalculationType() == 2) continue;
                 for (CutShape cutShape : entry.getValue()) {
                     if(expensiveCutShape == null ||
@@ -540,9 +541,9 @@ public class Receipt {
 
             System.out.println("\n Parts: ");
 
-            for (Map.Entry<Material.MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
+            for (Map.Entry<MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
 
-                Material.MaterialSheet materialSheet = entry.getKey();
+                MaterialSheet materialSheet = entry.getKey();
                 Material material = materialSheet.getMaterial();
 
                 double Pm2Material = materialSheet.getPrice(entry.getValue().get(0).getElementType(), entry.getKey().getDepth());
@@ -751,7 +752,7 @@ public class Receipt {
 
     public static double getUsesSlabs() {
         usesSlabs = 0;
-        for(Material.MaterialSheet ms : CutDesigner.getInstance().getCutPane().getUsedMaterialSheetsList()){
+        for(MaterialSheet ms : CutDesigner.getInstance().getCutPane().getUsedMaterialSheetsList()){
             usesSlabs += ms.getUsesSlabs();
         }
         return usesSlabs;
@@ -850,7 +851,7 @@ public class Receipt {
         return jointReceiptItemsList;
     }
 
-    public static Map<Material, ArrayList<Material.MaterialSheet>> getMaterialAndSheets() {
+    public static Map<Material, ArrayList<MaterialSheet>> getMaterialAndSheets() {
         return materialAndSheets;
     }
 

@@ -486,7 +486,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         Map<String, ImageView> imagesList = new LinkedHashMap<>();
         String imgPath = material.getImgPath();
         imagesList.put(material.getColor() + " лого#" + imgPath, new ImageView(material.getImageViewLogo().getImage()));
-        imagesList.put(material.getColor() + " текстура#" + imgPath + material.getColor() + "2", new ImageView(material.getMaterialImage().getImageMaterial()));
+        imagesList.put(material.getColor() + " текстура#" + imgPath + material.getColor() + "2", new ImageView(material.getTextureImage()));
 
         ImageView shapeImage = new ImageView();
         String imgPath1 = "";
@@ -1084,7 +1084,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         labelHeaderCard.setText(name);
         tooltipNameCard.setText(name);
 
-        imageViewBackCard.setImage(material.getMaterialImage().getImageMaterial());
+        imageViewBackCard.setImage(material.getTextureImage());
 
         imageViewCardLogo.setImage(material.getImageViewLogo().getImage());
 

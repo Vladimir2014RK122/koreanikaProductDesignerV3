@@ -147,11 +147,6 @@ public class Main extends Application {
             event.consume();
         });
 
-        //mainScene.getWindow().setOnShown(windowEvent ->{
-
-        //});
-
-
         primaryStage.getIcons().add(new Image(this.getClass().getResource("/styles/icons/koreanika_icon_3.png").toString()));
         primaryStage.setOnCloseRequest(event -> {
 

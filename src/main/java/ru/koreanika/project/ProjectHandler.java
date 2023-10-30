@@ -3,11 +3,20 @@ package ru.koreanika.project;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.koreanika.Common.Material.Material;
+import ru.koreanika.Common.Material.MaterialSheet;
+import ru.koreanika.cutDesigner.CutDesigner;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Features.AdditionalFeature;
+import ru.koreanika.utils.CheckSheetsPrices;
+import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.Main;
 import ru.koreanika.utils.MainWindow;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class ProjectHandler {
 
@@ -19,12 +28,15 @@ public class ProjectHandler {
     private String currentProjectPath;
     private String currentProjectName;
 
+    private final EventBus eventBus;
+
     private final ProjectWriter projectWriter;
     private final ProjectReader projectReader;
 
     public ProjectHandler() {
+        this.eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        this.projectReader = new ProjectReader();
         this.projectWriter = new ProjectWriter(this);
-        this.projectReader = new ProjectReader(this);
     }
 
     public void createProject(String projectName, String projectPath, ProjectType projectType) {
@@ -120,11 +132,28 @@ public class ProjectHandler {
     }
 
     public boolean openProject(String projectPath, String projectName) {
-        boolean success = projectReader.read(projectPath, projectName);
-        if (success) {
-            projectWriter.saveProject(projectPath, projectName);
-            return true;
-        } else {
+        if (!projectName.matches(".+\\.krnkproj$") && !projectName.matches(".+\\.kproj$")) {
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Неизвестный тип файла!!!"));
+            return false;
+        }
+
+        try {
+            JSONObject parsedProject = projectReader.read(projectPath);
+            if (parsedProject != null) {
+                this.currentProjectName = projectName;
+                this.currentProjectPath = projectPath;
+                this.projectJSONObject = parsedProject;
+
+                checkMaterialSheetsPrices();
+                projectWriter.saveProject(projectPath, projectName);
+                return true;
+            } else {
+                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, projectReader.getErrorMessage()));
+                return false;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Проект поврежден! (" + projectReader.getErrorMessage() + ")"));
             return false;
         }
     }
@@ -135,16 +164,43 @@ public class ProjectHandler {
         if (projectJSONObject != null) {
             projectJSONObject.clear();
         }
+        projectJSONObject = null;
 
         MainWindow.setCutDesigner(null);
         MainWindow.setSketchDesigner(null);
-        projectJSONObject = null;
 
         Project.clearCollections();
+        Project.setDefaultMaterial(null);
 
         AdditionalFeature.createdFeaturesNumbersList.clear();
+    }
 
-        Project.setDefaultMaterial(null);
+    private static void checkMaterialSheetsPrices() {
+        CutDesigner.getInstance().refreshCutView();
+
+        //check MaterialSheetsPrices:
+        boolean haveDifference = false;
+        LinkedHashMap<Material, ArrayList<MaterialSheet>> differenceMap = new LinkedHashMap<>();
+        for (MaterialSheet materialSheet : CutDesigner.getInstance().getCutPane().getUsedMaterialSheetsList()) {
+
+            boolean theSame = CheckSheetsPrices.checkPrices(materialSheet.getMaterial(), materialSheet);
+            //if sheets didn't use set it old price too:
+            if (!theSame/* && materialSheet.getUsesList() != 0*/) {
+                haveDifference = true;
+
+                ArrayList<MaterialSheet> sheetsList = differenceMap.get(materialSheet.getMaterial());
+                if (sheetsList == null) {
+                    sheetsList = new ArrayList<>();
+                }
+                sheetsList.add(materialSheet);
+                differenceMap.put(materialSheet.getMaterial(), sheetsList);
+            }
+        }
+
+        //check coefficients in sketchShapes
+        if (haveDifference) {
+            CheckSheetsPrices.showInfoWindow(Main.getMainScene(), differenceMap);
+        }
     }
 
     public boolean projectSelected() {
@@ -153,10 +209,6 @@ public class ProjectHandler {
 
     JSONObject getProjectJSONObject() {
         return projectJSONObject;
-    }
-
-    void setProjectJSONObject(JSONObject projectJSONObject) {
-        this.projectJSONObject = projectJSONObject;
     }
 
     public String getCurrentProjectName() {

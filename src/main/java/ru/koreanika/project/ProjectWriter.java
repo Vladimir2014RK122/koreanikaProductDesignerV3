@@ -4,6 +4,7 @@ import javafx.embed.swing.SwingFXUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.koreanika.Common.Material.Material;
+import ru.koreanika.Common.Material.MaterialSheet;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.NotificationEvent;
 import ru.koreanika.service.eventbus.EventBus;
@@ -28,6 +29,7 @@ public class ProjectWriter {
     private final ProjectHandler projectHandler;
     private final EventBus eventBus;
 
+    // TODO get rid of ProjectHandler dependency
     ProjectWriter(ProjectHandler projectHandler) {
         this.projectHandler = projectHandler;
         this.eventBus = ServiceLocator.getService("EventBus", EventBus.class);
@@ -81,7 +83,7 @@ public class ProjectWriter {
             for (Material material : Project.getMaterials()) {
                 materialsList.add(material.getName() + "#" + material.getDefaultDepth());//deprecated
 
-                JSONObject materialObject = material.getJsonView();
+                JSONObject materialObject = getJsonView(material);
                 materialsNewList.add(materialObject);
             }
 
@@ -176,6 +178,33 @@ public class ProjectWriter {
         } else {
             System.err.println("Try to save user project. Error: userProject object = null");
         }
+    }
+
+    private JSONObject getJsonView(Material material) {
+        JSONObject materialObject = new JSONObject();
+        materialObject.put("id", material.getId());
+        materialObject.put("name", material.getName());
+        materialObject.put("defaultDepth", material.getDefaultDepth());
+        materialObject.put("useMainSheets", material.isUseMainSheets());
+        materialObject.put("useAdditionalSheets", material.isUseAdditionalSheets());
+        materialObject.put("availableMainSheetsCount", material.getAvailableMainSheetsCount());
+
+        JSONArray additionalSheetsJsonArray = new JSONArray();
+
+        for (MaterialSheet materialSheet : material.getAvailableAdditionalSheets()) {
+            JSONObject sheetObject = new JSONObject();
+
+            sheetObject.put("width", materialSheet.getSheetWidth());
+            sheetObject.put("height", materialSheet.getSheetHeight());
+            sheetObject.put("depth", materialSheet.getSheetDepth());
+            sheetObject.put("priceForMeter", materialSheet.getSheetCustomPriceForMeter());
+            sheetObject.put("currency", materialSheet.getSheetCurrency());
+
+            additionalSheetsJsonArray.add(sheetObject);
+        }
+        materialObject.put("additionalSheets", additionalSheetsJsonArray);
+
+        return materialObject;
     }
 
 }

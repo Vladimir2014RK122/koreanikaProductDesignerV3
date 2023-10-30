@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ru.koreanika.Common.Material.MaterialSheet;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.ProjectClosedEvent;
 import ru.koreanika.service.eventbus.EventBus;
@@ -28,7 +29,7 @@ import java.util.Map;
 
 public class CheckSheetsPrices {
 
-    public static boolean checkPrices(Material material, Material.MaterialSheet materialSheet){
+    public static boolean checkPrices(Material material, MaterialSheet materialSheet){
         boolean theSame = false;
 
         if(materialSheet.isAdditionalSheet()) return true;
@@ -60,7 +61,7 @@ public class CheckSheetsPrices {
         return theSame;
     }
 
-    public static void setActualPrices(Material material, Material.MaterialSheet materialSheet){
+    public static void setActualPrices(Material material, MaterialSheet materialSheet){
 
         //set prices:
         materialSheet.getTableTopDepthsAndPrices().clear();
@@ -103,7 +104,7 @@ public class CheckSheetsPrices {
 
     }
 
-    public static void showInfoWindow(Scene mainScene, LinkedHashMap<Material, ArrayList<Material.MaterialSheet>> differenceMap){
+    public static void showInfoWindow(Scene mainScene, LinkedHashMap<Material, ArrayList<MaterialSheet>> differenceMap){
         new InfoWindow().showInfoWindow(mainScene, differenceMap);
     }
 
@@ -117,9 +118,9 @@ public class CheckSheetsPrices {
         Button btnUpdatePrices, btnSaveOldPrices;
         TableView<TableItem> tableView;
 
-        LinkedHashMap<Material, ArrayList<Material.MaterialSheet>> differenceMap;
+        LinkedHashMap<Material, ArrayList<MaterialSheet>> differenceMap;
 
-        public void showInfoWindow(Scene mainScene, LinkedHashMap<Material, ArrayList<Material.MaterialSheet>> differenceMap){
+        public void showInfoWindow(Scene mainScene, LinkedHashMap<Material, ArrayList<MaterialSheet>> differenceMap){
 
             this.differenceMap = differenceMap;
             this.mainScene = mainScene;
@@ -174,7 +175,7 @@ public class CheckSheetsPrices {
 
             ObservableList<TableItem> list = FXCollections.observableList(new ArrayList<>());
             int i =1;
-            for(Map.Entry<Material, ArrayList<Material.MaterialSheet>> entry : differenceMap.entrySet()){
+            for(Map.Entry<Material, ArrayList<MaterialSheet>> entry : differenceMap.entrySet()){
                 int number = i++;
                 String materialName = entry.getKey().getReceiptName();
                 int sheetsNumber = entry.getValue().size();
@@ -198,8 +199,8 @@ public class CheckSheetsPrices {
         private void initControlsLogic(){
             btnUpdatePrices.setOnMouseClicked(event -> {
 
-                for(Map.Entry<Material, ArrayList<Material.MaterialSheet>> entry : differenceMap.entrySet()){
-                    for(Material.MaterialSheet sheet : entry.getValue()){
+                for(Map.Entry<Material, ArrayList<MaterialSheet>> entry : differenceMap.entrySet()){
+                    for(MaterialSheet sheet : entry.getValue()){
                         CheckSheetsPrices.setActualPrices(entry.getKey(), sheet);
                     }
                 }
