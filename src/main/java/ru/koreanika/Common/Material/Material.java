@@ -263,7 +263,7 @@ public class Material {
 
             if (remoteImagePaths == null || remoteImagePaths.isEmpty()) {
                 try {
-                    Image image = new Image(new FileInputStream("materials_resources/no_img.png"));
+                    Image image = new Image(new FileInputStream("materials_resources/no_image.png"));
                     materialImage = new MaterialImage(image);
                     materialImageUpdatePending = false;
                 } catch (FileNotFoundException e) {
@@ -274,7 +274,7 @@ public class Material {
                 Image image = imageLoader.getImageByPath(remoteImagePaths.get(0));
                 if (image == null) {
                     try {
-                        image = new Image(new FileInputStream("materials_resources/no_photo_large.png"));
+                        image = new Image(new FileInputStream("materials_resources/no_image.png"));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

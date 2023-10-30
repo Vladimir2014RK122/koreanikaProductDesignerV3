@@ -99,7 +99,7 @@ public class MaterialImageModalWindowController {
         List<String> remoteImagePaths = imageIndex.get(material.getId());
         if (remoteImagePaths == null || remoteImagePaths.isEmpty()) {
             try {
-                Image image = new Image(new FileInputStream("materials_resources/no_photo_large.png"));
+                Image image = new Image(new FileInputStream("materials_resources/no_image.png"));
                 images.add(image);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
