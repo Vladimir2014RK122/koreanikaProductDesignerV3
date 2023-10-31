@@ -39,6 +39,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 
 public class Main extends Application {
 
@@ -464,6 +465,12 @@ public class Main extends Application {
         if (needToSave) {
             saveProperties();
         }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        ExecutorService executor = ServiceLocator.getService("ExecutorService", ExecutorService.class);
+        executor.shutdownNow();
     }
 
     private static synchronized void saveProperties() {

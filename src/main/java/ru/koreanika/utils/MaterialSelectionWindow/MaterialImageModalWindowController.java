@@ -6,7 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import ru.koreanika.Common.Material.ImageIndex;
 import ru.koreanika.Common.Material.ImageLoader;
 import ru.koreanika.Common.Material.Material;
@@ -21,12 +23,11 @@ import java.util.List;
 
 public class MaterialImageModalWindowController {
 
-    private final ImageIndex imageIndex;
-
-    private final ImageLoader imageLoader;
-
     @FXML
     private Pane slideShowRootPane;
+
+    @FXML
+    private Button closeWindowButton;
 
     @FXML
     private Button leftButton;
@@ -37,11 +38,17 @@ public class MaterialImageModalWindowController {
     @FXML
     private ImageView imageView;
 
+    private final ImageIndex imageIndex;
+    private final ImageLoader imageLoader;
     private int currentImageIndex;
-
     private final List<Image> images;
 
-    public MaterialImageModalWindowController() {
+    private final Stage stage;
+
+    private double xOffset = 0.0;
+    private double yOffset = 0.0;
+
+    public MaterialImageModalWindowController(Stage stage) {
         try (InputStream in = getClass().getResourceAsStream("/fxmls/MaterialManager/materialImageModalWindow.fxml")) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setController(this);
@@ -49,6 +56,8 @@ public class MaterialImageModalWindowController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        this.stage = stage;
 
         imageIndex = ServiceLocator.getService("ImageIndex", ImageIndex.class);
         imageLoader = ServiceLocator.getService("ImageLoader", ImageLoader.class);
@@ -68,6 +77,20 @@ public class MaterialImageModalWindowController {
                 this.imageView.setImage(images.get(currentImageIndex));
             }
         });
+
+        // drag and drop
+        this.slideShowRootPane.setOnMousePressed((MouseEvent event) -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        this.slideShowRootPane.setOnMouseDragged((MouseEvent event) -> {
+            stage.setX(event.getScreenX() - xOffset);
+            stage.setY(event.getScreenY() - yOffset);
+        });
+
+        // close
+        this.closeWindowButton.setOnAction(event -> stage.close());
     }
 
     public void setMaterial(Material material) {
@@ -76,7 +99,7 @@ public class MaterialImageModalWindowController {
         List<String> remoteImagePaths = imageIndex.get(material.getId());
         if (remoteImagePaths == null || remoteImagePaths.isEmpty()) {
             try {
-                Image image = new Image(new FileInputStream("materials_resources/no_img.png"));
+                Image image = new Image(new FileInputStream("materials_resources/no_image.png"));
                 images.add(image);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

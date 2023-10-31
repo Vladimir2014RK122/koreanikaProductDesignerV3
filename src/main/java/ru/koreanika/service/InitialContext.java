@@ -4,6 +4,8 @@ import ru.koreanika.Common.Material.CachingImageLoader;
 import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.service.eventbus.EventBus;
 
+import java.util.concurrent.Executors;
+
 public class InitialContext {
     public Object lookup(String serviceName) {
         if (serviceName.equalsIgnoreCase("EventBus")) {
@@ -17,6 +19,9 @@ public class InitialContext {
         }
         if (serviceName.equalsIgnoreCase("ProjectHandler")) {
             return new ProjectHandler();
+        }
+        if (serviceName.equalsIgnoreCase("ExecutorService")) {
+            return Executors.newSingleThreadExecutor();
         }
         return null;
     }

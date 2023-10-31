@@ -10,6 +10,7 @@ import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.*;
 
@@ -34,6 +35,7 @@ public class Material {
     private String depthsString = "";
 
     private Image textureImage;
+    private boolean textureImageUpdatePending = false;
 
     private double materialWidth = 0;//mm
     private double materialHeight = 0;//mm
@@ -227,19 +229,30 @@ public class Material {
     }
 
     public Image getTextureImage() {
-        if (textureImage == null) {
+        if (textureImage == null || textureImageUpdatePending) {
             ImageIndex imageIndex = ServiceLocator.getService("ImageIndex", ImageIndex.class);
             List<String> remoteImagePaths = imageIndex.get(this.id);
 
             if (remoteImagePaths == null || remoteImagePaths.isEmpty()) {
                 try {
-                    textureImage = new Image(new FileInputStream("materials_resources/no_img.png"));
+                    textureImage = new Image(new FileInputStream("materials_resources/no_image.png"));
+                    textureImageUpdatePending = false;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             } else {
                 ImageLoader imageLoader = ServiceLocator.getService("ImageLoader", ImageLoader.class);
                 textureImage = imageLoader.getImageByPath(remoteImagePaths.get(0));
+                if (textureImage == null) {
+                    try {
+                        textureImage = new Image(new FileInputStream("materials_resources/no_image.png"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    textureImageUpdatePending = true;
+                } else {
+                    textureImageUpdatePending = false;
+                }
             }
         }
         return textureImage;
