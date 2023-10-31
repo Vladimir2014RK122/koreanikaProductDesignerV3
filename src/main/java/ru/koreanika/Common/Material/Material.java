@@ -24,6 +24,7 @@ import ru.koreanika.utils.ProjectHandler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.*;
 
@@ -53,6 +54,7 @@ public class Material {
 //    ImageView materialImage;
 
     private MaterialImage materialImage;
+    private boolean materialImageUpdatePending = false;
 
     double materialWidth = 0;//mm
     double materialHeight = 0;//mm
@@ -255,20 +257,31 @@ public class Material {
     }
 
     public MaterialImage getMaterialImage() {
-        if (materialImage == null) {
+        if (materialImage == null || materialImageUpdatePending) {
             ImageIndex imageIndex = ServiceLocator.getService("ImageIndex", ImageIndex.class);
             List<String> remoteImagePaths = imageIndex.get(this.id);
 
             if (remoteImagePaths == null || remoteImagePaths.isEmpty()) {
                 try {
-                    Image image = new Image(new FileInputStream("materials_resources/no_img.png"));
+                    Image image = new Image(new FileInputStream("materials_resources/no_image.png"));
                     materialImage = new MaterialImage(image);
+                    materialImageUpdatePending = false;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             } else {
                 ImageLoader imageLoader = ServiceLocator.getService("ImageLoader", ImageLoader.class);
                 Image image = imageLoader.getImageByPath(remoteImagePaths.get(0));
+                if (image == null) {
+                    try {
+                        image = new Image(new FileInputStream("materials_resources/no_image.png"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    materialImageUpdatePending = true;
+                } else {
+                    materialImageUpdatePending = false;
+                }
                 materialImage = new MaterialImage(image);
             }
         }

@@ -1,5 +1,7 @@
 package ru.koreanika.utils;
 
+import ru.koreanika.Common.Material.CachingImageLoader;
+import ru.koreanika.Common.Material.ImageLoader;
 import ru.koreanika.PortalClient.Authorization.Authorization;
 import ru.koreanika.PortalClient.Maintenance.ClimeType;
 import ru.koreanika.PortalClient.Maintenance.MaintenanceMessage;
@@ -20,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.utils.Currency.BankCurrency;
 import ru.koreanika.utils.Currency.UserCurrency;
 import ru.koreanika.utils.News.NewsController;
@@ -33,6 +36,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 
 public class Main extends Application {
 
@@ -452,6 +456,12 @@ public class Main extends Application {
         if (needToSave) {
             saveProperties();
         }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        ExecutorService executor = ServiceLocator.getService("ExecutorService", ExecutorService.class);
+        executor.shutdownNow();
     }
 
     private static synchronized void saveProperties() {

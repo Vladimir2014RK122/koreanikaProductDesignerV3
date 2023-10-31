@@ -1,7 +1,6 @@
 package ru.koreanika.utils.MaterialSelectionWindow;
 
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -11,11 +10,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.Preferences.UserPreferences;
 import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.ImageCachedEvent;
+import ru.koreanika.service.event.ImageCachedEventHandler;
 import ru.koreanika.service.event.MouseClickedEvent;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
@@ -33,7 +35,7 @@ import ru.koreanika.utils.Receipt.ReceiptManager;
 import java.io.IOException;
 import java.util.*;
 
-public class MaterialSelectionWindow {
+public class MaterialSelectionWindow implements ImageCachedEventHandler {
 
     private final MaterialImageModalWindowController modalWindowController;
     private final Stage materialImageModalStage;
@@ -185,11 +187,13 @@ public class MaterialSelectionWindow {
         });
 
         // material images slideshow
-        modalWindowController = new MaterialImageModalWindowController();
         materialImageModalStage = new Stage();
+        modalWindowController = new MaterialImageModalWindowController(materialImageModalStage);
         materialImageModalStage.setScene(new Scene(modalWindowController.getRootElement()));
         materialImageModalStage.initOwner(null);
         materialImageModalStage.initModality(Modality.APPLICATION_MODAL);
+        materialImageModalStage.initStyle(StageStyle.UNDECORATED);
+        materialImageModalStage.setResizable(false);
         imageViewSelectedMaterial.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
             materialImageModalStage.showAndWait();
             materialImageModalStage.toFront();
@@ -361,6 +365,22 @@ public class MaterialSelectionWindow {
         this.firstStartFlag = firstStartFlag;
     }
 
+    @Override
+    public void onEvent(ImageCachedEvent e) {
+        // TODO check if the image cached belongs to the currently selected material
+        Platform.runLater(() -> {
+            TreeItem<MaterialTreeCellItem> i = treeViewAvailable.getSelectionModel().getSelectedItem();
+            if (i != null) {
+                if (i.isLeaf()) {
+                    MaterialTreeCellItem treeCellItem = i.getValue();
+                    if (treeCellItem instanceof MaterialItem) {
+                        showInfo(((MaterialItem) treeCellItem).getMaterial());
+                    }
+                }
+            }
+        });
+    }
+
     private void showInfo(Material material) {
         String mainType = material.getMainType() + "\n";
         String subType = material.getSubType() + "\n";
@@ -454,6 +474,8 @@ public class MaterialSelectionWindow {
             }
         });
 
+        // update views when images are cached
+        eventBus.addHandler(ImageCachedEvent.TYPE, this);
     }
 
     private void initFilterPropertyField(TitledPane titledPane, ListView<CheckBox> listView, Set<String> availableProps) {
