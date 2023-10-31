@@ -3,7 +3,6 @@ package ru.koreanika.project;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.koreanika.Common.Material.Material;
-import ru.koreanika.catalog.Catalogs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.Map;
 
 public class MaterialFactory {
 
-    public static Material getFromJson(JSONObject materialObject) {
+    public static Material buildFromJSON(JSONObject materialObject, List<Material> materialsCatalog) {
         Material material = null;
 
         String id = (String) materialObject.get("id");
@@ -35,7 +34,7 @@ public class MaterialFactory {
             //created from template
             Material templateMaterial = null;
             boolean foundTemplate = false;
-            for (Material m : Catalogs.getMaterialsListAvailable()) {
+            for (Material m : materialsCatalog) {
                 // try to resolve material template based on Material ID
                 if (m.getId() != null && id != null && !id.isEmpty() && m.getId().equals(id)) {
                     System.out.println("DEBUG: [1] Material template resolved by ID, id = " + id);
@@ -54,7 +53,7 @@ public class MaterialFactory {
                 }
             }
             if (!foundTemplate) {
-                for (Material m : Catalogs.getMaterialsListAvailable()) {
+                for (Material m : materialsCatalog) {
                     String condName = name.split("\\$")[0] + "$" + name.split("\\$")[1] + "$" + name.split("\\$")[2] + "$" + "Другой";
                     if ((m.getMainType() + "$" + m.getSubType() + "$" + m.getCollection() + "$" + m.getColor()).equalsIgnoreCase(condName)) {
                         templateMaterial = m;
@@ -93,7 +92,7 @@ public class MaterialFactory {
             //from availableList
             boolean foundTemplate = false;
 
-            for (Material m : Catalogs.getMaterialsListAvailable()) {
+            for (Material m : materialsCatalog) {
                 // try to resolve material template based on Material ID
                 if (m.getId() != null && id != null && !id.isEmpty() && m.getId().equals(id)) {
                     System.out.println("DEBUG: [2] Material template resolved by ID, id = " + id);

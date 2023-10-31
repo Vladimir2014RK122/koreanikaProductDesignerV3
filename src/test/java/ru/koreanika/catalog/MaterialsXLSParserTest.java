@@ -6,8 +6,6 @@ import ru.koreanika.Common.Material.ImageIndex;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
 import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
-import ru.koreanika.catalog.FacadeXLSParser;
-import ru.koreanika.catalog.MaterialsXLSParser;
 import ru.koreanika.service.ServiceLocator;
 
 import java.io.IOException;

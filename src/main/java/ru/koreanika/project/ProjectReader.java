@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import ru.koreanika.Common.Material.Material;
-import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
@@ -15,15 +14,18 @@ import ru.koreanika.utils.MainWindow;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class ProjectReader {
 
+    private final List<Material> materialsCatalog;
     private String errorMessage;
 
-    ProjectReader() {
+    ProjectReader(List<Material> materialsCatalog) {
+        this.materialsCatalog = materialsCatalog;
     }
 
     JSONObject read(String projectPath) throws NullPointerException {
@@ -170,7 +172,7 @@ public class ProjectReader {
                 for (Object obj : materialsNewList) {
                     JSONObject materialObject = (JSONObject) obj;
 
-                    Material material = MaterialFactory.getFromJson(materialObject);
+                    Material material = MaterialFactory.buildFromJSON(materialObject, materialsCatalog);
                     if (material != null) {
                         Project.getMaterials().add(material);
                     } else {
@@ -209,7 +211,7 @@ public class ProjectReader {
                 Project.setPriceMaterialCoefficient(priceMaterialCoefficientDouble);
             }
 
-            System.out.println("Default material = " + Project.getDefaultMaterial().getName());
+            System.out.println("Default material = " + (Project.getDefaultMaterial() != null ? Project.getDefaultMaterial().getName() : "null"));
 
             if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
                 /** Cut designer*/
@@ -251,7 +253,7 @@ public class ProjectReader {
         return errorMessage;
     }
 
-    public static Material findMaterialTemplateByName(String str) throws NumberFormatException {
+    private Material findMaterialTemplateByName(String str) throws NumberFormatException {
         String[] materialStrArrWithDepth = str.split("#");
         String[] materialStrArr = materialStrArrWithDepth[0].split("\\$");
 
@@ -266,7 +268,7 @@ public class ProjectReader {
 
         String nameForFind = mainType + "$" + subType + "$" + collection + "$" + color + "$" + width + "$" + height + "$" + imgPath + "$" + depthsString;
 
-        for (Material m : Catalogs.getMaterialsListAvailable()) {
+        for (Material m : materialsCatalog) {
             if (m.getName().contains(nameForFind)) {
                 return m;
             }

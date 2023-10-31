@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.Common.Material.MaterialSheet;
+import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.NotificationEvent;
@@ -35,7 +36,7 @@ public class ProjectHandler {
 
     public ProjectHandler() {
         this.eventBus = ServiceLocator.getService("EventBus", EventBus.class);
-        this.projectReader = new ProjectReader();
+        this.projectReader = new ProjectReader(Catalogs.getMaterialsListAvailable());
         this.projectWriter = new ProjectWriter(this);
     }
 
