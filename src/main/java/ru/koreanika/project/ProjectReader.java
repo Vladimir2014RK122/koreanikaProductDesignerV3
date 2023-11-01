@@ -1,289 +1,162 @@
 package ru.koreanika.project;
 
 import javafx.scene.image.Image;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import ru.koreanika.Common.Material.Material;
-import ru.koreanika.cutDesigner.CutDesigner;
-import ru.koreanika.sketchDesigner.SketchDesigner;
-import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.Main;
-import ru.koreanika.utils.MainWindow;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+
+/**
+ * Поддерживаются три формата файла проекта
+ * - plain-text JSON
+ * - зазипованный JSON
+ * - зазипованный JSON cо сдвигом байтов (~закодированный)
+ */
 public class ProjectReader {
 
-    private final List<Material> materialsCatalog;
-    private String errorMessage;
+    private final Deque<String> errorMessages = new ArrayDeque<>();
 
-    ProjectReader(List<Material> materialsCatalog) {
-        this.materialsCatalog = materialsCatalog;
+    public ProjectReader() {
     }
 
-    JSONObject read(String projectPath) throws NullPointerException {
-        errorMessage = null;
+    private static boolean checkZipFile(File projectFile) {
+        boolean result;
+        try (ZipFile zipFile = new ZipFile(projectFile, StandardCharsets.UTF_8)) {
+            zipFile.getName();
+            result = true;
+        } catch (IOException e) {
+            result = false;
+        }
+        return result;
+    }
 
+    private static boolean checkOldProject(InputStream in) {
+        boolean isOldProject;
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject parsedProject = (JSONObject) jsonParser.parse(bufferedReader);
+            isOldProject = true;
+        } catch (ParseException | IOException e) {
+            isOldProject = false;
+        }
+        return isOldProject;
+    }
+
+    private static String applyNameSubstitutions(String project) {
+        System.out.println("BEFORE NAME SUBSTITUTION: " + project);
+        String res = project.replace("Массив$", "Массив_шпон$");
+        System.out.println("AFTER NAME SUBSTITUTION:  " + res);
+        return res;
+    }
+
+    JSONObject read(String projectPath) {
+        errorMessages.clear();
+
+        JSONObject parsedProject;
+        try {
+            boolean isOldProject = checkOldProject(new FileInputStream(projectPath));
+            boolean isZipProject = checkZipFile(new File(projectPath));
+
+            FileInputStream in = new FileInputStream(projectPath);
+            if (isOldProject) {
+                System.out.println("Open project: " + projectPath + " (OLD TEXT type)");
+                parsedProject = readOldProject(in);
+            } else if (isZipProject) {
+                System.out.println("Open project: " + projectPath + " (ZIP type)");
+                parsedProject = readZipProject(in);
+            } else {
+                System.out.println("Open project: " + projectPath + " (ZIP ENCRYPTED type)");
+                parsedProject = readZipProject(new CustomDecryptInputStream(in));
+            }
+        } catch (FileNotFoundException e) {
+            errorMessages.push("Файл не найден");
+            return null;
+        } catch (IOException e) {
+            errorMessages.push("Ошибка контента");
+            return null;
+        } catch (ParseException e) {
+            errorMessages.push("Поврежден mainInfo файл");
+            return null;
+        }
+
+        return parsedProject;
+    }
+
+    public String getLastErrorMessage() {
+        return errorMessages.peek();
+    }
+
+    private JSONObject readOldProject(InputStream in) throws ParseException, IOException {
+        return parseProjectData(in, true);
+    }
+
+    /**
+     * TODO this method has a side-effect (writes to Project)!!! Eliminate it.
+     * <p>
+     * Note that an encrypted file will not be detected as ZIP.
+     */
+    private JSONObject readZipProject(InputStream in) throws IOException, ParseException {
         JSONObject parsedProject = null;
+        try (ZipInputStream zis = new ZipInputStream(in, StandardCharsets.UTF_8)) {
+            ZipEntry zipEntry;
+            while ((zipEntry = zis.getNextEntry()) != null) {
+                if (zipEntry.getName().equals("mainInfo.json")) {
+                    parsedProject = parseProjectData(zis, false);
+                } else if (zipEntry.getName().equals("receiptManagerSketchImage.png")) {
+                    Project.setReceiptManagerSketchImage(new Image(zis));
+                }
+            }
+        }
+        return parsedProject;
+    }
+
+    private JSONObject parseProjectData(InputStream in, boolean close) throws ParseException, IOException {
         JSONParser jsonParser = new JSONParser();
 
-        try {
-            boolean isZipProject = false;
-            boolean isOldProject = false;
-            boolean isENCRYPTEDProject = false;
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        JSONObject parsedProject = (JSONObject) jsonParser.parse(bufferedReader);
+        String s = applyNameSubstitutions(parsedProject.toString());
+        parsedProject = (JSONObject) jsonParser.parse(s);
 
-            //check if it .zip type of project:
-            {
-                try {
-                    ZipFile zipFile = new ZipFile(projectPath);
-                    zipFile.getName();
-                    isZipProject = true;
-                } catch (IOException e) {
-                    isZipProject = false;
-                }
-            }
-
-            // check if it old text format
-            {
-                try {
-                    File file = new File(projectPath);
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
-
-                    parsedProject = (JSONObject) jsonParser.parse(bufferedReader);
-
-                    bufferedReader.close();
-                    isOldProject = true;
-                } catch (ParseException e) {
-                    isOldProject = false;
-                } catch (IOException e) {
-                    isOldProject = false;
-                }
-            }
-
-            if (isOldProject) {
-                //open old type project .json
-                {
-                    File file = new File(projectPath);
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
-
-                    parsedProject = (JSONObject) jsonParser.parse(bufferedReader);
-
-                    String s = changeDektoneNameInProject(parsedProject.toString());
-                    parsedProject = (JSONObject) jsonParser.parse(s);
-
-                    bufferedReader.close();
-                }
-                System.out.println("Open project: " + projectPath + " (OLD TEXT type)");
-            } else if (isZipProject) {
-                //open .zip
-                {
-                    FileInputStream fileInputStream = new FileInputStream(projectPath);
-                    ZipInputStream zis = new ZipInputStream(fileInputStream, StandardCharsets.UTF_8);
-                    BufferedInputStream bis = new BufferedInputStream(zis);
-                    ZipEntry zipEntry;
-                    while ((zipEntry = zis.getNextEntry()) != null) {
-
-                        if (zipEntry.getName().equals("mainInfo.json")) {
-                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zis, StandardCharsets.UTF_8));
-                            parsedProject = (JSONObject) jsonParser.parse(bufferedReader);
-
-                            String s = changeDektoneNameInProject(parsedProject.toString());
-                            parsedProject = (JSONObject) jsonParser.parse(s);
-
-                        } else if (zipEntry.getName().equals("receiptManagerSketchImage.png")) {
-                            Project.setReceiptManagerSketchImage(new Image(zis));
-                            System.out.println("HAVE IMAGE");
-                        }
-                    }
-                    bis.close();
-                }
-
-                System.out.println("Open project: " + projectPath + " (ZIP type)");
-
-            } else {
-                /* ADD CUSTOM DECRYPT */
-                {
-                    FileInputStream fileInputStream = new FileInputStream(projectPath);
-
-                    byte[] buf = new byte[fileInputStream.available()];
-                    fileInputStream.read(buf);
-                    fileInputStream.close();
-
-                    for (int i = 0; i < buf.length; i++) {
-                        buf[i] -= 76;
-                    }
-
-                    FileOutputStream fileOutputStream = new FileOutputStream(projectPath);
-                    fileOutputStream.write(buf);
-
-                    fileOutputStream.close();
-                }
-
-                //open .zip
-                {
-                    FileInputStream fileInputStream = new FileInputStream(projectPath);
-                    ZipInputStream zis = new ZipInputStream(fileInputStream);
-                    BufferedInputStream bis = new BufferedInputStream(zis);
-                    ZipEntry zipEntry;
-                    while ((zipEntry = zis.getNextEntry()) != null) {
-
-                        if (zipEntry.getName().equals("mainInfo.json")) {
-                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zis, StandardCharsets.UTF_8));
-                            parsedProject = (JSONObject) jsonParser.parse(bufferedReader);
-
-                            String s = changeDektoneNameInProject(parsedProject.toString());
-                            parsedProject = (JSONObject) jsonParser.parse(s);
-
-                        } else if (zipEntry.getName().equals("receiptManagerSketchImage.png")) {
-                            Project.setReceiptManagerSketchImage(new Image(zis));
-                        }
-                    }
-                    bis.close();
-                }
-
-                System.out.println("parsedproject = " + parsedProject);
-                System.out.println("parsedproject.toString() = " + parsedProject.toString());
-                System.out.println("Open project: " + projectPath + " (ZIP ENCRYPTED type)");
-            }
-
-            /** System data: */
-            JSONObject info = (JSONObject) parsedProject.get("info");  // TODO not used?
-
-            /** Project settings*/
-            JSONObject projectSettings = (JSONObject) parsedProject.get("ProjectSettings");
-
-            //material settings:
-            JSONObject materialSettings = (JSONObject) projectSettings.get("materialSettings");
-            JSONArray materialsList = (JSONArray) materialSettings.get("materialsList");
-            JSONArray materialsNewList = (JSONArray) materialSettings.get("materialsNewList");
-
-            Project.setProjectType(ProjectType.valueOf((String) projectSettings.get("projectType")));
-
-            /** Materials */
-            //fill materials in project:
-            if (materialsNewList != null) {
-                for (Object obj : materialsNewList) {
-                    JSONObject materialObject = (JSONObject) obj;
-
-                    Material material = MaterialFactory.buildFromJSON(materialObject, materialsCatalog);
-                    if (material != null) {
-                        Project.getMaterials().add(material);
-                    } else {
-                        errorMessage = "Ошибка распаковки материала " + materialObject.get("name");
-                    }
-                }
-            } else {
-                for (Object str : materialsList) {
-                    String materialName = (String) str;
-                    System.out.println("materialsList item = " + materialName);
-
-                    Material materialTemplate = findMaterialTemplateByName(materialName);
-                    if (materialTemplate == null) {
-                        errorMessage = "Материал не существует: " + str;
-                    } else {
-                        Project.getMaterials().add(materialTemplate);
-                    }
-                }
-            }
-
-            // set default material, if not specified in project
-            for (Material material : Project.getMaterials()) {
-                if (((String) materialSettings.get("defaultMaterial")).contains(material.getName())) {
-                    Project.setDefaultMaterial(material);
-                }
-            }
-
-            //project coefficients for price:
-            Double priceMainCoefficientDouble = (Double) projectSettings.get("priceMainCoefficient");
-            Double priceMaterialCoefficientDouble = (Double) projectSettings.get("priceMaterialCoefficient");
-            if (priceMainCoefficientDouble == null || priceMaterialCoefficientDouble == null) {
-                Project.setPriceMainCoefficient(Main.mainCoefficient);
-                Project.setPriceMaterialCoefficient(Main.materialCoefficient);
-            } else {
-                Project.setPriceMainCoefficient(priceMainCoefficientDouble);
-                Project.setPriceMaterialCoefficient(priceMaterialCoefficientDouble);
-            }
-
-            System.out.println("Default material = " + (Project.getDefaultMaterial() != null ? Project.getDefaultMaterial().getName() : "null"));
-
-            if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
-                /** Cut designer*/
-                JSONObject cutDesigner = (JSONObject) parsedProject.get("CutDesigner");
-                MainWindow.getCutDesigner().initFromJson(cutDesigner);
-
-                JSONObject tableDesignerJSONObject = (JSONObject) parsedProject.get("TableDesigner");
-                MainWindow.setTableDesigner(TableDesigner.initFromJSON(tableDesignerJSONObject));
-
-                CutDesigner.getInstance().refreshCutView(); //need for correct calculate usesList in Material sheets
-            } else if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
-                /** Sketch designer*/
-                JSONObject sketchDesigner = (JSONObject) parsedProject.get("SketchDesigner");
-                SketchDesigner.setInstanceFromJson(sketchDesigner);
-
-                /** Cut designer*/
-                JSONObject cutDesigner = (JSONObject) parsedProject.get("CutDesigner");
-                MainWindow.getCutDesigner().initFromJson(cutDesigner);
-            }
-
-            /** receiptManager*/
-            JSONObject jsonObjectReceiptManager = (JSONObject) parsedProject.get("receiptManager");
-            MainWindow.getReceiptManager().initFromJsonObject(jsonObjectReceiptManager);
-
-            return parsedProject;
-
-        } catch (ParseException exio) {
-            System.out.println("cant Parse project");
-            errorMessage = "Поврежден mainInfo файл";
-            return null;
-        } catch (IOException exio) {
-            System.out.println("IOException");
-            errorMessage = "Ошибка контента";
-            return null;
+        if (close) {
+            bufferedReader.close();
         }
+        return parsedProject;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
+    private static class CustomDecryptInputStream extends FilterInputStream {
 
-    private Material findMaterialTemplateByName(String str) throws NumberFormatException {
-        String[] materialStrArrWithDepth = str.split("#");
-        String[] materialStrArr = materialStrArrWithDepth[0].split("\\$");
+        public static final int CUSTOM_BYTE_OFFSET = 76;
 
-        String mainType = materialStrArr[0];
-        String subType = materialStrArr[1];
-        String collection = materialStrArr[2];
-        String color = materialStrArr[3];
-        double width = Double.parseDouble(materialStrArr[4]);
-        double height = Double.parseDouble(materialStrArr[5]);
-        String imgPath = (materialStrArr.length == 8 ? materialStrArr[6] : "no_img.png");
-        String depthsString = materialStrArr[7];
-
-        String nameForFind = mainType + "$" + subType + "$" + collection + "$" + color + "$" + width + "$" + height + "$" + imgPath + "$" + depthsString;
-
-        for (Material m : materialsCatalog) {
-            if (m.getName().contains(nameForFind)) {
-                return m;
-            }
+        public CustomDecryptInputStream(InputStream in) {
+            super(in);
         }
-        return null;
-    }
 
-    private static String changeDektoneNameInProject(String project) {
-        System.out.println("BEFORE : " + project);
-        String res = project.replace("Dektone$D", "Кварцекерамический камень$D");
+        @Override
+        public int read(byte[] b) throws IOException {
+            int n = super.read(b);
+            for (int i = 0; i < b.length; i++) {
+                b[i] -= CUSTOM_BYTE_OFFSET;
+            }
+            return n;
+        }
 
-        res = project.replace("Массив$", "Массив_шпон$");
-        //res = project.replace("Agglocemento", "Мраморный агломерат");
-        System.out.println("AFTER : " + res);
-        return res;
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            int n = super.read(b, off, len);
+            for (int i = off; i < len; i++) {
+                b[off + i] -= CUSTOM_BYTE_OFFSET;
+            }
+            return n;
+        }
     }
 
 }
