@@ -35,7 +35,7 @@ import ru.koreanika.sketchDesigner.Joint;
 import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -175,8 +175,8 @@ public class SketchShapeRhombus extends SketchShape {
         }
 
 
-        initShapeMaterial(ProjectHandler.getDefaultMaterial(), ProjectHandler.getDefaultMaterial().getDefaultDepth());
-        setEdgesHeights(true, ProjectHandler.getDefaultMaterial().getDefaultDepth(), Border.DEFAULT_HEIGHT);
+        initShapeMaterial(Project.getDefaultMaterial(), Project.getDefaultMaterial().getDefaultDepth());
+        setEdgesHeights(true, Project.getDefaultMaterial().getDefaultDepth(), Border.DEFAULT_HEIGHT);
 
         initShapeSettings();
         initShapeSettingsControlLogic();
@@ -1171,8 +1171,8 @@ public class SketchShapeRhombus extends SketchShape {
 
     private void updateCutShapeView() {
 
-        cutShape.setSizesInfo("ШхВ "+ (int)(sizeAShape/ProjectHandler.getCommonShapeScale()) +
-                "x" + (int)(sizeBShape/ProjectHandler.getCommonShapeScale()));
+        cutShape.setSizesInfo("ШхВ "+ (int)(sizeAShape/ Project.getCommonShapeScale()) +
+                "x" + (int)(sizeBShape/ Project.getCommonShapeScale()));
 
         //create Cut zone polygon
         ArrayList<Point2D> cutZonePolygonPoints = null;
@@ -1293,7 +1293,7 @@ public class SketchShapeRhombus extends SketchShape {
         cutShape.getDimensionHLabel().setPrefWidth(sizeH);
         cutShape.getDimensionHLabel().setTranslateX(0.0);
         cutShape.getDimensionHLabel().setTranslateY(sizeBShape / 2 - 15);
-        cutShape.getDimensionHLabel().setText(String.format("%.0f", sizeH / ProjectHandler.getCommonShapeScale()));
+        cutShape.getDimensionHLabel().setText(String.format("%.0f", sizeH / Project.getCommonShapeScale()));
         cutShape.getDimensionHLabel().toFront();
 
         cutShape.refreshLabelNumber();
@@ -1842,7 +1842,7 @@ public class SketchShapeRhombus extends SketchShape {
         checkBoxMaterialDefault.setSelected(materialDefault);
         checkBoxDefaultHeights.setSelected(edgesHeightsDefault);
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         choiceBoxMaterial.getSelectionModel().select(shapeMaterial.getReceiptName());
@@ -1878,13 +1878,13 @@ public class SketchShapeRhombus extends SketchShape {
 
         checkBoxMaterialDefault.setOnMouseClicked(event -> {
             if (checkBoxMaterialDefault.isSelected()) {
-                choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+                choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
                 choiceBoxMaterial.setDisable(true);
 
                 choiceBoxMaterialDepth.getSelectionModel().select(String.valueOf(shapeMaterial.getDefaultDepth()));
                 choiceBoxMaterialDepth.setDisable(true);
 
-                if (ProjectHandler.getDefaultMaterial().getName().indexOf("Акриловый камень") != -1 || ProjectHandler.getDefaultMaterial().getName().indexOf("Полиэфирный камень") != -1) {
+                if (Project.getDefaultMaterial().getName().indexOf("Акриловый камень") != -1 || Project.getDefaultMaterial().getName().indexOf("Полиэфирный камень") != -1) {
 
                     checkBoxSaveImage.setDisable(true);
                     checkBoxSaveImage.setSelected(false);
@@ -1932,7 +1932,7 @@ public class SketchShapeRhombus extends SketchShape {
             if (newValue == null) return;
 
 
-            for (Material m : ProjectHandler.getMaterialsListInProject()) {
+            for (Material m : Project.getMaterials()) {
                 if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                     choiceBoxMaterialDepth.getItems().clear();
                     for (String s : m.getDepths()) {
@@ -2166,11 +2166,11 @@ public class SketchShapeRhombus extends SketchShape {
         checkBoxDefaultHeights.setSelected(edgesHeightsDefault);
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         if (!choiceBoxMaterial.getItems().contains(shapeMaterial.getReceiptName())) {
-            setShapeMaterial(ProjectHandler.getDefaultMaterial(), ProjectHandler.getDefaultMaterial().getDefaultDepth());
+            setShapeMaterial(Project.getDefaultMaterial(), Project.getDefaultMaterial().getDefaultDepth());
             //shapeMaterial = ProjectHandler.getDefaultMaterial();
         }
         choiceBoxMaterial.getSelectionModel().select(shapeMaterial.getReceiptName());
@@ -2288,13 +2288,13 @@ public class SketchShapeRhombus extends SketchShape {
         edgesHeightsDefault = checkBoxDefaultHeights.isSelected() ? true : false;
 
         if (checkBoxMaterialDefault.isSelected()) {
-            if (shapeDepth != ProjectHandler.getDefaultMaterial().getDefaultDepth() ||
-                    (!shapeMaterial.getName().equals(ProjectHandler.getDefaultMaterial()))) {
-                setShapeMaterial(ProjectHandler.getDefaultMaterial(), ProjectHandler.getDefaultMaterial().getDefaultDepth());
+            if (shapeDepth != Project.getDefaultMaterial().getDefaultDepth() ||
+                    (!shapeMaterial.getName().equals(Project.getDefaultMaterial()))) {
+                setShapeMaterial(Project.getDefaultMaterial(), Project.getDefaultMaterial().getDefaultDepth());
                 choiceBoxMaterial.getSelectionModel().select(shapeMaterial.getReceiptName());
             }
         } else {
-            for (Material material : ProjectHandler.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 if (choiceBoxMaterial.getSelectionModel().getSelectedItem().equals(material.getReceiptName())) {
                     setShapeMaterial(material, Integer.parseInt(choiceBoxMaterialDepth.getSelectionModel().getSelectedItem()));
                 }
@@ -2403,24 +2403,24 @@ public class SketchShapeRhombus extends SketchShape {
 
     @Override
     public void deleteShape() {
-        ProjectHandler.getMaterialsUsesInProjectObservable().remove(shapeMaterial.getName() + "#" + shapeDepth);
+        Project.getMaterialsInUse().remove(shapeMaterial.getName() + "#" + shapeDepth);
         if (elementType == ElementTypes.TABLETOP)
-            ProjectHandler.getDepthsTableTopsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().remove(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            ProjectHandler.getDepthsWallPanelsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().remove(String.valueOf(shapeDepth));
 
-        ProjectHandler.getEdgesHeightsUsesInProjectObservable().remove(String.valueOf(edgeHeight));
-        ProjectHandler.getBordersHeightsUsesInProjectObservable().remove(String.valueOf(borderHeight));
+        Project.getEdgesHeightsInUse().remove(String.valueOf(edgeHeight));
+        Project.getBordersHeightsInUse().remove(String.valueOf(borderHeight));
 
         SketchDesigner.getSketchPane().getChildren().remove(this);
         SketchDesigner.getSketchShapesList().remove(this);
 
 
-        for (String s : ProjectHandler.getMaterialsUsesInProjectObservable()) {
+        for (String s : Project.getMaterialsInUse()) {
             System.out.println(s);
         }
 
-        for (String s : ProjectHandler.getDepthsTableTopsUsesInProjectObservable()) {
+        for (String s : Project.getDepthsTableTopsInUse()) {
             System.out.println(s);
         }
 
@@ -2566,15 +2566,15 @@ public class SketchShapeRhombus extends SketchShape {
 
             if (!sideCEdge.getName().equals(newEdge.getName())) {
                 if (sideCEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().remove(sideCEdge);
+                    Project.getEdgesInUse().remove(sideCEdge);
                 } else if (sideCEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().remove(sideCEdge);
+                    Project.getBordersInUse().remove(sideCEdge);
                 }
 
                 if (newEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().add((Edge) newEdge);
+                    Project.getEdgesInUse().add((Edge) newEdge);
                 } else if (newEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().add((Border) newEdge);
+                    Project.getBordersInUse().add((Border) newEdge);
                 }
             }
             getChildren().remove(sideCEdge);
@@ -2588,15 +2588,15 @@ public class SketchShapeRhombus extends SketchShape {
 
             if (!sideDEdge.getName().equals(newEdge.getName())) {
                 if (sideDEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().remove(sideDEdge);
+                    Project.getEdgesInUse().remove(sideDEdge);
                 } else if (sideDEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().remove(sideDEdge);
+                    Project.getBordersInUse().remove(sideDEdge);
                 }
 
                 if (newEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().add((Edge) newEdge);
+                    Project.getEdgesInUse().add((Edge) newEdge);
                 } else if (newEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().add((Border) newEdge);
+                    Project.getBordersInUse().add((Border) newEdge);
                 }
             }
 
@@ -2611,15 +2611,15 @@ public class SketchShapeRhombus extends SketchShape {
 
             if (!sideEEdge.getName().equals(newEdge.getName())) {
                 if (sideEEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().remove(sideEEdge);
+                    Project.getEdgesInUse().remove(sideEEdge);
                 } else if (sideEEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().remove(sideEEdge);
+                    Project.getBordersInUse().remove(sideEEdge);
                 }
 
                 if (newEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().add((Edge) newEdge);
+                    Project.getEdgesInUse().add((Edge) newEdge);
                 } else if (newEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().add((Border) newEdge);
+                    Project.getBordersInUse().add((Border) newEdge);
                 }
             }
             getChildren().remove(sideEEdge);
@@ -2633,15 +2633,15 @@ public class SketchShapeRhombus extends SketchShape {
 
             if (!sideFEdge.getName().equals(newEdge.getName())) {
                 if (sideFEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().remove(sideFEdge);
+                    Project.getEdgesInUse().remove(sideFEdge);
                 } else if (sideFEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().remove(sideFEdge);
+                    Project.getBordersInUse().remove(sideFEdge);
                 }
 
                 if (newEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().add((Edge) newEdge);
+                    Project.getEdgesInUse().add((Edge) newEdge);
                 } else if (newEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().add((Border) newEdge);
+                    Project.getBordersInUse().add((Border) newEdge);
                 }
             }
             getChildren().remove(sideFEdge);
@@ -2655,15 +2655,15 @@ public class SketchShapeRhombus extends SketchShape {
 
             if (!sideGEdge.getName().equals(newEdge.getName())) {
                 if (sideGEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().remove(sideGEdge);
+                    Project.getEdgesInUse().remove(sideGEdge);
                 } else if (sideGEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().remove(sideGEdge);
+                    Project.getBordersInUse().remove(sideGEdge);
                 }
 
                 if (newEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().add((Edge) newEdge);
+                    Project.getEdgesInUse().add((Edge) newEdge);
                 } else if (newEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().add((Border) newEdge);
+                    Project.getBordersInUse().add((Border) newEdge);
                 }
             }
             getChildren().remove(sideGEdge);
@@ -2677,15 +2677,15 @@ public class SketchShapeRhombus extends SketchShape {
 
             if (!sideKEdge.getName().equals(newEdge.getName())) {
                 if (sideKEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().remove(sideKEdge);
+                    Project.getEdgesInUse().remove(sideKEdge);
                 } else if (sideKEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().remove(sideKEdge);
+                    Project.getBordersInUse().remove(sideKEdge);
                 }
 
                 if (newEdge instanceof Edge) {
-                    ProjectHandler.getEdgesUsesInProjectObservable().add((Edge) newEdge);
+                    Project.getEdgesInUse().add((Edge) newEdge);
                 } else if (newEdge instanceof Border) {
-                    ProjectHandler.getBordersUsesInProjectObservable().add((Border) newEdge);
+                    Project.getBordersInUse().add((Border) newEdge);
                 }
             }
             getChildren().remove(sideKEdge);
@@ -3045,11 +3045,11 @@ public class SketchShapeRhombus extends SketchShape {
     @Override
     public void updateMaterialList() {
         choiceBoxMaterial.getItems().clear();
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getName());
         }
         if (!choiceBoxMaterial.getItems().contains(shapeMaterial.getName())) {
-            shapeMaterial = ProjectHandler.getDefaultMaterial();
+            shapeMaterial = Project.getDefaultMaterial();
         }
         choiceBoxMaterial.getSelectionModel().select(shapeMaterial.getName());
     }
@@ -3421,12 +3421,12 @@ public class SketchShapeRhombus extends SketchShape {
         }
 
 
-        ProjectHandler.getMaterialsUsesInProjectObservable().add(shapeMaterial.getName() + "#" + shapeDepth);
+        Project.getMaterialsInUse().add(shapeMaterial.getName() + "#" + shapeDepth);
 
         if (elementType == ElementTypes.TABLETOP)
-            ProjectHandler.getDepthsTableTopsUsesInProjectObservable().add(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().add(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            ProjectHandler.getDepthsWallPanelsUsesInProjectObservable().add(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().add(String.valueOf(shapeDepth));
 
     }
 
@@ -3446,22 +3446,22 @@ public class SketchShapeRhombus extends SketchShape {
         }
 
         if (shapeMaterial != null)
-            ProjectHandler.getMaterialsUsesInProjectObservable().remove(shapeMaterial.getName() + "#" + shapeDepth);
+            Project.getMaterialsInUse().remove(shapeMaterial.getName() + "#" + shapeDepth);
 
         if (elementType == ElementTypes.TABLETOP)
-            ProjectHandler.getDepthsTableTopsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().remove(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            ProjectHandler.getDepthsWallPanelsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().remove(String.valueOf(shapeDepth));
 
         shapeMaterial = material;
         this.shapeDepth = depth;
 
-        ProjectHandler.getMaterialsUsesInProjectObservable().add(shapeMaterial.getName() + "#" + shapeDepth);
+        Project.getMaterialsInUse().add(shapeMaterial.getName() + "#" + shapeDepth);
 
         if (elementType == ElementTypes.TABLETOP)
-            ProjectHandler.getDepthsTableTopsUsesInProjectObservable().add(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().add(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            ProjectHandler.getDepthsWallPanelsUsesInProjectObservable().add(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().add(String.valueOf(shapeDepth));
 
         if (checkBoxDefaultHeights.isSelected()) {
             if (shapeMaterial.getName().indexOf("Акриловый камень") != -1) {
@@ -3553,8 +3553,8 @@ public class SketchShapeRhombus extends SketchShape {
 
         boolean haveBorder = true;
         if (!init) {
-            ProjectHandler.getEdgesHeightsUsesInProjectObservable().remove("" + this.edgeHeight);
-            if (haveBorder) ProjectHandler.getBordersHeightsUsesInProjectObservable().remove("" + this.borderHeight);
+            Project.getEdgesHeightsInUse().remove("" + this.edgeHeight);
+            if (haveBorder) Project.getBordersHeightsInUse().remove("" + this.borderHeight);
         }
 
         if (edgesHeightsDefault) {
@@ -3619,8 +3619,8 @@ public class SketchShapeRhombus extends SketchShape {
         if (textFieldEdgeHeight != null) textFieldEdgeHeight.setText("" + this.edgeHeight);
         this.borderHeight = borderHeight;
 
-        ProjectHandler.getEdgesHeightsUsesInProjectObservable().add("" + this.edgeHeight);
-        if (haveBorder) ProjectHandler.getBordersHeightsUsesInProjectObservable().add("" + this.borderHeight);
+        Project.getEdgesHeightsInUse().add("" + this.edgeHeight);
+        if (haveBorder) Project.getBordersHeightsInUse().add("" + this.borderHeight);
     }
 
     @Override
@@ -3628,16 +3628,16 @@ public class SketchShapeRhombus extends SketchShape {
         System.out.println("String.valueOf(shapeDepth)" + String.valueOf(shapeDepth));
 
         if (elementType == ElementTypes.TABLETOP)
-            ProjectHandler.getDepthsTableTopsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().remove(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            ProjectHandler.getDepthsWallPanelsUsesInProjectObservable().remove(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().remove(String.valueOf(shapeDepth));
         super.setShapeDepth(shapeDepth);
 
         // ProjectHandler.getDepthsTableTopsUsesInProjectObservable().add(String.valueOf(shapeDepth));
         if (elementType == ElementTypes.TABLETOP)
-            ProjectHandler.getDepthsTableTopsUsesInProjectObservable().add(String.valueOf(shapeDepth));
+            Project.getDepthsTableTopsInUse().add(String.valueOf(shapeDepth));
         else if (elementType == ElementTypes.WALL_PANEL)
-            ProjectHandler.getDepthsWallPanelsUsesInProjectObservable().add(String.valueOf(shapeDepth));
+            Project.getDepthsWallPanelsInUse().add(String.valueOf(shapeDepth));
 
         if (shapeDepth > edgeHeight) {
             edgeHeight = shapeDepth;
@@ -3870,7 +3870,7 @@ public class SketchShapeRhombus extends SketchShape {
 
         System.out.println("initFromJson shapeNumber = " + thisShapeNumber);
         String materialName = ((String) jsonObject.get("material"));
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (materialName.equals(material.getName())) {
                 setShapeMaterial(material, ((Long) jsonObject.get("shapeDepth")).intValue());
                 break;
@@ -4011,7 +4011,7 @@ public class SketchShapeRhombus extends SketchShape {
         this.setTranslateY(((Double) sketchDesignerXY.get(1)).doubleValue());
 
 
-        if (shapeMaterial.getName().equals(ProjectHandler.getDefaultMaterial().getName())) {
+        if (shapeMaterial.getName().equals(Project.getDefaultMaterial().getName())) {
             materialDefault = true;
         } else {
             materialDefault = false;

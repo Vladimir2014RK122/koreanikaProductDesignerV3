@@ -12,7 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 
 
 import java.io.IOException;
@@ -116,7 +116,7 @@ public class SetupSinkFeatureWindow {
         }
 
         try {
-            value = Double.parseDouble(newValue) * ProjectHandler.getCommonShapeScale();
+            value = Double.parseDouble(newValue) * Project.getCommonShapeScale();
             textFieldLeftAnchor.setStyle("-fx-text-fill: #A8A8A8");
 
             if (value < minValue || value > maxValue) {
@@ -146,7 +146,7 @@ public class SetupSinkFeatureWindow {
         }
 
         try {
-            value = Double.parseDouble(newValue) * ProjectHandler.getCommonShapeScale();
+            value = Double.parseDouble(newValue) * Project.getCommonShapeScale();
             textFieldRightAnchor.setStyle("-fx-text-fill: #A8A8A8");
 
             if (value < minValue || value > maxValue) {
@@ -176,7 +176,7 @@ public class SetupSinkFeatureWindow {
         }
 
         try {
-            value = Double.parseDouble(newValue) * ProjectHandler.getCommonShapeScale();
+            value = Double.parseDouble(newValue) * Project.getCommonShapeScale();
             textFieldTopAnchor.setStyle("-fx-text-fill: #A8A8A8");
 
             if (value < minValue || value > maxValue) {
@@ -206,7 +206,7 @@ public class SetupSinkFeatureWindow {
         }
 
         try {
-            value = Double.parseDouble(newValue) * ProjectHandler.getCommonShapeScale();
+            value = Double.parseDouble(newValue) * Project.getCommonShapeScale();
             textFieldBottomAnchor.setStyle("-fx-text-fill: #A8A8A8");
 
             if (value < minValue || value > maxValue) {
@@ -236,17 +236,17 @@ public class SetupSinkFeatureWindow {
         double y = 0;
 
         if (!textFieldLeftAnchor.getText().matches("")) {
-            x = Double.parseDouble(textFieldLeftAnchor.getText()) * ProjectHandler.getCommonShapeScale();
+            x = Double.parseDouble(textFieldLeftAnchor.getText()) * Project.getCommonShapeScale();
         }
         if (!textFieldRightAnchor.getText().matches("")) {
-            x = shape.getPolygon().getBoundsInLocal().getWidth() - feature.getBoundsInLocal().getWidth() - Double.parseDouble(textFieldRightAnchor.getText()) * ProjectHandler.getCommonShapeScale();
+            x = shape.getPolygon().getBoundsInLocal().getWidth() - feature.getBoundsInLocal().getWidth() - Double.parseDouble(textFieldRightAnchor.getText()) * Project.getCommonShapeScale();
         }
 
         if (!textFieldTopAnchor.getText().matches("")) {
-            y = Double.parseDouble(textFieldTopAnchor.getText()) * ProjectHandler.getCommonShapeScale();
+            y = Double.parseDouble(textFieldTopAnchor.getText()) * Project.getCommonShapeScale();
         }
         if (!textFieldBottomAnchor.getText().matches("")) {
-            y = shape.getPolygon().getBoundsInLocal().getHeight() - feature.getBoundsInLocal().getHeight() - Double.parseDouble(textFieldBottomAnchor.getText()) * ProjectHandler.getCommonShapeScale();
+            y = shape.getPolygon().getBoundsInLocal().getHeight() - feature.getBoundsInLocal().getHeight() - Double.parseDouble(textFieldBottomAnchor.getText()) * Project.getCommonShapeScale();
         }
 
         String model = "";

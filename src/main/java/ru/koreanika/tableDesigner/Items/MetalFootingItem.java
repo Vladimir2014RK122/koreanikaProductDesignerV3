@@ -12,7 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class MetalFootingItem extends TableDesignerItem {
         this.paintingType = paintingType;
         this.quantity = quantity;
 
-        imageMain = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/MetalFooting/paintingType" + paintingType + "_100px.png").toString()).getImage();
+        imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/MetalFooting/paintingType" + paintingType + "_100px.png").toString()).getImage();
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(
@@ -217,11 +217,11 @@ public class MetalFootingItem extends TableDesignerItem {
     public void updateRowPrice() {
 
         double priceForOne = -1.0;
-        Material defaultMaterial = ProjectHandler.getDefaultMaterial();
+        Material defaultMaterial = Project.getDefaultMaterial();
 
         priceForOne = (paintingType == 1) ? defaultMaterial.getMetalFootingPrices().get(0)/100 : defaultMaterial.getMetalFootingPrices().get(1)/100;
 
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity * (length/1000)) + ReceiptManager.RUR_SYMBOL);
 
@@ -362,11 +362,11 @@ public class MetalFootingItem extends TableDesignerItem {
         String currency = "RUB";
         String units = "м.п.";
         double priceForOne = -1.0;
-        Material defaultMaterial = ProjectHandler.getDefaultMaterial();
+        Material defaultMaterial = Project.getDefaultMaterial();
 
         if(defaultMaterial == null) return;
         priceForOne = ((toggleButtonPaintingType1.isSelected()) ? defaultMaterial.getMetalFootingPrices().get(0)/100 : defaultMaterial.getMetalFootingPrices().get(1)/100);
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelPrice.setText(String.format(Locale.ENGLISH, "Цена: %.0f" + " " + currency + "/" + units, priceForOne));
 

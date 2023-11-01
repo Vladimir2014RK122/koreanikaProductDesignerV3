@@ -3,11 +3,10 @@ package ru.koreanika.utils.MainSettings;
 
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.PortalClient.Authorization.Authorization;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-//import ru.koreanika.utils.AppOwner1;
 import javafx.scene.layout.HBox;
 import ru.koreanika.utils.Main;
 

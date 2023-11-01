@@ -16,9 +16,11 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import ru.koreanika.project.Project;
+import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.utils.LoadingProgressDialog;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.ProjectHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -28,6 +30,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class PdfSaver {
+
+    private final ProjectHandler projectHandler = ServiceLocator.getService("ProjectHandler", ProjectHandler.class);
 
     private ArrayList<Node> printNodes;
 
@@ -68,9 +72,9 @@ public class PdfSaver {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("pdf", "*.pdf"));
 
-        if (ProjectHandler.getCurProjectPath() != null) {
+        if (projectHandler.getCurrentProjectPath() != null) {
 
-            String[] pathArr = ProjectHandler.getCurProjectPath().split("\\\\");
+            String[] pathArr = projectHandler.getCurrentProjectPath().split("\\\\");
             String path1 = "";
             for (int i = 0; i < pathArr.length - 1; i++) {
                 path1 += "/" + pathArr[i];
@@ -79,7 +83,7 @@ public class PdfSaver {
             //System.out.println(path1);
 
             fileChooser.setInitialDirectory(new File(path1));
-            fileChooser.setInitialFileName(ProjectHandler.getCurProjectName().split("\\.")[0] + ".pdf");
+            fileChooser.setInitialFileName(projectHandler.getCurrentProjectName().split("\\.")[0] + ".pdf");
         }
         File file = fileChooser.showSaveDialog(MainWindow.getReceiptManager().getSceneReceiptManager().getWindow());
 

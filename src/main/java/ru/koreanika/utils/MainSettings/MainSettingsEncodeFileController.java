@@ -4,7 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.ProjectFileDecoder;
+import ru.koreanika.project.ProjectFileEncoder;
 
 import java.awt.*;
 import java.io.File;
@@ -34,7 +35,7 @@ public class MainSettingsEncodeFileController {
 
     public void btnEncodeClick(MouseEvent actionEvent) {
         try {
-            ProjectHandler.encodeProjectFile(
+            ProjectFileEncoder.encodeProjectFile(
                     new File(textFieldSrcEncode.getText()),
                     new File(textFieldDstEncode.getText()));
 
@@ -46,7 +47,7 @@ public class MainSettingsEncodeFileController {
 
     public void btnDecodeClick(MouseEvent actionEvent) {
         try {
-            ProjectHandler.decodeProjectFile(
+            ProjectFileDecoder.decodeProjectFile(
                     new File(textFieldSrcEncode.getText()),
                     new File(textFieldDstEncode.getText()));
             Desktop.getDesktop().open(new File(textFieldDstEncode.getText()).getParentFile());

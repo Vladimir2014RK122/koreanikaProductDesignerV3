@@ -2,7 +2,10 @@ package ru.koreanika.cutDesigner;
 
 import ru.koreanika.Common.ConnectPoints.ConnectPoint;
 import ru.koreanika.Common.Material.Material;
+import ru.koreanika.Common.Material.MaterialSheet;
 import ru.koreanika.Common.RepresentToJson;
+import ru.koreanika.project.ProjectHandler;
+import ru.koreanika.utils.Main;
 import ru.koreanika.cutDesigner.ListStatistics.StatisticCellItem;
 import ru.koreanika.cutDesigner.Shapes.*;
 import ru.koreanika.cutDesigner.TreeViewProjectElements.TreeCellCutShape;
@@ -31,6 +34,11 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import ru.koreanika.project.Project;
+import ru.koreanika.project.ProjectType;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Dimensions.LinearDimension;
 import ru.koreanika.sketchDesigner.Features.AdditionalFeature;
 import ru.koreanika.sketchDesigner.Features.Sink;
@@ -49,10 +57,13 @@ public class CutPane extends Pane implements RepresentToJson {
     private static Scale scale = new Scale(1.0, 1.0);
     public static SimpleDoubleProperty cutSheetScaleProperty = new SimpleDoubleProperty();
 
+    private final EventBus eventBus;
+    private final ProjectHandler projectHandler;
+
     private double originalCutPaneWidth = 0;
     private double originalCutPaneHeight = 0;
 
-    private static Map<String, ArrayList<Material.MaterialSheet>> materialSheetsMap = new LinkedHashMap<>();
+    private static Map<String, ArrayList<MaterialSheet>> materialSheetsMap = new LinkedHashMap<>();
 
     LoadingProgressDialog cuttingProgressDialog;
     private static Thread autoCutThread;
@@ -62,6 +73,7 @@ public class CutPane extends Pane implements RepresentToJson {
     private static boolean externalStopAutoCutting = false;
 
     static CutDesigner cutDesigner;
+
     public CutPane(CutDesigner cutDesigner) {
         this.cutDesigner = cutDesigner;
         materialSheetsMap.clear();
@@ -73,6 +85,9 @@ public class CutPane extends Pane implements RepresentToJson {
         this.getTransforms().add(scale);
         initDragAndDrop();
         initZoom();
+
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        projectHandler = ServiceLocator.getService("ProjectHandler", ProjectHandler.class);
     }
 
     BooleanProperty finishedCuttingThread = new SimpleBooleanProperty(false);
@@ -80,10 +95,10 @@ public class CutPane extends Pane implements RepresentToJson {
     /*CALCULATE STATISTICS START --->>>*/
     public static void refreshStatistics(ArrayList<StatisticCellItem> materialSheetStatisticsListObservable) {
         materialSheetStatisticsListObservable.clear();
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             double percentSumm = 0;
             int sheetsCount = entry.getValue().size();
-            for (Material.MaterialSheet materialSheet : entry.getValue()) {
+            for (MaterialSheet materialSheet : entry.getValue()) {
                 //update statistic for this sheet
                 percentSumm +=Double.valueOf(calculateUsesSheetInPercent(materialSheet));
 
@@ -94,7 +109,7 @@ public class CutPane extends Pane implements RepresentToJson {
         hideHalfOfMaterialIfNotUsed();
     }
 
-    public static int calculateUsesSheetInPercent(Material.MaterialSheet materialSheet) {
+    public static int calculateUsesSheetInPercent(MaterialSheet materialSheet) {
         double squareSheet = materialSheet.getPrefWidth() * materialSheet.getPrefHeight();
         double squareShapesSum = 0;
         for (CutShape cutShape : cutDesigner.getCutShapesList()) {
@@ -145,10 +160,10 @@ public class CutPane extends Pane implements RepresentToJson {
     }
 
     public static void hideHalfOfMaterialIfNotUsed() {
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             //if(entry.getKey().indexOf("Кварцевый") != -1){
             if (true) {
-                for (Material.MaterialSheet materialSheet : entry.getValue()) {
+                for (MaterialSheet materialSheet : entry.getValue()) {
                     System.out.println("1112 materialSheet.getPartsOfSheet() = " + materialSheet.getPartsOfSheet());
                     System.out.println("materialSheet.getCuttingDirection() = " + materialSheet.getCuttingDirection());
                     if (materialSheet.getCuttingDirection().equals("h")) {
@@ -452,14 +467,14 @@ public class CutPane extends Pane implements RepresentToJson {
             if (db.getContent(CutDesigner.CELL_FORMAT) != null) {
                 if (db.getContent(CutDesigner.CELL_FORMAT).equals(TreeCellCutShape.TREE_CELL_FORMAT)) {
 
-                    int shapeNumber = ((Integer) db.getContent(CutDesigner.SHAPE_NUMBER_DATA_FORMAT)).intValue();
+                    int shapeNumber = (Integer) db.getContent(CutDesigner.SHAPE_NUMBER_DATA_FORMAT);
                     ElementTypes elementType = (ElementTypes) db.getContent(CutDesigner.ELEMENT_DATA_FORMAT);
                     //System.out.println("ELEMENT TYPE: " + elementType);
                     if (elementType == ElementTypes.UNION) {
 
                         for (Integer n : cutDesigner.usedShapeUnionsNumberList) {
                             if (n.intValue() == shapeNumber) {
-                                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Элемент уже размещен");
+                                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Элемент уже размещен"));
                                 return;
                             }
                         }
@@ -512,7 +527,7 @@ public class CutPane extends Pane implements RepresentToJson {
                     } else {
                         for (Integer n : cutDesigner.usedShapesNumberList) {
                             if (n.intValue() == shapeNumber) {
-                                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Элемент уже размещен");
+                                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Элемент уже размещен"));
                                 return;
                             }
                         }
@@ -550,7 +565,7 @@ public class CutPane extends Pane implements RepresentToJson {
                         for (CutShapeAdditionalFeature cutShapeAdditionalFeature : sink.getCutShapes()) {
                             //if(this.getChildren().contains(cutShapeAdditionalFeature)) {
                             if (cutObjectsGroup.getChildren().contains(cutShapeAdditionalFeature)) {
-                                MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Элемент уже размещен");
+                                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Элемент уже размещен"));
                                 break;
                             }
                             //System.out.println("cutShapeAdditionalFeature = " + cutShapeAdditionalFeature);
@@ -622,9 +637,9 @@ public class CutPane extends Pane implements RepresentToJson {
             this.cutPaneScale = cutPaneScale;
 
 
-            for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+            for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
 
-                for (Material.MaterialSheet sheet : entry.getValue()) {
+                for (MaterialSheet sheet : entry.getValue()) {
                     for (ConnectPoint connectPoint : sheet.getConnectPointArrayList()) {
                         connectPoint.changeSide(10.0 / (cutPaneScale));
                     }
@@ -673,13 +688,13 @@ public class CutPane extends Pane implements RepresentToJson {
         return originalCutPaneWidth;
     }
 
-    public Material.MaterialSheet addMaterialSheet(String nameMaterial) {
+    public MaterialSheet addMaterialSheet(String nameMaterial) {
 
         double hValue = cutDesigner.getScrollPaneWorkPane().getHvalue();
         double vValue = cutDesigner.getScrollPaneWorkPane().getVvalue();
         //nameMaterial = nameMaterial.split("-")[0];
         //System.out.println("add new sheet Material : " + nameMaterial);
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             String nameM = material.getName();
             String nameF = nameMaterial.split("#")[0];
 
@@ -688,15 +703,15 @@ public class CutPane extends Pane implements RepresentToJson {
 
 
                 if (materialSheetsMap.get(nameMaterial) == null) {
-                    materialSheetsMap.put(nameMaterial, new ArrayList<Material.MaterialSheet>());
+                    materialSheetsMap.put(nameMaterial, new ArrayList<MaterialSheet>());
                 }
 
-                Material.MaterialSheet materialSheet = null;
+                MaterialSheet materialSheet = null;
 
                 //add additional sheet:
                 boolean successAdded = false;
                 if(material.isUseAdditionalSheets()){
-                    for(Material.MaterialSheet msh : material.getAvailableAdditionalSheets()){
+                    for(MaterialSheet msh : material.getAvailableAdditionalSheets()){
                         if(!materialSheetsMap.get(nameMaterial).contains(msh)){
                             materialSheet = msh;
                             materialSheetsMap.get(nameMaterial).add(materialSheet);
@@ -741,10 +756,10 @@ public class CutPane extends Pane implements RepresentToJson {
 
 
 
-    public ArrayList<Material.MaterialSheet> getUsedMaterialSheetsList() {
+    public ArrayList<MaterialSheet> getUsedMaterialSheetsList() {
 
-        ArrayList<Material.MaterialSheet> list = new ArrayList<>();
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        ArrayList<MaterialSheet> list = new ArrayList<>();
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             list.addAll(entry.getValue());
         }
 
@@ -754,14 +769,14 @@ public class CutPane extends Pane implements RepresentToJson {
     /**
      * Should bu invoked after auto cutting, returned only correct placed cutShapes !!!
      */
-    public Map<Material.MaterialSheet, ArrayList<CutShape>> getSheetsAndShapesOnItMap() {
+    public Map<MaterialSheet, ArrayList<CutShape>> getSheetsAndShapesOnItMap() {
 
-        Map<Material.MaterialSheet, ArrayList<CutShape>> resultMap = new LinkedHashMap<>();
+        Map<MaterialSheet, ArrayList<CutShape>> resultMap = new LinkedHashMap<>();
 
 
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
 
-            for (Material.MaterialSheet sheet : entry.getValue()) {
+            for (MaterialSheet sheet : entry.getValue()) {
 
                 for (CutShape cutShape : cutDesigner.getCutShapesList()) {
 
@@ -796,7 +811,7 @@ public class CutPane extends Pane implements RepresentToJson {
         refreshCutPaneView();
     }
 
-    private void deleteMaterialSheet(Material.MaterialSheet materialSheet) {
+    private void deleteMaterialSheet(MaterialSheet materialSheet) {
         String mNameWithDeth = materialSheet.getMaterial().getName() + "#" + materialSheet.getSheetDepth();
         materialSheetsMap.get(mNameWithDeth).remove(materialSheetsMap.get(mNameWithDeth).size() - 1);
         if (materialSheetsMap.get(mNameWithDeth).size() == 0) {
@@ -805,7 +820,7 @@ public class CutPane extends Pane implements RepresentToJson {
         refreshCutPaneView();
     }
 
-    public static Map<String, ArrayList<Material.MaterialSheet>> getMaterialSheetsMap() {
+    public static Map<String, ArrayList<MaterialSheet>> getMaterialSheetsMap() {
         return materialSheetsMap;
     }
 
@@ -833,14 +848,14 @@ public class CutPane extends Pane implements RepresentToJson {
         //check if materials deleted from project:
         ArrayList<String> keysForDelete = new ArrayList<>();
 
-        ArrayList<Material.MaterialSheet> sheetsForDelete = new ArrayList<>();
-        ArrayList<Material.MaterialSheet> sheetsForAdd = new ArrayList<>();
+        ArrayList<MaterialSheet> sheetsForDelete = new ArrayList<>();
+        ArrayList<MaterialSheet> sheetsForAdd = new ArrayList<>();
 
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             Material material = null;
             int depth = Integer.parseInt(entry.getKey().split("#")[1]);
 
-            for (Material m : ProjectHandler.getMaterialsListInProject()) {
+            for (Material m : Project.getMaterials()) {
                 if (m.getName().equals(entry.getKey().split("#")[0])) {
                     material = m;
                     break;
@@ -861,7 +876,7 @@ public class CutPane extends Pane implements RepresentToJson {
                         }
                     }else{
 
-                        for(Material.MaterialSheet materialSheet : entry.getValue()){
+                        for(MaterialSheet materialSheet : entry.getValue()){
                             if(materialSheet.isAdditionalSheet())sheetsForDelete.add(materialSheet);
                         }
 
@@ -870,7 +885,7 @@ public class CutPane extends Pane implements RepresentToJson {
                     }
                 }else{
 
-                    for(Material.MaterialSheet sheet : entry.getValue()){
+                    for(MaterialSheet sheet : entry.getValue()){
                         if(sheet.isAdditionalSheet()) sheetsForDelete.add(sheet);
                     }
 //                    int size = entry.getValue().size();
@@ -881,7 +896,7 @@ public class CutPane extends Pane implements RepresentToJson {
                 }
 
                 if(!material.isUseMainSheets()){
-                    for(Material.MaterialSheet materialSheet : entry.getValue()){
+                    for(MaterialSheet materialSheet : entry.getValue()){
                         if(!materialSheet.isAdditionalSheet()){
                             sheetsForDelete.add(materialSheet);
                         }
@@ -895,17 +910,17 @@ public class CutPane extends Pane implements RepresentToJson {
             materialSheetsMap.remove(key);
         }
 
-        for(Material.MaterialSheet materialSheet : sheetsForDelete){
-            for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()){
+        for(MaterialSheet materialSheet : sheetsForDelete){
+            for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()){
                 entry.getValue().remove(materialSheet);
             }
         }
 
         //Collections.reverse(sheetsForAdd);//need for correct sequence of adding sheets with different sizes
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()){
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()){
 
             int index = 0;
-            for(Material.MaterialSheet materialSheet : sheetsForAdd){
+            for(MaterialSheet materialSheet : sheetsForAdd){
                 if(entry.getKey().equals(materialSheet.getMaterial().getName() + "#" + materialSheet.getSheetDepth())){
                     entry.getValue().add(index++, materialSheet);
                 }
@@ -917,10 +932,10 @@ public class CutPane extends Pane implements RepresentToJson {
 
 
         double lastY = 0;
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             Material material = null;
 
-            for (Material m : ProjectHandler.getMaterialsListInProject()) {
+            for (Material m : Project.getMaterials()) {
                 if (m.getName().equals(entry.getKey().split("#")[0])) {
                     material = m;
                     break;
@@ -976,17 +991,17 @@ public class CutPane extends Pane implements RepresentToJson {
 
             double previousX = 10;
             double maxHeight = 0;
-            double maxWidth = 5000 * ProjectHandler.getCommonShapeScale() * 2 + 50;
-            for (Material.MaterialSheet ms : entry.getValue()){
+            double maxWidth = 5000 * Project.getCommonShapeScale() * 2 + 50;
+            for (MaterialSheet ms : entry.getValue()){
                 if(maxHeight<ms.getSheetHeight())maxHeight = ms.getSheetHeight();
             }
-            maxHeight *= ProjectHandler.getCommonShapeScale();
+            maxHeight *= Project.getCommonShapeScale();
 
             //System.out.println("cutObjectsGroup.getChildren() = " + cutObjectsGroup.getChildren());
             //System.out.println("entry.getValue() = " + entry.getValue());
 
-            for (Material.MaterialSheet ms : entry.getValue()) {
-                Material.MaterialSheet materialSheet = ms;
+            for (MaterialSheet ms : entry.getValue()) {
+                MaterialSheet materialSheet = ms;
 
                 //double zoneWidth = materialSheet.getMaterial().getMaterialWidth()*2*ProjectHandler.getCommonShapeScale();
 
@@ -998,14 +1013,14 @@ public class CutPane extends Pane implements RepresentToJson {
                 }
                 cutObjectsGroup.getChildren().add(materialSheet);
 
-                if (this.getPrefWidth() < material.getMaterialWidth() * ProjectHandler.getCommonShapeScale() * 2 + 50) {
-                    originalCutPaneWidth = (material.getMaterialWidth() * ProjectHandler.getCommonShapeScale() * 2 + 50);
-                    this.setPrefWidth(material.getMaterialWidth() * ProjectHandler.getCommonShapeScale() * 2 + 50);
-                    this.setMinWidth(material.getMaterialWidth() * ProjectHandler.getCommonShapeScale() * 2 + 50);
+                if (this.getPrefWidth() < material.getMaterialWidth() * Project.getCommonShapeScale() * 2 + 50) {
+                    originalCutPaneWidth = (material.getMaterialWidth() * Project.getCommonShapeScale() * 2 + 50);
+                    this.setPrefWidth(material.getMaterialWidth() * Project.getCommonShapeScale() * 2 + 50);
+                    this.setMinWidth(material.getMaterialWidth() * Project.getCommonShapeScale() * 2 + 50);
                 }
                 //System.out.println("originalCutPaneWidth = " + maxWidth);
                 //System.out.println("previousX + ms.getSheetWidth()*ProjectHandler.getCommonShapeScale() = " + (previousX + ms.getSheetWidth()*ProjectHandler.getCommonShapeScale()));
-                if(previousX + ms.getSheetWidth()*ProjectHandler.getCommonShapeScale() > maxWidth){
+                if(previousX + ms.getSheetWidth()* Project.getCommonShapeScale() > maxWidth){
                     previousX = 10;
                     lastY += maxHeight + 50;
                     ms.setTranslateX(previousX);
@@ -1016,7 +1031,7 @@ public class CutPane extends Pane implements RepresentToJson {
                 }
                 //ms.setTranslateX((index % 2 == 0) ? 10 : (material.getMaterialWidth() * ProjectHandler.getCommonShapeScale() + 20));
                // ms.setTranslateY((index / 2) * (material.getMaterialHeight() * ProjectHandler.getCommonShapeScale() + 10) + 10 + lastY);
-                previousX += ms.getSheetWidth()*ProjectHandler.getCommonShapeScale() + 10;
+                previousX += ms.getSheetWidth()* Project.getCommonShapeScale() + 10;
                 index++;
 
 //                System.out.println("ms.getBoundsInParent().getMaxY() = " + ms.getBoundsInParent().getMaxY());
@@ -1162,21 +1177,12 @@ public class CutPane extends Pane implements RepresentToJson {
                     }
 
                     if (invokeFromReceipt) {
-//                        if(Main.appOwner.toUpperCase().equals("KOREANIKA")){
-//                            MainWindow.getReceiptManager().show(Main.getMainScene());
-//                        }else if(Main.appOwner.toUpperCase().equals("ZETTA")){
-//                            ReceiptManagerZetta.show(Main.getMainScene());
-//                        }
                         Main.getMainWindow().showReceipt();
-
-                    }else{
-                        if(Boolean.parseBoolean(Main.getProperty("autosave.afterCut"))){
-                            ProjectHandler.saveProject(ProjectHandler.getCurProjectPath(), ProjectHandler.getCurProjectName());//save current project
+                    } else {
+                        if (Boolean.parseBoolean(Main.getProperty("autosave.afterCut"))) {
+                            projectHandler.saveProject();
                         }
                     }
-
-
-
 
                     cutDesigner.updateStatistics();
                 });
@@ -1206,9 +1212,9 @@ public class CutPane extends Pane implements RepresentToJson {
 
         /** DELETE ALL SHEETS START */
         System.out.println("************************ materialSheetsMap = " + materialSheetsMap.toString());
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
 
-            for (Material.MaterialSheet sheet : entry.getValue()) {
+            for (MaterialSheet sheet : entry.getValue()) {
                 System.out.println("************************ sheetDeleting = " + sheet.isActualPrice());
                if(sheet.isActualPrice()) sheetDeleting.add(entry.getKey());
             }
@@ -1324,7 +1330,7 @@ public class CutPane extends Pane implements RepresentToJson {
         for (CutObject cutObject : cutDesigner.getCutShapesList()) {
             if(cutObject instanceof CutShape){
                 CutShape cutShape = (CutShape) cutObject;
-                shapesSquare += cutShape.getShapeSquare()/Math.pow(ProjectHandler.getCommonShapeScale(), 2);
+                shapesSquare += cutShape.getShapeSquare()/Math.pow(Project.getCommonShapeScale(), 2);
             }
         }
 
@@ -1332,8 +1338,8 @@ public class CutPane extends Pane implements RepresentToJson {
 
         //get all sheets square
         double sheetsSquare = 0.0;
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
-            for (Material.MaterialSheet sheet : entry.getValue()) {
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+            for (MaterialSheet sheet : entry.getValue()) {
 
                 sheetsSquare += sheet.getSheetSquare()* (sheet.getUsesSlabs());
             }
@@ -1389,7 +1395,7 @@ public class CutPane extends Pane implements RepresentToJson {
             LinkedHashMap<String, ArrayList<CutShape>> sheetsTypeAndCutShapes = new LinkedHashMap<>();
 
             //add sheets with old prices
-            for(Material.MaterialSheet oldSheet : getUsedMaterialSheetsList()){
+            for(MaterialSheet oldSheet : getUsedMaterialSheetsList()){
                 String sheetType = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                 sheetsTypeAndCutShapes.put(sheetType, new ArrayList<CutShape>());
             }
@@ -1420,17 +1426,17 @@ public class CutPane extends Pane implements RepresentToJson {
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size()
                         + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
 //                System.out.println("oldSheets = " + oldSheets);
 
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
+                        MaterialSheet newSheet = null;
 
 //                        System.out.println("NEED SHEET NAME = " + entry.getKey());
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 //                            System.out.println("OLD SHEET NAME = " + sheetName);
 
@@ -1486,13 +1492,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -1542,13 +1548,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -1598,13 +1604,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -1659,13 +1665,13 @@ public class CutPane extends Pane implements RepresentToJson {
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -1724,13 +1730,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -1780,13 +1786,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -1836,13 +1842,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -1895,13 +1901,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -1951,13 +1957,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -2007,13 +2013,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -2063,13 +2069,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -2122,13 +2128,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -2178,13 +2184,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -2234,13 +2240,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -2290,13 +2296,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                 progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                 for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                     ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                     while(true){
-                        Material.MaterialSheet newSheet = null;
-                        for(Material.MaterialSheet oldSheet : oldSheets){
+                        MaterialSheet newSheet = null;
+                        for(MaterialSheet oldSheet : oldSheets){
                             String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
                             if(sheetName.equals(entry.getKey())){
                                 newSheet = oldSheet;
@@ -2359,13 +2365,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -2418,13 +2424,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -2478,13 +2484,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -2537,13 +2543,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -2596,13 +2602,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -2655,13 +2661,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -2714,13 +2720,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -2773,13 +2779,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -2832,13 +2838,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -2891,13 +2897,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -2950,13 +2956,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for (Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()) {
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while (true) {
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -3007,13 +3013,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for (Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()) {
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while (true) {
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -3063,13 +3069,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -3121,13 +3127,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -3179,13 +3185,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -3237,13 +3243,13 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     progressStep = 1.0 / (cutShapeEdgesForPlacing.size() + cutShapesForPlacing.size() + cutShapeAdditionalFeaturesForPlacing.size());
 
-                    ArrayList<Material.MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
+                    ArrayList<MaterialSheet> oldSheets = new ArrayList<>(getUsedMaterialSheetsList());
                     for(Map.Entry<String, ArrayList<CutShape>> entry : sheetsTypeAndCutShapes.entrySet()){
 
                         ArrayList<CutShape> remainderCutShapes = new ArrayList<>(entry.getValue());
                         while(true){
-                            Material.MaterialSheet newSheet = null;
-                            for(Material.MaterialSheet oldSheet : oldSheets){
+                            MaterialSheet newSheet = null;
+                            for(MaterialSheet oldSheet : oldSheets){
                                 String sheetName = oldSheet.getMaterial().getName() + "#" + oldSheet.getSheetDepth();
 
                                 if(sheetName.equals(entry.getKey())){
@@ -3381,8 +3387,8 @@ public class CutPane extends Pane implements RepresentToJson {
 
             System.out.println("\nTry to cutting EDGE for Shape#" + cutShapeEdge.getOwner().getShapeNumber());
             //check is there material sheet:
-            ArrayList<Material.MaterialSheet> compatibleSheets = new ArrayList<>();
-            for (Material.MaterialSheet sheet : getUsedMaterialSheetsList()) {
+            ArrayList<MaterialSheet> compatibleSheets = new ArrayList<>();
+            for (MaterialSheet sheet : getUsedMaterialSheetsList()) {
                 if (cutShapeEdge.getOwner().getMaterial() == sheet.getMaterial() && cutShapeEdge.getOwner().getDepth() == sheet.getDepth()) {
                     //add compatible sheet:
                     compatibleSheets.add(sheet);
@@ -3392,7 +3398,7 @@ public class CutPane extends Pane implements RepresentToJson {
             if (compatibleSheets.size() != 0) {
                 //have compatible sheet, try to auto cutting:
                 System.out.println("have compatible sheets");
-                for (Material.MaterialSheet sheet : compatibleSheets) {
+                for (MaterialSheet sheet : compatibleSheets) {
                     //try to cutting with this sheet:
                     //result = autoCutOnMaterialSheet(sheet, cutShapeEdge);
                     result = autoCutOnMaterialSheet(sheet, cutShapeEdge);
@@ -3401,13 +3407,13 @@ public class CutPane extends Pane implements RepresentToJson {
                 }
                 if (result == 0) {
                     System.out.println("can't cutting on compatible sheets");
-                    Material.MaterialSheet newSheet = addMaterialSheet(cutShapeEdge.getOwner().getMaterial().getName() + "#" + cutShapeEdge.getOwner().getDepth());
+                    MaterialSheet newSheet = addMaterialSheet(cutShapeEdge.getOwner().getMaterial().getName() + "#" + cutShapeEdge.getOwner().getDepth());
                     result = autoCutOnMaterialSheet(newSheet, cutShapeEdge);
                 }
             } else {
                 //no compatible sheet, try to create:
                 System.out.println("No compatible sheets");
-                Material.MaterialSheet newSheet = addMaterialSheet(cutShapeEdge.getOwner().getMaterial().getName() + "#" + cutShapeEdge.getOwner().getDepth());
+                MaterialSheet newSheet = addMaterialSheet(cutShapeEdge.getOwner().getMaterial().getName() + "#" + cutShapeEdge.getOwner().getDepth());
                 result = autoCutOnMaterialSheet(newSheet, cutShapeEdge);
             }
             System.out.println("Result of cutting : " + result);
@@ -3430,8 +3436,8 @@ public class CutPane extends Pane implements RepresentToJson {
             System.out.println("\nTry to cutting shape #" + cutShape.getShapeNumber());
 
             //check is there material sheet:
-            ArrayList<Material.MaterialSheet> compatibleSheets = new ArrayList<>();
-            for (Material.MaterialSheet sheet : getUsedMaterialSheetsList()) {
+            ArrayList<MaterialSheet> compatibleSheets = new ArrayList<>();
+            for (MaterialSheet sheet : getUsedMaterialSheetsList()) {
                 if (cutShape.getMaterial() == sheet.getMaterial() && cutShape.getDepth() == sheet.getDepth()) {
                     //add compatible sheet:
                     compatibleSheets.add(sheet);
@@ -3442,7 +3448,7 @@ public class CutPane extends Pane implements RepresentToJson {
                 //have compatible sheet, try to auto cutting:
                 System.out.println("have compatible sheets");
 
-                for (Material.MaterialSheet sheet : compatibleSheets) {
+                for (MaterialSheet sheet : compatibleSheets) {
                     //try to cutting with this sheet:
                     result = autoCutOnMaterialSheet(sheet, cutShape);
 
@@ -3452,7 +3458,7 @@ public class CutPane extends Pane implements RepresentToJson {
                 }
                 if (result == 0) {
                     System.out.println("can't cutting on compatible sheets");
-                    Material.MaterialSheet newSheet = addMaterialSheet(cutShape.getMaterial().getName() + "#" + cutShape.getDepth());
+                    MaterialSheet newSheet = addMaterialSheet(cutShape.getMaterial().getName() + "#" + cutShape.getDepth());
                     if(newSheet == null) {
                         result = 0;
                         System.out.println("NO AVAILABLE SHEETS FOR ADDING");
@@ -3469,7 +3475,7 @@ public class CutPane extends Pane implements RepresentToJson {
             } else {
                 //no compatible sheet, try to create:
                 System.out.println("No compatible sheets");
-                Material.MaterialSheet newSheet = addMaterialSheet(cutShape.getMaterial().getName() + "#" + cutShape.getDepth());
+                MaterialSheet newSheet = addMaterialSheet(cutShape.getMaterial().getName() + "#" + cutShape.getDepth());
                 if(newSheet == null) {
                     result = 0;
                     System.out.println("NO AVAILABLE SHEETS FOR ADDING");
@@ -3502,8 +3508,8 @@ public class CutPane extends Pane implements RepresentToJson {
             System.out.println("\nTry to cutting union #" + cutShapeUnion.getUnionNumber());
 
             //check is there material sheet:
-            ArrayList<Material.MaterialSheet> compatibleSheets = new ArrayList<>();
-            for (Material.MaterialSheet sheet : getUsedMaterialSheetsList()) {
+            ArrayList<MaterialSheet> compatibleSheets = new ArrayList<>();
+            for (MaterialSheet sheet : getUsedMaterialSheetsList()) {
                 if (cutShapeUnion.getMaterial() == sheet.getMaterial() && cutShapeUnion.getDepth() == sheet.getDepth()) {
                     //add compatible sheet:
                     compatibleSheets.add(sheet);
@@ -3514,7 +3520,7 @@ public class CutPane extends Pane implements RepresentToJson {
                 //have compatible sheet, try to auto cutting:
                 System.out.println("have compatible sheets");
 
-                for (Material.MaterialSheet sheet : compatibleSheets) {
+                for (MaterialSheet sheet : compatibleSheets) {
                     //try to cutting with this sheet:
                     result = autoCutUnionOnMaterialSheet(sheet, cutShapeUnion);
 
@@ -3523,7 +3529,7 @@ public class CutPane extends Pane implements RepresentToJson {
                 }
                 if (!result) {
                     System.out.println("can't cutting on compatible sheets");
-                    Material.MaterialSheet newSheet = addMaterialSheet(cutShapeUnion.getMaterial().getName() + "#" + cutShapeUnion.getDepth());
+                    MaterialSheet newSheet = addMaterialSheet(cutShapeUnion.getMaterial().getName() + "#" + cutShapeUnion.getDepth());
                     result = autoCutUnionOnMaterialSheet(newSheet, cutShapeUnion);
 
                 }
@@ -3531,7 +3537,7 @@ public class CutPane extends Pane implements RepresentToJson {
             } else {
                 //no compatible sheet, try to create:
                 System.out.println("No compatible sheets");
-                Material.MaterialSheet newSheet = addMaterialSheet(cutShapeUnion.getMaterial().getName() + "#" + cutShapeUnion.getDepth());
+                MaterialSheet newSheet = addMaterialSheet(cutShapeUnion.getMaterial().getName() + "#" + cutShapeUnion.getDepth());
                 result = autoCutUnionOnMaterialSheet(newSheet, cutShapeUnion);
 
 
@@ -3557,8 +3563,8 @@ public class CutPane extends Pane implements RepresentToJson {
             System.out.println("\nTry to cutting Feature #" + cutShapeAdditionalFeature.getFeatureOwner().getFeatureNumber());
 
             //check is there material sheet:
-            ArrayList<Material.MaterialSheet> compatibleSheets = new ArrayList<>();
-            for (Material.MaterialSheet sheet : getUsedMaterialSheetsList()) {
+            ArrayList<MaterialSheet> compatibleSheets = new ArrayList<>();
+            for (MaterialSheet sheet : getUsedMaterialSheetsList()) {
                 if (cutShapeAdditionalFeature.getMaterial() == sheet.getMaterial() && cutShapeAdditionalFeature.getDepth() == sheet.getDepth()) {
                     //add compatible sheet:
                     compatibleSheets.add(sheet);
@@ -3569,7 +3575,7 @@ public class CutPane extends Pane implements RepresentToJson {
                 //have compatible sheet, try to auto cutting:
                 System.out.println("have compatible sheets");
 
-                for (Material.MaterialSheet sheet : compatibleSheets) {
+                for (MaterialSheet sheet : compatibleSheets) {
                     //try to cutting with this sheet:
                     result = autoCutOnMaterialSheet(sheet, cutShapeAdditionalFeature);
 
@@ -3578,7 +3584,7 @@ public class CutPane extends Pane implements RepresentToJson {
                 }
                 if (result == 0) {
                     System.out.println("can't cutting on compatible sheets");
-                    Material.MaterialSheet newSheet = addMaterialSheet(cutShapeAdditionalFeature.getMaterial().getName() + "#" + cutShapeAdditionalFeature.getDepth());
+                    MaterialSheet newSheet = addMaterialSheet(cutShapeAdditionalFeature.getMaterial().getName() + "#" + cutShapeAdditionalFeature.getDepth());
                     result = autoCutOnMaterialSheet(newSheet, cutShapeAdditionalFeature);
 
                 }
@@ -3586,7 +3592,7 @@ public class CutPane extends Pane implements RepresentToJson {
             } else {
                 //no compatible sheet, try to create:
                 System.out.println("No compatible sheets");
-                Material.MaterialSheet newSheet = addMaterialSheet(cutShapeAdditionalFeature.getMaterial().getName() + "#" + cutShapeAdditionalFeature.getDepth());
+                MaterialSheet newSheet = addMaterialSheet(cutShapeAdditionalFeature.getMaterial().getName() + "#" + cutShapeAdditionalFeature.getDepth());
                 result = autoCutOnMaterialSheet(newSheet, cutShapeAdditionalFeature);
 
 
@@ -3604,7 +3610,7 @@ public class CutPane extends Pane implements RepresentToJson {
 
     }
 
-    private Point2D autoCutOnSheet(Material.MaterialSheet materialSheet, CutObject cutObject) {
+    private Point2D autoCutOnSheet(MaterialSheet materialSheet, CutObject cutObject) {
 
         if (materialSheet == null || cutObject == null) return null;
 
@@ -3657,7 +3663,7 @@ public class CutPane extends Pane implements RepresentToJson {
         return null;
     }
 
-    private boolean autoCutUnionOnMaterialSheet(Material.MaterialSheet materialSheet, CutShapeUnion cutShapeUnion) {
+    private boolean autoCutUnionOnMaterialSheet(MaterialSheet materialSheet, CutShapeUnion cutShapeUnion) {
 
 
         double startX = materialSheet.getTranslateX();
@@ -3849,7 +3855,7 @@ public class CutPane extends Pane implements RepresentToJson {
     }
 
     /* 0 - false 1- ok 2 - stop*/
-    private int autoCutOnMaterialSheet(Material.MaterialSheet materialSheet, CutObject cutObject) {
+    private int autoCutOnMaterialSheet(MaterialSheet materialSheet, CutObject cutObject) {
 
         int step = 1;//10mm
 
@@ -4005,7 +4011,7 @@ public class CutPane extends Pane implements RepresentToJson {
 
         boolean into = false;
         if (materialSheetsMap.get(materialName + "#" + materialDepth) == null) return into;
-        for (Material.MaterialSheet materialSheet : materialSheetsMap.get(materialName + "#" + materialDepth)) {
+        for (MaterialSheet materialSheet : materialSheetsMap.get(materialName + "#" + materialDepth)) {
 
             Bounds sheetBounds = materialSheet.localToParent(materialSheet.getPolygon().getBoundsInParent());
             Bounds cutObjectBounds = cutObj.localToParent(cutObj.getPolygon().getBoundsInParent());
@@ -4043,7 +4049,7 @@ public class CutPane extends Pane implements RepresentToJson {
         return objPolygon;
     }
 
-    public static boolean checkOverMaterialOrNot(CutObject cutObj, Material.MaterialSheet materialSheet) {
+    public static boolean checkOverMaterialOrNot(CutObject cutObj, MaterialSheet materialSheet) {
 
         String materialName = "";
         int materialDepth = 0;
@@ -4193,7 +4199,7 @@ public class CutPane extends Pane implements RepresentToJson {
         JSONObject jsonObject = new JSONObject();
         //all material Sheets
         JSONArray materialSheetsArray = new JSONArray();
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
 
             JSONObject materialObject = new JSONObject();
             materialObject.put("name", entry.getKey());
@@ -4202,7 +4208,7 @@ public class CutPane extends Pane implements RepresentToJson {
             System.out.println("SAVE SHEETS - " + entry.getValue().size());
             //add sheets:
             JSONArray jsonSheets = new JSONArray();
-            for(Material.MaterialSheet materialSheet : entry.getValue()){
+            for(MaterialSheet materialSheet : entry.getValue()){
 
                 JSONObject jsonMaterialSheet = new JSONObject();
 
@@ -4264,7 +4270,7 @@ public class CutPane extends Pane implements RepresentToJson {
         }
 
         ArrayList<CutShape> savedList = new ArrayList<>(cutDesigner.getCutShapesList());
-        if (ProjectHandler.getProjectType() == ProjectType.TABLE_TYPE) {
+        if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
             cutDesigner.getCutShapesList().clear();
         }
 
@@ -4297,7 +4303,7 @@ public class CutPane extends Pane implements RepresentToJson {
         //jsonObject.put("cutPaneScale", cutPaneScale);
 
 
-        if (ProjectHandler.getProjectType() == ProjectType.TABLE_TYPE) {
+        if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
             cutDesigner.getCutShapesList().addAll(savedList);
         }
 
@@ -4332,7 +4338,7 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     //if(jObj.get("name") == null) break;
 
-                    Material.MaterialSheet materialSheet = addMaterialSheet(((String) jObj.get("name")));
+                    MaterialSheet materialSheet = addMaterialSheet(((String) jObj.get("name")));
                     //if(materialSheet == null) break;
 
 
@@ -4414,7 +4420,7 @@ public class CutPane extends Pane implements RepresentToJson {
                 //for old projects:
                 System.out.println("old project = ");
                 for (int i = 0; i < ((Long) jObj.get("size")).intValue(); i++) {
-                    Material.MaterialSheet materialSheet = addMaterialSheet(((String) jObj.get("name")));
+                    MaterialSheet materialSheet = addMaterialSheet(((String) jObj.get("name")));
 
                 }
             }

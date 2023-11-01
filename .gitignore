@@ -38,3 +38,4 @@ target/
 
 /materials_resources/cache/
 /materials_resources/cashed/
+/dependency-reduced-pom.xml

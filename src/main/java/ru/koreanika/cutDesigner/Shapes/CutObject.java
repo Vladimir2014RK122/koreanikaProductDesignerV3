@@ -3,6 +3,7 @@ package ru.koreanika.cutDesigner.Shapes;
 import ru.koreanika.Common.ConnectPoints.ConnectPoint;
 import ru.koreanika.Common.Connectible;
 import ru.koreanika.Common.Material.Material;
+import ru.koreanika.Common.Material.MaterialSheet;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.CutPane;
 import javafx.geometry.Bounds;
@@ -299,8 +300,8 @@ public abstract class CutObject extends Pane implements Connectible {
                     ((Connectible) node).showConnectionPoints();
                 }
             }
-            for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : CutPane.getMaterialSheetsMap().entrySet()) {
-                for (Material.MaterialSheet sheet : entry.getValue()) {
+            for (Map.Entry<String, ArrayList<MaterialSheet>> entry : CutPane.getMaterialSheetsMap().entrySet()) {
+                for (MaterialSheet sheet : entry.getValue()) {
                     sheet.showConnectionPoints();
                 }
             }
@@ -365,8 +366,8 @@ public abstract class CutObject extends Pane implements Connectible {
             }
         }
 
-        for (Map.Entry<String, ArrayList<Material.MaterialSheet>> entry : CutPane.getMaterialSheetsMap().entrySet()) {
-            for (Material.MaterialSheet sheet : entry.getValue()) {
+        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : CutPane.getMaterialSheetsMap().entrySet()) {
+            for (MaterialSheet sheet : entry.getValue()) {
                 sheet.hideConnectionPoints();
             }
         }
@@ -705,9 +706,9 @@ public abstract class CutObject extends Pane implements Connectible {
             System.out.println("d=" + d);
 
 
-        } else if (staticPoint.getPointOwner() instanceof Material.MaterialSheet) {
+        } else if (staticPoint.getPointOwner() instanceof MaterialSheet) {
 
-            Material.MaterialSheet sheet = (Material.MaterialSheet) staticPoint.getPointOwner();
+            MaterialSheet sheet = (MaterialSheet) staticPoint.getPointOwner();
 
             CutObject draggableShape = (CutObject) draggablePoint.getPointOwner();
 

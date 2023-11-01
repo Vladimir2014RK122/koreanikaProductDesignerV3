@@ -1,4 +1,6 @@
-package ru.koreanika.utils;
+package ru.koreanika;
+
+import ru.koreanika.utils.Main;
 
 /**
  * This class serves as an entry point for an uberjar. Such class must not be a descendant of JavaFX's Application.

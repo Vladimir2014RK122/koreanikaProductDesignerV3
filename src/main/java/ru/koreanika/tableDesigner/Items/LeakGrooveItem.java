@@ -15,7 +15,7 @@ import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.IOException;
@@ -77,17 +77,17 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         LeakGrooveItem oldLeakGrooveItem = item;
 
         Material newMaterial = null;
-        Material defaultMaterial = ProjectHandler.getDefaultMaterial();
+        Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (ProjectHandler.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterials().contains(item.getMaterial())) {
             newMaterial = oldLeakGrooveItem.material;
         } else {
 
             if (defaultMaterial.getMainType().equals(item.getMaterial().getMainType())) {
-                newMaterial = ProjectHandler.getDefaultMaterial();
+                newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : ProjectHandler.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterials()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType())) {
                         newMaterial = material;
@@ -288,7 +288,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         else if (currency.equals("RUB")) multiplier = 1;
 
         priceForOne *= multiplier;
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity * (length/1000)) + ReceiptManager.RUR_SYMBOL);
 
@@ -341,10 +341,10 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         btnAdd = (Button) anchorPaneSettingsView.lookup("#btnAdd");
         labelPrice = (Label) anchorPaneSettingsView.lookup("#labelPrice");
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
         textFieldLength.setText("1000");
 
@@ -358,7 +358,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
 
             if(choiceBoxMaterial.getSelectionModel().getSelectedItem() != null){
                 Material material = null;
-                for (Material m : ProjectHandler.getMaterialsListInProject()) {
+                for (Material m : Project.getMaterials()) {
                     if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                         material = m;
                     }
@@ -389,7 +389,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         if (!(lengthOk && widthOk)) return;
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -410,15 +410,15 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     public static void settingsControlElementsRefresh() {
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
         textFieldLength.setText("1000");
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -431,7 +431,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     public static void updatePriceInSettings() {
 
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = "";
@@ -447,7 +447,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
                 }
 
                 priceForOne /= 100.0;
-                priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+                priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
                 labelPrice.setText(String.format(Locale.ENGLISH, "Цена: %.0f" + " " + currency + "/" + units, priceForOne));
                 break;
@@ -524,7 +524,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         String materialName = (String) jsonObject.get("material");
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (materialName.equals(m.getName())) {
                 material = m;
                 break;

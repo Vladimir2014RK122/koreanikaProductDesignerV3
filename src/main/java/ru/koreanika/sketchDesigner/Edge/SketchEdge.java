@@ -8,8 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
+import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.sketchDesigner.Shapes.SketchObject;
-import ru.koreanika.utils.ProjectHandler;
 
 import java.io.File;
 import java.net.MalformedURLException;

@@ -1,7 +1,7 @@
 package ru.koreanika.PortalClient.UserEventHandler;
 
 import ru.koreanika.PortalClient.Authorization.Authorization;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import org.apache.hc.client5.http.async.methods.*;
 import org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClients;
@@ -10,9 +10,11 @@ import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.apache.hc.core5.util.Timeout;
 import org.json.simple.JSONObject;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.Main;
-import ru.koreanika.utils.MainWindow;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -20,12 +22,14 @@ import java.util.concurrent.Future;
 public class UserEventService {
 
     private static UserEventService userEventService;
+    private final EventBus eventBus;
 
+    public UserEventService(){
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+    }
 
-    public UserEventService(){}
-
-    synchronized static public UserEventService getInstance(){
-        if(userEventService == null){
+    synchronized static public UserEventService getInstance() {
+        if (userEventService == null) {
             userEventService = new UserEventService();
         }
         return userEventService;
@@ -40,14 +44,12 @@ public class UserEventService {
         UserEvent event = new UserEvent(Authorization.getInstance().getUser().getLogin(), message);
         try {
             sendEventRequest(event, Main.getProperty("server.host") + "/api/app/saveCalcActivity", UserPreferences.getInstance().getAccessToken());
-
-
         } catch (InterruptedException e) {
             System.err.println("check auth request CRASHES/ INTERRUPT EXCEPTION");
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "При авторизации произошла ошибка");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "При авторизации произошла ошибка"));
         } catch (ExecutionException e) {
             System.err.println("check auth request CRASHES/ SERVER UNAVAILABLE");
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Сервер Авторизации не отвечает"));
         }
 
     }

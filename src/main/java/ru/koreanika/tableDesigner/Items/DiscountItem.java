@@ -1,7 +1,7 @@
 package ru.koreanika.tableDesigner.Items;
 
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -14,8 +14,7 @@ import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.ProjectHandler;
-//import ru.koreanika.utils.AppOwner1;
+import ru.koreanika.project.Project;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -24,7 +23,6 @@ import java.util.Map;
 public class DiscountItem extends TableDesignerItem {
 
     private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
-
 
     Label labelRowNumber, labelName, labelNull1, labelNull2, labelPercent, labelNull3, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -36,19 +34,12 @@ public class DiscountItem extends TableDesignerItem {
 
 
     public DiscountItem(int quantity, int percent) {
-
-
         this.percent = percent;
-
         this.quantity = quantity;
 
-        imageMain = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/DiscountItem/discountItem.png").toString()).getImage();
+        imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/DiscountItem/discountItem.png").toString()).getImage();
 
-
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/DiscountRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/DiscountRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -346,14 +337,11 @@ public class DiscountItem extends TableDesignerItem {
     }
 
     public static void settingsControlElementsRefresh() {
-
-        //if(Main.appOwner.toUpperCase().equals("ZETTA")){
-        if(UserPreferences.getInstance().getSelectedApp() == AppType.ZETTA){
+        if (UserPreferences.getInstance().getSelectedApp() == AppType.ZETTA) {
             textFieldPercent.setText("5");
-        }else{
+        } else {
             textFieldPercent.setText("10");
         }
-
     }
 
     private static void enterToEditMode(DiscountItem discountItem){

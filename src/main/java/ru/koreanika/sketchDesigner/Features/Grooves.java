@@ -13,7 +13,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -204,11 +204,11 @@ public class Grooves extends AdditionalFeature {
             this.getChildren().remove(shapeScheme);
             FileInputStream input = new FileInputStream(shapeSchemePath);
             shapeScheme.setImage(new Image(input));
-            shapeScheme.setFitWidth(featureWidth * ProjectHandler.getCommonShapeScale());
-            shapeScheme.setFitHeight(featureHeight * ProjectHandler.getCommonShapeScale());
+            shapeScheme.setFitWidth(featureWidth * Project.getCommonShapeScale());
+            shapeScheme.setFitHeight(featureHeight * Project.getCommonShapeScale());
             //shapeScheme.setPreserveRatio(true);
 
-            this.setPrefSize(featureWidth * ProjectHandler.getCommonShapeScale(), featureHeight * ProjectHandler.getCommonShapeScale());
+            this.setPrefSize(featureWidth * Project.getCommonShapeScale(), featureHeight * Project.getCommonShapeScale());
             this.getChildren().add(shapeScheme);
             //this.setCenter(shapeScheme);
             input.close();

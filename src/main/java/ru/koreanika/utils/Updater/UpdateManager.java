@@ -1,5 +1,6 @@
 package ru.koreanika.utils.Updater;
 
+import ru.koreanika.utils.Main;
 import ru.koreanika.PortalClient.Update.UpdateService;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +15,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javafx.stage.StageStyle;
-import ru.koreanika.utils.*;
 
 
 import java.io.*;
@@ -59,21 +59,6 @@ public class UpdateManager{
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-//        rootAnchorPane.getStylesheets().clear();
-////        if(Main.appOwner.toUpperCase().equals("KOREANIKA")){
-//        if(Main.appType == AppType.KOREANIKA || Main.appType == AppType.KOREANIKAMASTER){
-//            rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsKoreanika.css").toExternalForm());
-////        }else if(Main.appOwner.toUpperCase().equals("ZETTA")){
-//        }else if(Main.appType == AppType.ZETTA){
-//            rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsZetta.css").toExternalForm());
-//        }else if(Main.appType == AppType.PROMEBEL){
-//            rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsPromebel.css").toExternalForm());
-//        }
-//        rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/rootTheme.css").toExternalForm());
-//        rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/updateManager.css").toExternalForm());
-
-//        updaterScene = new Scene(rootAnchorPane, rootAnchorPane.getPrefWidth(), rootAnchorPane.getPrefHeight());
 
         AnchorPane root = new AnchorPane();
         root.setStyle("-fx-background-color: transparent;");

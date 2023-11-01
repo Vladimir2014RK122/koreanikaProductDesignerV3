@@ -1,24 +1,35 @@
 import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Exceptions.ParseXLSFileException;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.catalog.Catalogs;
+import ru.koreanika.catalog.FacadeXLSParser;
+import ru.koreanika.project.ProjectHandler;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static ru.koreanika.utils.ProjectHandler.projectHandlerInit;
-
+@Deprecated
 public class TestMaterialImages {
 
-    public static void main(String[] args) throws ParseXLSFileException {
-        projectHandlerInit();
+    private static final String MATERIALS_XLS_PATH = "materials_1_2004.xls";
+    private static final String ANALOGS_XLS_PATH = "material_analogs.xls";
 
-        ProjectHandler.getMaterialsListAvailable();
+    public static void main(String[] args) {
+        try {
+            FacadeXLSParser parser = new FacadeXLSParser(MATERIALS_XLS_PATH, ANALOGS_XLS_PATH);
+            parser.populateCatalogs(
+                    Catalogs.materialsListAvailable,
+                    Catalogs.plumbingElementsList,
+                    Catalogs.availablePlumbingTypes,
+                    Catalogs.materialsDeliveryFromManufacturer
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         String resultOut = "";
         int countLostImages = 0;
 
-        for(Material m : ProjectHandler.getMaterialsListAvailable()){
+        for (Material m : Catalogs.getMaterialsListAvailable()) {
             String name = m.getMainType() + "/" +
                     m.getSubType() + "/" +
                     m.getCollection() + "/" +
@@ -27,7 +38,7 @@ public class TestMaterialImages {
                     m.getColor() + " 200х200.png";
 
             String imageMaterialPath = "../Камни для калькулятора/Камни для калькулятора/" +
-            m.getMainType() + "/" +
+                    m.getMainType() + "/" +
                     m.getSubType() + "/" +
                     m.getCollection() + "/" +
                     m.getColor() + "/" +
@@ -35,9 +46,9 @@ public class TestMaterialImages {
                     m.getColor() + " 200х200.png";
 
             File file = new File(imageMaterialPath);
-            if(file.exists()){
+            if (file.exists()) {
 //                System.out.println(imageMaterialPath + " - exist");
-            }else{
+            } else {
                 countLostImages++;
                 resultOut += name + " - NO\r\n";
                 System.out.println(name + " - NO");
@@ -48,7 +59,7 @@ public class TestMaterialImages {
         System.out.println("count = " + countLostImages);
 
         try {
-            FileWriter writer = new FileWriter("../Камни для калькулятора/LostMaterialImages.txt",false);
+            FileWriter writer = new FileWriter("../Камни для калькулятора/LostMaterialImages.txt", false);
             writer.write(resultOut);
             writer.flush();
         } catch (IOException e) {

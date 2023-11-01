@@ -13,6 +13,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ru.koreanika.Common.Material.MaterialSheet;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.ProjectClosedEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.Receipt.ReceiptManager;
@@ -25,12 +29,10 @@ import java.util.Map;
 
 public class CheckSheetsPrices {
 
-    public static boolean checkPrices(Material material, Material.MaterialSheet materialSheet){
+    public static boolean checkPrices(Material material, MaterialSheet materialSheet){
         boolean theSame = false;
 
         if(materialSheet.isAdditionalSheet()) return true;
-
-
 
         //check depths and prices:
         boolean equalsTableTopDepthAndPrices = material.getTableTopDepthsAndPrices().toString().equals(materialSheet.getTableTopDepthsAndPrices().toString());
@@ -59,7 +61,7 @@ public class CheckSheetsPrices {
         return theSame;
     }
 
-    public static void setActualPrices(Material material, Material.MaterialSheet materialSheet){
+    public static void setActualPrices(Material material, MaterialSheet materialSheet){
 
         //set prices:
         materialSheet.getTableTopDepthsAndPrices().clear();
@@ -68,16 +70,16 @@ public class CheckSheetsPrices {
         materialSheet.getFootDepthsAndPrices().clear();
 
         for(Map.Entry<Integer, Integer> entry : material.getTableTopDepthsAndPrices().entrySet()){
-            materialSheet.getTableTopDepthsAndPrices().put(new Integer(entry.getKey()), new Integer(entry.getValue()));
+            materialSheet.getTableTopDepthsAndPrices().put(entry.getKey(), entry.getValue());
         }
         for(Map.Entry<Integer, Integer> entry : material.getWallPanelDepthsAndPrices().entrySet()){
-            materialSheet.getWallPanelDepthsAndPrices().put(new Integer(entry.getKey()), new Integer(entry.getValue()));
+            materialSheet.getWallPanelDepthsAndPrices().put(entry.getKey(), entry.getValue());
         }
         for(Map.Entry<Integer, Integer> entry : material.getWindowSillDepthsAndPrices().entrySet()){
-            materialSheet.getWindowSillDepthsAndPrices().put(new Integer(entry.getKey()), new Integer(entry.getValue()));
+            materialSheet.getWindowSillDepthsAndPrices().put(entry.getKey(), entry.getValue());
         }
         for(Map.Entry<Integer, Integer> entry : material.getFootDepthsAndPrices().entrySet()){
-            materialSheet.getFootDepthsAndPrices().put(new Integer(entry.getKey()), new Integer(entry.getValue()));
+            materialSheet.getFootDepthsAndPrices().put(entry.getKey(), entry.getValue());
         }
 
         //set coefficients:
@@ -86,23 +88,23 @@ public class CheckSheetsPrices {
         materialSheet.getWindowSillCoefficientList().clear();
         materialSheet.getFootCoefficientList().clear();
 
-        for(Double coefficient : material.getTableTopCoefficientList()){
-            materialSheet.getTableTopCoefficientList().add(new Double(coefficient));
+        for (Double coefficient : material.getTableTopCoefficientList()) {
+            materialSheet.getTableTopCoefficientList().add(coefficient);
         }
-        for(Double coefficient : material.getWallPanelCoefficientList()){
-            materialSheet.getWallPanelCoefficientList().add(new Double(coefficient));
+        for (Double coefficient : material.getWallPanelCoefficientList()) {
+            materialSheet.getWallPanelCoefficientList().add(coefficient);
         }
-        for(Double coefficient : material.getWindowSillCoefficientList()){
-            materialSheet.getWindowSillCoefficientList().add(new Double(coefficient));
+        for (Double coefficient : material.getWindowSillCoefficientList()) {
+            materialSheet.getWindowSillCoefficientList().add(coefficient);
         }
-        for(Double coefficient : material.getFootCoefficientList()){
-            materialSheet.getFootCoefficientList().add(new Double(coefficient));
+        for (Double coefficient : material.getFootCoefficientList()) {
+            materialSheet.getFootCoefficientList().add(coefficient);
         }
         materialSheet.setActualPrice(true);
 
     }
 
-    public static void showInfoWindow(Scene mainScene, LinkedHashMap<Material, ArrayList<Material.MaterialSheet>> differenceMap){
+    public static void showInfoWindow(Scene mainScene, LinkedHashMap<Material, ArrayList<MaterialSheet>> differenceMap){
         new InfoWindow().showInfoWindow(mainScene, differenceMap);
     }
 
@@ -116,9 +118,9 @@ public class CheckSheetsPrices {
         Button btnUpdatePrices, btnSaveOldPrices;
         TableView<TableItem> tableView;
 
-        LinkedHashMap<Material, ArrayList<Material.MaterialSheet>> differenceMap;
+        LinkedHashMap<Material, ArrayList<MaterialSheet>> differenceMap;
 
-        public void showInfoWindow(Scene mainScene, LinkedHashMap<Material, ArrayList<Material.MaterialSheet>> differenceMap){
+        public void showInfoWindow(Scene mainScene, LinkedHashMap<Material, ArrayList<MaterialSheet>> differenceMap){
 
             this.differenceMap = differenceMap;
             this.mainScene = mainScene;
@@ -130,20 +132,6 @@ public class CheckSheetsPrices {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-
-////            if(Main.appOwner.toUpperCase().equals("KOREANIKA")){
-//            if(Main.appType == AppType.KOREANIKA || Main.appType == AppType.KOREANIKAMASTER){
-//                rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsKoreanika.css").toExternalForm());
-////            }else if(Main.appOwner.toUpperCase().equals("ZETTA")){
-//            }else if(Main.appType == AppType.ZETTA){
-//                rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsZetta.css").toExternalForm());
-//            }else if(Main.appType == AppType.PROMEBEL){
-//                rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/colorsPromebel.css").toExternalForm());
-//            }
-//            rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/rootTheme.css").toExternalForm());
-            //rootAnchorPane.getStylesheets().add(getClass().getResource("/styles/check.css").toExternalForm());
-
-
 
             checkerScene = new Scene(rootAnchorPane, rootAnchorPane.getPrefWidth(), rootAnchorPane.getPrefHeight());
 
@@ -187,7 +175,7 @@ public class CheckSheetsPrices {
 
             ObservableList<TableItem> list = FXCollections.observableList(new ArrayList<>());
             int i =1;
-            for(Map.Entry<Material, ArrayList<Material.MaterialSheet>> entry : differenceMap.entrySet()){
+            for(Map.Entry<Material, ArrayList<MaterialSheet>> entry : differenceMap.entrySet()){
                 int number = i++;
                 String materialName = entry.getKey().getReceiptName();
                 int sheetsNumber = entry.getValue().size();
@@ -211,8 +199,8 @@ public class CheckSheetsPrices {
         private void initControlsLogic(){
             btnUpdatePrices.setOnMouseClicked(event -> {
 
-                for(Map.Entry<Material, ArrayList<Material.MaterialSheet>> entry : differenceMap.entrySet()){
-                    for(Material.MaterialSheet sheet : entry.getValue()){
+                for(Map.Entry<Material, ArrayList<MaterialSheet>> entry : differenceMap.entrySet()){
+                    for(MaterialSheet sheet : entry.getValue()){
                         CheckSheetsPrices.setActualPrices(entry.getKey(), sheet);
                     }
                 }
@@ -232,7 +220,9 @@ public class CheckSheetsPrices {
             ((Stage) (checkerScene.getWindow())).setOnCloseRequest(event -> {
                 System.out.println("close checker");
                 mainScene.getRoot().setDisable(false);
-                MainWindow.closeProject();
+
+                EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+                eventBus.fireEvent(new ProjectClosedEvent());
             });
         }
 

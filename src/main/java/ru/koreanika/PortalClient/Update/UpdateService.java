@@ -3,7 +3,7 @@ package ru.koreanika.PortalClient.Update;
 import ru.koreanika.PortalClient.Authorization.Authorization;
 import ru.koreanika.PortalClient.PortalURI;
 import ru.koreanika.PortalClient.Status.PortalStatus;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import javafx.application.Platform;
 
 import javafx.stage.Stage;
@@ -18,9 +18,11 @@ import org.apache.hc.core5.util.Timeout;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.Main;
-import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.Updater.UpdateChecker;
 import ru.koreanika.utils.Updater.UpdateManager;
 
@@ -34,16 +36,19 @@ import java.util.zip.ZipInputStream;
 public class UpdateService {
 
     private static UpdateService updateService;
+    private final EventBus eventBus;
 
     private AvailableVersionThread availableVersionThread;
 
     private String availableVersion = "";
     private String availableFile = "";
 
-    private UpdateService(){}
+    private UpdateService() {
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+    }
 
-    public synchronized static UpdateService getInstance(){
-        if(updateService == null){
+    public synchronized static UpdateService getInstance() {
+        if (updateService == null) {
             updateService = new UpdateService();
         }
         return updateService;
@@ -144,7 +149,7 @@ public class UpdateService {
             e.printStackTrace();
             return false;
         } catch (ExecutionException e) {
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "В процессе загрузки обновления связь с сервером потеряна.");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "В процессе загрузки обновления связь с сервером потеряна."));
             e.printStackTrace();
             return false;
         }

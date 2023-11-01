@@ -13,7 +13,7 @@ import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         this.handCarryPrice = handCarryPrice;
 
 
-        imageMain = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/DeliveryItem/delivery.png").toString()).getImage();
+        imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/DeliveryItem/delivery.png").toString()).getImage();
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(
@@ -294,10 +294,10 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
 //        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
 
-        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * ProjectHandler.getPriceMainCoefficient().doubleValue() * quantity)) + ReceiptManager.RUR_SYMBOL);
+        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * Project.getPriceMainCoefficient().doubleValue() * quantity)) + ReceiptManager.RUR_SYMBOL);
 
-        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * ProjectHandler.getPriceMainCoefficient().doubleValue())) + ReceiptManager.RUR_SYMBOL);
-        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * ProjectHandler.getPriceMainCoefficient().doubleValue() * quantity)) + ReceiptManager.RUR_SYMBOL);
+        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * Project.getPriceMainCoefficient().doubleValue())) + ReceiptManager.RUR_SYMBOL);
+        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * Project.getPriceMainCoefficient().doubleValue() * quantity)) + ReceiptManager.RUR_SYMBOL);
 
 
     }
@@ -440,7 +440,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         if (!(lengthOk && countOk && liftingOk)) return;
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -486,10 +486,10 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
     public static void settingsControlElementsRefresh() {
         choiceBoxMaterial.getItems().clear();
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
         textFieldCount.setText("1");
         textFieldLength.setText("0");
@@ -509,7 +509,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         double priceForOne = 0.0;
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -557,7 +557,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
         priceForOne += deliveryCount * priceForDelivery + priceForDeliveryKM * lengthCount + priceForUnBox + priceForHandCarry;
 
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelPrice.setText(String.format(Locale.ENGLISH, "Цена: %.0f" + " " + currency + "/" + units, priceForOne));
     }
@@ -669,7 +669,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         }
 
         String materialName = (String) jsonObject.get("material");
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (materialName.equals(m.getName())) {
 
                 DeliveryItem deliveryItem = new DeliveryItem(m, quantity, insideMKADCount, length, lifting, handCarryPrice);
@@ -701,17 +701,17 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         DeliveryItem oldDeliveryItem = item;
 
         Material newMaterial = null;
-        Material defaultMaterial = ProjectHandler.getDefaultMaterial();
+        Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (ProjectHandler.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterials().contains(item.getMaterial())) {
             newMaterial = oldDeliveryItem.material;
         } else {
 
             if (defaultMaterial.getMainType().equals(item.getMaterial().getMainType())) {
-                newMaterial = ProjectHandler.getDefaultMaterial();
+                newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : ProjectHandler.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterials()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType())) {
                         newMaterial = material;

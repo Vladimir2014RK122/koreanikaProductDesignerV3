@@ -1,7 +1,6 @@
 package ru.koreanika.utils;
 
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.Preferences.UserPreferences;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import ru.koreanika.project.Project;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -69,20 +69,6 @@ public class PriceCoefficientsWindow {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-//        anchorPaneRoot.getStylesheets().clear();
-////        if(Main.appOwner.toUpperCase().equals("KOREANIKA")){
-//        if(Main.appType == AppType.KOREANIKA || Main.appType == AppType.KOREANIKAMASTER){
-//            anchorPaneRoot.getStylesheets().add(getClass().getResource("/styles/colorsKoreanika.css").toExternalForm());
-////        }else if(Main.appOwner.toUpperCase().equals("ZETTA")){
-//        }else if(Main.appType == AppType.ZETTA){
-//            anchorPaneRoot.getStylesheets().add(getClass().getResource("/styles/colorsZetta.css").toExternalForm());
-//        }else if(Main.appType == AppType.PROMEBEL){
-//            anchorPaneRoot.getStylesheets().add(getClass().getResource("/styles/colorsPromebel.css").toExternalForm());
-//        }
-
-//        anchorPaneRoot.getStylesheets().add(getClass().getResource("/styles/rootTheme.css").toExternalForm());
-//        anchorPaneRoot.getStylesheets().add(getClass().getResource("/styles/priceCoefficients.css").toExternalForm());
 
         textFieldMaterialCoefficient = (TextField) anchorPaneRoot.lookup("#textFieldMaterialCoefficient");
         textFieldMainCoefficient = (TextField) anchorPaneRoot.lookup("#textFieldMainCoefficient");
@@ -164,8 +150,8 @@ public class PriceCoefficientsWindow {
                 String mainS = String.format(Locale.ENGLISH, "%.2f", mainD);
                 String materialS = String.format(Locale.ENGLISH, "%.2f", materialD);
 
-                ProjectHandler.setPriceMainCoefficient(Double.parseDouble(mainS));
-                ProjectHandler.setPriceMaterialCoefficient(Double.parseDouble(materialS));
+                Project.setPriceMainCoefficient(Double.parseDouble(mainS));
+                Project.setPriceMaterialCoefficient(Double.parseDouble(materialS));
 
                 Main.updateCoefficientProperties(Double.parseDouble(mainS), Double.parseDouble(materialS));
 
@@ -291,8 +277,8 @@ public class PriceCoefficientsWindow {
 
         priceCoefficientsWindow.refreshView();
 
-        priceCoefficientsWindow.textFieldMaterialCoefficient.setText(String.format(Locale.ENGLISH, "%.2f", ProjectHandler.getPriceMaterialCoefficient().get()));
-        priceCoefficientsWindow.textFieldMainCoefficient.setText(String.format(Locale.ENGLISH, "%.2f", ProjectHandler.getPriceMainCoefficient().get()));
+        priceCoefficientsWindow.textFieldMaterialCoefficient.setText(String.format(Locale.ENGLISH, "%.2f", Project.getPriceMaterialCoefficient().get()));
+        priceCoefficientsWindow.textFieldMainCoefficient.setText(String.format(Locale.ENGLISH, "%.2f", Project.getPriceMainCoefficient().get()));
 
 
 

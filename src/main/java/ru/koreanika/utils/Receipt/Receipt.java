@@ -2,6 +2,8 @@ package ru.koreanika.utils.Receipt;
 
 import ru.koreanika.Common.Material.Material;
 
+import ru.koreanika.Common.Material.MaterialSheet;
+import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.Shapes.CutObject;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
@@ -24,14 +26,14 @@ import ru.koreanika.utils.News.NewsCard;
 import ru.koreanika.utils.News.NewsCardStockCondition;
 import ru.koreanika.utils.News.NewsCardStockItem;
 import ru.koreanika.utils.News.NewsController;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 
 
 import java.util.*;
 
 public class Receipt {
 
-    private static Map<Material, ArrayList<Material.MaterialSheet>> materialAndSheets = new LinkedHashMap<>();
+    private static Map<Material, ArrayList<MaterialSheet>> materialAndSheets = new LinkedHashMap<>();
 
     private static Map<Material, Map<Integer, Double>> materialSquaresCalcType2 = new LinkedHashMap<>();
     private static Map<Material, Map<Integer, Double>> shapesSquaresCalcType2 = new LinkedHashMap<>();
@@ -152,13 +154,13 @@ public class Receipt {
         /** new calculate, more correct instead previous version:  START*/
         System.out.println("\n\n*** START calculate materials ***\n");
 
-        Map<Material.MaterialSheet, ArrayList<CutShape>> sheetsAndShapes = CutDesigner.getInstance().getCutPane().getSheetsAndShapesOnItMap();
-        Map<Material.MaterialSheet, Double> sheetsAndUsesSumSquare = new LinkedHashMap<>();
+        Map<MaterialSheet, ArrayList<CutShape>> sheetsAndShapes = CutDesigner.getInstance().getCutPane().getSheetsAndShapesOnItMap();
+        Map<MaterialSheet, Double> sheetsAndUsesSumSquare = new LinkedHashMap<>();
 
         Map<Material, Integer> materialAndNumberOfShapes = new LinkedHashMap<>();//need for calculate delivery
 
         System.out.println("Cut shapes on sheets:");
-        for (Map.Entry<Material.MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
+        for (Map.Entry<MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
 
             System.out.println("sheet: " + entry.getKey().getMaterial().getName().replace("$", " "));
 
@@ -170,7 +172,7 @@ public class Receipt {
         }
 
         System.out.println("Cut shapes into its sheets squares:");
-        for (Map.Entry<Material.MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
+        for (Map.Entry<MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
 
             System.out.println("sheet: " + entry.getKey().getMaterial().getName().replace("$", " "));
             double CutShapesSumSquare = 0;
@@ -204,7 +206,7 @@ public class Receipt {
         receiptLog = "";
         System.out.println(" \n*** Кварц/DECTONE/Натуральный камень ***");
         receiptLog += "CUARZ MATERIAL:";
-        for (Map.Entry<Material.MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
+        for (Map.Entry<MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
 
             //double Pm2Material = entry.getKey().getMaterial().getPrice(entry.getValue().get(0).getElementType(), entry.getKey().getDepth());//old
             double Pm2Material = entry.getKey().getPrice(entry.getValue().get(0).getElementType(), entry.getKey().getDepth());
@@ -453,7 +455,7 @@ public class Receipt {
                 if (cutShape.getMaterial().getCalculationType() == 2) continue;
                 double S = cutShape.getShapeSquare();
                 //System.out.println(cutShape + "S=" + S);
-                S = Math.ceil(S / Math.pow(ProjectHandler.getCommonShapeScale(), 2));
+                S = Math.ceil(S / Math.pow(Project.getCommonShapeScale(), 2));
                 S = S / 1000000;//mm^2 to m^2
                 allSquare += S;
                 cutObjectsAndSquareCalcType1.put(cutShape, Double.valueOf(S));
@@ -489,7 +491,7 @@ public class Receipt {
 
             /** get Cutshape with the most cost: */
             CutShape expensiveCutShape = null;
-            for (Map.Entry<Material.MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
+            for (Map.Entry<MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
                 if (entry.getKey().getMaterial().getCalculationType() == 2) continue;
                 for (CutShape cutShape : entry.getValue()) {
                     if(expensiveCutShape == null ||
@@ -539,9 +541,9 @@ public class Receipt {
 
             System.out.println("\n Parts: ");
 
-            for (Map.Entry<Material.MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
+            for (Map.Entry<MaterialSheet, ArrayList<CutShape>> entry : sheetsAndShapes.entrySet()) {
 
-                Material.MaterialSheet materialSheet = entry.getKey();
+                MaterialSheet materialSheet = entry.getKey();
                 Material material = materialSheet.getMaterial();
 
                 double Pm2Material = materialSheet.getPrice(entry.getValue().get(0).getElementType(), entry.getKey().getDepth());
@@ -583,9 +585,9 @@ public class Receipt {
 
 
                     double deliveryPrice = 0;
-                    if (ProjectHandler.getMaterialsDeliveryFromManufacture().get(material.getSubType()) != null) {
+                    if (Catalogs.getMaterialsDeliveryFromManufacturer().get(material.getSubType()) != null) {
 
-                        double deliveryCommonPrice = ProjectHandler.getMaterialsDeliveryFromManufacture().get(material.getSubType()).doubleValue();
+                        double deliveryCommonPrice = Catalogs.getMaterialsDeliveryFromManufacturer().get(material.getSubType()).doubleValue();
                         int shapesNumber = materialAndNumberOfShapes.get(material);
                         deliveryPrice = deliveryCommonPrice / shapesNumber;//in RUR
                         if (currency.equals("USD")) {
@@ -750,7 +752,7 @@ public class Receipt {
 
     public static double getUsesSlabs() {
         usesSlabs = 0;
-        for(Material.MaterialSheet ms : CutDesigner.getInstance().getCutPane().getUsedMaterialSheetsList()){
+        for(MaterialSheet ms : CutDesigner.getInstance().getCutPane().getUsedMaterialSheetsList()){
             usesSlabs += ms.getUsesSlabs();
         }
         return usesSlabs;
@@ -849,7 +851,7 @@ public class Receipt {
         return jointReceiptItemsList;
     }
 
-    public static Map<Material, ArrayList<Material.MaterialSheet>> getMaterialAndSheets() {
+    public static Map<Material, ArrayList<MaterialSheet>> getMaterialAndSheets() {
         return materialAndSheets;
     }
 
@@ -894,14 +896,14 @@ public class Receipt {
             if (cutShape.getMaterial().getCalculationType() == 2) continue;
             double S = cutShape.getShapeSquare();
             System.out.println(cutShape + "S=" + S);
-            S = Math.ceil(S / Math.pow(ProjectHandler.getCommonShapeScale(), 2));
+            S = Math.ceil(S / Math.pow(Project.getCommonShapeScale(), 2));
             S = S / 1000000;//mm^2 to m^2
             cutObjectsAndSquareCalcType1.put(cutShape, Double.valueOf(S));
         }
         for (CutShapeAdditionalFeature cutShapeAdditionalFeature : CutDesigner.getInstance().getCutShapeAdditionalFeaturesList()) {
             if (cutShapeAdditionalFeature.getMaterial().getCalculationType() == 2) continue;
             double S = cutShapeAdditionalFeature.getShapeSquare();
-            S = Math.ceil(S / Math.pow(ProjectHandler.getCommonShapeScale(), 2));
+            S = Math.ceil(S / Math.pow(Project.getCommonShapeScale(), 2));
             S = S / 1000000;//mm^2 to m^2
             cutObjectsAndSquareCalcType1.put(cutShapeAdditionalFeature, Double.valueOf(S));
         }
@@ -957,7 +959,7 @@ public class Receipt {
             if (cutShape.getElementType() != elementTypes) continue;
 
             double cutShapeSquare = cutShape.getShapeSquare();
-            cutShapeSquare = Math.ceil(cutShapeSquare / Math.pow(ProjectHandler.getCommonShapeScale(), 2));
+            cutShapeSquare = Math.ceil(cutShapeSquare / Math.pow(Project.getCommonShapeScale(), 2));
             cutShapeSquare = cutShapeSquare / 1000000;//mm^2 to m^2
 
             Map<Integer, Double> depthsAndSquare = map.get(cutShape.getMaterial());
@@ -1183,11 +1185,11 @@ public class Receipt {
                     currency = material.getJointsCurrency();
                     if (joint.getType() == Joint.JointType.STRAIGHT) {
 
-                        countStraight += (joint.getLen() / ProjectHandler.getCommonShapeScale()) / 1000;
+                        countStraight += (joint.getLen() / Project.getCommonShapeScale()) / 1000;
 
                     } else {
 
-                        countAngles += (joint.getLen() / ProjectHandler.getCommonShapeScale()) / 1000;
+                        countAngles += (joint.getLen() / Project.getCommonShapeScale()) / 1000;
                     }
 
                     priceForOne = (material.getJointsTypesAndPrices().get(joint.getType().ordinal())) / 100;
@@ -1441,11 +1443,11 @@ public class Receipt {
         }
 
         for (Integer integer : borderTopCutTypes) {
-            ImageView imageView = new ImageView(new Image(ProjectHandler.class.getResource("/styles/images/edgeManager/borderCut" + integer.intValue() + ".png").toString()));
+            ImageView imageView = new ImageView(new Image(Project.class.getResource("/styles/images/edgeManager/borderCut" + integer.intValue() + ".png").toString()));
             receiptImageItemsList.add(new ReceiptImageItem("Грань бортика", imageView));
         }
         for (Integer integer : borderSideCutTypes) {
-            ImageView imageView = new ImageView(new Image(ProjectHandler.class.getResource("/styles/images/edgeManager/borderSideCut" + integer.intValue() + ".png").toString()));
+            ImageView imageView = new ImageView(new Image(Project.class.getResource("/styles/images/edgeManager/borderSideCut" + integer.intValue() + ".png").toString()));
             receiptImageItemsList.add(new ReceiptImageItem("Запил бортика", imageView));
         }
 

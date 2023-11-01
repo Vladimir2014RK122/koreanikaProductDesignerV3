@@ -11,14 +11,17 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.MainWindow;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class MaintenanceMessageWindow {
 
+    private final EventBus eventBus;
     Stage stage = new Stage();
     Scene mainScene;
     Scene scene;
@@ -61,6 +64,8 @@ public class MaintenanceMessageWindow {
 
         initControls();
         initControlsLogic();
+
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
     }
 
     private void initControls(){
@@ -144,20 +149,20 @@ public class MaintenanceMessageWindow {
             maintenanceMessage.setResultCallBacks(new MaintenanceMessage.ResultCallBacks() {
                 @Override
                 public void success() {
-                    MainWindow.showInfoMessage(InfoMessage.MessageType.SUCCESS, "Ваше сообщение отправлено!");
+                    eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.SUCCESS, "Ваше сообщение отправлено!"));
                 }
 
                 @Override
                 public void failed() {
-                    MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Ваше сообщение НЕ отправлено!");
+                    eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Ваше сообщение НЕ отправлено!"));
                 }
             });
 
         } catch (ExecutionException e) {
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Ваше сообщение НЕ отправлено!");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Ваше сообщение НЕ отправлено!"));
             e.printStackTrace();
         } catch (InterruptedException e) {
-            MainWindow.showInfoMessage(InfoMessage.MessageType.ERROR, "Ваше сообщение НЕ отправлено!");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Ваше сообщение НЕ отправлено!"));
             e.printStackTrace();
         }
 

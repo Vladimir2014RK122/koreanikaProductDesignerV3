@@ -27,7 +27,7 @@ import ru.koreanika.sketchDesigner.Shapes.SketchShapeRectangle;
 import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.*;
@@ -108,10 +108,10 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
             ex.printStackTrace();
         }
 
-        imageInstallType = new ImageView(ProjectHandler.class
+        imageInstallType = new ImageView(Project.class
                 .getResource("/styles/images/TableDesigner/SinkItem/sink_install_type_" + installType + ".png")
                 .toString()).getImage();
-        imageEdgeType = new ImageView(ProjectHandler.class
+        imageEdgeType = new ImageView(Project.class
                 .getResource("/styles/images/TableDesigner/SinkItem/sink_edge_type_" + edgeType + ".png")
                 .toString()).getImage();
 
@@ -194,16 +194,16 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         SinkItem oldSinkItem = item;
 
         Material newMaterial = null;
-        Material defaultMaterial = ProjectHandler.getDefaultMaterial();
+        Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (ProjectHandler.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterials().contains(item.getMaterial())) {
             newMaterial = oldSinkItem.material;
         } else {
             if (defaultMaterial.getMainType().equals(item.getMaterial().getMainType()) && defaultMaterial.getDepths().contains("" + oldSinkItem.depth)) {
-                newMaterial = ProjectHandler.getDefaultMaterial();
+                newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : ProjectHandler.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterials()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType()) && material.getDepths().contains("" + oldSinkItem.depth)) {
                         newMaterial = material;
@@ -621,7 +621,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
             priceForOne += priceForOneInstall;
         }
 
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + ReceiptManager.RUR_SYMBOL);
 
@@ -714,12 +714,12 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         btnAdd = (Button) anchorPaneSettingsView.lookup("#btnAdd");
         labelPrice = (Label) anchorPaneSettingsView.lookup("#labelPrice");
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
-        choiceBoxDepth.getItems().addAll(ProjectHandler.getDefaultMaterial().getDepths());
+        choiceBoxDepth.getItems().addAll(Project.getDefaultMaterial().getDepths());
         choiceBoxDepth.getSelectionModel().select(0);
 
 
@@ -769,13 +769,13 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         }
 
 
-        if (ProjectHandler.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1 || ProjectHandler.getDefaultMaterial().getMainType().indexOf("Полиэфирный камень") != -1) {
+        if (Project.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1 || Project.getDefaultMaterial().getMainType().indexOf("Полиэфирный камень") != -1) {
 
             for (int i = 1; i <= 11; i++) {
 //                comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), i));
                 comboBoxSinkType.getItems().add(sinkTypes.get(i));
             }
-            if (ProjectHandler.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1)
+            if (Project.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1)
 //                comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 18));
                 comboBoxSinkType.getItems().add(sinkTypes.get(18));
 
@@ -787,8 +787,8 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
             comboBoxSinkType.getItems().add(sinkTypes.get(21));
 //            comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 16));
 //            comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 17));
-        }else if(ProjectHandler.getDefaultMaterial().getMainType().indexOf("Массив") != -1 ||
-                ProjectHandler.getDefaultMaterial().getMainType().indexOf("Массив_шпон") != -1){
+        }else if(Project.getDefaultMaterial().getMainType().indexOf("Массив") != -1 ||
+                Project.getDefaultMaterial().getMainType().indexOf("Массив_шпон") != -1){
             comboBoxSinkType.getItems().add(sinkTypes.get(16));
             comboBoxSinkType.getItems().add(sinkTypes.get(19));
             comboBoxSinkType.getSelectionModel().select(0);
@@ -867,7 +867,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
 
             comboBoxSinkType.getItems().clear();
 
-            for (Material material : ProjectHandler.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
 
                     if (material.getName().indexOf("Акриловый камень") != -1 || material.getName().indexOf("Полиэфирный камень") != -1) {
@@ -1085,7 +1085,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
     private static void addItem(int index, int quantity){
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -1169,28 +1169,28 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
     public static void settingsControlElementsRefresh() {
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
         choiceBoxDepth.getItems().clear();
-        choiceBoxDepth.getItems().addAll(ProjectHandler.getDefaultMaterial().getDepths());
-        choiceBoxDepth.getSelectionModel().select("" + ProjectHandler.getDefaultMaterial().getDefaultDepth());
+        choiceBoxDepth.getItems().addAll(Project.getDefaultMaterial().getDepths());
+        choiceBoxDepth.getSelectionModel().select("" + Project.getDefaultMaterial().getDefaultDepth());
 
         comboBoxSinkType.getItems().clear();
-        if (ProjectHandler.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1 || ProjectHandler.getDefaultMaterial().getMainType().indexOf("Полиэфирный камень") != -1) {
+        if (Project.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1 || Project.getDefaultMaterial().getMainType().indexOf("Полиэфирный камень") != -1) {
 
             for (int i = 1; i <= 11; i++) {
 
-                if(ProjectHandler.getDefaultMaterial().getAvailableSinkTypes().contains(i)){
+                if(Project.getDefaultMaterial().getAvailableSinkTypes().contains(i)){
                     comboBoxSinkType.getItems().add(sinkTypes.get(i));
                 }
 
 
 //                comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), i));
             }
-            if (ProjectHandler.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1)
+            if (Project.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1)
                 comboBoxSinkType.getItems().add(sinkTypes.get(18));
 //                comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 18));
 
@@ -1204,8 +1204,8 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
 //            comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 16));
 //            comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 17));
             //toggleButtonSinkInstallType2.setSelected(true);
-        }else if(ProjectHandler.getDefaultMaterial().getMainType().indexOf("Массив") != -1 ||
-                ProjectHandler.getDefaultMaterial().getMainType().indexOf("Массив_шпон") != -1){
+        }else if(Project.getDefaultMaterial().getMainType().indexOf("Массив") != -1 ||
+                Project.getDefaultMaterial().getMainType().indexOf("Массив_шпон") != -1){
             comboBoxSinkType.getItems().add(sinkTypes.get(16));
             comboBoxSinkType.getItems().add(sinkTypes.get(19));
 
@@ -1277,7 +1277,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         if (comboBoxSinkType.getSelectionModel().getSelectedItem() == null) return;
         if (choiceBoxSinkModel.getSelectionModel().getSelectedItem() == null) return;
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = material.getSinkCurrency();
@@ -1371,7 +1371,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
                 }
 
                 //System.out.println("priceForOne = " + priceForOne);
-                priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+                priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
                 //System.out.println("priceForOne * coeff = " + priceForOne);
 
@@ -1503,7 +1503,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         String materialName = (String) jsonObject.get("material");
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (materialName.equals(m.getName())) {
                 material = m;
                 break;

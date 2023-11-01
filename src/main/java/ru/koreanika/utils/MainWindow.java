@@ -3,7 +3,6 @@ package ru.koreanika.utils;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.Preferences.UserPreferences;
 import ru.koreanika.cutDesigner.CutDesigner;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
@@ -11,8 +10,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ru.koreanika.project.*;
 import ru.koreanika.service.ServiceLocator;
-import ru.koreanika.service.event.MouseClickedEvent;
+import ru.koreanika.service.event.*;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
@@ -27,9 +27,13 @@ import ru.koreanika.utils.Receipt.Zetta.ReceiptManagerZetta;
 
 import java.io.File;
 
-public class MainWindow {
+public class MainWindow implements NotificationEventHandler, ApplicationTypeChangeEventHandler,
+        ProjectOpenedEventHandler, ProjectClosedEventHandler {
 
     static AnchorPane rootAnchorPaneMainWindow;
+
+    private final EventBus eventBus;
+    private final ProjectHandler projectHandler;
 
     ChangeViewListener changeView;
 
@@ -44,7 +48,13 @@ public class MainWindow {
     NewsController newsController;
 
     public MainWindow() {
-        EventBus eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        eventBus.addHandler(NotificationEvent.TYPE, this);
+        eventBus.addHandler(ApplicationTypeChangeEvent.TYPE, this);
+        eventBus.addHandler(ProjectOpenedEvent.TYPE, this);
+        eventBus.addHandler(ProjectClosedEvent.TYPE, this);
+
+        projectHandler = ServiceLocator.getService("ProjectHandler", ProjectHandler.class);
 
         rootAnchorPaneMainWindow = new AnchorPane();
         rootAnchorPaneMainWindow.setId("rootAnchorPaneMainWindow");
@@ -55,7 +65,6 @@ public class MainWindow {
             eventBus.fireEvent(new MouseClickedEvent(source));
         });
 
-        initControlElementsLogic();
         newsController = NewsController.createNewsController(rootAnchorPaneMainWindow);
     }
 
@@ -103,10 +112,6 @@ public class MainWindow {
         return receiptManager;
     }
 
-    public static void setReceiptManager(ReceiptManager receiptManager) {
-        MainWindow.receiptManager = receiptManager;
-    }
-
     public static void setCutDesigner(CutDesigner cutDesigner) {
         MainWindow.cutDesigner = cutDesigner;
     }
@@ -129,15 +134,13 @@ public class MainWindow {
         File file = fileChooser.showSaveDialog(rootAnchorPaneMainWindow.getScene().getWindow());
 
         if (file != null) {
-            //save current project
-            ProjectHandler.saveProject(ProjectHandler.getCurProjectPath(), ProjectHandler.getCurProjectName());
-
-            ProjectHandler.closeProject();
+            projectHandler.saveProject();
+            projectHandler.closeProject();
             rootAnchorPaneMainWindow.getChildren().clear();
 
             String path = file.getPath();
             String projName = file.getName();
-            ProjectHandler.createProject(projName, path, ProjectType.TABLE_TYPE);
+            projectHandler.createProject(projName, path, ProjectType.TABLE_TYPE);
 
             MaterialSelectionWindow.getInstance().setFirstStartFlag(true);
             MaterialSelectionWindow.clear();
@@ -177,51 +180,47 @@ public class MainWindow {
                 new FileChooser.ExtensionFilter("Koreanika projects", "*.krnkproj", "*.kproj")
         );
 
-        if (ProjectHandler.getCurProjectPath() != null) {
-            String[] pathArr = ProjectHandler.getCurProjectPath().split("\\\\");
+        if (projectHandler.getCurrentProjectPath() != null) {
+            String[] pathArr = projectHandler.getCurrentProjectPath().split("\\\\");
             String path1 = "";
             for (int i = 0; i < pathArr.length - 1; i++) {
                 path1 += "/" + pathArr[i];
             }
-            System.out.println(ProjectHandler.getCurProjectPath());
+            System.out.println(projectHandler.getCurrentProjectPath());
             System.out.println(path1);
 
             fileChooser.setInitialDirectory(new File(path1));
         }
 
         File file = fileChooser.showOpenDialog(rootAnchorPaneMainWindow.getScene().getWindow());
+        eventBus.fireEvent(new ProjectOpenedEvent(file));
 
-        projectOpenedLogic(file);
         UserCurrency.getInstance().updateCurrencyValueWithRequest();
-    }
-
-    protected void saveProject() {
-        ProjectHandler.saveProject(ProjectHandler.getCurProjectPath(), ProjectHandler.getCurProjectName());
     }
 
     protected void saveAsProject() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Some Files");
 
-        if (ProjectHandler.getCurProjectPath() != null) {
-            String[] pathArr = ProjectHandler.getCurProjectPath().split("\\\\");
+        if (projectHandler.getCurrentProjectPath() != null) {
+            String[] pathArr = projectHandler.getCurrentProjectPath().split("\\\\");
             String path1 = "";
             for (int i = 0; i < pathArr.length - 1; i++) {
                 path1 += "/" + pathArr[i];
             }
-            System.out.println(ProjectHandler.getCurProjectPath());
+            System.out.println(projectHandler.getCurrentProjectPath());
             System.out.println(path1);
 
             fileChooser.setInitialDirectory(new File(path1));
-            fileChooser.setInitialFileName(ProjectHandler.getCurProjectName());
+            fileChooser.setInitialFileName(projectHandler.getCurrentProjectName());
         }
 
         File file = fileChooser.showSaveDialog(rootAnchorPaneMainWindow.getScene().getWindow());
         if (file != null) {
             String path = file.getPath();
             String projName = file.getName();
-            ProjectHandler.saveProject(path, projName); //save new name project
-            ((Stage) rootAnchorPaneMainWindow.getScene().getWindow()).setTitle("Koreanika: " + ProjectHandler.getCurProjectPath());
+            projectHandler.saveProjectNewName(path, projName);  // TODO Refac: ProjectHandler.curProjectPath is changed as a side effect when writing a file
+            ((Stage) rootAnchorPaneMainWindow.getScene().getWindow()).setTitle("Koreanika: " + projectHandler.getCurrentProjectPath());
         }
 
     }
@@ -274,7 +273,7 @@ public class MainWindow {
 
     protected void showReceiptWithCutting() {
         if (Boolean.parseBoolean(Main.getProperty("autosave.afterReceipt"))) {
-            ProjectHandler.saveProject(ProjectHandler.getCurProjectPath(), ProjectHandler.getCurProjectName());//save current project
+            projectHandler.saveProject();
         }
         System.out.println("ShowReceipt");
         CutDesigner.getInstance().autoCutting(true);
@@ -306,31 +305,35 @@ public class MainWindow {
         }
     }
 
-    private void initControlElementsLogic() {
-        UserPreferences.getInstance().addAppTypeChangeListener(change -> {
-            AppType appType = UserPreferences.getInstance().getSelectedApp();
-            if (appType == AppType.KOREANIKA || appType == AppType.KOREANIKAMASTER) {
-                receiptManager = new ReceiptManagerKoreanika();
-            } else if (appType == AppType.ZETTA) {
-                receiptManager = new ReceiptManagerZetta();
-            } else if (appType == AppType.PROMEBEL) {
-                receiptManager = new ReceiptManagerPromebel();
-            }
-        });
+    @Override
+    public void onEvent(ApplicationTypeChangeEvent e) {
+        AppType appType = e.getApplicationType();
+        if (appType == AppType.KOREANIKA || appType == AppType.KOREANIKAMASTER) {
+            receiptManager = new ReceiptManagerKoreanika();
+        } else if (appType == AppType.ZETTA) {
+            receiptManager = new ReceiptManagerZetta();
+        } else if (appType == AppType.PROMEBEL) {
+            receiptManager = new ReceiptManagerPromebel();
+        }
     }
 
-    public static void closeProject() {
-        ProjectHandler.closeProject();
+    @Override
+    public void onEvent(ProjectClosedEvent e) {
+        projectHandler.closeProject();
+
         rootAnchorPaneMainWindow.getChildren().clear();
         ((Stage) rootAnchorPaneMainWindow.getScene().getWindow()).setTitle("Koreanika " + Main.actualAppVersion);
     }
 
-    public static void projectOpenedLogic(File file) {
+    @Override
+    public void onEvent(ProjectOpenedEvent e) {
+        File file = e.getProjectFile();
         if (file != null) {
             String path = file.getPath();
             String projName = file.getName();
-            ProjectHandler.saveProject(ProjectHandler.getCurProjectPath(), ProjectHandler.getCurProjectName());//save current project
-            ProjectHandler.closeProject();
+
+            projectHandler.saveProject();
+            projectHandler.closeProject();
 
             sketchDesigner = new SketchDesigner();
             System.out.println(cutDesigner);
@@ -348,13 +351,13 @@ public class MainWindow {
                 receiptManager = new ReceiptManagerPromebel();
             }
 
-            if (!ProjectHandler.openProject(path, projName)) {
+            if (!projectHandler.openProject(path, projName)) {
                 return;
             }
 
             rootAnchorPaneMainWindow.getChildren().clear();
 
-            if (ProjectHandler.getProjectType() == ProjectType.SKETCH_TYPE) {
+            if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
                 rootAnchorPaneMainWindow.getChildren().add(sketchDesigner.getRootAnchorPaneSketchDesigner());
                 AnchorPane.setTopAnchor(sketchDesigner.getRootAnchorPaneSketchDesigner(), 0.0);
                 AnchorPane.setBottomAnchor(sketchDesigner.getRootAnchorPaneSketchDesigner(), 0.0);
@@ -376,8 +379,17 @@ public class MainWindow {
         }
     }
 
+    @Deprecated
+    /**
+     * этот метод ещё используется в классах, наследующих sketchDesigner.Shapes
+     */
     public static void showInfoMessage(InfoMessage.MessageType msgType, String message) {
         Platform.runLater(() -> InfoMessage.showMessage(msgType, message, null));
+    }
+
+    @Override
+    public void onEvent(NotificationEvent e) {
+        Platform.runLater(() -> InfoMessage.showMessage(e.getMessageType(), e.getMessage(), null));
     }
 
     public enum ViewType {

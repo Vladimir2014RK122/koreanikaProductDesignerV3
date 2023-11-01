@@ -1,9 +1,9 @@
 package ru.koreanika.cutDesigner;
 
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.Common.Material.MaterialSheet;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
 import javafx.geometry.Bounds;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.util.*;
 
@@ -14,15 +14,15 @@ public class CutShapesPacking {
     //- down all shapes
     //-right with rotate
     //-down with rotate
-    public static ArrayList<CutShape> packTypeOne(Material.MaterialSheet materialSheet, ArrayList<CutShape> shapesList, Comparator<CutShape> sortType){
+    public static ArrayList<CutShape> packTypeOne(MaterialSheet materialSheet, ArrayList<CutShape> shapesList, Comparator<CutShape> sortType){
 
         ArrayList<CutShape> remainderList = new ArrayList<>(shapesList);
 
         double sheetX = materialSheet.getTranslateX();
         double sheetY = materialSheet.getTranslateY();
 
-        double sheetWidth = materialSheet.getSheetWidth() * ProjectHandler.getCommonShapeScale();
-        double sheetHeight = materialSheet.getSheetHeight() * ProjectHandler.getCommonShapeScale();
+        double sheetWidth = materialSheet.getSheetWidth() * Project.getCommonShapeScale();
+        double sheetHeight = materialSheet.getSheetHeight() * Project.getCommonShapeScale();
 
 
 
@@ -369,15 +369,15 @@ public class CutShapesPacking {
     //-right with rotate
     //- down all shapes
     //-down with rotate
-    public static ArrayList<CutShape> packTypeTwo(Material.MaterialSheet materialSheet, ArrayList<CutShape> shapesList, Comparator<CutShape> sortType){
+    public static ArrayList<CutShape> packTypeTwo(MaterialSheet materialSheet, ArrayList<CutShape> shapesList, Comparator<CutShape> sortType){
 
         ArrayList<CutShape> remainderList = new ArrayList<>(shapesList);
 
         double sheetX = materialSheet.getTranslateX();
         double sheetY = materialSheet.getTranslateY();
 
-        double sheetWidth = materialSheet.getSheetWidth() * ProjectHandler.getCommonShapeScale();
-        double sheetHeight = materialSheet.getSheetHeight() * ProjectHandler.getCommonShapeScale();
+        double sheetWidth = materialSheet.getSheetWidth() * Project.getCommonShapeScale();
+        double sheetHeight = materialSheet.getSheetHeight() * Project.getCommonShapeScale();
 
 
 
@@ -731,15 +731,15 @@ public class CutShapesPacking {
     //- right with rotate
     //- down all shapes
 
-    public static ArrayList<CutShape> packTypeThree(Material.MaterialSheet materialSheet, ArrayList<CutShape> shapesList, Comparator<CutShape> sortType){
+    public static ArrayList<CutShape> packTypeThree(MaterialSheet materialSheet, ArrayList<CutShape> shapesList, Comparator<CutShape> sortType){
 
         ArrayList<CutShape> remainderList = new ArrayList<>(shapesList);
 
         double sheetX = materialSheet.getTranslateX();
         double sheetY = materialSheet.getTranslateY();
 
-        double sheetWidth = materialSheet.getSheetWidth() * ProjectHandler.getCommonShapeScale();
-        double sheetHeight = materialSheet.getSheetHeight() * ProjectHandler.getCommonShapeScale();
+        double sheetWidth = materialSheet.getSheetWidth() * Project.getCommonShapeScale();
+        double sheetHeight = materialSheet.getSheetHeight() * Project.getCommonShapeScale();
 
 
 
@@ -1097,15 +1097,15 @@ public class CutShapesPacking {
     //- right with rotate
 
 
-    public static ArrayList<CutShape> packTypeFour(Material.MaterialSheet materialSheet, ArrayList<CutShape> shapesList, Comparator<CutShape> sortType){
+    public static ArrayList<CutShape> packTypeFour(MaterialSheet materialSheet, ArrayList<CutShape> shapesList, Comparator<CutShape> sortType){
 
         ArrayList<CutShape> remainderList = new ArrayList<>(shapesList);
 
         double sheetX = materialSheet.getTranslateX();
         double sheetY = materialSheet.getTranslateY();
 
-        double sheetWidth = materialSheet.getSheetWidth() * ProjectHandler.getCommonShapeScale();
-        double sheetHeight = materialSheet.getSheetHeight() * ProjectHandler.getCommonShapeScale();
+        double sheetWidth = materialSheet.getSheetWidth() * Project.getCommonShapeScale();
+        double sheetHeight = materialSheet.getSheetHeight() * Project.getCommonShapeScale();
 
 
 

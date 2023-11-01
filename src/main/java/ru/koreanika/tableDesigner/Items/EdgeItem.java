@@ -22,7 +22,7 @@ import ru.koreanika.sketchDesigner.Shapes.*;
 import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.File;
@@ -194,16 +194,16 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         EdgeItem oldEdgeItem = item;
 
         Material newMaterial = null;
-        Material defaultMaterial = ProjectHandler.getDefaultMaterial();
+        Material defaultMaterial = Project.getDefaultMaterial();
 
-        if (ProjectHandler.getMaterialsListInProject().contains(item.getMaterial())) {
+        if (Project.getMaterials().contains(item.getMaterial())) {
             newMaterial = oldEdgeItem.material;
         } else {
             if (defaultMaterial.getMainType().equals(item.getMaterial().getMainType()) && defaultMaterial.getDepths().contains("" + oldEdgeItem.depth)) {
-                newMaterial = ProjectHandler.getDefaultMaterial();
+                newMaterial = Project.getDefaultMaterial();
             } else {
                 boolean foundNewMaterial = false;
-                for (Material material : ProjectHandler.getMaterialsListInProject()) {
+                for (Material material : Project.getMaterials()) {
 
                     if (material.getMainType().equals(item.getMaterial().getMainType()) && material.getDepths().contains("" + oldEdgeItem.depth)) {
                         newMaterial = material;
@@ -572,7 +572,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
         priceForOne *= multiplier;
 
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
 
 
@@ -642,13 +642,13 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         btnAdd = (Button) anchorPaneSettingsView.lookup("#btnAdd");
         labelPrice = (Label) anchorPaneSettingsView.lookup("#labelPrice");
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
 
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
-        choiceBoxDepth.getItems().addAll(ProjectHandler.getDefaultMaterial().getDepths());
+        choiceBoxDepth.getItems().addAll(Project.getDefaultMaterial().getDepths());
         choiceBoxDepth.getSelectionModel().select(0);
 
         choiceBoxSurface.getItems().add("Прямолинейная");
@@ -757,18 +757,18 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
             edgeTypesWood.add(new EdgeType(3, i));
         }
 
-        if (ProjectHandler.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != 0 || ProjectHandler.getDefaultMaterial().getMainType().indexOf("Полиэфирный камень") != 0) {
+        if (Project.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != 0 || Project.getDefaultMaterial().getMainType().indexOf("Полиэфирный камень") != 0) {
             for (int i = 1; i <= 17; i++) {
                 comboBoxEdgeType.getItems().add(edgeTypesAcryl.get(i));
             }
-        }else if(ProjectHandler.getDefaultMaterial().getMainType().contains("Массив") ||
-                ProjectHandler.getDefaultMaterial().getMainType().contains("Массив_шпон")){
+        }else if(Project.getDefaultMaterial().getMainType().contains("Массив") ||
+                Project.getDefaultMaterial().getMainType().contains("Массив_шпон")){
             for (int i = 1; i <= 3; i++) {
                 comboBoxEdgeType.getItems().add(edgeTypesWood.get(i));
             }
         } else {
             for (int i = 1; i <= 27; i++) {
-                if(ProjectHandler.getDefaultMaterial().getEdgesAndPrices().get(i) != null){
+                if(Project.getDefaultMaterial().getEdgesAndPrices().get(i) != null){
                     comboBoxEdgeType.getItems().add(edgeTypesQuarz.get(i));
                 }
 
@@ -779,7 +779,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
         Material selectedMaterial = null;
         int depth = Integer.parseInt(choiceBoxDepth.getSelectionModel().getSelectedItem());
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
                 selectedMaterial = material;
             }
@@ -811,7 +811,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
             comboBoxEdgeType.getItems().clear();
 
-            for (Material material : ProjectHandler.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
 
                     selectedMaterial = material;
@@ -882,7 +882,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
             int edgeType = comboBoxEdgeType.getSelectionModel().getSelectedItem().getType();
 
             System.out.println("EDGE ITEM CHOICE BOX DEPTH");
-            for (Material material : ProjectHandler.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
 
                     selectedMaterial = material;
@@ -972,7 +972,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         comboBoxShape.setOnAction(event -> {
 
             Material selectedMaterial = null;
-            for (Material material : ProjectHandler.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
 
                     selectedMaterial = material;
@@ -1113,7 +1113,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         int depth = Integer.parseInt(choiceBoxDepth.getSelectionModel().getSelectedItem());
         int height = Integer.parseInt(textFieldHeight.getText());
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
                 selectedMaterial = material;
             }
@@ -1147,7 +1147,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         //int quantity = 1;
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
                 material = m;
             }
@@ -1300,16 +1300,16 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
 
         choiceBoxMaterial.getItems().clear();
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
             System.out.println("MATERIALS IN PROJECT: "+material.getReceiptName());
         }
-        choiceBoxMaterial.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getReceiptName());
-        System.out.println("Default = " + ProjectHandler.getDefaultMaterial().getReceiptName());
+        choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
+        System.out.println("Default = " + Project.getDefaultMaterial().getReceiptName());
 
         choiceBoxDepth.getItems().clear();
-        choiceBoxDepth.getItems().addAll(ProjectHandler.getDefaultMaterial().getDepths());
-        choiceBoxDepth.getSelectionModel().select("" + ProjectHandler.getDefaultMaterial().getDefaultDepth());
+        choiceBoxDepth.getItems().addAll(Project.getDefaultMaterial().getDepths());
+        choiceBoxDepth.getSelectionModel().select("" + Project.getDefaultMaterial().getDefaultDepth());
 
         comboBoxShape.getItems().clear();
         for(TableDesignerItem tableDesignerItem : TableDesigner.getTableDesignerMainItemsList()){
@@ -1334,19 +1334,19 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
         comboBoxEdgeType.getItems().clear();
 
-        if (ProjectHandler.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1 ||
-                ProjectHandler.getDefaultMaterial().getMainType().indexOf("Полиэфирный камень") != -1) {
+        if (Project.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1 ||
+                Project.getDefaultMaterial().getMainType().indexOf("Полиэфирный камень") != -1) {
             for (int i = 1; i <= 17; i++) {
                 comboBoxEdgeType.getItems().add(edgeTypesAcryl.get(i));
             }
-        }else if(ProjectHandler.getDefaultMaterial().getMainType().contains("Массив") ||
-                ProjectHandler.getDefaultMaterial().getMainType().contains("Массив_шпон")){
+        }else if(Project.getDefaultMaterial().getMainType().contains("Массив") ||
+                Project.getDefaultMaterial().getMainType().contains("Массив_шпон")){
             for (int i = 1; i <= 3; i++) {
                 comboBoxEdgeType.getItems().add(edgeTypesWood.get(i));
             }
         } else {
             for (int i = 1; i <= 27; i++) {
-                if(ProjectHandler.getDefaultMaterial().getEdgesAndPrices().get(i) != null){
+                if(Project.getDefaultMaterial().getEdgesAndPrices().get(i) != null){
                     comboBoxEdgeType.getItems().add(edgeTypesQuarz.get(i));
                 }
             }
@@ -1357,7 +1357,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         System.out.println("choiceBoxMaterial.getValue() = " + choiceBoxMaterial.getValue());
         Material selectedMaterial = null;
         int depth = Integer.parseInt(choiceBoxDepth.getSelectionModel().getSelectedItem());
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             System.out.println(material.getReceiptName());
             if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
                 selectedMaterial = material;
@@ -1383,7 +1383,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         if (!heightOk) return;
         if (comboBoxEdgeType.getSelectionModel().getSelectedItem() == null) return;
 
-        for (Material material : ProjectHandler.getMaterialsListInProject()) {
+        for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = material.getEdgesCurrency();
@@ -1397,7 +1397,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
                 //priceForOne /= 100.0;
 
-                priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+                priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
                 labelPrice.setText(String.format(Locale.ENGLISH, "Цена: %.0f" + " " + currency + "/" + units, priceForOne));
                 break;
@@ -1535,7 +1535,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         String materialName = (String) jsonObject.get("material");
 
         Material material = null;
-        for (Material m : ProjectHandler.getMaterialsListInProject()) {
+        for (Material m : Project.getMaterials()) {
             if (materialName.equals(m.getName())) {
                 material = m;
                 break;

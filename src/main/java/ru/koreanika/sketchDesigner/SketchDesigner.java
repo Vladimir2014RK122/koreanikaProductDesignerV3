@@ -31,6 +31,9 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Dimensions.Dimension;
 import ru.koreanika.sketchDesigner.Dimensions.LinearDimension;
 import ru.koreanika.sketchDesigner.Edge.EdgeManager;
@@ -43,7 +46,6 @@ import ru.koreanika.sketchDesigner.lists.FeatureListElement;
 import ru.koreanika.sketchDesigner.lists.FeaturesCellFactory;
 import ru.koreanika.sketchDesigner.lists.ListElement;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.PrinterHandler.PrinterDialog;
 
 
@@ -56,6 +58,7 @@ public class SketchDesigner {
 
     //Main control elements:
     static AnchorPane rootAnchorPaneSketchDesigner, anchorPaneTableTopShapes;
+    private final EventBus eventBus;
     SplitPane splitPaneMain;
     Button btnCreateProject, btnOpenProject, btnSaveProject, btnSaveAsProject;
 
@@ -147,6 +150,7 @@ public class SketchDesigner {
 
         initZoom();
 
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
     }
 
 
@@ -922,13 +926,12 @@ public class SketchDesigner {
         btnAddDimH.setOnMouseClicked(event -> {
             setAddDimensionsMode(true);
             dimensionType = LinearDimension.HORIZONTAL_TYPE;
-            MainWindow.showInfoMessage(InfoMessage.MessageType.INFO, "Выберите две точки привязки");
-
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.INFO, "Выберите две точки привязки"));
         });
         btnAddDimV.setOnMouseClicked(event -> {
             setAddDimensionsMode(true);
             dimensionType = LinearDimension.VERTICAL_TYPE;
-            MainWindow.showInfoMessage(InfoMessage.MessageType.INFO, "Выберите две точки привязки");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.INFO, "Выберите две точки привязки"));
         });
 
         btnShapeManager.setOnMouseClicked(event -> {

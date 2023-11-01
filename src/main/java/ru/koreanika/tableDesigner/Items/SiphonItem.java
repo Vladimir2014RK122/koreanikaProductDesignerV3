@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class SiphonItem extends TableDesignerItem{
         this.type = type;
         this.quantity = quantity;
 
-        imageMain = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/SiphonItem/siphonType" + type + ".png").toString()).getImage();
+        imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/SiphonItem/siphonType" + type + ".png").toString()).getImage();
 
         FXMLLoader fxmlLoaderRow = new FXMLLoader(
                 this.getClass().getResource("/fxmls/TableDesigner/TableItems/SiphonRow.fxml")
@@ -69,7 +69,7 @@ public class SiphonItem extends TableDesignerItem{
     public Map<String, ImageView> getMainImageView() {
         Map<String, ImageView> imagesList = new LinkedHashMap<>();
         String imgPath = "/styles/images/TableDesigner/SiphonItem/siphonType" + type + ".png";
-        imagesList.put("Сифон#" + imgPath, new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/SiphonItem/siphonType" + type + ".png").toString()));
+        imagesList.put("Сифон#" + imgPath, new ImageView(Project.class.getResource("/styles/images/TableDesigner/SiphonItem/siphonType" + type + ".png").toString()));
 
         return imagesList;
     }
@@ -245,12 +245,12 @@ public class SiphonItem extends TableDesignerItem{
     public void updateRowPrice() {
 
         double priceForOne = -1.0;
-        if(ProjectHandler.getDefaultMaterial() == null) return;
-        double priceForType1 = ProjectHandler.getDefaultMaterial().getSiphonsTypesAndPrices().get(0);
-        double priceForType2 = ProjectHandler.getDefaultMaterial().getSiphonsTypesAndPrices().get(1);
+        if(Project.getDefaultMaterial() == null) return;
+        double priceForType1 = Project.getDefaultMaterial().getSiphonsTypesAndPrices().get(0);
+        double priceForType2 = Project.getDefaultMaterial().getSiphonsTypesAndPrices().get(1);
         priceForOne = (type == 1) ? priceForType1/100 : priceForType2/100;
 
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + ReceiptManager.RUR_SYMBOL);
 
@@ -345,16 +345,16 @@ public class SiphonItem extends TableDesignerItem{
 
     public static void updatePriceInSettings() {
 
-        if(ProjectHandler.getDefaultMaterial() == null) return;
+        if(Project.getDefaultMaterial() == null) return;
 
-        String currency = ProjectHandler.getDefaultMaterial().getSiphonsCurrency();
+        String currency = Project.getDefaultMaterial().getSiphonsCurrency();
         String units = "шт";
         double priceForOne = -1.0;
-        double priceForType1 = ProjectHandler.getDefaultMaterial().getSiphonsTypesAndPrices().get(0);
-        double priceForType2 = ProjectHandler.getDefaultMaterial().getSiphonsTypesAndPrices().get(1);
+        double priceForType1 = Project.getDefaultMaterial().getSiphonsTypesAndPrices().get(0);
+        double priceForType2 = Project.getDefaultMaterial().getSiphonsTypesAndPrices().get(1);
         priceForOne = (toggleGroupSiphonType.getSelectedToggle() == toggleButtonSiphonType1) ? priceForType1/100 : priceForType2/100;
 
-        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelPrice.setText(String.format(Locale.ENGLISH, "Цена: %.0f" + " " + currency + "/" + units, priceForOne));
 

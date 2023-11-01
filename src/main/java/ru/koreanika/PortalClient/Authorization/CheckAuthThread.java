@@ -1,7 +1,7 @@
 package ru.koreanika.PortalClient.Authorization;
 
 import ru.koreanika.PortalClient.Status.PortalStatus;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.utils.UserPreferences;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

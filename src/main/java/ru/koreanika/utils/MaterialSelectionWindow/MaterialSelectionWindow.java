@@ -14,11 +14,15 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import ru.koreanika.Common.Material.Material;
 import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.Preferences.UserPreferences;
+import ru.koreanika.catalog.Catalogs;
+import ru.koreanika.utils.UserPreferences;
 import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.ApplicationTypeChangeEvent;
+import ru.koreanika.service.event.ApplicationTypeChangeEventHandler;
 import ru.koreanika.service.event.ImageCachedEvent;
 import ru.koreanika.service.event.ImageCachedEventHandler;
 import ru.koreanika.service.event.MouseClickedEvent;
+import ru.koreanika.service.event.NotificationEvent;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.sketchDesigner.SketchDesigner;
@@ -28,17 +32,18 @@ import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems.FolderItem;
 import ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems.MaterialItem;
 import ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems.MaterialTreeCellItem;
-import ru.koreanika.utils.ProjectHandler;
-import ru.koreanika.utils.ProjectType;
+import ru.koreanika.project.Project;
+import ru.koreanika.project.ProjectType;
 import ru.koreanika.utils.Receipt.ReceiptManager;
 
 import java.io.IOException;
 import java.util.*;
 
-public class MaterialSelectionWindow implements ImageCachedEventHandler {
+public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandler, ImageCachedEventHandler {
 
     private final MaterialImageModalWindowController modalWindowController;
     private final Stage materialImageModalStage;
+    private final EventBus eventBus;
 
     MaterialSelectionEventHandler materialSelectionEventHandler;
 
@@ -161,7 +166,7 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
         initFilterFields();
         initFilterLogic();
 
-        allAvailableMaterialsList = ProjectHandler.getMaterialsListAvailable().stream().filter(material -> {
+        allAvailableMaterialsList = Catalogs.getMaterialsListAvailable().stream().filter(material -> {
             if (UserPreferences.getInstance().getSelectedApp() != AppType.KOREANIKAMASTER) {
                 if (material.getMainType().equals("Натуральный камень")
                         || material.getMainType().equals("Массив")
@@ -178,13 +183,8 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
         filterFieldsUpdated();
         initWindowLogic();
 
-        UserPreferences.getInstance().addAppTypeChangeListener(change -> {
-            Platform.runLater(() -> {
-                initTreeViewAvailable(ProjectHandler.getMaterialsListAvailable());
-                initWindowLogic();
-                MainWindow.showInfoMessage(InfoMessage.MessageType.INFO, "Тип приложения был изменен");
-            });
-        });
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
+        eventBus.addHandler(ApplicationTypeChangeEvent.TYPE, this);
 
         // material images slideshow
         materialImageModalStage = new Stage();
@@ -197,6 +197,15 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
         imageViewSelectedMaterial.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
             materialImageModalStage.showAndWait();
             materialImageModalStage.toFront();
+        });
+    }
+
+    @Override
+    public void onEvent(ApplicationTypeChangeEvent e) {
+        Platform.runLater(() -> {
+            initTreeViewAvailable(Catalogs.getMaterialsListAvailable());
+            initWindowLogic();
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.INFO, "Тип приложения был изменен"));
         });
     }
 
@@ -242,7 +251,7 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
                 return;
             }
 
-            ArrayList<Material> materialsInProject = new ArrayList<>();
+            List<Material> materialsInProject = new ArrayList<>();
             for (MaterialListCellItem item : listViewInProject.getItems()) {
                 Material material = item.getMaterial();
                 materialsInProject.add(material);
@@ -253,23 +262,29 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
 
             for (Material material : materialsInProject) {
                 System.out.println(material.getReceiptName());
-                if ((material.getSubType() + ", " + material.getCollection() + ", " + material.getColor()).equals(defaultMaterialName)) {
-                    ProjectHandler.setDefaultMaterialRAW(material);
+                String materialName = material.getSubType() + ", " + material.getCollection() + ", " + material.getColor();
+                if (materialName.equals(defaultMaterialName)) {
+                    Project.setDefaultMaterial(material);
+                    break;
                 }
             }
 
-            ProjectHandler.setMaterialsListInProject(materialsInProject);
-            ProjectHandler.getMaterialsUsesInProjectObservable().clear();
+            Project.setMaterials(materialsInProject);
+            Project.getMaterialsInUse().clear();
             SketchDesigner.getSketchShapesList().forEach(sketchShape -> {
-                ProjectHandler.getMaterialsUsesInProjectObservable().add(sketchShape.getMaterial().getName() + "#" + sketchShape.getShapeDepth());
+                Project.getMaterialsInUse().add(sketchShape.getMaterial().getName() + "#" + sketchShape.getShapeDepth());
             });
 
             System.out.println("\n\n******DEFAULT FROM CHOICE BOX: " + defaultMaterialName);
 
-            if (ProjectHandler.getProjectType() == ProjectType.SKETCH_TYPE) {
-                if (MainWindow.getSketchDesigner() != null) SketchDesigner.updateMaterialsInProject();
-            } else if (ProjectHandler.getProjectType() == ProjectType.TABLE_TYPE) {
-                if (MainWindow.getTableDesigner() != null) TableDesigner.updateMaterialsInProject();
+            if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
+                if (MainWindow.getSketchDesigner() != null) {
+                    SketchDesigner.updateMaterialsInProject();
+                }
+            } else if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
+                if (MainWindow.getTableDesigner() != null) {
+                    TableDesigner.updateMaterialsInProject();
+                }
             }
 
             if (firstStartFlag) {
@@ -288,7 +303,7 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
             TreeItem<MaterialTreeCellItem> item = newValue;
             if (item.isLeaf()) {
                 String name = item.getValue().getFullName();
-                for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+                for (Material m : Catalogs.getMaterialsListAvailable()) {
                     if (m.getName().equals(name)) {
                         showInfo(m);
                         break;
@@ -340,7 +355,7 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
 
             MaterialListCellItem cellItem = newValue;
 
-            for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+            for (Material m : Catalogs.getMaterialsListAvailable()) {
                 if (m.getReceiptName().equals(cellItem.getMaterial().getReceiptName())) {
                     showInfo(m);
                     break;
@@ -431,7 +446,7 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
                 "коллекции выполняется по усмотрению производителя." : "";
         labelNotification2.setText(notification2Text);
 
-        imageViewSelectedMaterial.setImage(material.getMaterialImage().getImageMaterial());
+        imageViewSelectedMaterial.setImage(material.getTextureImage());
         modalWindowController.setMaterial(material);
     }
 
@@ -442,7 +457,7 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
         Set<String> availableTextures = new LinkedHashSet<>();
         Set<String> availableSurfaces = new LinkedHashSet<>();
 
-        for (Material m : ProjectHandler.getMaterialsListAvailable()) {
+        for (Material m : Catalogs.getMaterialsListAvailable()) {
             String color = m.getVisualProperties().get(Material.VIS_PROP_COLOR);
             String texture = m.getVisualProperties().get(Material.VIS_PROP_TEXTURE);
             String surface = m.getVisualProperties().get(Material.VIS_PROP_SURFACE);
@@ -906,14 +921,14 @@ public class MaterialSelectionWindow implements ImageCachedEventHandler {
     }
 
     private void refreshView() {
-        if (ProjectHandler.getDefaultMaterial() != null) {
+        if (Project.getDefaultMaterial() != null) {
             listViewInProject.getItems().clear();
             choiceBoxDefault.getItems().clear();
-            for (Material material : ProjectHandler.getMaterialsListInProject()) {
+            for (Material material : Project.getMaterials()) {
                 listViewInProject.getItems().add(new MaterialListCellItem(material));
                 choiceBoxDefault.getItems().add(material.getSubType() + ", " + material.getCollection() + ", " + material.getColor());
             }
-            choiceBoxDefault.getSelectionModel().select(ProjectHandler.getDefaultMaterial().getSubType() + ", " + ProjectHandler.getDefaultMaterial().getCollection() + ", " + ProjectHandler.getDefaultMaterial().getColor());
+            choiceBoxDefault.getSelectionModel().select(Project.getDefaultMaterial().getSubType() + ", " + Project.getDefaultMaterial().getCollection() + ", " + Project.getDefaultMaterial().getColor());
         }
     }
 

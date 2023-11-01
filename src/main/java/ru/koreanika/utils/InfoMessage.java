@@ -119,7 +119,6 @@ public class InfoMessage {
     }
 
     public static void showMessage(MessageType messageType, String message, Pane parent) {
-
         if (parent == null) {
             parent = rootAnchorPane;
         }
@@ -144,7 +143,7 @@ public class InfoMessage {
 
         TranslateTransition showTransition = new TranslateTransition(Duration.millis(300), paneNotification);
         showTransition.setFromX(rootAnchorPane.getWidth() / 2);
-        showTransition.setToX(rootAnchorPane.getWidth() / 2  - paneNotification.getPrefWidth() / 2);
+        showTransition.setToX(rootAnchorPane.getWidth() / 2 - paneNotification.getPrefWidth() / 2);
 
         PauseTransition pauseTransition = new PauseTransition(Duration.seconds(duration));
 

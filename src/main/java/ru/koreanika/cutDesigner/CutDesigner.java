@@ -2,7 +2,7 @@ package ru.koreanika.cutDesigner;
 
 
 import ru.koreanika.Common.ConnectPoints.CornerConnectPoint;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.Common.Material.MaterialSheet;
 import ru.koreanika.Common.RepresentToJson;
 
 import ru.koreanika.cutDesigner.ListStatistics.StatisticCellItem;
@@ -31,12 +31,14 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 
 import org.json.simple.JSONObject;
+import ru.koreanika.service.ServiceLocator;
+import ru.koreanika.service.event.NotificationEvent;
+import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Dimensions.LinearDimension;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.PrinterHandler.PrinterDialog;
-import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.project.Project;
 
 import java.io.IOException;
 import java.util.*;
@@ -51,10 +53,11 @@ public class CutDesigner implements RepresentToJson {
     public static final DataFormat SHAPE_OWNER_DF = new DataFormat("SHAPE_OWNER_DF");
     public static final DataFormat FEATURE_NUMBER_DF = new DataFormat("FEATURE_NUMBER_DF");
 
-    public static double CUT_SHAPES_CUTSHIFT = 2.0 * ProjectHandler.getCommonShapeScale();//shift between cut shapes for cutting it
+    public static double CUT_SHAPES_CUTSHIFT = 2.0 * Project.getCommonShapeScale();//shift between cut shapes for cutting it
 
 
     private static CutDesigner cutDesigner;
+    private final EventBus eventBus;
 
     private AnchorPane anchorPaneCutDesignerRoot;
     private AnchorPane anchorPaneRootCutShapeInfo;
@@ -158,6 +161,7 @@ public class CutDesigner implements RepresentToJson {
         //createNewTab();
         //initZoom();
 
+        eventBus = ServiceLocator.getService("EventBus", EventBus.class);
     }
 
     public synchronized static CutDesigner getInstance() {
@@ -331,11 +335,11 @@ public class CutDesigner implements RepresentToJson {
 //            }
 
 
-            for (String materialName : ProjectHandler.getMaterialsUsesInProjectObservable()) {
+            for (String materialName : Project.getMaterialsInUse()) {
                 String[] nameDepth = materialName.split("#");
                 String[] nameArray = nameDepth[0].split("\\$");
                 if (choiceBoxAddMaterialSheet.getSelectionModel().getSelectedItem().equals(nameArray[2] + " " + nameArray[3] + " - " + nameDepth[1] + "мм")) {
-                    Material.MaterialSheet materialSheet = cutPane.addMaterialSheet(materialName);
+                    MaterialSheet materialSheet = cutPane.addMaterialSheet(materialName);
 
                     if(materialSheet == null){
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -423,7 +427,7 @@ public class CutDesigner implements RepresentToJson {
 
             setAddDimensionsMode(true);
             dimensionType = LinearDimension.HORIZONTAL_TYPE;
-            MainWindow.showInfoMessage(InfoMessage.MessageType.INFO, "Выберите две точки привязки");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.INFO, "Выберите две точки привязки"));
             //show all connect points
             //select 2 points
             //addDimensionForTwoPoints
@@ -434,7 +438,7 @@ public class CutDesigner implements RepresentToJson {
             //addDimensionForTwoPoints
             setAddDimensionsMode(true);
             dimensionType = LinearDimension.VERTICAL_TYPE;
-            MainWindow.showInfoMessage(InfoMessage.MessageType.INFO, "Выберите две точки привязки");
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.INFO, "Выберите две точки привязки"));
         });
 
         btnUpdateStatistics.setOnMouseClicked(event -> {
@@ -514,7 +518,7 @@ public class CutDesigner implements RepresentToJson {
 
         double pixelScale = 2;
 
-        for (Material.MaterialSheet materialSheet : cutPane.getUsedMaterialSheetsList()) {
+        for (MaterialSheet materialSheet : cutPane.getUsedMaterialSheetsList()) {
 
             SnapshotParameters materialSheetSnapshotParameters = new SnapshotParameters();
             //materialSheetSnapshotParameters.setFill(Color.TRANSPARENT);
@@ -776,13 +780,12 @@ public class CutDesigner implements RepresentToJson {
         choiceBoxAddMaterialSheet.getItems().clear();
         Set<String> materialSet = new LinkedHashSet<>();
 
-        for (String nameMaterial : ProjectHandler.getMaterialsUsesInProjectObservable()) {
+        for (String nameMaterial : Project.getMaterialsInUse()) {
             String[] nameDepth = nameMaterial.split("#");
             String[] nameArray = nameDepth[0].split("\\$");
             materialSet.add(nameArray[2] + " " + nameArray[3] + " - " + nameDepth[1] + "мм");
         }
         for (String nameMaterial : materialSet) {
-            //choiceBoxAddMaterialSheet.getItems().add(nameMaterial);
             choiceBoxAddMaterialSheet.getItems().add(nameMaterial);
         }
         choiceBoxAddMaterialSheet.getSelectionModel().select(0);
