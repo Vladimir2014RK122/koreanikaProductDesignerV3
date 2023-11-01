@@ -8,7 +8,7 @@ import static org.junit.Assert.assertNotNull;
 public class ProjectReaderTest {
 
     @Test
-    public void testZipProject() {
+    public void testZipProject() throws ProjectException {
         String projectPath = getClass().getResource("/fixtures/zip-non-encoded-1.kproj").getPath();
 
         ProjectReader reader = new ProjectReader();
@@ -21,7 +21,7 @@ public class ProjectReaderTest {
     }
 
     @Test
-    public void testEncodedZipProject() {
+    public void testEncodedZipProject() throws ProjectException {
         String projectPath = getClass().getResource("/fixtures/zip-encoded-1.kproj").getPath();
 
         ProjectReader reader = new ProjectReader();

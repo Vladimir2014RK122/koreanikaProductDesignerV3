@@ -7,8 +7,6 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -21,8 +19,6 @@ import java.util.zip.ZipInputStream;
  * - зазипованный JSON cо сдвигом байтов (~закодированный)
  */
 public class ProjectReader {
-
-    private final Deque<String> errorMessages = new ArrayDeque<>();
 
     public ProjectReader() {
     }
@@ -57,15 +53,13 @@ public class ProjectReader {
         return res;
     }
 
-    JSONObject read(String projectPath) {
-        errorMessages.clear();
-
-        JSONObject parsedProject;
+    JSONObject read(String projectPath) throws ProjectException {
         try {
             boolean isOldProject = checkOldProject(new FileInputStream(projectPath));
             boolean isZipProject = checkZipFile(new File(projectPath));
 
             FileInputStream in = new FileInputStream(projectPath);
+            JSONObject parsedProject;
             if (isOldProject) {
                 System.out.println("Open project: " + projectPath + " (OLD TEXT type)");
                 parsedProject = readOldProject(in);
@@ -76,22 +70,14 @@ public class ProjectReader {
                 System.out.println("Open project: " + projectPath + " (ZIP ENCRYPTED type)");
                 parsedProject = readZipProject(new CustomDecryptInputStream(in));
             }
+            return parsedProject;
         } catch (FileNotFoundException e) {
-            errorMessages.push("Файл не найден");
-            return null;
+            throw new ProjectException("Файл не найден", e);
         } catch (IOException e) {
-            errorMessages.push("Ошибка контента");
-            return null;
+            throw new ProjectException("Ошибка контента", e);
         } catch (ParseException e) {
-            errorMessages.push("Поврежден mainInfo файл");
-            return null;
+            throw new ProjectException("Поврежден mainInfo файл", e);
         }
-
-        return parsedProject;
-    }
-
-    public String getLastErrorMessage() {
-        return errorMessages.peek();
     }
 
     private JSONObject readOldProject(InputStream in) throws ParseException, IOException {

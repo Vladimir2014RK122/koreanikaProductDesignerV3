@@ -26,21 +26,162 @@ public class ProjectHandler {
 
     public static final String BORDERS_IMG_PATH = "borders_resources/";
     public static final String EDGES_IMG_PATH = "edges_resources/";
-
-    private JSONObject projectJSONObject;
-
-    private String currentProjectPath;
-    private String currentProjectName;
-
     private final EventBus eventBus;
-
     private final ProjectWriter projectWriter;
     private final ProjectReader projectReader;
+    private JSONObject projectJSONObject;
+    private String currentProjectPath;
+    private String currentProjectName;
 
     public ProjectHandler() {
         this.eventBus = ServiceLocator.getService("EventBus", EventBus.class);
         this.projectReader = new ProjectReader();
         this.projectWriter = new ProjectWriter(this);
+    }
+
+    /**
+     * Внешние зависимости, которые нужно устранить:
+     * - MainWindow.cutDesigner
+     * - MainWindow.tableDesigner
+     * - Main.mainCoefficient
+     * - Main.materialCoefficient
+     * - Project (static), side effects!!!
+     * - javafx.scene.image.Image
+     */
+    private static void processParsedProject(JSONObject parsedProject, List<Material> materialsCatalog) throws ProjectException {
+        /** System data: */
+        JSONObject info = (JSONObject) parsedProject.get("info");  // TODO not used?
+
+        /** Project settings*/
+        JSONObject projectSettings = (JSONObject) parsedProject.get("ProjectSettings");
+
+        //material settings:
+        JSONObject materialSettings = (JSONObject) projectSettings.get("materialSettings");
+        JSONArray materialsList = (JSONArray) materialSettings.get("materialsList");
+        JSONArray materialsNewList = (JSONArray) materialSettings.get("materialsNewList");
+
+        Project.setProjectType(ProjectType.valueOf((String) projectSettings.get("projectType")));
+
+        /** Materials */
+        //fill materials in project:
+        if (materialsNewList != null) {
+            for (Object obj : materialsNewList) {
+                JSONObject materialObject = (JSONObject) obj;
+
+                Material material = MaterialFactory.buildFromJSON(materialObject, materialsCatalog);
+                if (material != null) {
+                    Project.getMaterials().add(material);
+                } else {
+                    throw new ProjectException("Ошибка распаковки материала " + materialObject.get("name"));
+                }
+            }
+        } else {
+            for (Object str : materialsList) {
+                String materialName = (String) str;
+                System.out.println("materialsList item = " + materialName);
+
+                Material materialTemplate = findMaterialTemplateByName(materialName, materialsCatalog);
+                if (materialTemplate == null) {
+                    throw new ProjectException("Материал не существует: " + str);
+                } else {
+                    Project.getMaterials().add(materialTemplate);
+                }
+            }
+        }
+
+        // set default material
+        for (Material material : Project.getMaterials()) {
+            if (((String) materialSettings.get("defaultMaterial")).contains(material.getName())) {
+                Project.setDefaultMaterial(material);
+            }
+        }
+
+        //project coefficients for price:
+        Double priceMainCoefficientDouble = (Double) projectSettings.get("priceMainCoefficient");
+        Double priceMaterialCoefficientDouble = (Double) projectSettings.get("priceMaterialCoefficient");
+        if (priceMainCoefficientDouble == null || priceMaterialCoefficientDouble == null) {
+            Project.setPriceMainCoefficient(Main.mainCoefficient);
+            Project.setPriceMaterialCoefficient(Main.materialCoefficient);
+        } else {
+            Project.setPriceMainCoefficient(priceMainCoefficientDouble);
+            Project.setPriceMaterialCoefficient(priceMaterialCoefficientDouble);
+        }
+
+        System.out.println("Default material = " + (Project.getDefaultMaterial() != null ? Project.getDefaultMaterial().getName() : "null"));
+
+        if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
+            /** Cut designer*/
+            JSONObject cutDesigner = (JSONObject) parsedProject.get("CutDesigner");
+            MainWindow.getCutDesigner().initFromJson(cutDesigner);
+
+            JSONObject tableDesignerJSONObject = (JSONObject) parsedProject.get("TableDesigner");
+            MainWindow.setTableDesigner(TableDesigner.initFromJSON(tableDesignerJSONObject));
+
+            CutDesigner.getInstance().refreshCutView(); //need for correct calculate usesList in Material sheets
+        } else if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
+            /** Sketch designer*/
+            JSONObject sketchDesigner = (JSONObject) parsedProject.get("SketchDesigner");
+            SketchDesigner.setInstanceFromJson(sketchDesigner);
+
+            /** Cut designer*/
+            JSONObject cutDesigner = (JSONObject) parsedProject.get("CutDesigner");
+            MainWindow.getCutDesigner().initFromJson(cutDesigner);
+        }
+
+        /** receiptManager*/
+        JSONObject jsonObjectReceiptManager = (JSONObject) parsedProject.get("receiptManager");
+        MainWindow.getReceiptManager().initFromJsonObject(jsonObjectReceiptManager);
+    }
+
+    private static Material findMaterialTemplateByName(String str, List<Material> materialsCatalog) throws NumberFormatException {
+        String[] materialStrArrWithDepth = str.split("#");
+        String[] materialStrArr = materialStrArrWithDepth[0].split("\\$");
+
+        String mainType = materialStrArr[0];
+        String subType = materialStrArr[1];
+        String collection = materialStrArr[2];
+        String color = materialStrArr[3];
+        double width = Double.parseDouble(materialStrArr[4]);
+        double height = Double.parseDouble(materialStrArr[5]);
+        String imgPath = (materialStrArr.length == 8 ? materialStrArr[6] : "no_img.png");
+        String depthsString = materialStrArr[7];
+
+        String nameForFind = mainType + "$" + subType + "$" + collection + "$" + color + "$" + width + "$" + height + "$" + imgPath + "$" + depthsString;
+
+        for (Material m : materialsCatalog) {
+            if (m.getName().contains(nameForFind)) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    private static void checkMaterialSheetsPrices() {
+        CutDesigner.getInstance().refreshCutView();
+
+        //check MaterialSheetsPrices:
+        boolean haveDifference = false;
+        LinkedHashMap<Material, ArrayList<MaterialSheet>> differenceMap = new LinkedHashMap<>();
+        for (MaterialSheet materialSheet : CutDesigner.getInstance().getCutPane().getUsedMaterialSheetsList()) {
+
+            boolean theSame = CheckSheetsPrices.checkPrices(materialSheet.getMaterial(), materialSheet);
+            //if sheets didn't use set it old price too:
+            if (!theSame/* && materialSheet.getUsesList() != 0*/) {
+                haveDifference = true;
+
+                ArrayList<MaterialSheet> sheetsList = differenceMap.get(materialSheet.getMaterial());
+                if (sheetsList == null) {
+                    sheetsList = new ArrayList<>();
+                }
+                sheetsList.add(materialSheet);
+                differenceMap.put(materialSheet.getMaterial(), sheetsList);
+            }
+        }
+
+        //check coefficients in sketchShapes
+        if (haveDifference) {
+            CheckSheetsPrices.showInfoWindow(Main.getMainScene(), differenceMap);
+        }
     }
 
     public void createProject(String projectName, String projectPath, ProjectType projectType) {
@@ -143,151 +284,22 @@ public class ProjectHandler {
 
         try {
             JSONObject parsedProject = projectReader.read(projectPath);
-            if (parsedProject != null) {
-                System.out.println("parsedproject = " + parsedProject);
+            System.out.println("parsedproject = " + parsedProject);
 
-                this.currentProjectName = projectName;
-                this.currentProjectPath = projectPath;
-                this.projectJSONObject = parsedProject;
+            processParsedProject(parsedProject, Catalogs.getMaterialsListAvailable());
 
-                List<String> errors = new ArrayList<>();
-                processParsedProject(parsedProject, Catalogs.getMaterialsListAvailable(), errors);
-                for (String error : errors) {
-                    System.out.println("Error while processing project data: " + error);
-                }
+            this.currentProjectName = projectName;
+            this.currentProjectPath = projectPath;
+            this.projectJSONObject = parsedProject;
 
-                checkMaterialSheetsPrices();
+            checkMaterialSheetsPrices();
 
-                projectWriter.saveProject(projectPath, projectName);
-                return true;
-            } else {
-                // TODO refac error handling in reader
-                eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, projectReader.getLastErrorMessage()));
-                return false;
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            // TODO refac error handling in reader
-            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, "Проект поврежден! (" + projectReader.getLastErrorMessage() + ")"));
+            projectWriter.saveProject(projectPath, projectName);
+            return true;
+        } catch (ProjectException e) {
+            eventBus.fireEvent(new NotificationEvent(InfoMessage.MessageType.ERROR, e.getMessage()));
             return false;
         }
-    }
-
-    /**
-     * Внешние зависимости, которые нужно устранить:
-     *   - MainWindow.cutDesigner
-     *   - MainWindow.tableDesigner
-     *   - Main.mainCoefficient
-     *   - Main.materialCoefficient
-     *   - Project (static), side effects!!!
-     *   - javafx.scene.image.Image
-     */
-    private static void processParsedProject(JSONObject parsedProject, List<Material> materialsCatalog, List<String> errorMessages) {
-        /** System data: */
-        JSONObject info = (JSONObject) parsedProject.get("info");  // TODO not used?
-
-        /** Project settings*/
-        JSONObject projectSettings = (JSONObject) parsedProject.get("ProjectSettings");
-
-        //material settings:
-        JSONObject materialSettings = (JSONObject) projectSettings.get("materialSettings");
-        JSONArray materialsList = (JSONArray) materialSettings.get("materialsList");
-        JSONArray materialsNewList = (JSONArray) materialSettings.get("materialsNewList");
-
-        Project.setProjectType(ProjectType.valueOf((String) projectSettings.get("projectType")));
-
-        /** Materials */
-        //fill materials in project:
-        if (materialsNewList != null) {
-            for (Object obj : materialsNewList) {
-                JSONObject materialObject = (JSONObject) obj;
-
-                Material material = MaterialFactory.buildFromJSON(materialObject, materialsCatalog);
-                if (material != null) {
-                    Project.getMaterials().add(material);
-                } else {
-                    errorMessages.add("Ошибка распаковки материала " + materialObject.get("name"));
-                }
-            }
-        } else {
-            for (Object str : materialsList) {
-                String materialName = (String) str;
-                System.out.println("materialsList item = " + materialName);
-
-                Material materialTemplate = findMaterialTemplateByName(materialName, materialsCatalog);
-                if (materialTemplate == null) {
-                    errorMessages.add("Материал не существует: " + str);
-                } else {
-                    Project.getMaterials().add(materialTemplate);
-                }
-            }
-        }
-
-        // set default material, if not specified in project
-        for (Material material : Project.getMaterials()) {
-            if (((String) materialSettings.get("defaultMaterial")).contains(material.getName())) {
-                Project.setDefaultMaterial(material);
-            }
-        }
-
-        //project coefficients for price:
-        Double priceMainCoefficientDouble = (Double) projectSettings.get("priceMainCoefficient");
-        Double priceMaterialCoefficientDouble = (Double) projectSettings.get("priceMaterialCoefficient");
-        if (priceMainCoefficientDouble == null || priceMaterialCoefficientDouble == null) {
-            Project.setPriceMainCoefficient(Main.mainCoefficient);
-            Project.setPriceMaterialCoefficient(Main.materialCoefficient);
-        } else {
-            Project.setPriceMainCoefficient(priceMainCoefficientDouble);
-            Project.setPriceMaterialCoefficient(priceMaterialCoefficientDouble);
-        }
-
-        System.out.println("Default material = " + (Project.getDefaultMaterial() != null ? Project.getDefaultMaterial().getName() : "null"));
-
-        if (Project.getProjectType() == ProjectType.TABLE_TYPE) {
-            /** Cut designer*/
-            JSONObject cutDesigner = (JSONObject) parsedProject.get("CutDesigner");
-            MainWindow.getCutDesigner().initFromJson(cutDesigner);
-
-            JSONObject tableDesignerJSONObject = (JSONObject) parsedProject.get("TableDesigner");
-            MainWindow.setTableDesigner(TableDesigner.initFromJSON(tableDesignerJSONObject));
-
-            CutDesigner.getInstance().refreshCutView(); //need for correct calculate usesList in Material sheets
-        } else if (Project.getProjectType() == ProjectType.SKETCH_TYPE) {
-            /** Sketch designer*/
-            JSONObject sketchDesigner = (JSONObject) parsedProject.get("SketchDesigner");
-            SketchDesigner.setInstanceFromJson(sketchDesigner);
-
-            /** Cut designer*/
-            JSONObject cutDesigner = (JSONObject) parsedProject.get("CutDesigner");
-            MainWindow.getCutDesigner().initFromJson(cutDesigner);
-        }
-
-        /** receiptManager*/
-        JSONObject jsonObjectReceiptManager = (JSONObject) parsedProject.get("receiptManager");
-        MainWindow.getReceiptManager().initFromJsonObject(jsonObjectReceiptManager);
-    }
-
-    private static Material findMaterialTemplateByName(String str, List<Material> materialsCatalog) throws NumberFormatException {
-        String[] materialStrArrWithDepth = str.split("#");
-        String[] materialStrArr = materialStrArrWithDepth[0].split("\\$");
-
-        String mainType = materialStrArr[0];
-        String subType = materialStrArr[1];
-        String collection = materialStrArr[2];
-        String color = materialStrArr[3];
-        double width = Double.parseDouble(materialStrArr[4]);
-        double height = Double.parseDouble(materialStrArr[5]);
-        String imgPath = (materialStrArr.length == 8 ? materialStrArr[6] : "no_img.png");
-        String depthsString = materialStrArr[7];
-
-        String nameForFind = mainType + "$" + subType + "$" + collection + "$" + color + "$" + width + "$" + height + "$" + imgPath + "$" + depthsString;
-
-        for (Material m : materialsCatalog) {
-            if (m.getName().contains(nameForFind)) {
-                return m;
-            }
-        }
-        return null;
     }
 
     public void closeProject() {
@@ -307,34 +319,6 @@ public class ProjectHandler {
         AdditionalFeature.createdFeaturesNumbersList.clear();
     }
 
-    private static void checkMaterialSheetsPrices() {
-        CutDesigner.getInstance().refreshCutView();
-
-        //check MaterialSheetsPrices:
-        boolean haveDifference = false;
-        LinkedHashMap<Material, ArrayList<MaterialSheet>> differenceMap = new LinkedHashMap<>();
-        for (MaterialSheet materialSheet : CutDesigner.getInstance().getCutPane().getUsedMaterialSheetsList()) {
-
-            boolean theSame = CheckSheetsPrices.checkPrices(materialSheet.getMaterial(), materialSheet);
-            //if sheets didn't use set it old price too:
-            if (!theSame/* && materialSheet.getUsesList() != 0*/) {
-                haveDifference = true;
-
-                ArrayList<MaterialSheet> sheetsList = differenceMap.get(materialSheet.getMaterial());
-                if (sheetsList == null) {
-                    sheetsList = new ArrayList<>();
-                }
-                sheetsList.add(materialSheet);
-                differenceMap.put(materialSheet.getMaterial(), sheetsList);
-            }
-        }
-
-        //check coefficients in sketchShapes
-        if (haveDifference) {
-            CheckSheetsPrices.showInfoWindow(Main.getMainScene(), differenceMap);
-        }
-    }
-
     public boolean projectSelected() {
         return projectJSONObject != null;
     }
@@ -347,16 +331,16 @@ public class ProjectHandler {
         return currentProjectName;
     }
 
+    void setCurrentProjectName(String currentProjectName) {
+        this.currentProjectName = currentProjectName;
+    }
+
     public String getCurrentProjectPath() {
         return currentProjectPath;
     }
 
     void setCurrentProjectPath(String currentProjectPath) {
         this.currentProjectPath = currentProjectPath;
-    }
-
-    void setCurrentProjectName(String currentProjectName) {
-        this.currentProjectName = currentProjectName;
     }
 
 }
