@@ -52,15 +52,9 @@ import java.util.*;
 
 public class ReceiptManager {
 
-    public static String USD_SYMBOL;//"USD"; //"$";
-    public static String EUR_SYMBOL;//"EUR";//"€";
-    public static String RUR_SYMBOL;//"RUB";//"₽";
-
-    static {
-        USD_SYMBOL = "\u0024";
-        RUR_SYMBOL = "\u20BD";//"\u0584";
-        EUR_SYMBOL = "\u20AC";
-    }
+    public static final String USD_SYMBOL = "\u0024"; // $
+    public static final String EUR_SYMBOL = "\u20AC"; // €
+    public static final String RUR_SYMBOL = "\u20BD"; // ₽
 
     protected Scene sceneReceiptManager;
 
@@ -547,20 +541,14 @@ public class ReceiptManager {
                 //calculate allPrice:
                 {
                     if (receiptItem.getCurrency().equals("USD")) {
-                        allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice()
-                                .replaceAll(" ", "").replace(',', '.'));
-                        allStoneProductsPriceInUSD += Double.parseDouble(receiptItem.getAllPrice()
-                                .replaceAll(" ", "").replace(',', '.'));
+                        allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+                        allStoneProductsPriceInUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
                     } else if (receiptItem.getCurrency().equals("EUR")) {
-                        allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice()
-                                .replaceAll(" ", "").replace(',', '.'));
-                        allStoneProductsPriceInEUR += Double.parseDouble(receiptItem.getAllPrice()
-                                .replaceAll(" ", "").replace(',', '.'));
+                        allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+                        allStoneProductsPriceInEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
                     } else if (receiptItem.getCurrency().equals("RUB")) {
-                        allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice()
-                                .replaceAll(" ", "").replace(',', '.'));
-                        allStoneProductsPriceInRUR += Double.parseDouble(receiptItem.getAllPrice()
-                                .replaceAll(" ", "").replace(',', '.'));
+                        allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+                        allStoneProductsPriceInRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
                     }
                 }
 
@@ -637,18 +625,15 @@ public class ReceiptManager {
         }
 
         for (ReceiptItem receiptItem : TableDesigner.getSinkQuarzReceiptList()) {
-            //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD")) {
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                    allStoneProductsPriceInUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                } else if (receiptItem.getCurrency().equals("EUR")) {
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                    allStoneProductsPriceInEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                } else if (receiptItem.getCurrency().equals("RUB")) {
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                    allStoneProductsPriceInRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                }
+            if (receiptItem.getCurrency().equals("USD")) {
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+                allStoneProductsPriceInUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            } else if (receiptItem.getCurrency().equals("EUR")) {
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+                allStoneProductsPriceInEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            } else if (receiptItem.getCurrency().equals("RUB")) {
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+                allStoneProductsPriceInRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
             }
         }
     }
@@ -760,25 +745,17 @@ public class ReceiptManager {
         int rowIndex = gridPaneTop.getRowConstraints().size() - 1;
 
         Material material;
-        int depth;
-        ElementTypes elementType;
         double width = 0;
         double height = 0;
 
         if (object instanceof CutObject) {
             CutObject cutObject = (CutObject) object;
             material = cutObject.getMaterial();
-            depth = cutObject.getDepth();
-            elementType = ((CutShape) cutObject).getElementType();
-
             width = ((SketchShape) ((CutShape) cutObject).getSketchObjectOwner()).getShapeWidth();
             height = ((SketchShape) ((CutShape) cutObject).getSketchObjectOwner()).getShapeHeight();
-
         } else {
             Sink sink = (Sink) object;
             material = sink.getSketchShapeOwner().getMaterial();
-            depth = sink.getSketchShapeOwner().getShapeDepth();
-            elementType = sink.getSketchShapeOwner().getElementType();
             width = sink.getFeatureWidth();
             height = sink.getFeatureHeight();
         }
@@ -801,10 +778,8 @@ public class ReceiptManager {
                 if (material.getNotification1() == 1) {
                     message += "Выбранный цвет требует обязательного уточнения по наличию.\n\t";
                 }
-
                 if (material.getNotification2() == 1) {
-                    message += "Количество стыков и их расположение в данной " +
-                            "коллекции выполняется по усмотрению производителя.";
+                    message += "Количество стыков и их расположение в данной коллекции выполняется по усмотрению производителя.";
                 }
 
                 Tooltip tooltip = new Tooltip(message);
@@ -823,12 +798,12 @@ public class ReceiptManager {
 
             String message = "";
             if (material.getNotification1() == 1 || material.getNotification2() == 1) {
-                if (material.getNotification1() == 1)
+                if (material.getNotification1() == 1) {
                     message += "Выбранный цвет требует обязательного уточнения по наличию.\n\t";
-
-                if (material.getNotification2() == 1)
-                    message += "Количество стыков и их расположение в данной " +
-                            "коллекции выполняется по усмотрению производителя.";
+                }
+                if (material.getNotification2() == 1) {
+                    message += "Количество стыков и их расположение в данной коллекции выполняется по усмотрению производителя.";
+                }
 
                 Tooltip tooltip = new Tooltip(message);
                 labelStoneTypeValue.setTooltip(tooltip);
@@ -853,7 +828,6 @@ public class ReceiptManager {
             GridPane.setHgrow(labelStoneCollectionValue, Priority.ALWAYS);
             GridPane.setVgrow(labelStoneCollectionValue, Priority.ALWAYS);
         }
-
         //label stone color value
         {
             Label labelStoneColorValue = new Label(material.getCollection() + ", " + material.getColor());
@@ -866,12 +840,12 @@ public class ReceiptManager {
 
             String message = "";
             if (material.getNotification1() == 1 || material.getNotification2() == 1) {
-                if (material.getNotification1() == 1)
+                if (material.getNotification1() == 1) {
                     message += "Выбранный цвет требует обязательного уточнения по наличию.\n\t";
-
-                if (material.getNotification2() == 1)
-                    message += "Количество стыков и их расположение в данной " +
-                            "коллекции выполняется по усмотрению производителя.";
+                }
+                if (material.getNotification2() == 1) {
+                    message += "Количество стыков и их расположение в данной коллекции выполняется по усмотрению производителя.";
+                }
 
                 Tooltip tooltip = new Tooltip(message);
                 labelStoneColorValue.setTooltip(tooltip);
@@ -942,7 +916,6 @@ public class ReceiptManager {
         //label result price value
         {
             Label labelResultPriceValue = new Label();
-
             labelResultPriceValue.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
             labelResultPriceValue.setStyle("-fx-text-fill: " + receiptItem.getPriceColor() + ";");
             labelResultPriceValue.getStyleClass().add("labelStoneProductPrice");
@@ -956,20 +929,14 @@ public class ReceiptManager {
         //calculate allPrice:
         {
             if (receiptItem.getCurrency().equals("USD")) {
-                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice()
-                        .replaceAll(" ", "").replace(',', '.'));
-                allStoneProductsPriceInUSD += Double.parseDouble(receiptItem.getAllPrice()
-                        .replaceAll(" ", "").replace(',', '.'));
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+                allStoneProductsPriceInUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
             } else if (receiptItem.getCurrency().equals("EUR")) {
-                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice()
-                        .replaceAll(" ", "").replace(',', '.'));
-                allStoneProductsPriceInEUR += Double.parseDouble(receiptItem.getAllPrice()
-                        .replaceAll(" ", "").replace(',', '.'));
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+                allStoneProductsPriceInEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
             } else if (receiptItem.getCurrency().equals("RUB")) {
-                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice()
-                        .replaceAll(" ", "").replace(',', '.'));
-                allStoneProductsPriceInRUR += Double.parseDouble(receiptItem.getAllPrice()
-                        .replaceAll(" ", "").replace(',', '.'));
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+                allStoneProductsPriceInRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
             }
         }
 
@@ -987,11 +954,9 @@ public class ReceiptManager {
             flowPaneForFeaturesPictures.setMaxWidth(600);
             flowPaneForFeaturesPictures.setPrefWidth(600);
 
-
             for (ReceiptImageItem receiptImageItem : Receipt.getReceiptImageItemsList()) {
                 flowPaneForFeaturesPictures.getChildren().add(receiptImageItem);
             }
-
 
             double flowPaneHeight = (Receipt.getReceiptImageItemsList().size() / 6) * 140;
             if (Receipt.getReceiptImageItemsList().size() % 6 != 0) {
@@ -1013,7 +978,6 @@ public class ReceiptManager {
 
             gridPaneTop.setHalignment(flowPaneForFeaturesPictures, HPos.LEFT);
         }
-
 
         RowConstraints row1 = new RowConstraints(40);
         gridPaneTop.getRowConstraints().add(row1);
@@ -1074,10 +1038,7 @@ public class ReceiptManager {
     }
 
     protected void createAdditionalPartTop() {
-        RowConstraints row = new RowConstraints(40);
-        gridPaneTop.getRowConstraints().add(row);
-
-        int rowIndex = gridPaneTop.getRowConstraints().size() - 1;
+        int rowIndex = addRowToGridPaneTop();
 
         //label labelAdditionalFeatureName
         {
@@ -1138,262 +1099,75 @@ public class ReceiptManager {
      */
     protected void createEdgesAndBordersPartGridPane() {
         //create rows for edges:
-        int rowIndex;
-
         for (Map.Entry<SketchEdge, ReceiptItem> entry : Receipt.getEdgesAndBordersReceiptItemMap().entrySet()) {
             ReceiptItem receiptItem = entry.getValue();
-            Label labelEdgeValueName = new Label("none");
-            Label labelEdgeValueSubName = new Label("none");
-            Label labelEdgePrice = new Label("none");
-            Label labelEdgeCount = new Label("none");
-            Label labelEdgeResultPrice = new Label("none");
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
 
+            String labelEdgeValueNameText = null;
+            String labelEdgeValueSubNameText = null;
             if (entry.getKey() instanceof Edge) {
                 SketchEdge sketchEdge = entry.getKey();
-                labelEdgeValueName.setText(entry.getValue().getName() + ", Вариант №" + sketchEdge.getEdgeNumber());
-                labelEdgeValueSubName = new Label(sketchEdge.getSketchEdgeOwner().getMaterial().getReceiptName());
-
-                labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-                labelEdgeCount.setText(entry.getValue().getCount());
-                labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
+                labelEdgeValueNameText = entry.getValue().getName() + ", Вариант №" + sketchEdge.getEdgeNumber();
+                labelEdgeValueSubNameText = sketchEdge.getSketchEdgeOwner().getMaterial().getReceiptName();
             } else if (entry.getKey() instanceof Border) {
                 SketchEdge sketchBorder = entry.getKey();
-                labelEdgeValueName.setText(entry.getValue().getName() + ", Высота - " + ((SketchShape) sketchBorder.getSketchEdgeOwner()).getBorderHeight() + "мм");
-                labelEdgeValueSubName = new Label(sketchBorder.getSketchEdgeOwner().getMaterial().getReceiptName());
-                labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-                labelEdgeCount.setText(entry.getValue().getCount());
-                labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
+                labelEdgeValueNameText = entry.getValue().getName() + ", Высота - " + ((SketchShape) sketchBorder.getSketchEdgeOwner()).getBorderHeight() + "мм";
+                labelEdgeValueSubNameText = sketchBorder.getSketchEdgeOwner().getMaterial().getReceiptName();
             }
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            int rowIndex = addRowToGridPaneTop();
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", labelEdgeValueNameText, null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", labelEdgeValueSubNameText, null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + entry.getValue().getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", entry.getValue().getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + entry.getValue().getAllPrice(), null);
 
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("USD")) {
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            } else if (receiptItem.getCurrency().equals("EUR")) {
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
             }
-
+            if (receiptItem.getCurrency().equals("RUB")) {
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            }
         }
 
         for (Map.Entry<Border, ReceiptItem> entry : Receipt.getBordersTopCutReceiptItemMap().entrySet()) {
             ReceiptItem receiptItem = entry.getValue();
-            Label labelEdgeValueName = new Label("none");
-            Label labelEdgeValueSubName = new Label("Вариант №" + entry.getKey().getBorderCutType());
-            Label labelEdgePrice = new Label("none");
-            Label labelEdgeCount = new Label("none");
-            Label labelEdgeResultPrice = new Label("none");
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
-            Border border = entry.getKey();
-            labelEdgeValueName.setText(entry.getValue().getName());
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", entry.getValue().getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", "Вариант №" + entry.getKey().getBorderCutType(), null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + entry.getValue().getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", entry.getValue().getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + entry.getValue().getAllPrice(), null);
 
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
             {
@@ -1404,137 +1178,43 @@ public class ReceiptManager {
                 if (receiptItem.getCurrency().equals("RUB"))
                     allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
             }
-
         }
 
         for (Map.Entry<Border, ReceiptItem> entry : Receipt.getBordersSideCutReceiptItemMap().entrySet()) {
-            ReceiptItem receiptItem = entry.getValue();
-            Label labelEdgeValueName = new Label("none");
-            Label labelEdgeValueSubName = new Label("Вариант №" + entry.getKey().getBorderSideCutType());
-            Label labelEdgePrice = new Label("none");
-            Label labelEdgeCount = new Label("none");
-            Label labelEdgeResultPrice = new Label("none");
+            Border border = entry.getKey();
+            if (border.getBorderAnglesCutType() == Border.BORDER_ANGLE_CUT_NONE) {
+                continue;
+            }
 
+            ReceiptItem receiptItem = entry.getValue();
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", entry.getValue().getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", "Вариант №" + entry.getKey().getBorderSideCutType(), null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + entry.getValue().getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", entry.getValue().getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + entry.getValue().getAllPrice(), null);
 
-            Border border = entry.getKey();
-            labelEdgeValueName.setText(entry.getValue().getName());
-
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            if (border.getBorderAnglesCutType() == Border.BORDER_ANGLE_CUT_NONE) continue;
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
-
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
+            
             //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
     }
 
@@ -1544,134 +1224,35 @@ public class ReceiptManager {
         }
 
         for (Map.Entry<Sink, ReceiptItem> entry : Receipt.getSinkAndReceiptItem().entrySet()) {
-            int rowIndex;
-
-            Sink sink = entry.getKey();
-            Material material = sink.getSketchShapeOwner().getMaterial();
             ReceiptItem receiptItem = entry.getValue();
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label(material.getReceiptName());
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgeValueName.setText(entry.getValue().getName() + " " + sink.getModel());
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName() + " " + entry.getKey().getModel(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", entry.getKey().getSketchShapeOwner().getMaterial().getReceiptName(), null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
 
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
     }
 
@@ -1681,1256 +1262,381 @@ public class ReceiptManager {
         }
 
         for (Map.Entry<Sink, ReceiptItem> entry : Receipt.getSinkInstallTypesAndReceiptItem().entrySet()) {
-            int rowIndex;
-
             Sink sink = entry.getKey();
             Material material = sink.getSketchShapeOwner().getMaterial();
+            
             ReceiptItem receiptItem = entry.getValue();
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label(material.getReceiptName());
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgeValueName.setText(entry.getValue().getName());
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
 
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                //ReceiptItem receiptItem = entry.getValue();
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
-
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
 
         for (Map.Entry<Sink, ReceiptItem> entry : Receipt.getSinkEdgeTypesAndReceiptItem().entrySet()) {
-            int rowIndex;
-
             Sink sink = entry.getKey();
-            Material material = sink.getSketchShapeOwner().getMaterial();
+
             ReceiptItem receiptItem = entry.getValue();
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label(material.getReceiptName());
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgeValueName.setText(entry.getValue().getName());
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", sink.getSketchShapeOwner().getMaterial().getReceiptName(), null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
 
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
-
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
+    }
+
+    private int addRowToGridPaneTop() {
+        RowConstraints rowForEdge = new RowConstraints(40);
+        gridPaneTop.getRowConstraints().add(rowForEdge);
+        int rowIndex = gridPaneTop.getRowConstraints().size() - 1;
+        return rowIndex;
     }
 
     protected void createJointsPartGridPane() {
         for (ReceiptItem receiptItem : Receipt.getJointReceiptItemsList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label("");
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (receiptItem.getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (receiptItem.getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (receiptItem.getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(receiptItem);
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgeValueName.setText(receiptItem.getName());
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", null, null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
 
-            labelEdgePrice.setText(currency + receiptItem.getPriceForOne());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(currency + receiptItem.getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
     }
 
     protected void createCutoutPartGridPane() {
         for (Map.Entry<Cutout, ReceiptItem> entry : Receipt.getCutoutAndReceiptItem().entrySet()) {
-            int rowIndex;
-
             Cutout cutout = entry.getKey();
             Material material = cutout.getSketchShapeOwner().getMaterial();
             ReceiptItem receiptItem = entry.getValue();
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label(material.getReceiptName());
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgeValueName.setText(entry.getValue().getName());
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
 
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
 
             //calculate allAddPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
     }
 
     protected void createGroovesPartGridPane() {
         for (Map.Entry<Grooves, ReceiptItem> entry : Receipt.getGroovesAndReceiptItem().entrySet()) {
-            int rowIndex;
-
             Grooves grooves = entry.getKey();
             Material material = grooves.getSketchShapeOwner().getMaterial();
             ReceiptItem receiptItem = entry.getValue();
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label(material.getReceiptName());
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgeValueName.setText(entry.getValue().getName());
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
 
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
 
             //calculate allAddPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
     }
 
     protected void createRodsPartGridPane() {
         for (Map.Entry<Rods, ReceiptItem> entry : Receipt.getRodsAndReceiptItem().entrySet()) {
-            int rowIndex;
-
             Rods rods = entry.getKey();
             Material material = rods.getSketchShapeOwner().getMaterial();
+
             ReceiptItem receiptItem = entry.getValue();
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label(material.getReceiptName());
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgeValueName.setText(entry.getValue().getName());
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
 
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                //ReceiptItem receiptItem = entry.getValue();
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
 
             //calculate allAddPrice:
-            {
-                //ReceiptItem receiptItem = entry.getValue();
-                if (receiptItem.getCurrency().equals("USD"))
-                    allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
+    }
+
+    private static String getCurrency(ReceiptItem entry) {
+        return switch (entry.getCurrency()) {
+            case "USD" -> USD_SYMBOL;
+            case "EUR" -> EUR_SYMBOL;
+            case "RUB" -> RUR_SYMBOL;
+            default -> "*";
+        };
     }
 
     protected void createRadiusElementsPartGridPane() {
         for (Map.Entry<Material, ReceiptItem> entry : Receipt.getRadiusElementReceiptItemMap().entrySet()) {
-            int rowIndex;
-
             Material material = entry.getKey();
             ReceiptItem receiptItem = entry.getValue();
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label(material.getReceiptName());
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgeValueName.setText(entry.getValue().getName());
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
 
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                //ReceiptItem receiptItem = entry.getValue();
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
 
             //calculate allAddPrice:
-            {
-                //ReceiptItem receiptItem = entry.getValue();
-                if (receiptItem.getCurrency().equals("USD"))
-                    allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
     }
 
     protected void createLeakGroovePartGridPane() {
         for (Map.Entry<Material, ReceiptItem> entry : Receipt.getLeakGrooveReceiptItemMap().entrySet()) {
-            int rowIndex;
-
             Material material = entry.getKey();
             ReceiptItem receiptItem = entry.getValue();
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label(material.getReceiptName());
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
 
-            labelEdgeValueName.setText(entry.getValue().getName());
-
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
 
             //calculate allAddPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
     }
 
     protected void createStoneHemPartGridPane() {
         for (Map.Entry<Material, ReceiptItem> entry : Receipt.getStoneHemReceiptItemMap().entrySet()) {
-            int rowIndex;
-
             Material material = entry.getKey();
             ReceiptItem receiptItem = entry.getValue();
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label(material.getReceiptName());
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (entry.getValue().getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (entry.getValue().getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (entry.getValue().getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            String currency = getCurrency(entry.getValue());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgeValueName.setText(entry.getValue().getName());
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
 
-            labelEdgePrice.setText(currency + entry.getValue().getPriceForOne());
-            labelEdgeCount.setText(entry.getValue().getCount());
-            labelEdgeResultPrice.setText(currency + entry.getValue().getAllPrice());
-
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.setId("labelEdgeValueName");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.setId("labelEdgeValueSubName");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.setId("labelEdgeNull1");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.setId("labelEdgeNull2");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.setId("labelEdgeInches");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.setId("labelEdgePrice");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.setId("labelEdgeCount");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.setId("labelEdgeResultPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgePrice, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
 
             //calculate allAddPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            if (receiptItem.getCurrency().equals("USD"))
+                allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            else if (receiptItem.getCurrency().equals("EUR"))
+                allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            if (receiptItem.getCurrency().equals("RUB"))
+                allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         }
     }
 
@@ -3125,13 +1831,10 @@ public class ReceiptManager {
                 gridPaneTop.add(labelAdditionalAllPrice, 7, rowIndex, 2, 1);
             }
         }
-
     }
 
     protected void createHeaderForAdditionalWorks() {
-        RowConstraints row = new RowConstraints(40);
-        gridPaneTop.getRowConstraints().add(row);
-        int rowIndex = gridPaneTop.getRowConstraints().size() - 1;
+        int rowIndex = addRowToGridPaneTop();
 
         //label labelAdditionalFeatureName
         {
@@ -3187,238 +1890,53 @@ public class ReceiptManager {
     }
 
     protected void createEdgesAndBordersPartGridPaneTD() {
-        //create rows for edges:
         int rowIndex;
 
         for (ReceiptItem receiptItem : TableDesigner.getEdgesReceiptList()) {
-            Label labelEdgeValueName = new Label("none");
-            Label labelEdgeValueSubName = new Label("none");
-            Label labelEdgePrice = new Label("none");
-            Label labelEdgeCount = new Label("none");
-            Label labelEdgeResultPrice = new Label("none");
-
             receiptItem.setCoefficient(coefficient);
-
-            String currency = "*";
-            if (receiptItem.getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (receiptItem.getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (receiptItem.getCurrency().equals("RUB")) currency = RUR_SYMBOL;
-
-
-            labelEdgeValueName.setText(receiptItem.getName().split("#")[0]);
-            labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
 
             RowConstraints rowForEdge = new RowConstraints(40);
             gridPaneTop.getRowConstraints().add(rowForEdge);
+            rowIndex = gridPaneTop.getRowConstraints().size() - 1;
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "м.п.", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
         }
 
         for (ReceiptItem receiptItem : TableDesigner.getBordersReceiptList()) {
-            Label labelEdgeValueName = new Label("none");
-            Label labelEdgeValueSubName = new Label("none");
-            Label labelEdgePrice = new Label("none");
-            Label labelEdgeCount = new Label("none");
-            Label labelEdgeResultPrice = new Label("none");
-
             receiptItem.setCoefficient(coefficient);
-
-            labelEdgeValueName.setText(receiptItem.getName().split("#")[0]);
-            labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
 
             RowConstraints rowForEdge = new RowConstraints(40);
             gridPaneTop.getRowConstraints().add(rowForEdge);
+            rowIndex = gridPaneTop.getRowConstraints().size() - 1;
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "м.п.", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -3427,227 +1945,48 @@ public class ReceiptManager {
 
     protected void createSinkAcrylPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getSinkAcrylReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName().split("#")[0]);
-            Label labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOneInRUR());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPriceInRUR());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "шт", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("шт");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
         }
-
     }
 
-    protected void createSinkQuarzPartGridPaneTD() {
+    protected void createSinkQuartzPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getSinkQuarzReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName().split("#")[0]);
-            Label labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOneInRUR());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPriceInRUR());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "шт", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("шт");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -3656,112 +1995,23 @@ public class ReceiptManager {
 
     protected void createSinkInstallTypesPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getSinkInstallReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName().split("#")[0]);
-            Label labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "м.п.", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -3770,112 +2020,23 @@ public class ReceiptManager {
 
     protected void createJointsPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getJointsReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName().split("#")[0]);
-            Label labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "м.п.", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -3884,112 +2045,23 @@ public class ReceiptManager {
 
     protected void createCutoutPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getCutoutsReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName().split("#")[0]);
-            Label labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "шт", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("шт");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -3998,112 +2070,23 @@ public class ReceiptManager {
 
     protected void createPlumbingAlveusPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getPlumbingAlveusReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label("");
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName(), "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, null, "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "шт", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("шт");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -4112,117 +2095,23 @@ public class ReceiptManager {
 
     protected void createPlumbingPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getPlumbingReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label("");
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (receiptItem.getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (receiptItem.getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (receiptItem.getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName(), "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, null, "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "шт", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("шт");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -4231,112 +2120,23 @@ public class ReceiptManager {
 
     protected void createPalletPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getPalletReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label("");
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName(), "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, null, "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "шт", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("шт");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -4345,112 +2145,23 @@ public class ReceiptManager {
 
     protected void createGroovesPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getGroovesReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName().split("#")[0]);
-            Label labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "м.п.", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -4459,113 +2170,23 @@ public class ReceiptManager {
 
     protected void createRodsPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getRodsReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName().split("#")[0]);
-            Label labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, "Нержавеющая сталь", "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "шт.", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setText("Нержавеющая сталь");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("шт.");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -4574,112 +2195,23 @@ public class ReceiptManager {
 
     protected void createRadiusElementsPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getRadiusReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName().split("#")[0]);
-            Label labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, receiptItem.getUnits(), "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label(receiptItem.getUnits());
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -4688,112 +2220,23 @@ public class ReceiptManager {
 
     protected void createLeakGroovePartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getLeakGroovesReceiptItems()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName().split("#")[0]);
-            Label labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            int rowIndex = addRowToGridPaneTop();
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, "м.п.", "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label("м.п.");
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -4806,115 +2249,23 @@ public class ReceiptManager {
 
     protected void createMetalFootingPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getMetalFootingReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label("");
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgeValueName.setText(receiptItem.getName());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName(), "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, null, "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, receiptItem.getUnits(), "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label(receiptItem.getUnits());
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -4923,118 +2274,23 @@ public class ReceiptManager {
 
     protected void createPlywoodPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getPlywoodReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName().split("#")[0]);
-            Label labelEdgeValueSubName = new Label(receiptItem.getName().split("#")[1]);
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            String currency = "*";
-            if (receiptItem.getCurrency().equals("USD")) currency = USD_SYMBOL;
-            else if (receiptItem.getCurrency().equals("EUR")) currency = EUR_SYMBOL;
-            if (receiptItem.getCurrency().equals("RUB")) currency = RUR_SYMBOL;
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(currency + receiptItem.getAllPriceInRUR());
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName().split("#")[0], "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, receiptItem.getName().split("#")[1], "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, receiptItem.getUnits(), "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label(receiptItem.getUnits());
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -5043,115 +2299,23 @@ public class ReceiptManager {
 
     protected void createStonePolishingPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getStonePolishingReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label("");
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgeValueName.setText(receiptItem.getName());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName(), "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, null, "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, receiptItem.getUnits(), "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label(receiptItem.getUnits());
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -5160,232 +2324,64 @@ public class ReceiptManager {
 
     protected void createSiphonPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getSiphonReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label("");
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgeValueName.setText(receiptItem.getName());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName(), "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, null, "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, receiptItem.getUnits(), "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label(receiptItem.getUnits());
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
         }
     }
+    
+    private static Label buildLabel(String id, String text, String className) {
+        Label label = new Label(text);
+        if (id != null && !id.isEmpty()) {
+            label.setId(id);
+        }
+        if (className != null && !className.isEmpty()) {
+            label.getStyleClass().add(className);
+        }
+        label.setWrapText(true);
+        label.setMaxWidth(Double.MAX_VALUE);
+        label.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setHgrow(label, Priority.ALWAYS);
+        GridPane.setVgrow(label, Priority.ALWAYS);
+        return label;
+    }
 
     protected void createCustomPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getCustomReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label("");
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgeValueName.setText(receiptItem.getName());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName(), "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, null, "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, receiptItem.getUnits(), "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label(receiptItem.getUnits());
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -5394,115 +2390,23 @@ public class ReceiptManager {
 
     protected void createMeasuringPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getMeasurerReceiptList()) {
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label("");
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgeValueName.setText(receiptItem.getName());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName(), "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, null, "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, receiptItem.getUnits(), "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label(receiptItem.getUnits());
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -5511,117 +2415,23 @@ public class ReceiptManager {
 
     protected void createDeliveryPartGridPaneTD() {
         for (ReceiptItem receiptItem : TableDesigner.getDeliveryReceiptList()) {
-            System.out.println();
-
-            int rowIndex;
-
-            Label labelEdgeValueName = new Label(receiptItem.getName());
-            Label labelEdgeValueSubName = new Label("");
-            Label labelEdgePrice = new Label(receiptItem.getPriceForOne());
-            Label labelEdgeCount = new Label(receiptItem.getCount());
-            Label labelEdgeResultPrice = new Label(receiptItem.getAllPrice());
-
             receiptItem.setCoefficient(coefficient);
 
-            labelEdgeValueName.setText(receiptItem.getName());
+            int rowIndex = addRowToGridPaneTop();
 
-            labelEdgePrice.setText(RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelEdgeCount.setText(receiptItem.getCount());
-            labelEdgeResultPrice.setText(RUR_SYMBOL + receiptItem.getAllPriceInRUR());
+            Label labelEdgeValueName = buildLabel(null, receiptItem.getName(), "labelProduct");
+            Label labelEdgeValueSubName = buildLabel(null, null, "labelProduct");
+            Label labelEdgeNull2 = buildLabel(null, null, "labelProduct");
+            Label labelEdgeInches = buildLabel(null, receiptItem.getUnits(), "labelProduct");
+            Label labelEdgeCount = buildLabel(null, receiptItem.getCount(), "labelProduct");
+            Label labelEdgeResultPrice = buildLabel(null, RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelProductPrice");
 
-            RowConstraints rowForEdge = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(rowForEdge);
-
-            //labelEdgeValueName:
-            {
-                labelEdgeValueName.getStyleClass().add("labelProduct");
-                labelEdgeValueName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueName, Priority.ALWAYS);
-                labelEdgeValueName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
-            }
-            //labelEdgeValueSubName:
-            {
-                labelEdgeValueSubName.getStyleClass().add("labelProduct");
-                labelEdgeValueSubName.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeValueSubName.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeValueSubName, Priority.ALWAYS);
-                labelEdgeValueSubName.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
-            }
-
-            //labelEdgeNull1:
-            {
-                Label labelEdgeNull1 = new Label();
-                labelEdgeNull1.getStyleClass().add("labelProduct");
-                labelEdgeNull1.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull1.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull1, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull1, Priority.ALWAYS);
-                labelEdgeNull1.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeNull2 = new Label();
-                labelEdgeNull2.getStyleClass().add("labelProduct");
-                labelEdgeNull2.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeNull2.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeNull2, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeNull2, Priority.ALWAYS);
-                labelEdgeNull2.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
-            }
-            //labelEdgeNull2:
-            {
-                Label labelEdgeInches = new Label(receiptItem.getUnits());
-                labelEdgeInches.getStyleClass().add("labelProduct");
-                labelEdgeInches.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeInches.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeInches, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeInches, Priority.ALWAYS);
-                labelEdgeInches.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
-            }
-            //labelEdgePrice:
-            {
-                labelEdgePrice.getStyleClass().add("labelProduct");
-                labelEdgePrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgePrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgePrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgePrice, Priority.ALWAYS);
-                labelEdgePrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-            }
-            //labelEdgeCount:
-            {
-                labelEdgeCount.getStyleClass().add("labelProduct");
-                labelEdgeCount.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeCount.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeCount, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeCount, Priority.ALWAYS);
-                labelEdgeCount.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
-            }
-            //labelEdgeResultPrice:
-            {
-                labelEdgeResultPrice.getStyleClass().add("labelProductPrice");
-                labelEdgeResultPrice.setMaxWidth(Double.MAX_VALUE);
-                labelEdgeResultPrice.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setHgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                GridPane.setVgrow(labelEdgeResultPrice, Priority.ALWAYS);
-                labelEdgeResultPrice.setWrapText(true);
-                rowIndex = gridPaneTop.getRowConstraints().size() - 1;
-                gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
-            }
+            gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
+            gridPaneTop.add(labelEdgeNull2, 4, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeInches, 5, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeCount, 6, rowIndex, 1, 1);
+            gridPaneTop.add(labelEdgeResultPrice, 7, rowIndex, 2, 1);
 
             allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -5635,9 +2445,7 @@ public class ReceiptManager {
         double addPriceUSD = 0;
 
         for (ReceiptItem receiptItem : TableDesigner.getMountingReceiptList()) {
-            RowConstraints row2 = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(row2);
-            int rowIndex = gridPaneTop.getRowConstraints().size() - 1;
+            int rowIndex = addRowToGridPaneTop();
             //label labelMountName
             {
                 Label labelMountName = new Label(receiptItem.getName());
@@ -5692,9 +2500,7 @@ public class ReceiptManager {
         double addPriceUSD = 0;
 
         for (ReceiptItem receiptItem : TableDesigner.getDiscountReceiptList()) {
-            RowConstraints row2 = new RowConstraints(40);
-            gridPaneTop.getRowConstraints().add(row2);
-            int rowIndex = gridPaneTop.getRowConstraints().size() - 1;
+            int rowIndex = addRowToGridPaneTop();
             //label labelMountName
             {
                 Label labelMountName = new Label(receiptItem.getName());
@@ -5742,7 +2548,7 @@ public class ReceiptManager {
     }
 
     protected void createAdditionalRowShort() {
-        ArrayList<ReceiptItem> allAdditionalItems = new ArrayList<>();
+        List<ReceiptItem> allAdditionalItems = new ArrayList<>();
 
         allAdditionalItems.addAll(TableDesigner.getEdgesReceiptList());
         allAdditionalItems.addAll(TableDesigner.getBordersReceiptList());
@@ -5771,10 +2577,7 @@ public class ReceiptManager {
         double RUBtoUSD = MainWindow.getUSDValue().doubleValue();
         double RUBtoEUR = MainWindow.getEURValue().doubleValue();
 
-        RowConstraints row = new RowConstraints(40);
-        gridPaneTop.getRowConstraints().add(row);
-
-        int rowIndex = gridPaneTop.getRowConstraints().size() - 1;
+        int rowIndex = addRowToGridPaneTop();
 
         /** Additional work price*/
         {
@@ -5820,10 +2623,7 @@ public class ReceiptManager {
         double RUBtoUSD = MainWindow.getUSDValue().doubleValue();
         double RUBtoEUR = MainWindow.getEURValue().doubleValue();
 
-        RowConstraints row = new RowConstraints(40);
-        gridPaneTop.getRowConstraints().add(row);
-
-        int rowIndex = gridPaneTop.getRowConstraints().size() - 1;
+        int rowIndex = addRowToGridPaneTop();
 
         /** Additional work price*/
         {
@@ -5864,10 +2664,8 @@ public class ReceiptManager {
 
         /** All product price in USD */
         {
-            rowIndex = gridPaneTop.getRowConstraints().size() - 1;
             //label labelAdditionalFeatureName
             {
-
                 Label labelAllPriceName = new Label("  Итого сумма по заказу в долларах США");
                 labelAllPriceName.setAlignment(Pos.CENTER_LEFT);
                 labelAllPriceName.setId("labelAllPriceName");
@@ -5945,10 +2743,8 @@ public class ReceiptManager {
 
         /** result price in USD*/
         {
-            rowIndex = gridPaneTop.getRowConstraints().size() - 1;
             //label labelResultPriceUSDName
             {
-
                 Label labelResultPriceUSDName = new Label("  Итог по заказу в долларах США:");
                 labelResultPriceUSDName.setAlignment(Pos.CENTER_LEFT);
                 labelResultPriceUSDName.setId("labelResultPriceUSDName");
@@ -5979,14 +2775,13 @@ public class ReceiptManager {
                 coeff = 0;
             }
 
-            double price = (allStoneProductsPriceInRUR +
-                    allStoneProductsPriceInUSD * RUBtoUSD +
-                    allStoneProductsPriceInEUR * RUBtoEUR) * coeff;//in RUR
+            double price = (allStoneProductsPriceInRUR + allStoneProductsPriceInUSD * RUBtoUSD + allStoneProductsPriceInEUR * RUBtoEUR) * coeff;//in RUR
 
             if (coeff != 0.0) {
                 RowConstraints row2 = new RowConstraints(40);
                 gridPaneTop.getRowConstraints().add(row2);
                 rowIndex = gridPaneTop.getRowConstraints().size() - 1;
+
                 //label labelMountName
                 {
                     Label labelMountName = new Label(" Доплата за изделие менее 2 кв.м.");
@@ -5998,7 +2793,6 @@ public class ReceiptManager {
                     GridPane.setVgrow(labelMountName, Priority.ALWAYS);
                     gridPaneTop.add(labelMountName, 0, rowIndex, 6, 1);
                 }
-
                 //label labelMountPercent
                 {
                     Label labelMountPercent = new Label();
@@ -6010,7 +2804,6 @@ public class ReceiptManager {
                     GridPane.setVgrow(labelMountPercent, Priority.ALWAYS);
                     gridPaneTop.add(labelMountPercent, 6, rowIndex, 1, 1);
                 }
-
                 //label labelMountPrice
                 {
                     Label labelMountPrice = new Label();
@@ -6041,6 +2834,7 @@ public class ReceiptManager {
                 RowConstraints row4 = new RowConstraints(40);
                 gridPaneTop.getRowConstraints().add(row4);
                 rowIndex = gridPaneTop.getRowConstraints().size() - 1;
+
                 //label labelResultPriceRURName
                 {
                     Label labelResultPriceRURName = new Label("Скидка по акции: " + stockName);
@@ -6052,7 +2846,6 @@ public class ReceiptManager {
                     GridPane.setVgrow(labelResultPriceRURName, Priority.ALWAYS);
                     gridPaneTop.add(labelResultPriceRURName, 0, rowIndex, 7, 1);
                 }
-
                 //label labelResultPriceRUR
                 {
                     Label labelResultPriceRUR = new Label();
@@ -6078,6 +2871,7 @@ public class ReceiptManager {
                 RowConstraints row4 = new RowConstraints(40);
                 gridPaneTop.getRowConstraints().add(row4);
                 rowIndex = gridPaneTop.getRowConstraints().size() - 1;
+
                 //label labelResultPriceRURName
                 {
                     Label labelResultPriceRURName = new Label("Скидка по акции: " + stockName);
@@ -6089,7 +2883,6 @@ public class ReceiptManager {
                     GridPane.setVgrow(labelResultPriceRURName, Priority.ALWAYS);
                     gridPaneTop.add(labelResultPriceRURName, 0, rowIndex, 7, 1);
                 }
-
                 //label labelResultPriceRUR
                 {
                     Label labelResultPriceRUR = new Label();
@@ -6103,7 +2896,6 @@ public class ReceiptManager {
                 }
 
                 stockSizeAll += stock; //in RUR
-
                 System.out.println("STOCK SIZE ALL = " + stockSizeAll);
             }
         }
@@ -6233,7 +3025,6 @@ public class ReceiptManager {
 
                 MainWindow.getUSDValue().set(value);
                 labelUSD.setText(USD_SYMBOL + value);
-                //receiptManager.updateReceiptTable();
                 textFieldUSD.setStyle("-fx-text-fill: #B3B4B4");
             } catch (NumberFormatException ex) {
                 textFieldUSD.setStyle("-fx-text-fill: red;");
@@ -6484,7 +3275,7 @@ public class ReceiptManager {
         createImagesPartGridPaneTD();
         createHeaderForAdditionalWorks();
 
-        createSinkQuarzPartGridPaneTD();
+        createSinkQuartzPartGridPaneTD();
         createEdgesAndBordersPartGridPaneTD();
         createLeakGroovePartGridPaneTD();
         createStoneHemPartGridPaneTD();
@@ -6577,7 +3368,7 @@ public class ReceiptManager {
             //AdditionalPart
             //MainWork
             //AdditionalWork
-            createSinkQuarzPartGridPaneTD();
+            createSinkQuartzPartGridPaneTD();
             createImagesPartGridPaneTD();
             createEdgesAndBordersPartGridPaneTD();
             createLeakGroovePartGridPaneTD();
@@ -6672,22 +3463,15 @@ public class ReceiptManager {
         double RUBtoEUR = MainWindow.getEURValue().doubleValue();
 
         JSONObject jsonObject = new JSONObject();
-        //usdToRub
         jsonObject.put("RUBtoUSD", RUBtoUSD);
-        //rubToUSD
         jsonObject.put("RUBtoEUR", RUBtoEUR);
-        //coefficient
         jsonObject.put("coefficient", coefficient);
-        //customer address
         jsonObject.put("costumerAddress", costumerAddress);
-        //customer name
         jsonObject.put("costumerName", costumerName);
-        //manager name
         jsonObject.put("managerName", managerName);
-        //Document name
         jsonObject.put("documentName", docName);
-        //custom receiptItemsMap
 
+        //custom receiptItemsMap
         JSONArray jsonCustomItemsArray = new JSONArray();
         for (ReceiptItem receiptItem : customReceiptItems) {
             JSONObject jsonCustomItemObject = new JSONObject();
@@ -6704,16 +3488,13 @@ public class ReceiptManager {
     }
 
     public void initFromJsonObject(JSONObject jsonObject) {
-        double RUBtoUSD = MainWindow.getUSDValue().doubleValue();
-        double RUBtoEUR = MainWindow.getEURValue().doubleValue();
-
-        RUBtoUSD = ((Double) jsonObject.get("RUBtoUSD")).doubleValue();
-        RUBtoEUR = ((Double) jsonObject.get("RUBtoEUR")).doubleValue();
+        double RUBtoUSD = (Double) jsonObject.get("RUBtoUSD");
+        double RUBtoEUR = (Double) jsonObject.get("RUBtoEUR");
 
         MainWindow.getUSDValue().set(RUBtoUSD);
         MainWindow.getEURValue().set(RUBtoEUR);
 
-        coefficient = ((Double) jsonObject.get("coefficient")).doubleValue();
+        coefficient = (Double) jsonObject.get("coefficient");
         costumerAddress = (String) jsonObject.get("costumerAddress");
         costumerName = (String) jsonObject.get("costumerName");
         managerName = (String) jsonObject.get("managerName");

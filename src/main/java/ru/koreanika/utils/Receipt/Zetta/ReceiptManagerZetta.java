@@ -1495,7 +1495,7 @@ public class ReceiptManagerZetta extends ReceiptManager {
 
         createHeaderForAdditionalWorks();
 
-        createSinkQuarzPartGridPaneTD();
+        createSinkQuartzPartGridPaneTD();
         createEdgesAndBordersPartGridPaneTD();
         createLeakGroovePartGridPaneTD();
         createStoneHemPartGridPaneTD();
