@@ -33,7 +33,6 @@ import ru.koreanika.sketchDesigner.Features.Cutout;
 import ru.koreanika.sketchDesigner.Features.Grooves;
 import ru.koreanika.sketchDesigner.Features.Rods;
 import ru.koreanika.sketchDesigner.Features.Sink;
-import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.Currency.UserCurrency;
@@ -78,34 +77,32 @@ public class ReceiptManager {
     protected AnchorPane anchorPaneIntoScrollPane;
     protected GridPane gridPaneTop;
     protected AnchorPane anchorPaneReceiptHeader;
-    protected ImageView imageViewLogo;
     protected Label labelGeneralName;
     protected Label labelDate;
     protected Label labelCutoutInfo;
     protected TextField textFieldDocName = new TextField();
     protected Label labelManagerName;
-    protected TextField textFieldCostumerName = new TextField();
-    protected TextField textFieldCostumerAddress = new TextField();
+    protected TextField textFieldCustomerName = new TextField();
+    protected TextField textFieldCustomerAddress = new TextField();
     protected TextField textFieldManagerName = new TextField();
     protected Label labelUSD;
     protected Label labelEUR;
     protected TextField textFieldCoefficient = new TextField();
-    protected Label labelStoneType, labelElementType, labelMaterial, labelCollection, labelColor, labelLength;
-    protected Label labelWidth, labelInchType, labelPrice, labelCount, labelResultPrice;
     protected Label labelAdditionalFeatureName;
     protected Label labelAdditionalFeatureInches;
     protected Label labelAdditionalFeaturePrice;
     protected Label labelAdditionalFeatureCount;
     protected Label labelAdditionalFeatureResultPrice;
     protected ImageView imageViewSketch = null;
-    protected ArrayList<ReceiptItem> customReceiptItems = new ArrayList<>();
+    protected List<ReceiptItem> customReceiptItems = new ArrayList<>();
     protected int topPartChildrenCount = 0;
+
     //common:
     protected String docName = "";
 
     //properties zone:
-    protected String costumerName = "";
-    protected String costumerAddress = "";
+    protected String customerName = "";
+    protected String customerAddress = "";
     protected String managerName = "";
     protected double coefficient = 1;
     protected double allPriceForRUR = 0.0;
@@ -142,7 +139,6 @@ public class ReceiptManager {
         }
 
         rootAnchorPane.getStylesheets().clear();
-
         sceneReceiptManager = new Scene(rootAnchorPane, rootAnchorPane.getPrefWidth(), rootAnchorPane.getPrefHeight());
 
         initControlElements();
@@ -188,8 +184,8 @@ public class ReceiptManager {
 
         gridPaneTop = (GridPane) anchorPaneIntoScrollPane.lookup("#gridPaneTop");
 
-        textFieldCostumerName = (TextField) anchorPaneReceiptHeader.lookup("#textFieldCostumerName");
-        textFieldCostumerAddress = (TextField) anchorPaneReceiptHeader.lookup("#textFieldCostumerAddress");
+        textFieldCustomerName = (TextField) anchorPaneReceiptHeader.lookup("#textFieldCostumerName");
+        textFieldCustomerAddress = (TextField) anchorPaneReceiptHeader.lookup("#textFieldCostumerAddress");
         textFieldManagerName = (TextField) anchorPaneReceiptHeader.lookup("#textFieldManagerName");
         textFieldDocName = (TextField) anchorPaneReceiptHeader.lookup("#textFieldDocName");
 
@@ -261,145 +257,46 @@ public class ReceiptManager {
             labelCutoutInfo.setText("S:" + usesSlabs + " K:" +
                     String.format(Locale.ENGLISH, "%.1f", coeffMain) + " P:" +
                     String.format(Locale.ENGLISH, "%.1f", coeffMaterial) +
-                    " Sq:" + String.format(Locale.ENGLISH, "%.2f", allSquare) + "");
+                    " Sq:" + String.format(Locale.ENGLISH, "%.2f", allSquare));
+        }
 
+        labelManagerName = buildLabel("labelManagerName", "Менеджер ФИО/Подпись", null, false);
+
+        textFieldDocName.setText(docName);
+        if (docName.isEmpty()) {
+            textFieldDocName.setText("Приложение №1 к заказу №");
         }
-        //label Manager name:
-        {
-            labelManagerName = new Label("Менеджер ФИО/Подпись");
-            labelManagerName.setId("labelManagerName");
-            labelManagerName.setMaxWidth(Double.MAX_VALUE);
-            labelManagerName.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelManagerName, Priority.ALWAYS);
-            GridPane.setVgrow(labelManagerName, Priority.ALWAYS);
-        }
-        //textField document name
-        {
-            textFieldDocName.setText(docName);
-            if (docName.equals("")) {
-                textFieldDocName.setText("Приложение №1 к заказу №");
-            }
-        }
-        textFieldCostumerName.setText(costumerName);
-        textFieldCostumerAddress.setText(costumerAddress);
+
+        textFieldCustomerName.setText(customerName);
+        textFieldCustomerAddress.setText(customerAddress);
         textFieldManagerName.setText(managerName);
 
         labelUSD.setText(USD_SYMBOL + String.format(Locale.ENGLISH, "%.2f", MainWindow.getUSDValue().doubleValue()));
         labelEUR.setText(EUR_SYMBOL + String.format(Locale.ENGLISH, "%.2f", MainWindow.getEURValue().doubleValue()));
 
-        //STONE TABLE HEADER:
-
-        //label labelElementType
-        {
-            labelElementType = new Label("Наименование изделия");
-            labelElementType.getStyleClass().add("labelTableHeader");
-            labelElementType.setMaxWidth(Double.MAX_VALUE);
-            labelElementType.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelElementType, Priority.ALWAYS);
-            GridPane.setVgrow(labelElementType, Priority.ALWAYS);
-            gridPaneTop.add(labelElementType, 0, 5, 1, 1);
-        }
-        //label labelStoneType
-        {
-            labelStoneType = new Label("Материал");
-            labelStoneType.getStyleClass().add("labelTableHeader");
-            labelStoneType.setMaxWidth(Double.MAX_VALUE);
-            labelStoneType.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelStoneType, Priority.ALWAYS);
-            GridPane.setVgrow(labelStoneType, Priority.ALWAYS);
-            gridPaneTop.add(labelStoneType, 1, 5, 1, 1);
-        }
-        //label labelMaterial
-        {
-            labelMaterial = new Label("Материал");
-            labelMaterial.getStyleClass().add("labelTableHeader");
-            labelMaterial.setMaxWidth(Double.MAX_VALUE);
-            labelMaterial.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelMaterial, Priority.ALWAYS);
-            GridPane.setVgrow(labelMaterial, Priority.ALWAYS);
-        }
-        //label labelCollection
-        {
-            labelCollection = new Label("Коллекция");
-            labelCollection.getStyleClass().add("labelTableHeader");
-            labelCollection.setMaxWidth(Double.MAX_VALUE);
-            labelCollection.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelCollection, Priority.ALWAYS);
-            GridPane.setVgrow(labelCollection, Priority.ALWAYS);
-        }
-        //label labelColor
-        {
-            labelColor = new Label("Цвет");
-            labelColor.getStyleClass().add("labelTableHeader");
-            labelColor.setMaxWidth(Double.MAX_VALUE);
-            labelColor.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelColor, Priority.ALWAYS);
-            GridPane.setVgrow(labelColor, Priority.ALWAYS);
-            gridPaneTop.add(labelColor, 2, 5, 1, 1);
-        }
-        //label labelLength
-        {
-            labelLength = new Label("Сторона 1, мм.");
-            labelLength.setWrapText(true);
-            labelLength.getStyleClass().add("labelTableHeader");
-            labelLength.setMaxWidth(Double.MAX_VALUE);
-            labelLength.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelLength, Priority.ALWAYS);
-            GridPane.setVgrow(labelLength, Priority.ALWAYS);
-            gridPaneTop.add(labelLength, 3, 5, 1, 1);
-        }
-        //label labelWidth
-        {
-            labelWidth = new Label("Сторона 2, мм.");
-            labelWidth.setWrapText(true);
-            labelWidth.getStyleClass().add("labelTableHeader");
-            labelWidth.setMaxWidth(Double.MAX_VALUE);
-            labelWidth.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelWidth, Priority.ALWAYS);
-            GridPane.setVgrow(labelWidth, Priority.ALWAYS);
-            gridPaneTop.add(labelWidth, 4, 5, 1, 1);
-        }
-        //label labelInchType
-        {
-            labelInchType = new Label("Ед.");
-            labelInchType.getStyleClass().add("labelTableHeader");
-            labelInchType.setMaxWidth(Double.MAX_VALUE);
-            labelInchType.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelInchType, Priority.ALWAYS);
-            GridPane.setVgrow(labelInchType, Priority.ALWAYS);
-            gridPaneTop.add(labelInchType, 5, 5, 1, 1);
-        }
-        //label labelPrice
-        {
-            labelPrice = new Label("Цена");
-            labelPrice.getStyleClass().add("labelTableHeader");
-            labelPrice.setMaxWidth(Double.MAX_VALUE);
-            labelPrice.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelPrice, Priority.ALWAYS);
-            GridPane.setVgrow(labelPrice, Priority.ALWAYS);
-        }
-        //label labelCount
-        {
-            labelCount = new Label("Кол-во");
-            labelCount.getStyleClass().add("labelTableHeader");
-            labelCount.setMaxWidth(Double.MAX_VALUE);
-            labelCount.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelCount, Priority.ALWAYS);
-            GridPane.setVgrow(labelCount, Priority.ALWAYS);
-            gridPaneTop.add(labelCount, 6, 5, 1, 1);
-        }
-        //label labelResultPrice
-        {
-            labelResultPrice = new Label("Стоимость");
-            labelResultPrice.getStyleClass().add("labelTableHeader");
-            labelResultPrice.setMaxWidth(Double.MAX_VALUE);
-            labelResultPrice.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelResultPrice, Priority.ALWAYS);
-            GridPane.setVgrow(labelResultPrice, Priority.ALWAYS);
-            gridPaneTop.add(labelResultPrice, 7, 5, 2, 1);
-        }
+        addTableHeaderToGridPaneTop();
 
         topPartChildrenCount = gridPaneTop.getChildren().size();
+    }
+
+    private void addTableHeaderToGridPaneTop() {
+        Label labelElementType = buildLabel(null, "Наименование изделия", "labelTableHeader", false);
+        Label labelStoneType = buildLabel(null, "Материал", "labelTableHeader", false);
+        Label labelColor = buildLabel(null, "Цвет", "labelTableHeader", false);
+        Label labelLength = buildLabel(null, "Сторона 1, мм.", "labelTableHeader", true);
+        Label labelWidth = buildLabel(null, "Сторона 2, мм.", "labelTableHeader", true);
+        Label labelInchType = buildLabel(null, "Ед.", "labelTableHeader", false);
+        Label labelCount = buildLabel(null, "Кол-во", "labelTableHeader", false);
+        Label labelResultPrice = buildLabel(null, "Стоимость", "labelTableHeader", false);
+
+        gridPaneTop.add(labelElementType, 0, 5, 1, 1);
+        gridPaneTop.add(labelStoneType, 1, 5, 1, 1);
+        gridPaneTop.add(labelColor, 2, 5, 1, 1);
+        gridPaneTop.add(labelLength, 3, 5, 1, 1);
+        gridPaneTop.add(labelWidth, 4, 5, 1, 1);
+        gridPaneTop.add(labelInchType, 5, 5, 1, 1);
+        gridPaneTop.add(labelCount, 6, 5, 1, 1);
+        gridPaneTop.add(labelResultPrice, 7, 5, 2, 1);
     }
 
     protected void createMaterialsPartGridPane() {
@@ -2346,8 +2243,12 @@ public class ReceiptManager {
             allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
         }
     }
-    
+
     private static Label buildLabel(String id, String text, String className) {
+        return buildLabel(id, text, className, true);
+    }
+    
+    private static Label buildLabel(String id, String text, String className, boolean wrapText) {
         Label label = new Label(text);
         if (id != null && !id.isEmpty()) {
             label.setId(id);
@@ -2355,7 +2256,7 @@ public class ReceiptManager {
         if (className != null && !className.isEmpty()) {
             label.getStyleClass().add(className);
         }
-        label.setWrapText(true);
+        label.setWrapText(wrapText);
         label.setMaxWidth(Double.MAX_VALUE);
         label.setMaxHeight(Double.MAX_VALUE);
         GridPane.setHgrow(label, Priority.ALWAYS);
@@ -3049,24 +2950,28 @@ public class ReceiptManager {
         });
 
         textFieldUSD.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.booleanValue()) {
+            if (!newValue) {
                 UserCurrency.getInstance().checkCurrencyLvl(textFieldUSD, "USD");
                 updateReceiptTable();
             }
         });
 
         textFieldEUR.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.booleanValue()) {
+            if (!newValue) {
                 UserCurrency.getInstance().checkCurrencyLvl(textFieldEUR, "EUR");
                 updateReceiptTable();
             }
         });
 
         textFieldUSD.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.ENTER) rootAnchorPane.requestFocus();
+            if (event.getCode() == KeyCode.ENTER) {
+                rootAnchorPane.requestFocus();
+            }
         });
         textFieldEUR.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.ENTER) rootAnchorPane.requestFocus();
+            if (event.getCode() == KeyCode.ENTER) {
+                rootAnchorPane.requestFocus();
+            }
         });
 
         textFieldCoefficient.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -3078,38 +2983,24 @@ public class ReceiptManager {
             }
         });
 
-        textFieldDocName.textProperty().addListener((observable, oldValue, newValue) -> {
-            docName = newValue;
-        });
-
-        textFieldCostumerName.textProperty().addListener((observable, oldValue, newValue) -> {
-            costumerName = newValue;
-        });
-
-        textFieldCostumerAddress.textProperty().addListener((observable, oldValue, newValue) -> {
-            costumerAddress = newValue;
-        });
-
-        textFieldManagerName.textProperty().addListener((observable, oldValue, newValue) -> {
-            managerName = newValue;
-        });
+        textFieldDocName.textProperty().addListener((observable, oldValue, newValue) -> docName = newValue);
+        textFieldCustomerName.textProperty().addListener((observable, oldValue, newValue) -> customerName = newValue);
+        textFieldCustomerAddress.textProperty().addListener((observable, oldValue, newValue) -> customerAddress = newValue);
+        textFieldManagerName.textProperty().addListener((observable, oldValue, newValue) -> managerName = newValue);
 
         btnPrint.setOnMouseClicked(e -> printReceipt());
         btnPrintQuickly.setOnMouseClicked(e -> printToPdfBox());
 
         btnCurrencyUpdate.setOnMouseClicked(event -> {
             UserCurrency.getInstance().updateCurrencyValue();
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    textFieldUSD.setText(String.format(Locale.ENGLISH, "%.2f", MainWindow.getUSDValue().doubleValue()));
-                    textFieldEUR.setText(String.format(Locale.ENGLISH, "%.2f", MainWindow.getEURValue().doubleValue()));
+            Platform.runLater(() -> {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                textFieldUSD.setText(String.format(Locale.ENGLISH, "%.2f", MainWindow.getUSDValue().doubleValue()));
+                textFieldEUR.setText(String.format(Locale.ENGLISH, "%.2f", MainWindow.getEURValue().doubleValue()));
             });
         });
 
@@ -3397,11 +3288,7 @@ public class ReceiptManager {
     }
 
     public AnchorPane getView() {
-        if (UserPreferences.getInstance().getSelectedApp() == AppType.KOREANIKAMASTER) {
-            btnReceiptLog.setVisible(true);
-        } else {
-            btnReceiptLog.setVisible(false);
-        }
+        btnReceiptLog.setVisible(UserPreferences.getInstance().getSelectedApp() == AppType.KOREANIKAMASTER);
 
         Receipt.calculateMaterials();
         Receipt.calculateItemsStocks();
@@ -3446,10 +3333,6 @@ public class ReceiptManager {
         return textFieldEUR;
     }
 
-    public ArrayList<ReceiptItem> getCustomReceiptItems() {
-        return customReceiptItems;
-    }
-
     public Scene getSceneReceiptManager() {
         return sceneReceiptManager;
     }
@@ -3466,8 +3349,8 @@ public class ReceiptManager {
         jsonObject.put("RUBtoUSD", RUBtoUSD);
         jsonObject.put("RUBtoEUR", RUBtoEUR);
         jsonObject.put("coefficient", coefficient);
-        jsonObject.put("costumerAddress", costumerAddress);
-        jsonObject.put("costumerName", costumerName);
+        jsonObject.put("costumerAddress", customerAddress);
+        jsonObject.put("costumerName", customerName);
         jsonObject.put("managerName", managerName);
         jsonObject.put("documentName", docName);
 
@@ -3495,8 +3378,8 @@ public class ReceiptManager {
         MainWindow.getEURValue().set(RUBtoEUR);
 
         coefficient = (Double) jsonObject.get("coefficient");
-        costumerAddress = (String) jsonObject.get("costumerAddress");
-        costumerName = (String) jsonObject.get("costumerName");
+        customerAddress = (String) jsonObject.get("costumerAddress");
+        customerName = (String) jsonObject.get("costumerName");
         managerName = (String) jsonObject.get("managerName");
         docName = (String) jsonObject.get("documentName");
 
