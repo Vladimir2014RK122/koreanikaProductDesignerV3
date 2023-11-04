@@ -1,6 +1,4 @@
-package ru.koreanika.utils.Receipt.Promebel;
-
-import ru.koreanika.utils.Receipt.ReceiptManager;
+package ru.koreanika.utils.receipt.controller;
 
 public class ReceiptManagerPromebel extends ReceiptManager {
 

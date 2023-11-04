@@ -1,6 +1,4 @@
-package ru.koreanika.utils.Receipt.Koreanika;
-
-import ru.koreanika.utils.Receipt.ReceiptManager;
+package ru.koreanika.utils.receipt.controller;
 
 public class ReceiptManagerKoreanika extends ReceiptManager {
 

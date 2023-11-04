@@ -30,7 +30,7 @@ import ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems.MaterialItem;
 import ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems.MaterialTreeCellItem;
 import ru.koreanika.utils.ProjectHandler;
 import ru.koreanika.utils.ProjectType;
-import ru.koreanika.utils.Receipt.Currency;
+import ru.koreanika.utils.currency.Currency;
 
 import java.io.IOException;
 import java.util.*;

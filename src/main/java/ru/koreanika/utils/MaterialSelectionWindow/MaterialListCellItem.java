@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextAlignment;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.Receipt.Currency;
+import ru.koreanika.utils.currency.Currency;
 
 import java.util.ArrayList;
 import java.util.Locale;

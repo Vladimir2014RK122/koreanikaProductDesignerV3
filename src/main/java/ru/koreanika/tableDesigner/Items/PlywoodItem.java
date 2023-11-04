@@ -13,7 +13,7 @@ import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.ProjectHandler;
-import ru.koreanika.utils.Receipt.Currency;
+import ru.koreanika.utils.currency.Currency;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;

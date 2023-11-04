@@ -18,7 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import ru.koreanika.utils.Currency.UserCurrency;
+import ru.koreanika.utils.currency.UserCurrency;
 import ru.koreanika.utils.MainSettings.MainSettings;
 import ru.koreanika.utils.MaterialSelectionWindow.MaterialSelectionEventHandler;
 import ru.koreanika.utils.MaterialSelectionWindow.MaterialSelectionWindow;
@@ -446,7 +446,7 @@ public class MainWindowDecorator {
 
 
 
-        // Currency:
+        // currency:
         btnCurrencyUpdate.setOnMouseClicked(event -> {
             UserCurrency.getInstance().updateCurrencyValue();
         });

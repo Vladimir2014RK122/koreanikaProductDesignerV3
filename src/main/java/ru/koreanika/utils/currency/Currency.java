@@ -1,4 +1,4 @@
-package ru.koreanika.utils.Receipt;
+package ru.koreanika.utils.currency;
 
 public class Currency {
     public static final String USD_SYMBOL = "\u0024"; // $

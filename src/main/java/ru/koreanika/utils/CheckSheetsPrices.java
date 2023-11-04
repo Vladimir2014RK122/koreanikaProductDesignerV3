@@ -15,7 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.Receipt.Currency;
+import ru.koreanika.utils.currency.Currency;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package ru.koreanika.utils.Receipt;
+package ru.koreanika.utils.receipt.builder;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -11,6 +11,10 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
 import ru.koreanika.utils.ProjectType;
+import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.utils.receipt.Receipt;
+import ru.koreanika.utils.receipt.ReceiptItem;
+import ru.koreanika.utils.receipt.controller.ReceiptManager;
 
 import java.util.Locale;
 import java.util.Map;
@@ -397,7 +401,7 @@ public class TableReceiptNodeBuilder extends BaseTableReceiptNodeBuilder {
         double stockSizeAll = 0;
 
         {
-            System.out.println("Receipt.getMaterialStocks() = " + Receipt.getMaterialStocks());
+            System.out.println("receipt.getMaterialStocks() = " + Receipt.getMaterialStocks());
 
             for (Map.Entry<String, Double> entry : Receipt.getMaterialStocks().entrySet()) {
                 String stockName = "\"" + entry.getKey() + "\"";
@@ -434,7 +438,7 @@ public class TableReceiptNodeBuilder extends BaseTableReceiptNodeBuilder {
                 System.out.println("STOCK SIZE ALL = " + stockSizeAll);
             }
 
-            System.out.println("Receipt.getItemStocks() = " + Receipt.getItemStocks());
+            System.out.println("receipt.getItemStocks() = " + Receipt.getItemStocks());
 
             for (Map.Entry<String, Double> entry : Receipt.getItemStocks().entrySet()) {
                 String stockName = "\"" + entry.getKey() + "\"";

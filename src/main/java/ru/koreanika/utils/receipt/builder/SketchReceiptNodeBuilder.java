@@ -1,4 +1,4 @@
-package ru.koreanika.utils.Receipt;
+package ru.koreanika.utils.receipt.builder;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -21,7 +21,13 @@ import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
 import ru.koreanika.utils.ProjectType;
+import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.utils.receipt.Receipt;
+import ru.koreanika.utils.receipt.ReceiptImageItem;
+import ru.koreanika.utils.receipt.ReceiptItem;
+import ru.koreanika.utils.receipt.controller.ReceiptManager;
 
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
@@ -31,16 +37,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         super(receiptManager);
     }
 
-    public static String getCurrency(ReceiptItem entry) {
-        return switch (entry.getCurrency()) {
-            case "USD" -> Currency.USD_SYMBOL;
-            case "EUR" -> Currency.EUR_SYMBOL;
-            case "RUB" -> Currency.RUR_SYMBOL;
-            default -> "*";
-        };
-    }
-
-    protected void createEdgesAndBordersPartGridPane() {
+    public void createEdgesAndBordersPartGridPane() {
         //create rows for edges:
         for (Map.Entry<SketchEdge, ReceiptItem> entry : Receipt.getEdgesAndBordersReceiptItemMap().entrySet()) {
             ReceiptItem receiptItem = entry.getValue();
@@ -62,13 +59,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
 
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", labelEdgeValueNameText, null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", labelEdgeValueSubNameText, null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + entry.getValue().getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", entry.getValue().getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + entry.getValue().getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", labelEdgeValueNameText, Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", labelEdgeValueSubNameText, Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + entry.getValue().getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", entry.getValue().getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + entry.getValue().getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -96,13 +93,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", entry.getValue().getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", "Вариант №" + entry.getKey().getBorderCutType(), null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + entry.getValue().getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", entry.getValue().getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + entry.getValue().getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", entry.getValue().getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", "Вариант №" + entry.getKey().getBorderCutType(), Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + entry.getValue().getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", entry.getValue().getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + entry.getValue().getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -135,13 +132,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", entry.getValue().getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", "Вариант №" + entry.getKey().getBorderSideCutType(), null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + entry.getValue().getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", entry.getValue().getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + entry.getValue().getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", entry.getValue().getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", "Вариант №" + entry.getKey().getBorderSideCutType(), Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + entry.getValue().getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", entry.getValue().getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + entry.getValue().getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -161,7 +158,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         }
     }
 
-    protected void createSinkPartGridPane() {
+    public void createSinkPartGridPane() {
         if (Receipt.getSinkAndReceiptItem().isEmpty()) {
             return;
         }
@@ -173,13 +170,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName() + " " + entry.getKey().getModel(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", entry.getKey().getSketchShapeOwner().getMaterial().getReceiptName(), null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName() + " " + entry.getKey().getModel(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", entry.getKey().getSketchShapeOwner().getMaterial().getReceiptName(), Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -199,7 +196,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         }
     }
 
-    protected void createSinkInstallTypesPartGridPane() {
+    public void createSinkInstallTypesPartGridPane() {
         if (Receipt.getSinkAndReceiptItem().isEmpty()) {
             return;
         }
@@ -214,13 +211,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -248,13 +245,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", sink.getSketchShapeOwner().getMaterial().getReceiptName(), null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", sink.getSketchShapeOwner().getMaterial().getReceiptName(), Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -274,20 +271,20 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         }
     }
 
-    protected void createJointsPartGridPane() {
+    public void createJointsPartGridPane() {
         for (ReceiptItem receiptItem : Receipt.getJointReceiptItemsList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             String currency = getCurrency(receiptItem);
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", null, null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", null, Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -307,7 +304,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         }
     }
 
-    protected void createCutoutPartGridPane() {
+    public void createCutoutPartGridPane() {
         for (Map.Entry<Cutout, ReceiptItem> entry : Receipt.getCutoutAndReceiptItem().entrySet()) {
             Cutout cutout = entry.getKey();
             Material material = cutout.getSketchShapeOwner().getMaterial();
@@ -317,13 +314,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -351,7 +348,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         }
     }
 
-    protected void createGroovesPartGridPane() {
+    public void createGroovesPartGridPane() {
         for (Map.Entry<Grooves, ReceiptItem> entry : Receipt.getGroovesAndReceiptItem().entrySet()) {
             Grooves grooves = entry.getKey();
             Material material = grooves.getSketchShapeOwner().getMaterial();
@@ -361,13 +358,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -395,7 +392,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         }
     }
 
-    protected void createRodsPartGridPane() {
+    public void createRodsPartGridPane() {
         for (Map.Entry<Rods, ReceiptItem> entry : Receipt.getRodsAndReceiptItem().entrySet()) {
             Rods rods = entry.getKey();
             Material material = rods.getSketchShapeOwner().getMaterial();
@@ -406,13 +403,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -440,7 +437,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         }
     }
 
-    protected void createRadiusElementsPartGridPane() {
+    public void createRadiusElementsPartGridPane() {
         for (Map.Entry<Material, ReceiptItem> entry : Receipt.getRadiusElementReceiptItemMap().entrySet()) {
             Material material = entry.getKey();
             ReceiptItem receiptItem = entry.getValue();
@@ -449,13 +446,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -483,7 +480,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         }
     }
 
-    protected void createLeakGroovePartGridPane() {
+    public void createLeakGroovePartGridPane() {
         for (Map.Entry<Material, ReceiptItem> entry : Receipt.getLeakGrooveReceiptItemMap().entrySet()) {
             Material material = entry.getKey();
             ReceiptItem receiptItem = entry.getValue();
@@ -492,12 +489,12 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -524,7 +521,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         }
     }
 
-    protected void createStoneHemPartGridPane() {
+    public void createStoneHemPartGridPane() {
         for (Map.Entry<Material, ReceiptItem> entry : Receipt.getStoneHemReceiptItemMap().entrySet()) {
             Material material = entry.getKey();
             ReceiptItem receiptItem = entry.getValue();
@@ -533,13 +530,13 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             String currency = getCurrency(entry.getValue());
             int rowIndex = addRowToGridPaneTop();
 
-            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), null);
-            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), null);
-            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, null);
-            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", null);
-            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), null);
-            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), null);
-            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), null);
+            Label labelEdgeValueName = buildLabel("labelEdgeValueName", receiptItem.getName(), Collections.emptyList());
+            Label labelEdgeValueSubName = buildLabel("labelEdgeValueSubName", material.getReceiptName(), Collections.emptyList());
+            Label labelEdgeNull2 = buildLabel("labelEdgeNull2", null, Collections.emptyList());
+            Label labelEdgeInches = buildLabel("labelEdgeInches", "м.п.", Collections.emptyList());
+            Label labelEdgePrice = buildLabel("labelEdgePrice", currency + receiptItem.getPriceForOne(), Collections.emptyList());
+            Label labelEdgeCount = buildLabel("labelEdgeCount", receiptItem.getCount(), Collections.emptyList());
+            Label labelEdgeResultPrice = buildLabel("labelEdgeResultPrice", currency + receiptItem.getAllPrice(), Collections.emptyList());
 
             receiptManager.gridPaneTop.add(labelEdgeValueName, 0, rowIndex, 2, 1);
             receiptManager.gridPaneTop.add(labelEdgeValueSubName, 2, rowIndex, 2, 1);
@@ -567,12 +564,12 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         }
     }
 
-    protected void createImagesPartGridPane() {
+    public void createImagesPartGridPane() {
         int rowIndex;
 
         if (!Receipt.getReceiptImageItemsList().isEmpty()) {
 
-            System.out.println("***************** Receipt.getReceiptImageItemsList().size() = " + Receipt.getReceiptImageItemsList().size());
+            System.out.println("***************** receipt.getReceiptImageItemsList().size() = " + Receipt.getReceiptImageItemsList().size());
             FlowPane flowPaneForFeaturesPictures = new FlowPane();
             flowPaneForFeaturesPictures.setId("flowPaneForFeaturesPictures");
             flowPaneForFeaturesPictures.setMinWidth(600);
@@ -604,9 +601,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(flowPaneForFeaturesPictures, 0, rowIndex, 5, 1);
         }
 
-        RowConstraints row1 = new RowConstraints(40);
-        receiptManager.gridPaneTop.getRowConstraints().add(row1);
-        rowIndex = receiptManager.gridPaneTop.getRowConstraints().size() - 1;
+        rowIndex = addRowToGridPaneTop();
 
         Label labelAdditionalFeatureName = buildLabel(null, "Фиксированые дополнительные работы и опции", "labelTableHeader");
         Label labelAdditionalFeatureInches = buildLabel(null, "Ед.", "labelTableHeader");
@@ -829,7 +824,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
         double stockSizeAll = 0;
 
         {
-            System.out.println("Receipt.getMaterialStocks() = " + Receipt.getMaterialStocks());
+            System.out.println("receipt.getMaterialStocks() = " + Receipt.getMaterialStocks());
 
             for (Map.Entry<String, Double> entry : Receipt.getMaterialStocks().entrySet()) {
                 String stockName = "\"" + entry.getKey() + "\"";
@@ -866,7 +861,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
                 System.out.println("STOCK SIZE ALL = " + stockSizeAll);
             }
 
-            System.out.println("Receipt.getItemStocks() = " + Receipt.getItemStocks());
+            System.out.println("receipt.getItemStocks() = " + Receipt.getItemStocks());
 
             for (Map.Entry<String, Double> entry : Receipt.getItemStocks().entrySet()) {
                 String stockName = "\"" + entry.getKey() + "\"";

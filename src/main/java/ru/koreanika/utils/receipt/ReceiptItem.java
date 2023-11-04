@@ -1,4 +1,4 @@
-package ru.koreanika.utils.Receipt;
+package ru.koreanika.utils.receipt;
 
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;

@@ -1,9 +1,8 @@
-package ru.koreanika.utils.Receipt.Zetta;
+package ru.koreanika.utils.receipt.controller;
 
 import javafx.scene.layout.RowConstraints;
-import ru.koreanika.utils.Receipt.Receipt;
-import ru.koreanika.utils.Receipt.ReceiptManager;
-import ru.koreanika.utils.Receipt.TableReceiptZettaNodeBuilder;
+import ru.koreanika.utils.receipt.Receipt;
+import ru.koreanika.utils.receipt.builder.TableReceiptZettaNodeBuilder;
 
 public class ReceiptManagerZetta extends ReceiptManager {
 

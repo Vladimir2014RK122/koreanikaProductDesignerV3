@@ -1,11 +1,10 @@
-package ru.koreanika.utils.Currency;
+package ru.koreanika.utils.currency;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.Receipt.Currency;
 
 import java.util.Locale;
 import java.util.Optional;

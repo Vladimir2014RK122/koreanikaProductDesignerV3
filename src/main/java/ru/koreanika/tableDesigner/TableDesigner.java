@@ -18,8 +18,8 @@ import ru.koreanika.utils.Main;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
 import ru.koreanika.utils.ProjectType;
-import ru.koreanika.utils.Receipt.ReceiptImageItem;
-import ru.koreanika.utils.Receipt.ReceiptItem;
+import ru.koreanika.utils.receipt.ReceiptImageItem;
+import ru.koreanika.utils.receipt.ReceiptItem;
 
 import java.io.IOException;
 import java.util.*;

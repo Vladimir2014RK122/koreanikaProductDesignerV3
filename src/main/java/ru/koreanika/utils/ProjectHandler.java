@@ -34,7 +34,7 @@ import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.sketchDesigner.SketchDesigner;
 
 import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.receipt.controller.ReceiptManager;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -776,7 +776,7 @@ public class ProjectHandler {
             userProject.put("CutDesigner", MainWindow.getCutDesigner().getJsonView());
 
 
-            /** Receipt manager*/
+            /** receipt manager*/
             userProject.put("receiptManager", MainWindow.getReceiptManager().getJsonViewForSaveData());
 
             //          try (FileWriter writer = new FileWriter(curProjectPath)){

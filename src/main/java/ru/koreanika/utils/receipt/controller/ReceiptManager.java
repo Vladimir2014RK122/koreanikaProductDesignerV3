@@ -1,4 +1,4 @@
-package ru.koreanika.utils.Receipt;
+package ru.koreanika.utils.receipt.controller;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
@@ -20,23 +20,27 @@ import ru.koreanika.PortalClient.UserEventHandler.UserEventService;
 import ru.koreanika.Preferences.UserPreferences;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
-import ru.koreanika.utils.Currency.UserCurrency;
+import ru.koreanika.utils.currency.UserCurrency;
 import ru.koreanika.utils.*;
 import ru.koreanika.utils.PrinterHandler.PdfSaver;
 import ru.koreanika.utils.PrinterHandler.PrinterDialog;
+import ru.koreanika.utils.receipt.*;
+import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.utils.receipt.builder.SketchReceiptNodeBuilder;
+import ru.koreanika.utils.receipt.builder.TableReceiptNodeBuilder;
 
 import java.io.IOException;
 import java.util.*;
 
 public abstract class ReceiptManager {
 
-    protected Scene sceneReceiptManager;
+    public Scene sceneReceiptManager;
 
     //CONTROL ELEMENTS:
     protected AnchorPane rootAnchorPane;
 
     //menu zone:
-    protected AnchorPane anchorPaneMenu;
+    private AnchorPane anchorPaneMenu;
     protected TextField textFieldUSD;
     protected TextField textFieldEUR;
     protected Button btnPrint;
@@ -51,46 +55,48 @@ public abstract class ReceiptManager {
     protected AnchorPane anchorPaneResultMenu;
     protected ScrollPane scrollPaneResultMenu;
     protected AnchorPane anchorPaneIntoScrollPane;
-    protected GridPane gridPaneTop;
-    protected AnchorPane anchorPaneReceiptHeader;
-    protected Label labelGeneralName;
-    protected Label labelDate;
-    protected Label labelCutoutInfo;
-    protected TextField textFieldDocName = new TextField();
-    protected Label labelManagerName;
-    protected TextField textFieldCustomerName = new TextField();
-    protected TextField textFieldCustomerAddress = new TextField();
-    protected TextField textFieldManagerName = new TextField();
-    protected Label labelUSD;
-    protected Label labelEUR;
     protected TextField textFieldCoefficient = new TextField();
-    protected ImageView imageViewSketch = null;
     protected List<ReceiptItem> customReceiptItems = new ArrayList<>();
-    protected int topPartChildrenCount = 0;
+
+    public GridPane gridPaneTop;
+    public AnchorPane anchorPaneReceiptHeader;
+
+    public Label labelGeneralName;
+    public Label labelDate;
+    public Label labelCutoutInfo;
+    public TextField textFieldDocName = new TextField();
+    public Label labelManagerName;
+    public TextField textFieldCustomerName = new TextField();
+    public TextField textFieldCustomerAddress = new TextField();
+    public TextField textFieldManagerName = new TextField();
+    public Label labelUSD;
+    public Label labelEUR;
+    public ImageView imageViewSketch = null;
+    public int topPartChildrenCount = 0;
 
     //common:
-    protected String docName = "";
+    public String docName = "";
 
     //properties zone:
-    protected String customerName = "";
-    protected String customerAddress = "";
-    protected String managerName = "";
-    protected double coefficient = 1;
-    protected double allPriceForRUR = 0.0;
-    protected double allPriceForUSD = 0.0;
-    protected double allPriceForEUR = 0.0;
-    protected double allAddPriceForRUR = 0.0;
-    protected double allAddPriceForUSD = 0.0;
-    protected double allAddPriceForEUR = 0.0;
-    protected double allStoneProductsPriceInRUR = 0.0;
-    protected double allStoneProductsPriceInEUR = 0.0;
-    protected double allStoneProductsPriceInUSD = 0.0;
-    protected int stoneItems = 0;
-    ToggleGroup toggleGroupReceiptSize;
-    ScrollBar scrollBarVertical;
-    ScrollBar scrollBarHorizontal;
-    Set<String> materialsForEvent = new LinkedHashSet<>();
-    JSONObject jsonObjectLastCalcEvent;
+    public String customerName = "";
+    public String customerAddress = "";
+    public String managerName = "";
+    public double coefficient = 1;
+    public double allPriceForRUR = 0.0;
+    public double allPriceForUSD = 0.0;
+    public double allPriceForEUR = 0.0;
+    public double allAddPriceForRUR = 0.0;
+    public double allAddPriceForUSD = 0.0;
+    public double allAddPriceForEUR = 0.0;
+    public double allStoneProductsPriceInRUR = 0.0;
+    public double allStoneProductsPriceInEUR = 0.0;
+    public double allStoneProductsPriceInUSD = 0.0;
+    public int stoneItems = 0;
+
+    private ToggleGroup toggleGroupReceiptSize;
+
+    public Set<String> materialsForEvent = new LinkedHashSet<>();
+    public JSONObject jsonObjectLastCalcEvent;
 
     protected ReceiptManager() {
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -141,8 +147,8 @@ public abstract class ReceiptManager {
         anchorPaneResultMenu = (AnchorPane) anchorPaneReceiptRoot.lookup("#anchorPaneResultMenu");
         scrollPaneResultMenu = (ScrollPane) anchorPaneReceiptRoot.lookup("#scrollPaneResultMenu");
 
-        scrollBarVertical = (ScrollBar) anchorPaneResultMenu.lookup(".scroll-bar:vertical");
-        scrollBarHorizontal = (ScrollBar) anchorPaneResultMenu.lookup(".scroll-bar:horizontal");
+        ScrollBar scrollBarVertical = (ScrollBar) anchorPaneResultMenu.lookup(".scroll-bar:vertical");
+        ScrollBar scrollBarHorizontal = (ScrollBar) anchorPaneResultMenu.lookup(".scroll-bar:horizontal");
         anchorPaneIntoScrollPane = (AnchorPane) scrollPaneResultMenu.getContent();
 
         gridPaneTop = (GridPane) anchorPaneIntoScrollPane.lookup("#gridPaneTop");

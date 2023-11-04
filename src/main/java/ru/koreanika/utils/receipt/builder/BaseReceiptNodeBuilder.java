@@ -1,4 +1,4 @@
-package ru.koreanika.utils.Receipt;
+package ru.koreanika.utils.receipt.builder;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -15,14 +15,15 @@ import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.utils.receipt.Receipt;
+import ru.koreanika.utils.receipt.ReceiptItem;
+import ru.koreanika.utils.receipt.controller.ReceiptManager;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public abstract class BaseReceiptNodeBuilder {
 
@@ -30,6 +31,12 @@ public abstract class BaseReceiptNodeBuilder {
 
     public BaseReceiptNodeBuilder(ReceiptManager receiptManager) {
         this.receiptManager = receiptManager;
+    }
+
+    protected static Label buildLabel(String id, String text, List<String> classNames) {
+        Label label = buildLabel(id, text, null, true);
+        label.getStyleClass().addAll(classNames);
+        return label;
     }
 
     protected static Label buildLabel(String id, String text, String className) {
@@ -58,6 +65,15 @@ public abstract class BaseReceiptNodeBuilder {
 
         DecimalFormat formatter = new DecimalFormat("###,###", symbols);
         return formatter.format(price);
+    }
+
+    public static String getCurrency(ReceiptItem entry) {
+        return switch (entry.getCurrency()) {
+            case "USD" -> Currency.USD_SYMBOL;
+            case "EUR" -> Currency.EUR_SYMBOL;
+            case "RUB" -> Currency.RUR_SYMBOL;
+            default -> "*";
+        };
     }
 
     public void createMaterialsPartGridPane() {

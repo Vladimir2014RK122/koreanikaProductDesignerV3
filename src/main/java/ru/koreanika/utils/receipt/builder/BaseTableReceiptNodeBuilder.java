@@ -1,4 +1,4 @@
-package ru.koreanika.utils.Receipt;
+package ru.koreanika.utils.receipt.builder;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -11,11 +11,16 @@ import javafx.stage.FileChooser;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
+import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.utils.receipt.ReceiptImageItem;
+import ru.koreanika.utils.receipt.ReceiptItem;
+import ru.koreanika.utils.receipt.controller.ReceiptManager;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder {
@@ -724,7 +729,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
         int rowIndex = addRowToGridPaneTop();
 
         // Additional work price
-        Label labelAdditionalAllPriceName = buildLabel(null, "Стоимость дополнительных работ", null);
+        Label labelAdditionalAllPriceName = buildLabel(null, "Стоимость дополнительных работ", Collections.emptyList());
         labelAdditionalAllPriceName.setAlignment(Pos.CENTER_LEFT);
         labelAdditionalAllPriceName.getStyleClass().add("labelTableResult");
         labelAdditionalAllPriceName.getStyleClass().add("labelProduct-right");

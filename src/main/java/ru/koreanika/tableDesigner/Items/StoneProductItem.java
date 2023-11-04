@@ -21,7 +21,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
-import ru.koreanika.utils.Receipt.Currency;
+import ru.koreanika.utils.currency.Currency;
 
 import java.io.IOException;
 import java.util.*;
