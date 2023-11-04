@@ -5,7 +5,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.Receipt.Currency;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -86,12 +86,12 @@ public class UserCurrency {
 
         alert.setHeaderText("Обновить курс валют на следующий:");
         alert.setContentText(String.format(Locale.ENGLISH, "\r\n1%s = %.2f%s \r\n1%s = %.2f%s",
-                ReceiptManager.USD_SYMBOL,
+                Currency.USD_SYMBOL,
                 usd,
-                ReceiptManager.RUR_SYMBOL,
-                ReceiptManager.EUR_SYMBOL,
+                Currency.RUR_SYMBOL,
+                Currency.EUR_SYMBOL,
                 eur,
-                ReceiptManager.RUR_SYMBOL));
+                Currency.RUR_SYMBOL));
 
         ButtonType  buttonTypeOk = new ButtonType("ДА", ButtonBar.ButtonData.OK_DONE);
         ButtonType  buttonTypeNo = new ButtonType("НЕТ", ButtonBar.ButtonData.CANCEL_CLOSE);

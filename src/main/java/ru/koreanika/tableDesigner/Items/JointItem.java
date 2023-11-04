@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.Receipt.Currency;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -299,10 +299,10 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         priceForOne *= multiplier;
         priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
 
-        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + ReceiptManager.RUR_SYMBOL);
+        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + Currency.RUR_SYMBOL);
 
-        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000)) + ReceiptManager.RUR_SYMBOL);
-        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + ReceiptManager.RUR_SYMBOL);
+        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000)) + Currency.RUR_SYMBOL);
+        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + Currency.RUR_SYMBOL);
 
     }
 

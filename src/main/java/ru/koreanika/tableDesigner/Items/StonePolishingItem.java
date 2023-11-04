@@ -14,7 +14,7 @@ import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.Receipt.Currency;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -309,10 +309,10 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
         priceForOne *= multiplier;
         priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
 
-        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity * (length/1000.0) * (width/1000.0)) + ReceiptManager.RUR_SYMBOL);
+        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity * (length/1000.0) * (width/1000.0)) + Currency.RUR_SYMBOL);
 
-        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000.0) * (width/1000.0)) + ReceiptManager.RUR_SYMBOL);
-        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity * (length/1000.0) * (width/1000.0)) + ReceiptManager.RUR_SYMBOL);
+        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000.0) * (width/1000.0)) + Currency.RUR_SYMBOL);
+        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity * (length/1000.0) * (width/1000.0)) + Currency.RUR_SYMBOL);
 
     }
 

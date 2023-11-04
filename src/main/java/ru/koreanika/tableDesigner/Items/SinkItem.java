@@ -28,7 +28,7 @@ import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.Receipt.Currency;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -562,8 +562,8 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
             if(material.getAvailableSinkModels().get(modelShort) == null){
                 priceForOne = -1; //sink unavailable now
 
-                labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne) + ReceiptManager.RUR_SYMBOL);
-                labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + ReceiptManager.RUR_SYMBOL);
+                labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne) + Currency.RUR_SYMBOL);
+                labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + Currency.RUR_SYMBOL);
 
                 rowPrice = priceForOne * quantity;
 
@@ -623,10 +623,10 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
 
         priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
 
-        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + ReceiptManager.RUR_SYMBOL);
+        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + Currency.RUR_SYMBOL);
 
-        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne) + ReceiptManager.RUR_SYMBOL);
-        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + ReceiptManager.RUR_SYMBOL);
+        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne) + Currency.RUR_SYMBOL);
+        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + Currency.RUR_SYMBOL);
 
         rowPrice = priceForOne * quantity;
 
@@ -1375,7 +1375,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
 
                 //System.out.println("priceForOne * coeff = " + priceForOne);
 
-                labelPrice.setText("Цена: " + String.format(Locale.ENGLISH, "%.0f", priceForOne) + " " + ReceiptManager.RUR_SYMBOL + "/" + units);
+                labelPrice.setText("Цена: " + String.format(Locale.ENGLISH, "%.0f", priceForOne) + " " + Currency.RUR_SYMBOL + "/" + units);
                 break;
             }
         }

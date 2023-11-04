@@ -15,7 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.Receipt.Currency;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -193,9 +193,9 @@ public class CheckSheetsPrices {
                 int sheetsNumber = entry.getValue().size();
                 String currency = entry.getKey().getCurrency();
 
-                if (currency.equals("USD")) currency = ReceiptManager.USD_SYMBOL;
-                else if (currency.equals("EUR")) currency = ReceiptManager.EUR_SYMBOL;
-                if (currency.equals("RUB")) currency = ReceiptManager.RUR_SYMBOL;
+                if (currency.equals("USD")) currency = Currency.USD_SYMBOL;
+                else if (currency.equals("EUR")) currency = Currency.EUR_SYMBOL;
+                if (currency.equals("RUB")) currency = Currency.RUR_SYMBOL;
 
 
                 String oldPrice = String.format(Locale.ENGLISH, "%.2f" + currency, entry.getValue().get(0).getPrice(ElementTypes.TABLETOP, entry.getKey().getDefaultDepth()));
