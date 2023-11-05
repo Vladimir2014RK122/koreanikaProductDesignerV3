@@ -1,7 +1,6 @@
 package ru.koreanika.utils.receipt.builder;
 
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -20,7 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder {
@@ -180,7 +179,6 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
         rowIndex = addRowToGridPaneTop();
 
         Label labelAdditionalAllPriceName = buildLabel(null, "  Итого стоимость обязательных работ", "labelTableResult");
-        labelAdditionalAllPriceName.setAlignment(Pos.CENTER_LEFT);
 
         double RUBtoUSD = MainWindow.getUSDValue().doubleValue();
         double RUBtoEUR = MainWindow.getEURValue().doubleValue();
@@ -729,12 +727,9 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
         int rowIndex = addRowToGridPaneTop();
 
         // Additional work price
-        Label labelAdditionalAllPriceName = buildLabel(null, "Стоимость дополнительных работ", Collections.emptyList());
-        labelAdditionalAllPriceName.setAlignment(Pos.CENTER_LEFT);
-        labelAdditionalAllPriceName.getStyleClass().add("labelTableResult");
-        labelAdditionalAllPriceName.getStyleClass().add("labelProduct-right");
-
         double price = receiptManager.allAddPriceForRUR + (receiptManager.allAddPriceForUSD * RUBtoUSD) + ((receiptManager.allAddPriceForEUR * RUBtoEUR));//in RUR
+
+        Label labelAdditionalAllPriceName = buildLabel(null, "Стоимость дополнительных работ", Arrays.asList("labelTableResult", "labelProduct-right"));
         Label labelAdditionalAllPrice = buildLabel(null, Currency.RUR_SYMBOL + formatPrice(price), "labelTableResultPrice");
 
         receiptManager.gridPaneTop.add(labelAdditionalAllPriceName, 0, rowIndex, 7, 1);

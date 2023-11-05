@@ -1,5 +1,6 @@
 package ru.koreanika.utils.receipt.builder;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.ColumnConstraints;
@@ -51,6 +52,7 @@ public abstract class BaseReceiptNodeBuilder {
         if (className != null && !className.isEmpty()) {
             label.getStyleClass().add(className);
         }
+        label.setAlignment(Pos.CENTER_LEFT);
         label.setWrapText(wrapText);
         label.setMaxWidth(Double.MAX_VALUE);
         label.setMaxHeight(Double.MAX_VALUE);
@@ -126,29 +128,17 @@ public abstract class BaseReceiptNodeBuilder {
             System.out.println("ERROR WITH SORTING STONE PRODUCT!!!");
 
             for (Map.Entry<CutShape, ReceiptItem> entry : Receipt.getCutShapesAndReceiptItem().entrySet()) {
-                RowConstraints row = new RowConstraints(20);
-                receiptManager.gridPaneTop.getRowConstraints().add(row);
-                row.setPrefHeight(40);
-
                 createCutShapeRow(entry.getKey(), entry.getValue());
             }
         } else {
             System.out.println("SUCCESS SORTING STONE PRODUCT!!!");
 
             for (Map.Entry<CutShape, ReceiptItem> entry : receiptItems.entrySet()) {
-                RowConstraints row = new RowConstraints(20);
-                receiptManager.gridPaneTop.getRowConstraints().add(row);
-                row.setPrefHeight(40);
-
                 createCutShapeRow(entry.getKey(), entry.getValue());
             }
         }
 
         for (Map.Entry<Sink, ReceiptItem> entry : Receipt.getCuttableSinkAndReceiptItem().entrySet()) {
-            RowConstraints row = new RowConstraints(20);
-            receiptManager.gridPaneTop.getRowConstraints().add(row);
-            row.setPrefHeight(40);
-
             createCutShapeRow(entry.getKey(), entry.getValue());
         }
         System.out.println("MATERIAL PART ONLY:");
@@ -268,7 +258,11 @@ public abstract class BaseReceiptNodeBuilder {
     }
 
     protected int addRowToGridPaneTop() {
-        RowConstraints rowForEdge = new RowConstraints(40);
+        return addRowToGridPaneTop(40);
+    }
+
+    protected int addRowToGridPaneTop(double height) {
+        RowConstraints rowForEdge = new RowConstraints(height);
         receiptManager.gridPaneTop.getRowConstraints().add(rowForEdge);
         int rowIndex = receiptManager.gridPaneTop.getRowConstraints().size() - 1;
         return rowIndex;
@@ -306,56 +300,30 @@ public abstract class BaseReceiptNodeBuilder {
         }
 
         for (Map.Entry<Material, Map<CutShape, ReceiptItem>> entry : cutShapesAndMaterials.entrySet()) {
-            double priceForPartInRUB = 0;
-
-            Material material = entry.getKey();
-
-            String name = "Стоимость изделия с обработкой";
-            String materialMainType = material.getMainType();
-            String materialSubType = material.getSubType();
-            String materialCollectionType = material.getCollection();
-            String materialColor = material.getColor();
-            String units = "м2";
-            String strPrice;
-            double square = 0;
-            String squareStr = String.format(Locale.ENGLISH, "%.2f", Receipt.getAllSquare());
-
+            double priceForPartInRUB = 0.0;
+            double square = 0.0;
             for (Map.Entry<CutShape, ReceiptItem> entryInner : entry.getValue().entrySet()) {
                 receiptManager.stoneItems++;
 
                 ReceiptItem receiptItem = entryInner.getValue();
-
                 square += receiptItem.getPseudoCountDouble();
 
                 //calculate allPrice:
-                {
-                    if (receiptItem.getCurrency().equals("USD")) {
-                        receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                        receiptManager.allStoneProductsPriceInUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                    } else if (receiptItem.getCurrency().equals("EUR")) {
-                        receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                        receiptManager.allStoneProductsPriceInEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                    } else if (receiptItem.getCurrency().equals("RUB")) {
-                        receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                        receiptManager.allStoneProductsPriceInRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                    }
-                }
+                addAllPriceToRunningTotal(receiptItem);
 
                 priceForPartInRUB += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             }
 
-            squareStr = String.format(Locale.ENGLISH, "%.2f", square);
+            Material material = entry.getKey();
+            String squareStr = String.format(Locale.ENGLISH, "%.2f", square);
+            String strPrice = formatPrice(priceForPartInRUB);
 
-            DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
-            symbols.setGroupingSeparator(' ');
-            DecimalFormat formatter = new DecimalFormat("###,###", symbols);
-            strPrice = formatter.format(priceForPartInRUB);
-
-            createCutShapeRow(name, materialMainType, materialSubType, materialColor, "-", "-", units, squareStr, strPrice);
+            createCutShapeRow("Стоимость изделия с обработкой", material.getMainType(), material.getSubType(),
+                    material.getColor(), "-", "-", "м2", squareStr, strPrice);
         }
 
         for (Map.Entry<Material, Map<CutShape, ReceiptItem>> entry : cutShapesForSinkAndMaterials.entrySet()) {
-            double priceForPartInRUB = 0;
+            double priceForPartInRUB = 0.0;
 
             Material material = entry.getKey();
 
@@ -376,52 +344,27 @@ public abstract class BaseReceiptNodeBuilder {
                 square += receiptItem.getPseudoCountDouble();
 
                 //calculate allPrice:
-                {
-                    if (receiptItem.getCurrency().equals("USD")) {
-                        receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                        receiptManager.allStoneProductsPriceInUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                    } else if (receiptItem.getCurrency().equals("EUR")) {
-                        receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                        receiptManager.allStoneProductsPriceInEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                    } else if (receiptItem.getCurrency().equals("RUB")) {
-                        receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                        receiptManager.allStoneProductsPriceInRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                    }
-                }
+                addAllPriceToRunningTotal(receiptItem);
 
                 priceForPartInRUB += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             }
 
             for (ReceiptItem receiptItemSink : TableDesigner.getSinkQuarzReceiptList()) {
-                String nameSink = receiptItemSink.getName().split("#")[0];
                 String subNameSink = receiptItemSink.getName().split("#")[1];
-
                 if (subNameSink.equals(materialCollectionType + " " + materialColor)) {
                     priceForPartInRUB += Double.parseDouble(receiptItemSink.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
                 }
             }
 
             squareStr = String.format(Locale.ENGLISH, "%.2f", square);
-
-            DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
-            symbols.setGroupingSeparator(' ');
-            DecimalFormat formatter = new DecimalFormat("###,###", symbols);
-            strPrice = formatter.format(priceForPartInRUB);
+            strPrice = formatPrice(priceForPartInRUB);
 
             createCutShapeRow(name, materialMainType, materialSubType, materialColor, "-", "-", units, squareStr, strPrice);
         }
 
+        // allPrice
         for (ReceiptItem receiptItem : TableDesigner.getSinkQuarzReceiptList()) {
-            if (receiptItem.getCurrency().equals("USD")) {
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                receiptManager.allStoneProductsPriceInUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            } else if (receiptItem.getCurrency().equals("EUR")) {
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                receiptManager.allStoneProductsPriceInEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            } else if (receiptItem.getCurrency().equals("RUB")) {
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                receiptManager.allStoneProductsPriceInRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            addAllPriceToRunningTotal(receiptItem);
         }
     }
 
@@ -454,15 +397,14 @@ public abstract class BaseReceiptNodeBuilder {
 
     public void createCutShapeRow(Object object, ReceiptItem receiptItem) {
         receiptManager.stoneItems++;
+        receiptItem.setCoefficient(receiptManager.coefficient);
 
-        int rowIndex = receiptManager.gridPaneTop.getRowConstraints().size() - 1;
+        int rowIndex = addRowToGridPaneTop();
 
         Material material;
-        double width = 0;
-        double height = 0;
-
-        if (object instanceof CutObject) {
-            CutObject cutObject = (CutObject) object;
+        double width;
+        double height;
+        if (object instanceof CutObject cutObject) {
             material = cutObject.getMaterial();
             width = ((SketchShape) ((CutShape) cutObject).getSketchObjectOwner()).getShapeWidth();
             height = ((SketchShape) ((CutShape) cutObject).getSketchObjectOwner()).getShapeHeight();
@@ -473,185 +415,70 @@ public abstract class BaseReceiptNodeBuilder {
             height = sink.getFeatureHeight();
         }
 
-        receiptItem.setCoefficient(receiptManager.coefficient);
-
-        //label element type type value
-        {
-            Label labelElementTypeValue = new Label(receiptItem.getName());
-            labelElementTypeValue.getStyleClass().add("labelStoneProduct");
-
-            labelElementTypeValue.setMaxWidth(Double.MAX_VALUE);
-            labelElementTypeValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelElementTypeValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelElementTypeValue, Priority.ALWAYS);
-            receiptManager.gridPaneTop.add(labelElementTypeValue, 0, rowIndex, 1, 1);
-
-            String message = "";
-            if (material.getNotification1() == 1 || material.getNotification2() == 1) {
-                if (material.getNotification1() == 1) {
-                    message += "Выбранный цвет требует обязательного уточнения по наличию.\n\t";
-                }
-                if (material.getNotification2() == 1) {
-                    message += "Количество стыков и их расположение в данной коллекции выполняется по усмотрению производителя.";
-                }
-
-                Tooltip tooltip = new Tooltip(message);
-                labelElementTypeValue.setTooltip(tooltip);
-            }
+        String message = "";
+        if (material.getNotification1() == 1) {
+            message += "Выбранный цвет требует обязательного уточнения по наличию.\n\t";
         }
-        //label stone type value
-        {
-            Label labelStoneTypeValue = new Label(material.getMainType());
-            labelStoneTypeValue.getStyleClass().add("labelStoneProduct");
-            labelStoneTypeValue.setMaxWidth(Double.MAX_VALUE);
-            labelStoneTypeValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelStoneTypeValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelStoneTypeValue, Priority.ALWAYS);
-            receiptManager.gridPaneTop.add(labelStoneTypeValue, 1, rowIndex, 1, 1);
-
-            String message = "";
-            if (material.getNotification1() == 1 || material.getNotification2() == 1) {
-                if (material.getNotification1() == 1) {
-                    message += "Выбранный цвет требует обязательного уточнения по наличию.\n\t";
-                }
-                if (material.getNotification2() == 1) {
-                    message += "Количество стыков и их расположение в данной коллекции выполняется по усмотрению производителя.";
-                }
-
-                Tooltip tooltip = new Tooltip(message);
-                labelStoneTypeValue.setTooltip(tooltip);
-            }
-        }
-        //label stone name value
-        {
-            Label labelStoneNameValue = new Label(material.getSubType());
-            labelStoneNameValue.getStyleClass().add("labelStoneProduct");
-            labelStoneNameValue.setMaxWidth(Double.MAX_VALUE);
-            labelStoneNameValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelStoneNameValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelStoneNameValue, Priority.ALWAYS);
+        if (material.getNotification2() == 1) {
+            message += "Количество стыков и их расположение в данной коллекции выполняется по усмотрению производителя.";
         }
 
-        //label stone collection value
-        {
-            Label labelStoneCollectionValue = new Label(material.getCollection());
-            labelStoneCollectionValue.getStyleClass().add("labelStoneProduct");
-            labelStoneCollectionValue.setMaxWidth(Double.MAX_VALUE);
-            labelStoneCollectionValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelStoneCollectionValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelStoneCollectionValue, Priority.ALWAYS);
-        }
-        //label stone color value
-        {
-            Label labelStoneColorValue = new Label(material.getCollection() + ", " + material.getColor());
-            labelStoneColorValue.getStyleClass().add("labelStoneProduct");
-            labelStoneColorValue.setMaxWidth(Double.MAX_VALUE);
-            labelStoneColorValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelStoneColorValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelStoneColorValue, Priority.ALWAYS);
-            receiptManager.gridPaneTop.add(labelStoneColorValue, 2, rowIndex, 1, 1);
-
-            String message = "";
-            if (material.getNotification1() == 1 || material.getNotification2() == 1) {
-                if (material.getNotification1() == 1) {
-                    message += "Выбранный цвет требует обязательного уточнения по наличию.\n\t";
-                }
-                if (material.getNotification2() == 1) {
-                    message += "Количество стыков и их расположение в данной коллекции выполняется по усмотрению производителя.";
-                }
-
-                Tooltip tooltip = new Tooltip(message);
-                labelStoneColorValue.setTooltip(tooltip);
-            }
+        // labels
+        Label labelElementTypeValue = buildLabel(null, receiptItem.getName(), "labelStoneProduct");
+        if (!message.isEmpty()) {
+            labelElementTypeValue.setTooltip(new Tooltip(message));
         }
 
-        //label stone width value
-        {
-            Label labelStoneWidthValue = new Label(String.format(Locale.ENGLISH, "%.1f", width));
-            labelStoneWidthValue.getStyleClass().add("labelStoneProduct");
-            labelStoneWidthValue.setMaxWidth(Double.MAX_VALUE);
-            labelStoneWidthValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelStoneWidthValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelStoneWidthValue, Priority.ALWAYS);
-            receiptManager.gridPaneTop.add(labelStoneWidthValue, 3, rowIndex, 1, 1);
+        Label labelStoneTypeValue = buildLabel(null, material.getMainType(), "labelStoneProduct");
+        if (!message.isEmpty()) {
+            labelStoneTypeValue.setTooltip(new Tooltip(message));
         }
 
-        //label stone height value
-        {
-            Label labelStoneHeightValue = new Label(String.format(Locale.ENGLISH, "%.1f", height));
-            labelStoneHeightValue.getStyleClass().add("labelStoneProduct");
-            labelStoneHeightValue.setMaxWidth(Double.MAX_VALUE);
-            labelStoneHeightValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelStoneHeightValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelStoneHeightValue, Priority.ALWAYS);
-            receiptManager.gridPaneTop.add(labelStoneHeightValue, 4, rowIndex, 1, 1);
+        Label labelStoneColorValue = buildLabel(null, material.getCollection() + ", " + material.getColor(), "labelStoneProduct");
+        if (!message.isEmpty()) {
+            labelStoneColorValue.setTooltip(new Tooltip(message));
         }
 
-        //label inches type
-        {
-            Label labelInchesValue = new Label(receiptItem.getUnits());
-            labelInchesValue.getStyleClass().add("labelStoneProduct");
-            labelInchesValue.setMaxWidth(Double.MAX_VALUE);
-            labelInchesValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelInchesValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelInchesValue, Priority.ALWAYS);
-            receiptManager.gridPaneTop.add(labelInchesValue, 5, rowIndex, 1, 1);
-        }
+        Label labelStoneWidthValue = buildLabel(null, String.format(Locale.ENGLISH, "%.1f", width), "labelStoneProduct");
+        Label labelStoneHeightValue = buildLabel(null, String.format(Locale.ENGLISH, "%.1f", height), "labelStoneProduct");
+        Label labelInchesValue = buildLabel(null, receiptItem.getUnits(), "labelStoneProduct");
 
-        //label price value
-        {
-            Label labelPriceValue = new Label(Currency.RUR_SYMBOL + receiptItem.getPriceForOneInRUR());
-            labelPriceValue.setStyle("-fx-text-fill: " + receiptItem.getPriceColor() + ";");
-            labelPriceValue.getStyleClass().add("labelStoneProduct");
-            labelPriceValue.setMaxWidth(Double.MAX_VALUE);
-            labelPriceValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelPriceValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelPriceValue, Priority.ALWAYS);
-        }
+        String count = (receiptItem.getPseudoCount().equals("-1.00") ? receiptItem.getCount() : receiptItem.getPseudoCount());
+        Label labelSquareValue = buildLabel(null, count, "labelStoneProduct");
 
-        //label square value
-        {
-            String count = "";
-            if (!(receiptItem.getPseudoCount().equals("-1.00"))) {
-                count = receiptItem.getPseudoCount();
-            } else {
-                count = receiptItem.getCount();
-            }
-            Label labelSquareValue = new Label(count);
-            labelSquareValue.getStyleClass().add("labelStoneProduct");
-            labelSquareValue.setMaxWidth(Double.MAX_VALUE);
-            labelSquareValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelSquareValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelSquareValue, Priority.ALWAYS);
-            receiptManager.gridPaneTop.add(labelSquareValue, 6, rowIndex, 1, 1);
-        }
+        Label labelResultPriceValue = buildLabel(null, Currency.RUR_SYMBOL + receiptItem.getAllPriceInRUR(), "labelStoneProductPrice");
+        labelResultPriceValue.setStyle("-fx-text-fill: " + receiptItem.getPriceColor() + ";");
 
-        //label result price value
-        {
-            Label labelResultPriceValue = new Label();
-            labelResultPriceValue.setText(Currency.RUR_SYMBOL + receiptItem.getAllPriceInRUR());
-            labelResultPriceValue.setStyle("-fx-text-fill: " + receiptItem.getPriceColor() + ";");
-            labelResultPriceValue.getStyleClass().add("labelStoneProductPrice");
-            labelResultPriceValue.setMaxWidth(Double.MAX_VALUE);
-            labelResultPriceValue.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setHgrow(labelResultPriceValue, Priority.ALWAYS);
-            GridPane.setVgrow(labelResultPriceValue, Priority.ALWAYS);
-            receiptManager.gridPaneTop.add(labelResultPriceValue, 7, rowIndex, 2, 1);
-        }
+        // add labels to row
+        receiptManager.gridPaneTop.add(labelElementTypeValue, 0, rowIndex, 1, 1);
+        receiptManager.gridPaneTop.add(labelStoneTypeValue, 1, rowIndex, 1, 1);
+        receiptManager.gridPaneTop.add(labelStoneColorValue, 2, rowIndex, 1, 1);
+        receiptManager.gridPaneTop.add(labelStoneWidthValue, 3, rowIndex, 1, 1);
+        receiptManager.gridPaneTop.add(labelStoneHeightValue, 4, rowIndex, 1, 1);
+        receiptManager.gridPaneTop.add(labelInchesValue, 5, rowIndex, 1, 1);
+        receiptManager.gridPaneTop.add(labelSquareValue, 6, rowIndex, 1, 1);
+        receiptManager.gridPaneTop.add(labelResultPriceValue, 7, rowIndex, 2, 1);
 
         //calculate allPrice:
-        {
-            if (receiptItem.getCurrency().equals("USD")) {
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                receiptManager.allStoneProductsPriceInUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            } else if (receiptItem.getCurrency().equals("EUR")) {
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                receiptManager.allStoneProductsPriceInEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            } else if (receiptItem.getCurrency().equals("RUB")) {
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                receiptManager.allStoneProductsPriceInRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+        addAllPriceToRunningTotal(receiptItem);
+    }
+
+    private void addAllPriceToRunningTotal(ReceiptItem receiptItem) {
+        double allPrice = Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+        switch (receiptItem.getCurrency()) {
+            case "USD" -> {
+                receiptManager.allPriceForUSD += allPrice;
+                receiptManager.allStoneProductsPriceInUSD += allPrice;
+            }
+            case "EUR" -> {
+                receiptManager.allPriceForEUR += allPrice;
+                receiptManager.allStoneProductsPriceInEUR += allPrice;
+            }
+            case "RUB" -> {
+                receiptManager.allPriceForRUR += allPrice;
+                receiptManager.allStoneProductsPriceInRUR += allPrice;
             }
         }
-
     }
+
 }

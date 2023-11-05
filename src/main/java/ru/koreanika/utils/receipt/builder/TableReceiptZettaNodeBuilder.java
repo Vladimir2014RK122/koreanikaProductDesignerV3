@@ -1,6 +1,5 @@
 package ru.koreanika.utils.receipt.builder;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
@@ -232,7 +231,7 @@ public class TableReceiptZettaNodeBuilder extends BaseTableReceiptNodeBuilder {
             }
         }
 
-        /** result price in RUR*/
+        // result price in RUR
         {
             int rowIndex = addRowToGridPaneTop();
 
@@ -240,17 +239,16 @@ public class TableReceiptZettaNodeBuilder extends BaseTableReceiptNodeBuilder {
             System.out.println("allPriceForUSD = " + receiptManager.allPriceForUSD);
             System.out.println("allPriceForEUR = " + receiptManager.allPriceForEUR);
 
-            Label labelResultPriceRURName = buildLabel(null, "  Стоимость в рублях действительна на день просчета:", "labelTableResultEnd");
-            labelResultPriceRURName.setAlignment(Pos.CENTER_LEFT);
-
             double price = ((receiptManager.allPriceForRUR / RUBtoUSD) + (receiptManager.allPriceForUSD) + ((receiptManager.allPriceForEUR * RUBtoEUR) / RUBtoUSD)) * RUBtoUSD;
+
+            Label labelResultPriceRURName = buildLabel(null, "  Стоимость в рублях действительна на день просчета:", "labelTableResultEnd");
             Label labelResultPriceRUR = buildLabel(null, Currency.RUR_SYMBOL + formatPrice(price), "labelTableResultEndPrice");
 
             receiptManager.gridPaneTop.add(labelResultPriceRURName, 0, rowIndex, 7, 1);
             receiptManager.gridPaneTop.add(labelResultPriceRUR, 7, rowIndex, 2, 1);
         }
 
-        /** FOR CLIENT*/
+        // FOR CLIENT
         int rowIndex = addRowToGridPaneTop();
 
         Label labelText = buildLabel(null, "С выбранным декором и конфигурацией согласен", "labelProduct");
