@@ -76,14 +76,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD")) {
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            } else if (receiptItem.getCurrency().equals("EUR")) {
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
-            if (receiptItem.getCurrency().equals("RUB")) {
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            addToAllPriceRunningTotal(receiptItem);
         }
 
         for (Map.Entry<Border, ReceiptItem> entry : Receipt.getBordersTopCutReceiptItemMap().entrySet()) {
@@ -110,14 +103,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            {
-                if (receiptItem.getCurrency().equals("USD"))
-                    receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                else if (receiptItem.getCurrency().equals("EUR"))
-                    receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-                if (receiptItem.getCurrency().equals("RUB"))
-                    receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            }
+            addToAllPriceRunningTotal(receiptItem);
         }
 
         for (Map.Entry<Border, ReceiptItem> entry : Receipt.getBordersSideCutReceiptItemMap().entrySet()) {
@@ -149,12 +135,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            addToAllPriceRunningTotal(receiptItem);
         }
     }
 
@@ -187,12 +168,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            addToAllPriceRunningTotal(receiptItem);
         }
     }
 
@@ -228,12 +204,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            addToAllPriceRunningTotal(receiptItem);
         }
 
         for (Map.Entry<Sink, ReceiptItem> entry : Receipt.getSinkEdgeTypesAndReceiptItem().entrySet()) {
@@ -262,12 +233,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            addToAllPriceRunningTotal(receiptItem);
         }
     }
 
@@ -295,12 +261,7 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
             //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            addToAllPriceRunningTotal(receiptItem);
         }
     }
 
@@ -330,21 +291,9 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
-            //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-
-            //calculate allAddPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            // calculate allPrice
+            addToAllPriceRunningTotal(receiptItem);
+            addToAllAddPriceRunningTotal(receiptItem);
         }
     }
 
@@ -374,21 +323,9 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
-            //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-
-            //calculate allAddPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            // calculate allPrice
+            addToAllPriceRunningTotal(receiptItem);
+            addToAllAddPriceRunningTotal(receiptItem);
         }
     }
 
@@ -419,21 +356,9 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
-            //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-
-            //calculate allAddPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            // calculate allPrice
+            addToAllPriceRunningTotal(receiptItem);
+            addToAllAddPriceRunningTotal(receiptItem);
         }
     }
 
@@ -462,21 +387,9 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
-            //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-
-            //calculate allAddPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            // calculate allPrice
+            addToAllPriceRunningTotal(receiptItem);
+            addToAllAddPriceRunningTotal(receiptItem);
         }
     }
 
@@ -503,21 +416,9 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
-            //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-
-            //calculate allAddPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            // calculate allPrice
+            addToAllPriceRunningTotal(receiptItem);
+            addToAllAddPriceRunningTotal(receiptItem);
         }
     }
 
@@ -546,21 +447,9 @@ public class SketchReceiptNodeBuilder extends BaseReceiptNodeBuilder {
             receiptManager.gridPaneTop.add(labelEdgeCount, 7, rowIndex, 1, 1);
             receiptManager.gridPaneTop.add(labelEdgeResultPrice, 8, rowIndex, 1, 1);
 
-            //calculate allPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-
-            //calculate allAddPrice:
-            if (receiptItem.getCurrency().equals("USD"))
-                receiptManager.allAddPriceForUSD += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            else if (receiptItem.getCurrency().equals("EUR"))
-                receiptManager.allAddPriceForEUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
-            if (receiptItem.getCurrency().equals("RUB"))
-                receiptManager.allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+            // calculate allPrice
+            addToAllPriceRunningTotal(receiptItem);
+            addToAllAddPriceRunningTotal(receiptItem);
         }
     }
 

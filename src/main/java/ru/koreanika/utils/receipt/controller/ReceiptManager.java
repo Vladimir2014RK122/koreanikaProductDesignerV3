@@ -27,7 +27,7 @@ import ru.koreanika.utils.PrinterHandler.PrinterDialog;
 import ru.koreanika.utils.receipt.*;
 import ru.koreanika.utils.currency.Currency;
 import ru.koreanika.utils.receipt.builder.SketchReceiptNodeBuilder;
-import ru.koreanika.utils.receipt.builder.TableReceiptNodeBuilder;
+import ru.koreanika.utils.receipt.builder.TableReceiptGenericNodeBuilder;
 
 import java.io.IOException;
 import java.util.*;
@@ -423,7 +423,7 @@ public abstract class ReceiptManager {
 
         Receipt.calculateItemsStocks();
 
-        TableReceiptNodeBuilder receiptNodeBuilder = new TableReceiptNodeBuilder(this);
+        TableReceiptGenericNodeBuilder receiptNodeBuilder = new TableReceiptGenericNodeBuilder(this);
 
         receiptNodeBuilder.createTopPartGridPane();
         receiptNodeBuilder.createMaterialsPartGridPane();
@@ -476,7 +476,7 @@ public abstract class ReceiptManager {
 
         Receipt.calculateItemsStocks();
 
-        TableReceiptNodeBuilder receiptNodeBuilder = new TableReceiptNodeBuilder(this);
+        TableReceiptGenericNodeBuilder receiptNodeBuilder = new TableReceiptGenericNodeBuilder(this);
 
         receiptNodeBuilder.createTopPartGridPane();
         receiptNodeBuilder.createMaterialsPartGridPaneShort();
@@ -528,7 +528,7 @@ public abstract class ReceiptManager {
 
             receiptNodeBuilder.createResultPart();
         } else {
-            TableReceiptNodeBuilder receiptNodeBuilder = new TableReceiptNodeBuilder(this);
+            TableReceiptGenericNodeBuilder receiptNodeBuilder = new TableReceiptGenericNodeBuilder(this);
 
             receiptNodeBuilder.createTopPartGridPane();
             receiptNodeBuilder.createMaterialsPartGridPane();
@@ -630,7 +630,6 @@ public abstract class ReceiptManager {
             jsonCustomItemObject.put("currency", receiptItem.getCurrency());
             jsonCustomItemObject.put("priceForOne", Double.parseDouble(receiptItem.getPriceForOne().replaceAll(" ", "").replace(',', '.')));
             jsonCustomItemsArray.add(jsonCustomItemObject);
-
         }
         jsonObject.put("jsonCustomItemsArray", jsonCustomItemsArray);
         return jsonObject;

@@ -309,7 +309,8 @@ public abstract class BaseReceiptNodeBuilder {
                 square += receiptItem.getPseudoCountDouble();
 
                 //calculate allPrice:
-                addAllPriceToRunningTotal(receiptItem);
+                addToAllPriceRunningTotal(receiptItem);
+                addToStoneProductsPriceRunningTotal(receiptItem);
 
                 priceForPartInRUB += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             }
@@ -344,7 +345,8 @@ public abstract class BaseReceiptNodeBuilder {
                 square += receiptItem.getPseudoCountDouble();
 
                 //calculate allPrice:
-                addAllPriceToRunningTotal(receiptItem);
+                addToAllPriceRunningTotal(receiptItem);
+                addToStoneProductsPriceRunningTotal(receiptItem);
 
                 priceForPartInRUB += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             }
@@ -364,7 +366,8 @@ public abstract class BaseReceiptNodeBuilder {
 
         // allPrice
         for (ReceiptItem receiptItem : TableDesigner.getSinkQuarzReceiptList()) {
-            addAllPriceToRunningTotal(receiptItem);
+            addToAllPriceRunningTotal(receiptItem);
+            addToStoneProductsPriceRunningTotal(receiptItem);
         }
     }
 
@@ -460,24 +463,34 @@ public abstract class BaseReceiptNodeBuilder {
         receiptManager.gridPaneTop.add(labelResultPriceValue, 7, rowIndex, 2, 1);
 
         //calculate allPrice:
-        addAllPriceToRunningTotal(receiptItem);
+        addToAllPriceRunningTotal(receiptItem);
+        addToStoneProductsPriceRunningTotal(receiptItem);
     }
 
-    private void addAllPriceToRunningTotal(ReceiptItem receiptItem) {
+    protected void addToAllPriceRunningTotal(ReceiptItem receiptItem) {
         double allPrice = Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
         switch (receiptItem.getCurrency()) {
-            case "USD" -> {
-                receiptManager.allPriceForUSD += allPrice;
-                receiptManager.allStoneProductsPriceInUSD += allPrice;
-            }
-            case "EUR" -> {
-                receiptManager.allPriceForEUR += allPrice;
-                receiptManager.allStoneProductsPriceInEUR += allPrice;
-            }
-            case "RUB" -> {
-                receiptManager.allPriceForRUR += allPrice;
-                receiptManager.allStoneProductsPriceInRUR += allPrice;
-            }
+            case "USD" -> receiptManager.allPriceForUSD += allPrice;
+            case "EUR" -> receiptManager.allPriceForEUR += allPrice;
+            case "RUB" -> receiptManager.allPriceForRUR += allPrice;
+        }
+    }
+
+    protected void addToAllAddPriceRunningTotal(ReceiptItem receiptItem) {
+        double allPrice = Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+        switch (receiptItem.getCurrency()) {
+            case "USD" -> receiptManager.allAddPriceForUSD += allPrice;
+            case "EUR" -> receiptManager.allAddPriceForEUR += allPrice;
+            case "RUB" -> receiptManager.allAddPriceForRUR += allPrice;
+        }
+    }
+
+    private void addToStoneProductsPriceRunningTotal(ReceiptItem receiptItem) {
+        double allPrice = Double.parseDouble(receiptItem.getAllPrice().replaceAll(" ", "").replace(',', '.'));
+        switch (receiptItem.getCurrency()) {
+            case "USD" -> receiptManager.allStoneProductsPriceInUSD += allPrice;
+            case "EUR" -> receiptManager.allStoneProductsPriceInEUR += allPrice;
+            case "RUB" -> receiptManager.allStoneProductsPriceInRUR += allPrice;
         }
     }
 

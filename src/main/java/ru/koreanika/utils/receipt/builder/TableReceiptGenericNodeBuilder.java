@@ -17,9 +17,9 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
-public class TableReceiptNodeBuilder extends BaseTableReceiptNodeBuilder {
+public class TableReceiptGenericNodeBuilder extends BaseTableReceiptNodeBuilder {
 
-    public TableReceiptNodeBuilder(ReceiptManager receiptManager) {
+    public TableReceiptGenericNodeBuilder(ReceiptManager receiptManager) {
         super(receiptManager);
     }
 
