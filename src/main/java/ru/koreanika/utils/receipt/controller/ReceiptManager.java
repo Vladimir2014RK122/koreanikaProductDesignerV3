@@ -298,9 +298,7 @@ public abstract class ReceiptManager {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setResizable(true);
             alert.setHeaderText("Лог раскроя: ");
-
             alert.getDialogPane().setContent(new TextArea(Receipt.getReceiptLog()));
-
             alert.show();
         });
 
@@ -309,12 +307,13 @@ public abstract class ReceiptManager {
                 toggle.setSelected(true);
                 return;
             }
-            if (toggle == null) return;
+            if (toggle == null) {
+                return;
+            }
             if (t1.equals(toggleButtonFullReceipt)) {
                 updateReceiptFull();
             } else if (t1.equals(toggleButtonShortReceipt)) {
                 updateReceiptShort();
-            } else {
             }
         });
 
