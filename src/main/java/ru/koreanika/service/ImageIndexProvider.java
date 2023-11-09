@@ -1,6 +1,6 @@
 package ru.koreanika.service;
 
-import ru.koreanika.Common.Material.ImageIndex;
+import ru.koreanika.common.material.ImageIndex;
 
 import java.io.BufferedReader;
 import java.io.IOException;

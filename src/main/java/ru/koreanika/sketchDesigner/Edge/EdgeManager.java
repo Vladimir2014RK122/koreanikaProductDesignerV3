@@ -1,6 +1,5 @@
 package ru.koreanika.sketchDesigner.Edge;
 
-import ru.koreanika.Common.Material.Material;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -10,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.sketchDesigner.SketchDesigner;

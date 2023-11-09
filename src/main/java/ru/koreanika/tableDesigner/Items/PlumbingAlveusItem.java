@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.util.Callback;
 import org.json.simple.JSONObject;
 import ru.koreanika.catalog.Catalogs;
+import ru.koreanika.common.PlumbingElementForSale.PlumbingElement;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;

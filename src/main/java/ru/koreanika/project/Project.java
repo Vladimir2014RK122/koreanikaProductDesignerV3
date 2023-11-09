@@ -3,7 +3,7 @@ package ru.koreanika.project;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.image.Image;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.sketchDesigner.Edge.Border;
 import ru.koreanika.sketchDesigner.Edge.Edge;
 import ru.koreanika.utils.PriceCoefficientsWindow;

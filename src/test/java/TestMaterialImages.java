@@ -1,7 +1,6 @@
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.catalog.FacadeXLSParser;
-import ru.koreanika.project.ProjectHandler;
 
 import java.io.File;
 import java.io.FileWriter;

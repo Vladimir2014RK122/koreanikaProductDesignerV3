@@ -3,8 +3,8 @@ package ru.koreanika.utils.MaterialSelectionWindow;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Common.Material.MaterialSheet;
+import ru.koreanika.common.material.Material;
+import ru.koreanika.common.material.MaterialSheet;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.project.MaterialFactory;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
@@ -181,7 +181,6 @@ public class MaterialSettings {
 
         //set main list prices:
         if (materialForAdd.getAvailableMainSheetsCount() == 0) {
-
             materialForAdd.getTableTopDepthsAndPrices().clear();
             materialForAdd.getWallPanelDepthsAndPrices().clear();
             materialForAdd.getWindowSillDepthsAndPrices().clear();

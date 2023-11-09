@@ -2,10 +2,10 @@ package ru.koreanika.catalog;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import ru.koreanika.Common.Material.ImageIndex;
-import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
-import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
+import ru.koreanika.common.material.ImageIndex;
+import ru.koreanika.common.material.Material;
+import ru.koreanika.common.PlumbingElementForSale.PlumbingElement;
+import ru.koreanika.common.PlumbingElementForSale.PlumbingType;
 import ru.koreanika.service.ServiceLocator;
 
 import java.io.IOException;

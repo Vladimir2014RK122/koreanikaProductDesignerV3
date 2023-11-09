@@ -1,8 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import ru.koreanika.Common.Material.Material;
-import ru.koreanika.cutDesigner.CutDesigner;
-import ru.koreanika.cutDesigner.Shapes.CutShape;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import ru.koreanika.common.material.Material;
+import ru.koreanika.cutDesigner.CutDesigner;
+import ru.koreanika.cutDesigner.Shapes.CutShape;
 import ru.koreanika.sketchDesigner.Shapes.*;
 import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;

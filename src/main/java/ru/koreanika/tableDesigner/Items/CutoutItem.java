@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import ru.koreanika.Common.Material.Material;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Callback;
 import org.json.simple.JSONObject;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.sketchDesigner.Features.Cutout;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;

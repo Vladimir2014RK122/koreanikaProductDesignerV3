@@ -2,8 +2,8 @@ package ru.koreanika.project;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Common.Material.MaterialSheet;
+import ru.koreanika.common.material.Material;
+import ru.koreanika.common.material.MaterialSheet;
 import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.service.ServiceLocator;

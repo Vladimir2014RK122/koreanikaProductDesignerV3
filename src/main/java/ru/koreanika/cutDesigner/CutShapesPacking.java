@@ -1,8 +1,8 @@
 package ru.koreanika.cutDesigner;
 
-import ru.koreanika.Common.Material.MaterialSheet;
-import ru.koreanika.cutDesigner.Shapes.CutShape;
 import javafx.geometry.Bounds;
+import ru.koreanika.common.material.MaterialSheet;
+import ru.koreanika.cutDesigner.Shapes.CutShape;
 import ru.koreanika.project.Project;
 
 import java.util.*;

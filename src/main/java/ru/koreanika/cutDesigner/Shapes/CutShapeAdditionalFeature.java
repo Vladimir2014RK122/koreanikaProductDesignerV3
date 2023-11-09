@@ -1,7 +1,7 @@
 package ru.koreanika.cutDesigner.Shapes;
 
-import ru.koreanika.Common.ConnectPoints.ConnectPoint;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.ConnectPoints.ConnectPoint;
+import ru.koreanika.common.material.Material;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import ru.koreanika.sketchDesigner.Features.AdditionalFeature;

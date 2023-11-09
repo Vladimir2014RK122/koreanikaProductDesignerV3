@@ -1,9 +1,9 @@
 package ru.koreanika.cutDesigner;
 
 
-import ru.koreanika.Common.ConnectPoints.CornerConnectPoint;
-import ru.koreanika.Common.Material.MaterialSheet;
-import ru.koreanika.Common.RepresentToJson;
+import ru.koreanika.common.ConnectPoints.CornerConnectPoint;
+import ru.koreanika.common.material.MaterialSheet;
+import ru.koreanika.common.RepresentToJson;
 
 import ru.koreanika.cutDesigner.ListStatistics.StatisticCellItem;
 import ru.koreanika.cutDesigner.ListStatistics.StatisticsCellFactory;
@@ -37,7 +37,7 @@ import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.Dimensions.LinearDimension;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.PrinterHandler.PrinterDialog;
+import ru.koreanika.utils.print.PrinterDialog;
 import ru.koreanika.project.Project;
 
 import java.io.IOException;

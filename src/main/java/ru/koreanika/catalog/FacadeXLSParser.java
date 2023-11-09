@@ -1,9 +1,9 @@
 package ru.koreanika.catalog;
 
 import org.apache.poi.hssf.record.crypto.Biff8EncryptionKey;
-import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
-import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
+import ru.koreanika.common.material.Material;
+import ru.koreanika.common.PlumbingElementForSale.PlumbingElement;
+import ru.koreanika.common.PlumbingElementForSale.PlumbingType;
 
 import java.io.IOException;
 import java.util.List;

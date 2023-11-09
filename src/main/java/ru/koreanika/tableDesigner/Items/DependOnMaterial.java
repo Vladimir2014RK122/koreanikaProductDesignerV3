@@ -1,6 +1,6 @@
 package ru.koreanika.tableDesigner.Items;
 
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.material.Material;
 
 public interface DependOnMaterial {
 

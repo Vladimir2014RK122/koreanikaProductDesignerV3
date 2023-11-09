@@ -3,7 +3,7 @@ package ru.koreanika.catalog;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.material.Material;
 
 import java.io.FileInputStream;
 import java.io.IOException;

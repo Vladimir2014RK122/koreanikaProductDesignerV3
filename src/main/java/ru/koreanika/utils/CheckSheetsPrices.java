@@ -1,7 +1,5 @@
 package ru.koreanika.utils;
 
-import ru.koreanika.Common.Material.Material;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +11,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ru.koreanika.Common.Material.MaterialSheet;
+import ru.koreanika.common.material.Material;
+import ru.koreanika.common.material.MaterialSheet;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.ProjectClosedEvent;
 import ru.koreanika.service.eventbus.EventBus;

@@ -28,7 +28,7 @@ import ru.koreanika.service.event.ProjectOpenedEvent;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.utils.currency.BankCurrency;
 import ru.koreanika.utils.currency.UserCurrency;
-import ru.koreanika.utils.News.NewsController;
+import ru.koreanika.utils.news.NewsController;
 
 import java.io.File;
 import java.io.FileInputStream;

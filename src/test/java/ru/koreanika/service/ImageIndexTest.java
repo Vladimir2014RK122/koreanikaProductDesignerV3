@@ -1,7 +1,7 @@
 package ru.koreanika.service;
 
 import org.junit.Test;
-import ru.koreanika.Common.Material.ImageIndex;
+import ru.koreanika.common.material.ImageIndex;
 
 import static org.junit.Assert.*;
 

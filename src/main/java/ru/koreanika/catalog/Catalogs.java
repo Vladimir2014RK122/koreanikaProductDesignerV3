@@ -1,8 +1,8 @@
 package ru.koreanika.catalog;
 
-import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Common.PlumbingElementForSale.PlumbingElement;
-import ru.koreanika.Common.PlumbingElementForSale.PlumbingType;
+import ru.koreanika.common.material.Material;
+import ru.koreanika.common.PlumbingElementForSale.PlumbingElement;
+import ru.koreanika.common.PlumbingElementForSale.PlumbingType;
 
 import java.util.*;
 

@@ -1,6 +1,6 @@
 package ru.koreanika.service;
 
-import ru.koreanika.Common.Material.CachingImageLoader;
+import ru.koreanika.common.material.CachingImageLoader;
 import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.service.eventbus.EventBus;
 

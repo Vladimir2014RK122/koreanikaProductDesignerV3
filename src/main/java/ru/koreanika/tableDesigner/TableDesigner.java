@@ -1,7 +1,5 @@
 package ru.koreanika.tableDesigner;
 
-import ru.koreanika.Common.Material.Material;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -12,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.sketchDesigner.Features.*;
 import ru.koreanika.tableDesigner.Items.*;
 import ru.koreanika.utils.Main;
@@ -26,7 +25,6 @@ import java.util.*;
 
 public class TableDesigner {
 
-
     private AnchorPane anchorPaneRoot = null;
 
     private static Accordion accordionItems;
@@ -35,7 +33,6 @@ public class TableDesigner {
     private static AnchorPane anchorPaneIntoScrollPaneItems;
     private static ScrollPane scrollPaneVBoxTable;
     private static VBox vBoxTableRowsZone;
-
 
     private static FlowPane flowPaneTableCardsZone;
     private static Label labelMainItemsHeaderCards = new Label("Основные изделия");
@@ -53,7 +50,6 @@ public class TableDesigner {
     private static ObservableList<TableDesignerItem> tableDesignerMainWorkItemsList = FXCollections.observableList(new ArrayList<TableDesignerItem>());
     private static ObservableList<TableDesignerItem> tableDesignerAdditionalWorkItemsList = FXCollections.observableList(new ArrayList<TableDesignerItem>());
 
-
     public TableDesigner() {
 
         tableDesignerMainItemsList.clear();
@@ -62,7 +58,6 @@ public class TableDesigner {
         tableDesignerAdditionalWorkItemsList.clear();
 
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/tableDesigner.fxml"));
-        //fxmlLoader.setLocation(this.getClass().getResource("/fxmls/TableDesigner/ru.koreanika.tableDesigner.fxml"));
         try {
             anchorPaneRoot = fxmlLoader.load();
         } catch (IOException ex) {

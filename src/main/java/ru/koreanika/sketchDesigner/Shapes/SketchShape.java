@@ -1,7 +1,7 @@
 package ru.koreanika.sketchDesigner.Shapes;
 
-import ru.koreanika.Common.ConnectPoints.ConnectPoint;
-import ru.koreanika.Common.RepresentToJson;
+import ru.koreanika.common.ConnectPoints.ConnectPoint;
+import ru.koreanika.common.RepresentToJson;
 //import ru.koreanika.cutDesigner.CutSheet;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
 import ru.koreanika.cutDesigner.Shapes.CutShapeEdge;

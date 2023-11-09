@@ -1,6 +1,6 @@
 package ru.koreanika.utils.MaterialSelectionWindow;
 
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.utils.UserPreferences;
 import javafx.scene.control.Button;

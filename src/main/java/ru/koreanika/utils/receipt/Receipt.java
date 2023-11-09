@@ -1,7 +1,7 @@
 package ru.koreanika.utils.receipt;
 
-import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Common.Material.MaterialSheet;
+import ru.koreanika.common.material.Material;
+import ru.koreanika.common.material.MaterialSheet;
 import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.Shapes.CutObject;
@@ -17,10 +17,10 @@ import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.tableDesigner.Items.SinkItem;
 import ru.koreanika.tableDesigner.Items.TableDesignerItem;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.News.NewsCard;
-import ru.koreanika.utils.News.NewsCardStockCondition;
-import ru.koreanika.utils.News.NewsCardStockItem;
-import ru.koreanika.utils.News.NewsController;
+import ru.koreanika.utils.news.NewsCard;
+import ru.koreanika.utils.news.NewsCardStockCondition;
+import ru.koreanika.utils.news.NewsCardStockItem;
+import ru.koreanika.utils.news.NewsController;
 
 
 import java.util.ArrayList;

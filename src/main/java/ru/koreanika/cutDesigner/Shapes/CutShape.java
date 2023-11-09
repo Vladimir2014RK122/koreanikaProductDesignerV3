@@ -1,8 +1,8 @@
 package ru.koreanika.cutDesigner.Shapes;
 
-import ru.koreanika.Common.ConnectPoints.ConnectPoint;
-import ru.koreanika.Common.Material.Material;
-import ru.koreanika.Common.RepresentToJson;
+import ru.koreanika.common.ConnectPoints.ConnectPoint;
+import ru.koreanika.common.material.Material;
+import ru.koreanika.common.RepresentToJson;
 
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.CutPane;

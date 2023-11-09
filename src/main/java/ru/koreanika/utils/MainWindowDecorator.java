@@ -1,6 +1,5 @@
 package ru.koreanika.utils;
 
-import ru.koreanika.PortalClient.Maintenance.MaintenanceMessageWindow;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import ru.koreanika.PortalClient.Maintenance.MaintenanceMessageWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.service.ServiceLocator;
@@ -27,9 +27,9 @@ import ru.koreanika.utils.currency.UserCurrency;
 import ru.koreanika.utils.MainSettings.MainSettings;
 import ru.koreanika.utils.MaterialSelectionWindow.MaterialSelectionEventHandler;
 import ru.koreanika.utils.MaterialSelectionWindow.MaterialSelectionWindow;
-import ru.koreanika.utils.News.NewsController;
-import ru.koreanika.utils.Updater.UpdateChecker;
-import ru.koreanika.utils.Updater.UpdateManager;
+import ru.koreanika.utils.news.NewsController;
+import ru.koreanika.utils.updater.UpdateChecker;
+import ru.koreanika.utils.updater.UpdateManager;
 
 import java.io.IOException;
 import java.util.HashMap;

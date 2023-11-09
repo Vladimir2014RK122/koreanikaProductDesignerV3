@@ -1,6 +1,6 @@
 package ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems;
 
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.material.Material;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;

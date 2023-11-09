@@ -9,9 +9,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import ru.koreanika.Common.Material.ImageIndex;
-import ru.koreanika.Common.Material.ImageLoader;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.material.ImageIndex;
+import ru.koreanika.common.material.ImageLoader;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.service.ServiceLocator;
 
 import java.io.FileInputStream;

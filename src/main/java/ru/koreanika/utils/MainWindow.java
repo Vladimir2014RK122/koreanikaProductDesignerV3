@@ -19,7 +19,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.currency.UserCurrency;
 import ru.koreanika.utils.MaterialSelectionWindow.FirstStart;
 import ru.koreanika.utils.MaterialSelectionWindow.MaterialSelectionWindow;
-import ru.koreanika.utils.News.NewsController;
+import ru.koreanika.utils.news.NewsController;
 import ru.koreanika.utils.receipt.controller.ReceiptManagerKoreanika;
 import ru.koreanika.utils.receipt.controller.ReceiptManagerPromebel;
 import ru.koreanika.utils.receipt.controller.ReceiptManager;

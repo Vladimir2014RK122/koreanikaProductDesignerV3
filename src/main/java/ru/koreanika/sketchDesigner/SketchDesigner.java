@@ -1,10 +1,5 @@
 package ru.koreanika.sketchDesigner;
 
-import ru.koreanika.Common.ConnectPoints.CornerConnectPoint;
-import ru.koreanika.Common.Material.Material;
-
-import ru.koreanika.cutDesigner.CutDesigner;
-import ru.koreanika.cutDesigner.Shapes.CutShape;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -31,6 +26,10 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import ru.koreanika.common.ConnectPoints.CornerConnectPoint;
+import ru.koreanika.common.material.Material;
+import ru.koreanika.cutDesigner.CutDesigner;
+import ru.koreanika.cutDesigner.Shapes.CutShape;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.NotificationEvent;
 import ru.koreanika.service.eventbus.EventBus;
@@ -46,7 +45,7 @@ import ru.koreanika.sketchDesigner.lists.FeatureListElement;
 import ru.koreanika.sketchDesigner.lists.FeaturesCellFactory;
 import ru.koreanika.sketchDesigner.lists.ListElement;
 import ru.koreanika.utils.InfoMessage;
-import ru.koreanika.utils.PrinterHandler.PrinterDialog;
+import ru.koreanika.utils.print.PrinterDialog;
 
 
 import java.io.IOException;
@@ -1124,7 +1123,7 @@ public class SketchDesigner {
             for (SketchShape sketchShape : sketchShapeUnion.getSketchShapesInUnion()) {
                 CutShape cutShape = sketchShape.getCutShape();
                 CutDesigner.getInstance().getCutPane().deleteCutShape(cutShape);
-                CutDesigner.getInstance().usedShapesNumberList.remove(new Integer(cutShape.getShapeNumber()));
+                CutDesigner.getInstance().usedShapesNumberList.remove(cutShape.getShapeNumber());
                 sketchShape.edgesDisable(true);
                 sketchShape.setSaveMaterialImageOnEdges(true);
             }
@@ -1180,7 +1179,7 @@ public class SketchDesigner {
             SketchShape sketchShape = (SketchShape) sketchObject;
             if (sketchShape.isContainInUnion()) {
                 SketchDesigner.getSketchShapeUnionsList().remove(sketchShape.getSketchShapeUnionOwner());
-                CutDesigner.getInstance().usedShapeUnionsNumberList.remove(new Integer(sketchShape.getSketchShapeUnionOwner().getUnionNumber()));
+                CutDesigner.getInstance().usedShapeUnionsNumberList.remove(sketchShape.getSketchShapeUnionOwner().getUnionNumber());
             }
             //CutDesigner.getCutPane().deleteCutShape(sh.getShapeNumber());
         }

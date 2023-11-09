@@ -2,7 +2,7 @@ package ru.koreanika.project;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.material.Material;
 
 import java.util.ArrayList;
 import java.util.List;

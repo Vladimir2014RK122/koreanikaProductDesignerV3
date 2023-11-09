@@ -1,8 +1,8 @@
 package ru.koreanika.sketchDesigner.Shapes;
 
-import ru.koreanika.Common.ConnectPoints.ConnectPoint;
-import ru.koreanika.Common.Connectible;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.ConnectPoints.ConnectPoint;
+import ru.koreanika.common.Connectible;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.cutDesigner.CutDesigner;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;

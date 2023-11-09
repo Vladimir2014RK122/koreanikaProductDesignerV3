@@ -1,7 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import ru.koreanika.Common.Material.Material;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
@@ -25,19 +24,26 @@ import java.util.Map;
 public class JointItem extends TableDesignerItem implements DependOnMaterial {
 
     private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
-
-
+    /**
+     * Settings part
+     */
+    private static AnchorPane anchorPaneSettingsView = null;
+    private static Button btnAdd;
+    private static Button btnApply = new Button("OK"), btnCancel = new Button("Отмена");
+    private static ChoiceBox<String> choiceBoxMaterial;
+    private static ToggleButton toggleButtonJointType1, toggleButtonJointType2, toggleButtonJointType3, toggleButtonJointType4;
+    private static ToggleGroup toggleGroupJointType = new ToggleGroup();
+    private static TextField textFieldLength;
+    private static Label labelPrice;
+    private static boolean lengthOk = true;
     Label labelRowNumber, labelName, labelMaterial, labelNull1, labelLength, labelNull2, labelQuantity, labelRowPrice;
     ImageView imageView;
     Button btnPlus, btnMinus, btnDelete, btnEdit;
-
     Material material;
     int type;
     int subType;
     double length;
-
     Image imageMain;
-
 
     public JointItem(Material material, int type, int subType, double length, int quantity) {
 
@@ -67,15 +73,6 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         cardControlElementLogicInit();
 
         updateItemView();
-    }
-
-    public Material getMaterial() {
-        return material;
-    }
-
-    @Override
-    public void autoUpdateMaterial() {
-        updateMaterial(this);
     }
 
     private static void updateMaterial(JointItem item) {
@@ -118,211 +115,9 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
 
     }
 
-    public int getType() {
-        return type;
-    }
-
-
-
-    public double getLength() {
-        return length;
-    }
-
-    @Override
-    public Map<String, ImageView> getMainImageView() {
-        Map<String, ImageView> imagesList = new LinkedHashMap<>();
-        String imgPath = "/styles/images/TableDesigner/Joint/jointItemType" + subType + ".png";
-        if(type == 1)imagesList.put("Стык прямой#" + imgPath, new ImageView(Project.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()));
-        else if(type == 2)imagesList.put("Стык косой#" + imgPath, new ImageView(Project.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()));
-
-        return imagesList;
-    }
-
-    @Override
-    public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
-    }
-
-    @Override
-    public void exitEditMode() {
-        if(this.editModeProperty.get()){
-            JointItem.exitFromEditMode(this);
-        }
-    }
-
     public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
         return tableDesignerItemsList;
     }
-
-
-    /**
-     * Table ROW part
-     */
-
-    @Override
-    public void setRowNumber(int number) {
-        labelRowNumber.setText("" + number);
-    }
-
-    @Override
-    public AnchorPane getTableView() {
-        return anchorPaneTableRow;
-    }
-
-    private void rowControlElementsInit() {
-
-        HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
-        labelRowNumber = (Label) hBox.getChildren().get(0);
-        labelName = (Label) hBox.getChildren().get(1);
-        AnchorPane anchorPaneImageView = (AnchorPane) hBox.getChildren().get(2);
-        imageView = (ImageView) anchorPaneImageView.lookup("#imageView");
-        labelMaterial = (Label) hBox.getChildren().get(3);
-        labelNull1 = (Label) hBox.getChildren().get(4);
-        labelLength = (Label) hBox.getChildren().get(5);
-        labelNull2 = (Label) hBox.getChildren().get(6);
-        labelQuantity = (Label) hBox.getChildren().get(7);
-        labelRowPrice = (Label) hBox.getChildren().get(8);
-        AnchorPane anchorPaneButtons = (AnchorPane) hBox.getChildren().get(9);
-        btnPlus = (Button) anchorPaneButtons.lookup("#btnPlus");
-        btnMinus = (Button) anchorPaneButtons.lookup("#btnMinus");
-        btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
-        btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
-
-
-
-        HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
-        HBox.setHgrow(labelName, Priority.ALWAYS);
-        HBox.setHgrow(labelMaterial, Priority.ALWAYS);
-        HBox.setHgrow(labelNull1, Priority.ALWAYS);
-        HBox.setHgrow(labelLength, Priority.ALWAYS);
-        HBox.setHgrow(labelNull2, Priority.ALWAYS);
-        HBox.setHgrow(labelQuantity, Priority.ALWAYS);
-        HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
-      }
-
-    private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
-    }
-
-    private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
-    }
-
-    private void btnPlusClicked(ActionEvent event){
-        quantity++;
-        updateItemView();
-    }
-    private void btnMinusClicked(ActionEvent event){
-        if (quantity == 1) return;
-        quantity--;
-        updateItemView();
-    }
-    private void btnDeleteClicked(ActionEvent event){
-        if(editModeProperty.get()) exitFromEditMode(this);
-
-        tableDesignerItemsList.remove(this);
-    }
-    private void btnEditClicked(ActionEvent event){
-        //setting change mode to edit
-        for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
-            item.setEditModeProperty(false);
-        }
-        editModeProperty.setValue(true);
-        enterToEditMode(this);
-    }
-
-    public void updateItemView(){
-
-        labelRowNumber.setText("");
-        labelName.setText((type == 1) ? "Прямой стык" : "Косой стык");
-        imageView.setImage(imageMain);
-        labelMaterial.setText(material.getReceiptName());
-        labelNull1.setText("");
-        labelLength.setText("" + length + " мм.");
-        labelNull2.setText("");
-        labelQuantity.setText("" + quantity);
-
-
-        labelHeaderCard.setText("Соединение элементов");
-        tooltipNameCard.setText("Соединение элементов");
-        imageViewBackCard.setImage(imageMain);
-        labelQuantityCard.setText("" + quantity);
-
-
-
-        labelName1Card.setText("Материал");
-        labelValue1Card.setText(material.getReceiptName());
-
-        labelName2Card.setText("Тип");
-        labelValue2Card.setText((type == 1) ? "Прямой стык" : "Косой стык");
-
-        labelName3Card.setText("Длина");
-        labelValue3Card.setText("" + (int)length + " мм");
-
-        labelName4Card.setText("Высота");
-        labelValue4Card.setText("-");
-
-        updateRowPrice();
-    }
-
-    @Override
-    public void updateRowPrice() {
-
-        String currency = material.getJointsCurrency();
-        String units = "м.п.";
-        double priceForOne = -1.0;
-
-        priceForOne = material.getJointsTypesAndPrices().get(new Integer(type - 1));
-
-        priceForOne /= 100.0;
-
-        double multiplier = 1;
-        if (currency.equals("USD")) multiplier = MainWindow.getUSDValue().get();
-        else if (currency.equals("EUR")) multiplier = MainWindow.getEURValue().get();
-        else if (currency.equals("RUB")) multiplier = 1;
-
-        priceForOne *= multiplier;
-        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
-
-        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + Currency.RUR_SYMBOL);
-
-        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000)) + Currency.RUR_SYMBOL);
-        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + Currency.RUR_SYMBOL);
-
-    }
-
-
-    /**
-     * Settings part
-     */
-    private static AnchorPane anchorPaneSettingsView = null;
-    private static Button btnAdd;
-    private static Button btnApply = new Button("OK"), btnCancel = new Button("Отмена");
-
-    private static ChoiceBox<String> choiceBoxMaterial;
-
-    private static ToggleButton toggleButtonJointType1, toggleButtonJointType2, toggleButtonJointType3, toggleButtonJointType4;
-    private static ToggleGroup toggleGroupJointType = new ToggleGroup();
-
-    private static TextField textFieldLength;
-    private static Label labelPrice;
-
-    private static boolean lengthOk = true;
 
     public static AnchorPane getAnchorPaneSettingsView() {
         if (anchorPaneSettingsView == null) {
@@ -424,12 +219,12 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
 
         toggleGroupJointType.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             updatePriceInSettings();
-            if(toggleGroupJointType.getSelectedToggle() != null) btnAdd.setDisable(false);
+            if (toggleGroupJointType.getSelectedToggle() != null) btnAdd.setDisable(false);
         });
 
     }
 
-    private static void addItem(int index, int quantity){
+    private static void addItem(int index, int quantity) {
 
         if (!lengthOk) return;
 
@@ -442,16 +237,16 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
 
         int type = 1;
         int subType = 1;
-        if(toggleButtonJointType1.isSelected()){
+        if (toggleButtonJointType1.isSelected()) {
             type = 1;
             subType = 1;
-        }else if(toggleButtonJointType2.isSelected()){
+        } else if (toggleButtonJointType2.isSelected()) {
             type = 1;
             subType = 2;
-        }else if(toggleButtonJointType3.isSelected()){
+        } else if (toggleButtonJointType3.isSelected()) {
             type = 2;
             subType = 3;
-        }else if(toggleButtonJointType4.isSelected()){
+        } else if (toggleButtonJointType4.isSelected()) {
             type = 2;
             subType = 4;
         }
@@ -500,21 +295,21 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
 
                 int type = 1;
                 int subType = 1;
-                if(toggleButtonJointType1.isSelected()){
+                if (toggleButtonJointType1.isSelected()) {
                     type = 1;
                     subType = 1;
-                }else if(toggleButtonJointType2.isSelected()){
+                } else if (toggleButtonJointType2.isSelected()) {
                     type = 1;
                     subType = 2;
-                }else if(toggleButtonJointType3.isSelected()){
+                } else if (toggleButtonJointType3.isSelected()) {
                     type = 2;
                     subType = 3;
-                }else if(toggleButtonJointType4.isSelected()){
+                } else if (toggleButtonJointType4.isSelected()) {
                     type = 2;
                     subType = 4;
                 }
 
-                priceForOne = material.getJointsTypesAndPrices().get(new Integer(type-1));
+                priceForOne = material.getJointsTypesAndPrices().get(type - 1);
 
                 priceForOne /= 100.0;
 
@@ -526,7 +321,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         }
     }
 
-    private static void enterToEditMode(JointItem jointItem){
+    private static void enterToEditMode(JointItem jointItem) {
         TableDesigner.openSettings(JointItem.class);
 
 
@@ -537,13 +332,13 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         toggleButtonJointType2.setSelected(false);
         toggleButtonJointType3.setSelected(false);
         toggleButtonJointType4.setSelected(false);
-        if(jointItem.subType == 1){
+        if (jointItem.subType == 1) {
             toggleButtonJointType1.setSelected(true);
-        }else if(jointItem.subType == 2){
+        } else if (jointItem.subType == 2) {
             toggleButtonJointType2.setSelected(true);
-        }else if(jointItem.subType == 3){
+        } else if (jointItem.subType == 3) {
             toggleButtonJointType3.setSelected(true);
-        }else if(jointItem.subType == 4){
+        } else if (jointItem.subType == 4) {
             toggleButtonJointType4.setSelected(true);
         }
         textFieldLength.setText("" + jointItem.length);
@@ -578,7 +373,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         //"cancel". exit from edit mode
     }
 
-    protected static void exitFromEditMode(TableDesignerItem tableDesignerItem){
+    protected static void exitFromEditMode(TableDesignerItem tableDesignerItem) {
         btnAdd.setVisible(true);
         //delete buttons "apply" and "cancel"
         anchorPaneSettingsView.getChildren().remove(btnApply);
@@ -586,25 +381,6 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         //unselect row
         tableDesignerItem.setEditModeProperty(false);
         settingsControlElementsRefresh();
-    }
-    /**
-     * JSON SAVING & OPENING PART
-     */
-
-    @Override
-    public JSONObject getJsonView() {
-
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("itemName", "JointItem");
-        jsonObject.put("quantity", quantity);
-
-        jsonObject.put("material", material.getName());
-        jsonObject.put("type", type);
-        jsonObject.put("subType", subType);
-        jsonObject.put("length", length);
-
-        return jsonObject;
     }
 
     public static JointItem initFromJSON(JSONObject jsonObject) {
@@ -624,11 +400,11 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
 
         int type = ((Long) jsonObject.get("type")).intValue();
         int subType = 1;
-        if(jsonObject.get("subType") == null){
-            if(type == 1) subType = 1;
-            else if(type == 2) subType = 3;
-        }else{
-            subType =  ((Long) jsonObject.get("subType")).intValue();
+        if (jsonObject.get("subType") == null) {
+            if (type == 1) subType = 1;
+            else if (type == 2) subType = 3;
+        } else {
+            subType = ((Long) jsonObject.get("subType")).intValue();
         }
         double length = ((Double) jsonObject.get("length")).doubleValue();
 
@@ -637,5 +413,218 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         jointItem.labelQuantity.setText("" + quantity);
         jointItem.updateRowPrice();
         return jointItem;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    @Override
+    public void autoUpdateMaterial() {
+        updateMaterial(this);
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    @Override
+    public Map<String, ImageView> getMainImageView() {
+        Map<String, ImageView> imagesList = new LinkedHashMap<>();
+        String imgPath = "/styles/images/TableDesigner/Joint/jointItemType" + subType + ".png";
+        if (type == 1)
+            imagesList.put("Стык прямой#" + imgPath, new ImageView(Project.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()));
+        else if (type == 2)
+            imagesList.put("Стык косой#" + imgPath, new ImageView(Project.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()));
+
+        return imagesList;
+    }
+
+    @Override
+    public void removeThisItem() {
+        tableDesignerItemsList.remove(this);
+    }
+
+    @Override
+    public void exitEditMode() {
+        if (this.editModeProperty.get()) {
+            JointItem.exitFromEditMode(this);
+        }
+    }
+
+    /**
+     * Table ROW part
+     */
+
+    @Override
+    public void setRowNumber(int number) {
+        labelRowNumber.setText("" + number);
+    }
+
+    @Override
+    public AnchorPane getTableView() {
+        return anchorPaneTableRow;
+    }
+
+    private void rowControlElementsInit() {
+
+        HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
+        labelRowNumber = (Label) hBox.getChildren().get(0);
+        labelName = (Label) hBox.getChildren().get(1);
+        AnchorPane anchorPaneImageView = (AnchorPane) hBox.getChildren().get(2);
+        imageView = (ImageView) anchorPaneImageView.lookup("#imageView");
+        labelMaterial = (Label) hBox.getChildren().get(3);
+        labelNull1 = (Label) hBox.getChildren().get(4);
+        labelLength = (Label) hBox.getChildren().get(5);
+        labelNull2 = (Label) hBox.getChildren().get(6);
+        labelQuantity = (Label) hBox.getChildren().get(7);
+        labelRowPrice = (Label) hBox.getChildren().get(8);
+        AnchorPane anchorPaneButtons = (AnchorPane) hBox.getChildren().get(9);
+        btnPlus = (Button) anchorPaneButtons.lookup("#btnPlus");
+        btnMinus = (Button) anchorPaneButtons.lookup("#btnMinus");
+        btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
+        btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
+
+
+        HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
+        HBox.setHgrow(labelName, Priority.ALWAYS);
+        HBox.setHgrow(labelMaterial, Priority.ALWAYS);
+        HBox.setHgrow(labelNull1, Priority.ALWAYS);
+        HBox.setHgrow(labelLength, Priority.ALWAYS);
+        HBox.setHgrow(labelNull2, Priority.ALWAYS);
+        HBox.setHgrow(labelQuantity, Priority.ALWAYS);
+        HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
+
+    }
+
+    private void rowControlElementLogicInit() {
+
+        btnPlus.setOnAction(event -> btnPlusClicked(event));
+
+        btnMinus.setOnAction(event -> btnMinusClicked(event));
+
+        btnDelete.setOnAction(event -> btnDeleteClicked(event));
+
+        btnEdit.setOnAction(event -> btnEditClicked(event));
+    }
+
+    private void cardControlElementLogicInit() {
+
+        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
+
+        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
+
+        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
+
+        btnEditCard.setOnAction(event -> btnEditClicked(event));
+    }
+
+    private void btnPlusClicked(ActionEvent event) {
+        quantity++;
+        updateItemView();
+    }
+
+    private void btnMinusClicked(ActionEvent event) {
+        if (quantity == 1) return;
+        quantity--;
+        updateItemView();
+    }
+
+    private void btnDeleteClicked(ActionEvent event) {
+        if (editModeProperty.get()) exitFromEditMode(this);
+
+        tableDesignerItemsList.remove(this);
+    }
+
+    private void btnEditClicked(ActionEvent event) {
+        //setting change mode to edit
+        for (TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()) {
+            item.setEditModeProperty(false);
+        }
+        editModeProperty.setValue(true);
+        enterToEditMode(this);
+    }
+
+    public void updateItemView() {
+
+        labelRowNumber.setText("");
+        labelName.setText((type == 1) ? "Прямой стык" : "Косой стык");
+        imageView.setImage(imageMain);
+        labelMaterial.setText(material.getReceiptName());
+        labelNull1.setText("");
+        labelLength.setText("" + length + " мм.");
+        labelNull2.setText("");
+        labelQuantity.setText("" + quantity);
+
+
+        labelHeaderCard.setText("Соединение элементов");
+        tooltipNameCard.setText("Соединение элементов");
+        imageViewBackCard.setImage(imageMain);
+        labelQuantityCard.setText("" + quantity);
+
+
+        labelName1Card.setText("Материал");
+        labelValue1Card.setText(material.getReceiptName());
+
+        labelName2Card.setText("Тип");
+        labelValue2Card.setText((type == 1) ? "Прямой стык" : "Косой стык");
+
+        labelName3Card.setText("Длина");
+        labelValue3Card.setText("" + (int) length + " мм");
+
+        labelName4Card.setText("Высота");
+        labelValue4Card.setText("-");
+
+        updateRowPrice();
+    }
+
+    @Override
+    public void updateRowPrice() {
+
+        String currency = material.getJointsCurrency();
+        String units = "м.п.";
+        double priceForOne = -1.0;
+
+        priceForOne = material.getJointsTypesAndPrices().get(type - 1);
+
+        priceForOne /= 100.0;
+
+        double multiplier = 1;
+        if (currency.equals("USD")) multiplier = MainWindow.getUSDValue().get();
+        else if (currency.equals("EUR")) multiplier = MainWindow.getEURValue().get();
+        else if (currency.equals("RUB")) multiplier = 1;
+
+        priceForOne *= multiplier;
+        priceForOne *= Project.getPriceMainCoefficient().doubleValue();
+
+        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length / 1000) * quantity) + Currency.RUR_SYMBOL);
+
+        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length / 1000)) + Currency.RUR_SYMBOL);
+        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length / 1000) * quantity) + Currency.RUR_SYMBOL);
+
+    }
+
+    /**
+     * JSON SAVING & OPENING PART
+     */
+
+    @Override
+    public JSONObject getJsonView() {
+
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("itemName", "JointItem");
+        jsonObject.put("quantity", quantity);
+
+        jsonObject.put("material", material.getName());
+        jsonObject.put("type", type);
+        jsonObject.put("subType", subType);
+        jsonObject.put("length", length);
+
+        return jsonObject;
     }
 }

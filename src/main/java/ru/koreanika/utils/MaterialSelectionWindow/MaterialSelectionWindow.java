@@ -12,7 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.catalog.Catalogs;
 import ru.koreanika.utils.UserPreferences;

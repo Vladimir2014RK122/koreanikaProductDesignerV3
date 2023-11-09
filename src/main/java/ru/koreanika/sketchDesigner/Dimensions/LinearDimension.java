@@ -1,6 +1,6 @@
 package ru.koreanika.sketchDesigner.Dimensions;
 
-import ru.koreanika.Common.ConnectPoints.CornerConnectPoint;
+import ru.koreanika.common.ConnectPoints.CornerConnectPoint;
 //import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.Shapes.CutShape;

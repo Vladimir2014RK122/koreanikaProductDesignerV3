@@ -1,8 +1,8 @@
 package ru.koreanika.sketchDesigner.Shapes;
 
-import ru.koreanika.Common.ConnectPoints.ConnectPoint;
-import ru.koreanika.Common.ConnectPoints.CornerConnectPoint;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.ConnectPoints.ConnectPoint;
+import ru.koreanika.common.ConnectPoints.CornerConnectPoint;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
 import ru.koreanika.cutDesigner.Shapes.CutShapeEdge;
@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import static ru.koreanika.Common.MyMath.lineIntersection;
+import static ru.koreanika.common.MyMath.lineIntersection;
 
 public class SketchShapeTriangle extends SketchShape {
 

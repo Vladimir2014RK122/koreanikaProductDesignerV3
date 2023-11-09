@@ -8,7 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import org.json.simple.JSONObject;
-import ru.koreanika.Common.Material.Material;
+import ru.koreanika.common.material.Material;
 import ru.koreanika.PortalClient.UserEventHandler.UserEventService;
 import ru.koreanika.project.Project;
 import ru.koreanika.sketchDesigner.Edge.Border;

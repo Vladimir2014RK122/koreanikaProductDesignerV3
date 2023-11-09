@@ -1,7 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.utils.UserPreferences;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -12,9 +10,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
-import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.InfoMessage;
+import ru.koreanika.PortalClient.Authorization.AppType;
 import ru.koreanika.project.Project;
+import ru.koreanika.tableDesigner.TableDesigner;
+import ru.koreanika.utils.UserPreferences;
+import ru.koreanika.utils.InfoMessage;
 
 
 import java.io.IOException;

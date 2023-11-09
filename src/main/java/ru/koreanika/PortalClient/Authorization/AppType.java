@@ -16,11 +16,13 @@ public enum AppType {
     }
 
     public static AppType getByShortName(String shortName) {
-        if (shortName.equals("z")) return AppType.ZETTA;
-        else if (shortName.equals("k")) return AppType.KOREANIKA;
-        else if (shortName.equals("km")) return AppType.KOREANIKAMASTER;
-        else if (shortName.equals("pm")) return AppType.PROMEBEL;
-        return null;
+        return switch (shortName) {
+            case "z" -> AppType.ZETTA;
+            case "k" -> AppType.KOREANIKA;
+            case "km" -> AppType.KOREANIKAMASTER;
+            case "pm" -> AppType.PROMEBEL;
+            default -> null;
+        };
     }
 
     public String getName() {
