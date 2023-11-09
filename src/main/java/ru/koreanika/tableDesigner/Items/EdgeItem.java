@@ -23,7 +23,7 @@ import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.ProjectHandler;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.currency.Currency;
 
 import java.io.File;
 import java.io.IOException;
@@ -576,10 +576,10 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
 
 
-        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + ReceiptManager.RUR_SYMBOL);
+        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + Currency.RUR_SYMBOL);
 
-        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000)) + ReceiptManager.RUR_SYMBOL);
-        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + ReceiptManager.RUR_SYMBOL);
+        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000)) + Currency.RUR_SYMBOL);
+        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * (length/1000) * quantity) + Currency.RUR_SYMBOL);
 
     }
 

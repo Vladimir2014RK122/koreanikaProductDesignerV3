@@ -1,4 +1,4 @@
-package ru.koreanika.utils.Currency;
+package ru.koreanika.utils.currency;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;

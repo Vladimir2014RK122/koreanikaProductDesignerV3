@@ -1,4 +1,4 @@
-package ru.koreanika.utils.Receipt;
+package ru.koreanika.utils.receipt;
 
 import ru.koreanika.Common.Material.Material;
 
@@ -428,7 +428,7 @@ public class Receipt {
         }
 
 
-//        for(Map.Entry<CutShape, ReceiptItem> entry : Receipt.getCutShapesAndReceiptItem().entrySet()){
+//        for(Map.Entry<CutShape, ReceiptItem> entry : receipt.getCutShapesAndReceiptItem().entrySet()){
 //            if(entry.getValue().getAllPriceInRURDouble() > 800000){
 //                System.out.println("high");
 //            }

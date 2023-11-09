@@ -77,7 +77,7 @@ public class Border extends SketchEdge {
     @Override
     public String getCurrency() {
 
-        //System.out.println("Border Currency = " + getSketchEdgeOwner().getMaterial().getBorderCurrency());
+        //System.out.println("Border currency = " + getSketchEdgeOwner().getMaterial().getBorderCurrency());
         return getSketchEdgeOwner().getMaterial().getBorderCurrency();
     }
 

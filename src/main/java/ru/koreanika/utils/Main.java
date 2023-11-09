@@ -1,7 +1,5 @@
 package ru.koreanika.utils;
 
-import ru.koreanika.Common.Material.CachingImageLoader;
-import ru.koreanika.Common.Material.ImageLoader;
 import ru.koreanika.PortalClient.Authorization.Authorization;
 import ru.koreanika.PortalClient.Maintenance.ClimeType;
 import ru.koreanika.PortalClient.Maintenance.MaintenanceMessage;
@@ -23,8 +21,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import ru.koreanika.service.ServiceLocator;
-import ru.koreanika.utils.Currency.BankCurrency;
-import ru.koreanika.utils.Currency.UserCurrency;
+import ru.koreanika.utils.currency.BankCurrency;
+import ru.koreanika.utils.currency.UserCurrency;
 import ru.koreanika.utils.News.NewsController;
 
 import java.io.File;
@@ -265,7 +263,7 @@ public class Main extends Application {
                     //UpdateChecker.startCheckUpdates();
                     UpdateService.getInstance().startAvailableVersionThread();
 
-                    //Start Currency monitoring:
+                    //Start currency monitoring:
                     {
 
                         BankCurrency.getInstance().startMonitor();

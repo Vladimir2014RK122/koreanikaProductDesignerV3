@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextAlignment;
 import ru.koreanika.sketchDesigner.Shapes.ElementTypes;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.currency.Currency;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -39,7 +39,7 @@ public class MaterialListCellItem extends AnchorPane {
         double RURToUSD = MainWindow.getUSDValue().get();
         double RURToEUR = MainWindow.getEURValue().get();
         double priceForOne = material.getPrice(ElementTypes.TABLETOP, material.getDefaultDepth());
-        String symbol = ReceiptManager.RUR_SYMBOL;
+        String symbol = Currency.RUR_SYMBOL;
         if (material.getCurrency().equals("RUB")) {
         } else if (material.getCurrency().equals("EUR")) {
             price = String.format(Locale.ENGLISH, "%.0f", priceForOne * RURToEUR);

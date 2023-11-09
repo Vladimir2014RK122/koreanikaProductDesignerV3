@@ -26,6 +26,7 @@ import ru.koreanika.utils.MainWindow;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 public class PrinterDialog {
@@ -66,7 +67,7 @@ public class PrinterDialog {
     private Stage printerStage;
     private Scene printerDialogScene;
     private Window windowOwner;
-    private ArrayList<Node> rawPrintNodes;
+    private List<Node> rawPrintNodes;
     private ArrayList<Node> preparedPrintNodes = new ArrayList<>();
     private ArrayList<Node> previewPrintNodes = new ArrayList<>();
 
@@ -80,7 +81,7 @@ public class PrinterDialog {
 
     double pixelScale = 2;
 
-    private PrinterDialog(Window windowOwner, ArrayList<Node> printNodes, boolean withFrame) {
+    private PrinterDialog(Window windowOwner, List<Node> printNodes, boolean withFrame) {
 
         this.windowOwner = windowOwner;
         this.rawPrintNodes = printNodes;
@@ -124,13 +125,9 @@ public class PrinterDialog {
 
     }
 
-    public static void showPrinterDialog(Window windowOwner, ArrayList<Node> printNodes, boolean withFrame) {
-
-
+    public static void showPrinterDialog(Window windowOwner, List<Node> printNodes, boolean withFrame) {
         PrinterDialog printerDialog = new PrinterDialog(windowOwner, printNodes, withFrame);
         printerDialog.printerStage.show();
-
-
     }
 
     public static void printToPdf(ArrayList<Node> printNodes){

@@ -14,7 +14,7 @@ import org.json.simple.JSONObject;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.ProjectHandler;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.currency.Currency;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -294,10 +294,10 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
 //        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
 
-        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * ProjectHandler.getPriceMainCoefficient().doubleValue() * quantity)) + ReceiptManager.RUR_SYMBOL);
+        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * ProjectHandler.getPriceMainCoefficient().doubleValue() * quantity)) + Currency.RUR_SYMBOL);
 
-        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * ProjectHandler.getPriceMainCoefficient().doubleValue())) + ReceiptManager.RUR_SYMBOL);
-        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * ProjectHandler.getPriceMainCoefficient().doubleValue() * quantity)) + ReceiptManager.RUR_SYMBOL);
+        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * ProjectHandler.getPriceMainCoefficient().doubleValue())) + Currency.RUR_SYMBOL);
+        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * ProjectHandler.getPriceMainCoefficient().doubleValue() * quantity)) + Currency.RUR_SYMBOL);
 
 
     }

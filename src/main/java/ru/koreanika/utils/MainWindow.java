@@ -16,14 +16,14 @@ import ru.koreanika.service.event.MouseClickedEvent;
 import ru.koreanika.service.eventbus.EventBus;
 import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.Currency.UserCurrency;
+import ru.koreanika.utils.currency.UserCurrency;
 import ru.koreanika.utils.MaterialSelectionWindow.FirstStart;
 import ru.koreanika.utils.MaterialSelectionWindow.MaterialSelectionWindow;
 import ru.koreanika.utils.News.NewsController;
-import ru.koreanika.utils.Receipt.Koreanika.ReceiptManagerKoreanika;
-import ru.koreanika.utils.Receipt.Promebel.ReceiptManagerPromebel;
-import ru.koreanika.utils.Receipt.ReceiptManager;
-import ru.koreanika.utils.Receipt.Zetta.ReceiptManagerZetta;
+import ru.koreanika.utils.receipt.controller.ReceiptManagerKoreanika;
+import ru.koreanika.utils.receipt.controller.ReceiptManagerPromebel;
+import ru.koreanika.utils.receipt.controller.ReceiptManager;
+import ru.koreanika.utils.receipt.controller.ReceiptManagerZetta;
 
 import java.io.File;
 
