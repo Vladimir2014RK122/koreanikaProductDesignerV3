@@ -3,7 +3,7 @@ package ru.koreanika.tableDesigner;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
-import ru.koreanika.tableDesigner.Items.TableDesignerItem;
+import ru.koreanika.tableDesigner.item.TableDesignerItem;
 
 import java.util.ArrayList;
 

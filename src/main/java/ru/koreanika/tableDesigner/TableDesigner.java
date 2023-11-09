@@ -11,7 +11,7 @@ import javafx.scene.layout.*;
 import lombok.Getter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import ru.koreanika.tableDesigner.Items.*;
+import ru.koreanika.tableDesigner.item.*;
 import ru.koreanika.utils.Main;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;

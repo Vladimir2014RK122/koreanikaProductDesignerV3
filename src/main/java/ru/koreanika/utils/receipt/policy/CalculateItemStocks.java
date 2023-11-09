@@ -2,8 +2,8 @@ package ru.koreanika.utils.receipt.policy;
 
 import ru.koreanika.common.material.Material;
 import ru.koreanika.cutDesigner.Shapes.CutShape;
-import ru.koreanika.tableDesigner.Items.SinkItem;
-import ru.koreanika.tableDesigner.Items.TableDesignerItem;
+import ru.koreanika.tableDesigner.item.SinkItem;
+import ru.koreanika.tableDesigner.item.TableDesignerItem;
 import ru.koreanika.utils.news.NewsCard;
 import ru.koreanika.utils.news.NewsCardStockCondition;
 import ru.koreanika.utils.news.NewsCardStockItem;
