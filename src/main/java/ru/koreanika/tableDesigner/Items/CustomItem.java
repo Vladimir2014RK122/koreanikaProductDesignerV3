@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.currency.Currency;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -225,10 +225,10 @@ public class CustomItem extends TableDesignerItem {
         double priceForOne = price;
 
         //priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
-        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + ReceiptManager.RUR_SYMBOL);
+        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + Currency.RUR_SYMBOL);
 
-        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne) + ReceiptManager.RUR_SYMBOL);
-        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + ReceiptManager.RUR_SYMBOL);
+        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne) + Currency.RUR_SYMBOL);
+        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + Currency.RUR_SYMBOL);
     }
 
     @Override

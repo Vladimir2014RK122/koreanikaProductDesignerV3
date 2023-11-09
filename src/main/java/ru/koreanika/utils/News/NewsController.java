@@ -8,7 +8,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import ru.koreanika.utils.Main;
@@ -50,15 +49,6 @@ public class NewsController {
 
     Button btnClose;
 
-    ImageView imageViewSystemIconSeen;
-    ImageView imageViewSystemIconNotSeen;
-
-    ImageView imageViewStockIconSeen;
-    ImageView imageViewStockIconNotSeen;
-
-    ImageView imageViewSaleIconSeen;
-    ImageView imageViewSaleIconNotSeen;
-
     private static Pane showingTooltip = null;
 
     private NewsController(AnchorPane mainWindowAnchorPane){
@@ -66,7 +56,6 @@ public class NewsController {
         this.mainWindowAnchorPane = mainWindowAnchorPane;
 
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/News/newsBar.fxml"));
-        //fxmlLoader.setLocation(this.getClass().getResource("/fxmls/TableDesigner/ru.koreanika.tableDesigner.fxml"));
         try {
             anchorPaneNewsRoot = fxmlLoader.load();
         } catch (IOException ex) {
@@ -88,65 +77,21 @@ public class NewsController {
     }
 
     private void initView(){
-//        imageViewStockIconNotSeen = new ImageView(new Image(String.valueOf(getClass().getResource("/styles/icons/news/icons8_sale_notSeen_100px.png"))));
-//        imageViewStockIconSeen = new ImageView(new Image(String.valueOf(getClass().getResource("/styles/icons/news/icons8_sale_100px.png"))));
-
-//        imageViewStockIconSeen.setFitHeight(16);
-//        imageViewStockIconSeen.setFitWidth(16);
-
-//        imageViewStockIconNotSeen.setFitHeight(16);
-//        imageViewStockIconNotSeen.setFitWidth(16);
-
         tabPaneView = (TabPane) anchorPaneNewsRoot.lookup("#tabPaneView");
         tabStock = tabPaneView.getTabs().get(0);
         tabSystem = tabPaneView.getTabs().get(1);
 
-
         btnClose = (Button) anchorPaneNewsRoot.lookup("#btnClose");
-//        tabStock.setGraphic(imageViewStockIconNotSeen);
-//        tabStock.setClosable(false);
-//        tabPaneView.getTabs().add(tabStock);
-
-//        imageViewSystemIconNotSeen = new ImageView(new Image(String.valueOf(getClass().getResource("/styles/icons/news/icons8_laptop_not_seen_100px.png"))));
-//        imageViewSystemIconSeen = new ImageView(new Image(String.valueOf(getClass().getResource("/styles/icons/news/icons8_laptop_seen_100px_1.png"))));
-//
-//        imageViewSystemIconSeen.setFitHeight(16);
-//        imageViewSystemIconSeen.setFitWidth(16);
-//
-//        imageViewSystemIconNotSeen.setFitHeight(16);
-//        imageViewSystemIconNotSeen.setFitWidth(16);
-
-//        Tab tabSystem = new Tab();
-//        tabSystem.setGraphic(imageViewSystemIconNotSeen);
-//        tabSystem.setClosable(false);
-//        tabPaneView.getTabs().add(tabSystem);
-
-//        imageViewSaleIconNotSeen = new ImageView(new Image(String.valueOf(getClass().getResource("/styles/icons/news/icons8_free_shipping_100px.png"))));
-//        imageViewSaleIconSeen = new ImageView(new Image(String.valueOf(getClass().getResource("/styles/icons/news/icons8_free_shipping_100px.png"))));
-
-//        imageViewSaleIconSeen.setFitHeight(16);
-//        imageViewSaleIconSeen.setFitWidth(16);
-//        Tab tabSale = new Tab();
-//        tabSale.setGraphic(imageViewSaleIconNotSeen);
-//        tabSale.setClosable(false);
-//        tabPaneView.getTabs().add(tabSale);
-//
-//        tabSale.setDisable(true);
-//        tabSale.setVisible(false);
 
         scrollPaneStock = (ScrollPane)tabStock.getContent();
         vBoxStockStatic = (VBox) scrollPaneStock.getContent();
         vBoxStockStatic.setPrefWidth(230);
 
-//        scrollPaneStock.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPaneStock.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         scrollPaneSystem = (ScrollPane)tabSystem.getContent();
         vBoxSystemStatic = (VBox) scrollPaneSystem.getContent();
         vBoxSystemStatic.setPrefWidth(230);
-//        scrollPaneSystem.setContent(vBoxSystemStatic);
-//        tabPaneView.getTabs().get(1).setContent(scrollPaneSystem);
-//        scrollPaneSystem.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPaneSystem.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         mainWindowAnchorPane.heightProperty().addListener((observableValue, number, t1) -> {
@@ -157,9 +102,6 @@ public class NewsController {
             anchorPaneNewsRoot.setTranslateX(mainWindowAnchorPane.getWidth() - newsController.tabPaneView.getWidth());
         });
 
-//        ((SplitPane)mainWindowAnchorPane.getChildren().get(1)).setOnMouseClicked(mouseEvent -> {
-//            hide();
-//        });
         AnchorPane.setTopAnchor(anchorPaneNewsRoot, 0.0);
         AnchorPane.setBottomAnchor(anchorPaneNewsRoot, 0.0);
 
@@ -168,22 +110,17 @@ public class NewsController {
 
 
     public void readStaticNewsCards(){
-
         newsCardsStockStatic.clear();
         newsCardsSystemStatic.clear();
 
-
         File dir = new File(STATIC_NEWS_PATH);
-
         if(dir.isFile() || dir.listFiles() == null){
             System.err.println("Update News cards ERROR. Static dir is file");
             return;
         }
 
         for(File cardDir : dir.listFiles()){
-
             NewsCard  newsCard = new NewsCard(cardDir);
-
             newsCard.setTooltipShowingHandler(new TooltipShowingHandler() {
                 @Override
                 public void onShowTooltip(AnchorPane anchorPaneTooltip) {
@@ -208,33 +145,24 @@ public class NewsController {
                 }
             });
 
-//            if(newsCard.getCardOwners() != null && !newsCard.getCardOwners().contains(Main.appType)) continue;
-
             if(newsCard.getCardType() == NewsCardType.STOCK || newsCard.getCardType() == NewsCardType.NEWS){
                 newsCardsStockStatic.add(newsCard);
             }else if(newsCard.getCardType() == NewsCardType.SYSTEM){
                 newsCardsSystemStatic.add(newsCard);
             }
-
         }
     }
 
     public static NewsController createNewsController(AnchorPane mainWindowAnchorPane){
-
         newsController = new NewsController(mainWindowAnchorPane);
-
         return newsController;
-
     }
 
     public static NewsController getNewsController() {
         return newsController;
     }
 
-
-
     private void updateView(){
-
         vBoxStockStatic.getChildren().clear();
         vBoxSystemStatic.getChildren().clear();
 
@@ -244,20 +172,16 @@ public class NewsController {
         for(NewsCard newsCard : newsCardsSystemStaticForShowing){
             vBoxSystemStatic.getChildren().add(newsCard.getRootAnchorPane());
         }
-
     }
 
     protected void checkCardsAllowedTime(){
         newsCardsStockStaticForShowing.clear();
-
-
 
         AppType appType = UserPreferences.getInstance().getSelectedApp();
 
         System.out.println("newsCardsStockStatic = " + newsCardsStockStatic);
 
         for(NewsCard card : newsCardsStockStatic){
-
             System.out.println("\r\ncard.getHeader() = " + card.getHeader());
             System.out.println("card.isAllowed() = " + card.isAllowed());
             System.out.println("card.getCardOwners() = " + card.getCardOwners());
@@ -274,14 +198,10 @@ public class NewsController {
             }
         }
 
-
         System.out.println("newsCardsStockStaticForShowing = " + newsCardsStockStaticForShowing);
 
         updateView();
-
-
     }
-
 
     public static IntegerProperty newsBtnProperty() {
         return newsBtnProperty;
@@ -289,42 +209,29 @@ public class NewsController {
 
     protected void checkSeenCards(){
         boolean allSeen = true;
-        boolean stockSeen = true;
-        boolean systemSeen = true;
 
         int stockUnseenCount = 0;
         int systemUnseenCount = 0;
 
         for(NewsCard card : newsCardsStockStaticForShowing){
-            if(card.isSeen() == false){
+            if(!card.isSeen()){
                 stockUnseenCount++;
                 allSeen = false;
-                stockSeen = false;
-               // break;
             }
-
         }
 
         for(NewsCard card : newsCardsSystemStaticForShowing){
-            if(card.isSeen() == false){
+            if(!card.isSeen()){
                 systemUnseenCount++;
                 allSeen = false;
-                systemSeen = false;
-                //break;
             }
 
         }
 
-        //Button btnNews = MainWindow.getBtnNews();
-
         if(allSeen){
-            //set white icon
-            newsBtnProperty.set(0);
-
+            newsBtnProperty.set(0); //set white icon
         }else{
-            //set orange color of icon
-            newsBtnProperty.set(1);
-
+            newsBtnProperty.set(1); //set orange color of icon
         }
 
         //stock icon
@@ -333,7 +240,6 @@ public class NewsController {
                 tabStock.setStyle("-fx-background-size: 8px;");
             }else{
                 tabStock.setStyle("-fx-background-size: 0px;");
-
             }
         }
         //system icon
@@ -350,79 +256,59 @@ public class NewsController {
         return anchorPaneNewsRoot;
     }
 
-
     public boolean isHaveNotSeenCards(){
-
         boolean haveStock = false;
         boolean haveSystem = false;
         for(NewsCard card : newsCardsStockStaticForShowing){
-            if(card.isSeen() == false){
+            if(!card.isSeen()){
                 haveStock = true;
                 break;
             }
         }
 
         for(NewsCard card : newsCardsSystemStaticForShowing){
-            if(card.isSeen() == false){
+            if(!card.isSeen()){
                 haveSystem = true;
                 break;
             }
         }
 
-
-
         System.out.println("isHaveNotSeenCards() = " + (haveStock || haveSystem));
         return haveStock || haveSystem;
     }
-
-
 
     public String getMaterialStockSize(Material material){
         double stockSize = 0;
         String stockName = "No stock name";
         for(NewsCard newsCard : newsCardsStockStaticForShowing){
             if(newsCard.cardType == NewsCardType.STOCK && newsCard.stockType == NewsCardStockType.MATERIAL){
-
                 System.out.println(material.getSubType());
                 System.out.println(newsCard.getStockMaterials());
                 for(Map.Entry<String, ArrayList<String>> entry : newsCard.getStockMaterials().entrySet()){
-
-                    if(material.getSubType().toLowerCase().equals(entry.getKey().toLowerCase())){
-
-//                        System.out.println(material.getSubType().toLowerCase());
-//                        System.out.println(entry.getKey().toLowerCase());
-
+                    if(material.getSubType().equalsIgnoreCase(entry.getKey())){
                         for(String materialCode : entry.getValue()){
-
-//                            System.out.println(materialCode);
-                            if(material.getColor().toLowerCase().indexOf(materialCode.toLowerCase()) != -1){
+                            if(material.getColor().toLowerCase().contains(materialCode.toLowerCase())){
                                 stockSize += newsCard.getStockSize();
                                 stockName = newsCard.getHeader();
-//                                System.out.println("STOCK NAME :" + stockName + "STOCK SIZE = " + stockSize);
                                 break;
                             }
                         }
-
                     }
-
                 }
             }
         }
 
         System.out.println("STOCK SIZE = " + stockSize);
-
         return stockName + "##" + stockSize;
     }
 
     public ArrayList<NewsCard> getStockItemCards(){
-
         ArrayList<NewsCard> list = new ArrayList<>();
         for(NewsCard newsCard : newsCardsStockStaticForShowing){
             if(newsCard.getStockType() == NewsCardStockType.ITEM){
                 list.add(newsCard);
             }
         }
-
         return list;
     }
 
@@ -437,7 +323,6 @@ public class NewsController {
     }
 
     public static void show(){
-
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setByX(1);
         translateTransition.setFromX(newsController.mainWindowAnchorPane.getWidth());
@@ -451,7 +336,6 @@ public class NewsController {
 
         translateTransition.play();
 
-
         newsController.initAndStartAutoClosingThread();
         newsController.tabPaneView.setOnMouseMoved(mouseEvent -> {
             newsController.newsAutoClosingThread.resetCounter();
@@ -459,7 +343,6 @@ public class NewsController {
     }
 
     public static void hide(){
-
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setByX(1);
         translateTransition.setFromX(newsController.mainWindowAnchorPane.getWidth() - 230);

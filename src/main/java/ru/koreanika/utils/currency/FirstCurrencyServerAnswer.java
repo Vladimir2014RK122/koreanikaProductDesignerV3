@@ -1,4 +1,4 @@
-package ru.koreanika.utils.Currency;
+package ru.koreanika.utils.currency;
 
 public interface FirstCurrencyServerAnswer {
 

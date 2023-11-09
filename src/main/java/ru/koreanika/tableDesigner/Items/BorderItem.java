@@ -27,7 +27,7 @@ import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.currency.Currency;
 
 import java.io.File;
 import java.io.IOException;
@@ -583,8 +583,8 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
         String currencyBorder = material.getBorderCurrency();
 
         String symbol = (material.getCurrency().equals("RUB")) ?
-                ReceiptManager.RUR_SYMBOL : ((material.getCurrency().equals("USD")) ?
-                ReceiptManager.USD_SYMBOL : ReceiptManager.EUR_SYMBOL);
+                Currency.RUR_SYMBOL : ((material.getCurrency().equals("USD")) ?
+                Currency.USD_SYMBOL : Currency.EUR_SYMBOL);
         String units = "м.п.";
         double priceForOne = -1.0;
 
@@ -627,10 +627,10 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
 
         priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
-        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * length/1000 * quantity) + ReceiptManager.RUR_SYMBOL);
+        labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * length/1000 * quantity) + Currency.RUR_SYMBOL);
 
-        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * length/1000) + ReceiptManager.RUR_SYMBOL);
-        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * length/1000 * quantity) + ReceiptManager.RUR_SYMBOL);
+        labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * length/1000) + Currency.RUR_SYMBOL);
+        labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * length/1000 * quantity) + Currency.RUR_SYMBOL);
 
     }
 

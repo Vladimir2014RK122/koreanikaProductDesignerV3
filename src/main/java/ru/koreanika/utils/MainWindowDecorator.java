@@ -23,7 +23,7 @@ import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.ApplicationTypeChangeEvent;
 import ru.koreanika.service.event.ApplicationTypeChangeEventHandler;
 import ru.koreanika.service.eventbus.EventBus;
-import ru.koreanika.utils.Currency.UserCurrency;
+import ru.koreanika.utils.currency.UserCurrency;
 import ru.koreanika.utils.MainSettings.MainSettings;
 import ru.koreanika.utils.MaterialSelectionWindow.MaterialSelectionEventHandler;
 import ru.koreanika.utils.MaterialSelectionWindow.MaterialSelectionWindow;
@@ -458,7 +458,7 @@ public class MainWindowDecorator implements ApplicationTypeChangeEventHandler {
 
 
 
-        // Currency:
+        // currency:
         btnCurrencyUpdate.setOnMouseClicked(event -> {
             UserCurrency.getInstance().updateCurrencyValue();
         });

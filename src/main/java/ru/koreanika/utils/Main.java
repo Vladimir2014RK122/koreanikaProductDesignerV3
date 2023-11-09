@@ -26,8 +26,8 @@ import ru.koreanika.project.ProjectHandler;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.ProjectOpenedEvent;
 import ru.koreanika.service.eventbus.EventBus;
-import ru.koreanika.utils.Currency.BankCurrency;
-import ru.koreanika.utils.Currency.UserCurrency;
+import ru.koreanika.utils.currency.BankCurrency;
+import ru.koreanika.utils.currency.UserCurrency;
 import ru.koreanika.utils.News.NewsController;
 
 import java.io.File;
@@ -275,7 +275,7 @@ public class Main extends Application {
                     //UpdateChecker.startCheckUpdates();
                     UpdateService.getInstance().startAvailableVersionThread();
 
-                    //Start Currency monitoring:
+                    //Start currency monitoring:
                     {
 
                         BankCurrency.getInstance().startMonitor();

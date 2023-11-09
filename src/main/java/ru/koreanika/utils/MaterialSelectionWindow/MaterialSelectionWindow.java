@@ -34,7 +34,7 @@ import ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems.MaterialItem;
 import ru.koreanika.utils.MaterialSelectionWindow.TreeViewItems.MaterialTreeCellItem;
 import ru.koreanika.project.Project;
 import ru.koreanika.project.ProjectType;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.currency.Currency;
 
 import java.io.IOException;
 import java.util.*;
@@ -424,7 +424,7 @@ public class MaterialSelectionWindow implements ApplicationTypeChangeEventHandle
             priceInRUR = material.getPrice(ElementTypes.TABLETOP, material.getDefaultDepth()) * MainWindow.getUSDValue().get();
         else if (material.getCurrency().equals("EUR"))
             priceInRUR = material.getPrice(ElementTypes.TABLETOP, material.getDefaultDepth()) * MainWindow.getEURValue().get();
-        String symbol = ReceiptManager.RUR_SYMBOL;
+        String symbol = Currency.RUR_SYMBOL;
 
         String materialPrice = String.format(Locale.ENGLISH, "Цена: %.0f", priceInRUR) + symbol + " м^2";
 

@@ -21,7 +21,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
-import ru.koreanika.utils.Receipt.ReceiptManager;
+import ru.koreanika.utils.currency.Currency;
 
 import java.io.IOException;
 import java.util.*;
@@ -2253,7 +2253,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 if(material.getCurrency().equals("RUB")) priceInRUR = priceForOne;
                 else if(material.getCurrency().equals("USD")) priceInRUR = priceForOne * MainWindow.getUSDValue().get();
                 else if(material.getCurrency().equals("EUR")) priceInRUR = priceForOne * MainWindow.getEURValue().get();
-                String symbol = ReceiptManager.RUR_SYMBOL;
+                String symbol = Currency.RUR_SYMBOL;
 
                 //priceForOne /= 100.0;
 
