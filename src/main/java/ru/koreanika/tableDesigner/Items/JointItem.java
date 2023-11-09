@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -15,6 +14,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -23,7 +23,6 @@ import java.util.Map;
 
 public class JointItem extends TableDesignerItem implements DependOnMaterial {
 
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
     /**
      * Settings part
      */
@@ -46,14 +45,12 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
     Image imageMain;
 
     public JointItem(Material material, int type, int subType, double length, int quantity) {
-
         this.material = material;
         this.type = type;
         this.length = length;
         this.quantity = quantity;
         this.subType = subType;
 
-        //System.out.println("SubType=" + subType);
         imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/Joint/jointItemType" + subType + "_100px.png").toString()).getImage();
 
         FXMLLoader fxmlLoader = new FXMLLoader(
@@ -111,12 +108,8 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         JointItem newJointItem = new JointItem(newMaterial, oldJointItem.type, oldJointItem.subType, oldJointItem.length, oldJointItem.quantity);
 
         oldJointItem.removeThisItem();
-        tableDesignerItemsList.add(newJointItem);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(newJointItem);
 
-    }
-
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
     }
 
     public static AnchorPane getAnchorPaneSettingsView() {
@@ -138,7 +131,6 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     private static void settingsControlElementsInit() {
-
         btnApply.getStyleClass().add("btnBrown");
         btnCancel.getStyleClass().add("btnBrown");
 
@@ -164,35 +156,12 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         toggleButtonJointType2.setToggleGroup(toggleGroupJointType);
         toggleButtonJointType3.setToggleGroup(toggleGroupJointType);
         toggleButtonJointType4.setToggleGroup(toggleGroupJointType);
-        //toggleButtonSiphonType1.setSelected(true);
-
-//        ImageView image1 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/Joint/jointItemType1.png").toString());
-//        image1.setFitWidth(45);
-//        image1.setFitHeight(45);
-//        toggleButtonJointType1.setGraphic(image1);
-//
-//        ImageView image2 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/Joint/jointItemType2.png").toString());
-//        image2.setFitWidth(45);
-//        image2.setFitHeight(45);
-//        toggleButtonJointType2.setGraphic(image2);
-//
-//        ImageView image3 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/Joint/jointItemType3.png").toString());
-//        image3.setFitWidth(45);
-//        image3.setFitHeight(45);
-//        toggleButtonJointType3.setGraphic(image3);
-//
-//        ImageView image4 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/Joint/jointItemType4.png").toString());
-//        image4.setFitWidth(45);
-//        image4.setFitHeight(45);
-//        toggleButtonJointType4.setGraphic(image4);
 
         textFieldLength.setText("600");
-
     }
 
     private static void settingsControlElementsLogicInit() {
-
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerMainWorkItemsList().size(), 1));
 
         choiceBoxMaterial.setOnAction(event -> {
             updatePriceInSettings();
@@ -259,7 +228,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         }
 
         if (length == 0) return;
-        tableDesignerItemsList.add(index, new JointItem(material, type, subType, length, quantity));
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(index, new JointItem(material, type, subType, length, quantity));
     }
 
     public static void settingsControlElementsRefresh() {
@@ -358,7 +327,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(jointItem);
+            int index = TableDesignerSession.getTableDesignerMainWorkItemsList().indexOf(jointItem);
             addItem(index, jointItem.quantity);
 
             exitFromEditMode(jointItem);
@@ -446,7 +415,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
 
     @Override
@@ -502,24 +471,16 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     private void rowControlElementLogicInit() {
-
         btnPlus.setOnAction(event -> btnPlusClicked(event));
-
         btnMinus.setOnAction(event -> btnMinusClicked(event));
-
         btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
         btnEdit.setOnAction(event -> btnEditClicked(event));
     }
 
     private void cardControlElementLogicInit() {
-
         btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
         btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
         btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
         btnEditCard.setOnAction(event -> btnEditClicked(event));
     }
 
@@ -537,7 +498,7 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
     private void btnDeleteClicked(ActionEvent event) {
         if (editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
 
     private void btnEditClicked(ActionEvent event) {
@@ -614,8 +575,6 @@ public class JointItem extends TableDesignerItem implements DependOnMaterial {
 
     @Override
     public JSONObject getJsonView() {
-
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("itemName", "JointItem");
         jsonObject.put("quantity", quantity);

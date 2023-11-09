@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -24,6 +23,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,9 +31,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PlumbingItem extends TableDesignerItem{
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
-
 
     Label labelRowNumber, labelName, labelMaterial, labelType, labelModel, labelNull1, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -50,7 +47,6 @@ public class PlumbingItem extends TableDesignerItem{
     double price;
     double priceForOne;
     String units;
-
 
     public PlumbingItem(int id, String model, int quantity) {
 
@@ -77,10 +73,7 @@ public class PlumbingItem extends TableDesignerItem{
 
         imageMain = new Image(imgURL.toString());
 
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/PlumbingRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/PlumbingRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -95,8 +88,6 @@ public class PlumbingItem extends TableDesignerItem{
 
         updateItemView();
     }
-
-
 
     public int getId() {
         return id;
@@ -145,7 +136,7 @@ public class PlumbingItem extends TableDesignerItem{
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
 
     @Override
@@ -155,17 +146,11 @@ public class PlumbingItem extends TableDesignerItem{
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -183,8 +168,6 @@ public class PlumbingItem extends TableDesignerItem{
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -196,25 +179,17 @@ public class PlumbingItem extends TableDesignerItem{
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -229,7 +204,7 @@ public class PlumbingItem extends TableDesignerItem{
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
@@ -446,7 +421,7 @@ public class PlumbingItem extends TableDesignerItem{
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1));
 
         choiceBoxType.setOnAction(actionEvent -> {
             PlumbingType plumbingType = choiceBoxType.getSelectionModel().getSelectedItem();
@@ -508,8 +483,8 @@ public class PlumbingItem extends TableDesignerItem{
 
         if (countOk) {
             quantity = Integer.parseInt(textFieldCount.getText());
-            if(index == -1) index = tableDesignerItemsList.size();
-            tableDesignerItemsList.add(index, new PlumbingItem(id, model, quantity));
+            if(index == -1) index = TableDesignerSession.getTableDesignerAdditionalItemsList().size();
+            TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new PlumbingItem(id, model, quantity));
         }
 
     }
@@ -614,14 +589,11 @@ public class PlumbingItem extends TableDesignerItem{
 
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
-
-            int index = getTableDesignerItemsList().indexOf(plumbingItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(plumbingItem);
             addItem(index, plumbingItem.quantity);
 
             exitFromEditMode(plumbingItem);
             plumbingItem.removeThisItem();
-
-
         });
         btnCancel.setOnAction(event -> {
             exitFromEditMode(plumbingItem);

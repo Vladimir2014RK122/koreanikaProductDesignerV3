@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.builder;
+package ru.koreanika.utils.receipt.ui.builder;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -13,13 +13,13 @@ import ru.koreanika.cutDesigner.Shapes.CutShape;
 import ru.koreanika.project.Project;
 import ru.koreanika.sketchDesigner.Features.Sink;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
-import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.UserPreferences;
 import ru.koreanika.utils.currency.Currency;
-import ru.koreanika.utils.receipt.Receipt;
-import ru.koreanika.utils.receipt.ReceiptItem;
-import ru.koreanika.utils.receipt.controller.ReceiptManager;
+import ru.koreanika.utils.receipt.domain.Receipt;
+import ru.koreanika.utils.receipt.domain.ReceiptItem;
+import ru.koreanika.utils.receipt.policy.TableDesignerItemMapper;
+import ru.koreanika.utils.receipt.ui.controller.ReceiptManager;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -351,7 +351,7 @@ public abstract class BaseReceiptNodeBuilder {
                 priceForPartInRUB += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             }
 
-            for (ReceiptItem receiptItemSink : TableDesigner.getSinkQuarzReceiptList()) {
+            for (ReceiptItem receiptItemSink : TableDesignerItemMapper.getSinkQuarzReceiptList()) {
                 String subNameSink = receiptItemSink.getName().split("#")[1];
                 if (subNameSink.equals(materialCollectionType + " " + materialColor)) {
                     priceForPartInRUB += Double.parseDouble(receiptItemSink.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -365,7 +365,7 @@ public abstract class BaseReceiptNodeBuilder {
         }
 
         // allPrice
-        for (ReceiptItem receiptItem : TableDesigner.getSinkQuarzReceiptList()) {
+        for (ReceiptItem receiptItem : TableDesignerItemMapper.getSinkQuarzReceiptList()) {
             addToAllPriceRunningTotal(receiptItem);
             addToStoneProductsPriceRunningTotal(receiptItem);
         }

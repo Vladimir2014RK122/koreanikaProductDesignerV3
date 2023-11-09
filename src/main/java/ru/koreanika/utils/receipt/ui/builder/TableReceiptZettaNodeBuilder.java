@@ -1,12 +1,12 @@
-package ru.koreanika.utils.receipt.builder;
+package ru.koreanika.utils.receipt.ui.builder;
 
 import javafx.scene.control.Label;
-import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.currency.Currency;
-import ru.koreanika.utils.receipt.Receipt;
-import ru.koreanika.utils.receipt.ReceiptItem;
-import ru.koreanika.utils.receipt.controller.ReceiptManager;
+import ru.koreanika.utils.receipt.domain.Receipt;
+import ru.koreanika.utils.receipt.domain.ReceiptItem;
+import ru.koreanika.utils.receipt.policy.TableDesignerItemMapper;
+import ru.koreanika.utils.receipt.ui.controller.ReceiptManager;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,7 +27,7 @@ public class TableReceiptZettaNodeBuilder extends BaseTableReceiptNodeBuilder {
         double RUBtoEUR = MainWindow.getEURValue().doubleValue();
 
         double addPriceUSD = 0;
-        for (ReceiptItem receiptItem : TableDesigner.getMountingReceiptList()) {
+        for (ReceiptItem receiptItem : TableDesignerItemMapper.getMountingReceiptList()) {
             int rowIndex = addRowToGridPaneTop();
 
             double price = ((receiptManager.allPriceForRUR / RUBtoUSD) + (receiptManager.allPriceForUSD) + ((receiptManager.allPriceForEUR * RUBtoEUR) / RUBtoUSD)) * ((Double.parseDouble(receiptItem.getPriceForOne())) / 100.0);
@@ -57,7 +57,7 @@ public class TableReceiptZettaNodeBuilder extends BaseTableReceiptNodeBuilder {
         double RUBtoEUR = MainWindow.getEURValue().doubleValue();
 
         double discountPriceInUSD = 0;
-        for (ReceiptItem receiptItem : TableDesigner.getDiscountReceiptList()) {
+        for (ReceiptItem receiptItem : TableDesignerItemMapper.getDiscountReceiptList()) {
             int rowIndex = addRowToGridPaneTop();
 
             System.out.println("price part in RUR = " + receiptManager.allPriceForRUR);
@@ -85,7 +85,7 @@ public class TableReceiptZettaNodeBuilder extends BaseTableReceiptNodeBuilder {
         double RUBtoUSD = MainWindow.getUSDValue().doubleValue();
         double RUBtoEUR = MainWindow.getEURValue().doubleValue();
 
-        for (ReceiptItem receiptItem : TableDesigner.getDeliveryReceiptList()) {
+        for (ReceiptItem receiptItem : TableDesignerItemMapper.getDeliveryReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
             String currency = getCurrency(receiptItem);
 
@@ -119,7 +119,7 @@ public class TableReceiptZettaNodeBuilder extends BaseTableReceiptNodeBuilder {
         double RUBtoUSD = MainWindow.getUSDValue().doubleValue();
         double RUBtoEUR = MainWindow.getEURValue().doubleValue();
 
-        for (ReceiptItem receiptItem : TableDesigner.getMeasurerReceiptList()) {
+        for (ReceiptItem receiptItem : TableDesignerItemMapper.getMeasurerReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
             String currency = getCurrency(receiptItem);
 

@@ -18,6 +18,7 @@ import javafx.scene.transform.Rotate;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public abstract class CutObject extends Pane implements Connectible {
@@ -300,32 +301,11 @@ public abstract class CutObject extends Pane implements Connectible {
                     ((Connectible) node).showConnectionPoints();
                 }
             }
-            for (Map.Entry<String, ArrayList<MaterialSheet>> entry : CutPane.getMaterialSheetsMap().entrySet()) {
+            for (Map.Entry<String, List<MaterialSheet>> entry : CutPane.getMaterialSheetsMap().entrySet()) {
                 for (MaterialSheet sheet : entry.getValue()) {
                     sheet.showConnectionPoints();
                 }
             }
-//            for(CutShape shape : CutDesigner.getCutShapesList()){
-//                if (!shape.equals(event.getSource())){
-//                    if(shape.isContainInUnion() != true){
-//                        shape.showConnectionPoints();
-//                    }
-//                }
-//            }
-//            for(CutShapeEdge cutShapeEdge : CutDesigner.getCutShapeEdgesList()){
-//                if (!cutShapeEdge.equals(event.getSource())){
-//                    if(cutShapeEdge.getOwner().isContainInUnion() != true){
-//                        cutShapeEdge.showConnectionPoints();
-//                    }
-//                }
-//            }
-//            for(CutShapeUnion shapeUnion : CutDesigner.getCutShapeUnionsList()){
-//                if (!shapeUnion.equals(event.getSource())){
-//
-//                    shapeUnion.showConnectionPoints();
-//
-//                }
-//            }
 
             if (this instanceof CutShape) {
                 if (((CutShape) this).isSaveMaterialImage()) {
@@ -366,29 +346,11 @@ public abstract class CutObject extends Pane implements Connectible {
             }
         }
 
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : CutPane.getMaterialSheetsMap().entrySet()) {
+        for (Map.Entry<String, List<MaterialSheet>> entry : CutPane.getMaterialSheetsMap().entrySet()) {
             for (MaterialSheet sheet : entry.getValue()) {
                 sheet.hideConnectionPoints();
             }
         }
-
-//        for(CutShape shape : CutDesigner.getCutShapesList()){
-//            if (!shape.equals(event.getSource()))
-//                shape.hideConnectionPoints();
-//        }
-//        for(CutShapeEdge cutShapeEdge : CutDesigner.getCutShapeEdgesList()){
-//            if (!cutShapeEdge.equals(event.getSource())){
-//                if(cutShapeEdge.getOwner().isContainInUnion() != true){
-//                    cutShapeEdge.hideConnectionPoints();
-//                }
-//            }
-//        }
-//        for(CutShapeUnion shapeUnion : CutDesigner.getCutShapeUnionsList()){
-//            if (!shapeUnion.equals(event.getSource())){
-//                shapeUnion.hideConnectionPoints();
-//            }
-//        }
-
 
         if (this instanceof CutShape) {
             for (CutShapeEdge edge : ((CutShape) this).getCutShapeEdgesList()) {

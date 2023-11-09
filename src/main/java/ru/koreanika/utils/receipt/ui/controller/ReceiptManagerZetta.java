@@ -1,8 +1,8 @@
-package ru.koreanika.utils.receipt.controller;
+package ru.koreanika.utils.receipt.ui.controller;
 
 import javafx.scene.layout.RowConstraints;
-import ru.koreanika.utils.receipt.Receipt;
-import ru.koreanika.utils.receipt.builder.TableReceiptZettaNodeBuilder;
+import ru.koreanika.utils.receipt.policy.CalculateItemStocks;
+import ru.koreanika.utils.receipt.ui.builder.TableReceiptZettaNodeBuilder;
 
 public class ReceiptManagerZetta extends ReceiptManager {
 
@@ -26,7 +26,7 @@ public class ReceiptManagerZetta extends ReceiptManager {
         allAddPriceForUSD = 0.0;
         allAddPriceForEUR = 0.0;
 
-        Receipt.calculateItemsStocks();
+        CalculateItemStocks.calculateItemsStocks();
 
         TableReceiptZettaNodeBuilder receiptNodeBuilder = new TableReceiptZettaNodeBuilder(this);
 
@@ -75,7 +75,7 @@ public class ReceiptManagerZetta extends ReceiptManager {
         allAddPriceForUSD = 0.0;
         allAddPriceForEUR = 0.0;
 
-        Receipt.calculateItemsStocks();
+        CalculateItemStocks.calculateItemsStocks();
 
         TableReceiptZettaNodeBuilder receiptNodeBuilder = new TableReceiptZettaNodeBuilder(this);
 

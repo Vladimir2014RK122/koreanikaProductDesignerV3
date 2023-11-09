@@ -1,7 +1,6 @@
 package ru.koreanika.tableDesigner.Items;
 
 import ru.koreanika.common.material.Material;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -17,6 +16,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -26,9 +26,6 @@ import java.util.Map;
 
 public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMaterial {
 
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
-
-
     Label labelRowNumber, labelName, labelMaterial, labelType, labelModel, labelNull1, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
     Button btnPlus, btnMinus, btnDelete, btnEdit;
@@ -37,7 +34,6 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
     int type = 7;
     String model;
     Image imageMain;
-
 
     public RadiatorGroovesItem(Material material, String model, int quantity) {
 
@@ -117,7 +113,7 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
         RadiatorGroovesItem newRadiatorGroovesItem = new RadiatorGroovesItem(newMaterial, oldRadiatorGroovesItem.model, oldRadiatorGroovesItem.quantity);
 
         oldRadiatorGroovesItem.removeThisItem();
-        tableDesignerItemsList.add(newRadiatorGroovesItem);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(newRadiatorGroovesItem);
 
     }
 
@@ -146,7 +142,7 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
 
     @Override
@@ -156,17 +152,11 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -189,7 +179,6 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
         labelName.setWrapText(true);
         imageViewMain.setImage(imageMain);
 
-
         labelMaterial.setText(material.getReceiptName());
         labelType.setText("#" + type);
         labelModel.setText(model);
@@ -207,25 +196,17 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -240,7 +221,7 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
@@ -388,7 +369,6 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
                             setText(null);
                             setGraphic(null);
                         } else {
-                            //setText("#" + item.getType());
                             setGraphic(item.getImage());
                             setTooltip(item.getTooltip());
                         }
@@ -405,14 +385,12 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
                     setText(null);
                     setGraphic(null);
                 } else {
-                    //setText("#" + item.getType());
                     setGraphic(item.getImageCopy());
                     setTooltip(item.getTooltipCopy());
                 }
             }
         });
-//
-//
+
         comboBoxType.getItems().add(new CutoutType(7));
         comboBoxType.getSelectionModel().select(0);
         comboBoxType.setTooltip(comboBoxType.getSelectionModel().getSelectedItem().getTooltip());
@@ -423,36 +401,11 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
     }
 
     private static void settingsControlElementsLogicInit() {
-
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
-
-
-        choiceBoxMaterial.setOnAction(event -> {
-            updatePriceInSettings();
-        });
-
-
-//        comboBoxType.setOnAction(event -> {
-//            if(comboBoxType.getItems().size() == 0 || comboBoxType.getSelectionModel().getSelectedIndex() == -1) return;
-//
-//            choiceBoxModel.getItems().clear();
-//            choiceBoxModel.getItems().addAll(Cutout.getAvailableModels(comboBoxType.getSelectionModel().getSelectedItem().getType()));
-//            choiceBoxModel.getSelectionModel().select(0);
-//
-//            if(comboBoxType.getSelectionModel().getSelectedItem() != null) {
-//                comboBoxType.setTooltip(comboBoxType.getSelectionModel().getSelectedItem().getTooltip());
-//            }
-//
-//        });
-
-        choiceBoxModel.setOnAction(event -> {
-
-        });
-
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1));
+        choiceBoxMaterial.setOnAction(event -> updatePriceInSettings());
     }
 
     private static void addItem(int index, int quantity){
-
         Material material = null;
         for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
@@ -460,11 +413,8 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
             }
         }
 
-        //int type = comboBoxType.getSelectionModel().getSelectedItem().getType();
         String model = choiceBoxModel.getSelectionModel().getSelectedItem();
-
-        tableDesignerItemsList.add(index, new RadiatorGroovesItem(material, model, quantity));
-
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new RadiatorGroovesItem(material, model, quantity));
     }
 
     public static void settingsControlElementsRefresh() {
@@ -475,12 +425,6 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
         }
         choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
-//        comboBoxType.getItems().clear();
-//        for(int i =1;i<=6;i++){
-//            comboBoxType.getItems().add(new CutoutType(ProjectHandler.getDefaultMaterial(), i));
-//        }
-//        comboBoxType.getSelectionModel().select(0);
-
         choiceBoxModel.getItems().clear();
         choiceBoxModel.getItems().addAll(Cutout.getAvailableModels(7));
         choiceBoxModel.getSelectionModel().select(0);
@@ -489,9 +433,6 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
     }
 
     public static void updatePriceInSettings() {
-
-        //if(comboBoxType.getSelectionModel().getSelectedItem() == null) return;
-
         for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
@@ -517,7 +458,6 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
     private static void enterToEditMode(RadiatorGroovesItem radiatorGroovesItem){
         TableDesigner.openSettings(RadiatorGroovesItem.class);
 
-
         //get row data to settings
         choiceBoxMaterial.getSelectionModel().select(radiatorGroovesItem.material.getReceiptName());
         choiceBoxModel.getSelectionModel().select(radiatorGroovesItem.model);
@@ -537,7 +477,7 @@ public class RadiatorGroovesItem extends TableDesignerItem implements DependOnMa
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(radiatorGroovesItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(radiatorGroovesItem);
             addItem(index, radiatorGroovesItem.quantity);
 
             exitFromEditMode(radiatorGroovesItem);

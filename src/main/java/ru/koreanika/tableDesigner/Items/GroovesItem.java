@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -21,6 +20,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -29,9 +29,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
-
 
     Label labelRowNumber, labelName, labelMaterial, labelType, labelModel, labelNull1, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -58,10 +55,7 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
             ex.printStackTrace();
         }
 
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/GroovesRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/GroovesRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -122,7 +116,7 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
         GroovesItem newGroovesItem = new GroovesItem(newMaterial, oldGroovesItem.type, oldGroovesItem.model, oldGroovesItem.quantity);
 
         oldGroovesItem.removeThisItem();
-        tableDesignerItemsList.add(newGroovesItem);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(newGroovesItem);
 
     }
 
@@ -151,7 +145,7 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
 
     @Override
@@ -161,17 +155,11 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -189,8 +177,6 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -202,41 +188,35 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
         quantity++;
         updateItemView();
     }
+
     private void btnMinusClicked(ActionEvent event){
         if (quantity == 1) return;
         quantity--;
         updateItemView();
     }
+
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
-
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
+
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
         for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
@@ -247,12 +227,10 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     public void updateItemView(){
-
         labelRowNumber.setText("");
         labelName.setText("Проточки");
         labelName.setWrapText(true);
         imageViewMain.setImage(imageMain);
-
 
         labelMaterial.setText(material.getReceiptName());
         labelType.setText("#" + type);
@@ -260,13 +238,10 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
 
         labelQuantity.setText("" + quantity);
 
-
         labelHeaderCard.setText("Проточки для стока воды");
         tooltipNameCard.setText("Проточки для стока воды");
         imageViewBackCard.setImage(imageMain);
         labelQuantityCard.setText("" + quantity);
-
-
 
         labelName1Card.setText("Материал");
         labelValue1Card.setText(material.getReceiptName());
@@ -285,7 +260,6 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
 
     @Override
     public void updateRowPrice() {
-
         String currency = material.getGroovesCurrency();
         String units = "шт.";
         double priceForOne = -1.0;
@@ -306,7 +280,6 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
 
         labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne) + Currency.RUR_SYMBOL);
         labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + Currency.RUR_SYMBOL);
-
     }
 
     @Override
@@ -318,7 +291,6 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
     public AnchorPane getTableView() {
         return anchorPaneTableRow;
     }
-
 
     /**
      * Settings part
@@ -351,7 +323,6 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     private static void settingsControlElementsInit() {
-
         btnApply.getStyleClass().add("btnBrown");
         btnCancel.getStyleClass().add("btnBrown");
 
@@ -366,7 +337,6 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
-
 
         comboBoxType.setCellFactory(new Callback<ListView<GroovesType>, ListCell<GroovesType>>() {
             @Override
@@ -418,7 +388,7 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1));
 
 
         choiceBoxMaterial.setOnAction(event -> {
@@ -468,8 +438,7 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
         int type = comboBoxType.getSelectionModel().getSelectedItem().getType();
         String model = choiceBoxModel.getSelectionModel().getSelectedItem();
 
-        tableDesignerItemsList.add(index, new GroovesItem(material, type, model, quantity));
-
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new GroovesItem(material, type, model, quantity));
     }
 
     public static void settingsControlElementsRefresh() {
@@ -556,7 +525,7 @@ public class GroovesItem extends TableDesignerItem implements DependOnMaterial {
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(groovesItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(groovesItem);
             addItem(index, groovesItem.quantity);
 
             exitFromEditMode(groovesItem);

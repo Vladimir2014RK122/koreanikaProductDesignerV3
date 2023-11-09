@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.builder;
+package ru.koreanika.utils.receipt.ui.builder;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -21,10 +21,10 @@ import ru.koreanika.sketchDesigner.Features.Sink;
 import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.currency.Currency;
-import ru.koreanika.utils.receipt.Receipt;
-import ru.koreanika.utils.receipt.ReceiptImageItem;
-import ru.koreanika.utils.receipt.ReceiptItem;
-import ru.koreanika.utils.receipt.controller.ReceiptManager;
+import ru.koreanika.utils.receipt.domain.Receipt;
+import ru.koreanika.utils.receipt.ui.component.ReceiptImageItem;
+import ru.koreanika.utils.receipt.domain.ReceiptItem;
+import ru.koreanika.utils.receipt.ui.controller.ReceiptManager;
 
 import java.util.Arrays;
 import java.util.Collections;

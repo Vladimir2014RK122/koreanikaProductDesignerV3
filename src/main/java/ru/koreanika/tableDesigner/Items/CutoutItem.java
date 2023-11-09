@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -23,6 +22,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -32,9 +32,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class CutoutItem extends TableDesignerItem implements DependOnMaterial {
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
-
 
     Label labelRowNumber, labelName, labelMaterial, labelType, labelModel, labelNull1, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -125,7 +122,7 @@ public class CutoutItem extends TableDesignerItem implements DependOnMaterial {
         CutoutItem newBorderItem = new CutoutItem(newMaterial, oldCutOutItem.type, oldCutOutItem.model, oldCutOutItem.quantity);
 
         oldCutOutItem.removeThisItem();
-        tableDesignerItemsList.add(newBorderItem);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(newBorderItem);
 
     }
 
@@ -159,7 +156,7 @@ public class CutoutItem extends TableDesignerItem implements DependOnMaterial {
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
 
     @Override
@@ -169,17 +166,11 @@ public class CutoutItem extends TableDesignerItem implements DependOnMaterial {
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -197,8 +188,6 @@ public class CutoutItem extends TableDesignerItem implements DependOnMaterial {
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -210,25 +199,17 @@ public class CutoutItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -243,7 +224,7 @@ public class CutoutItem extends TableDesignerItem implements DependOnMaterial {
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
@@ -479,7 +460,7 @@ public class CutoutItem extends TableDesignerItem implements DependOnMaterial {
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1));
 
 
         choiceBoxMaterial.setOnAction(event -> {
@@ -523,8 +504,8 @@ public class CutoutItem extends TableDesignerItem implements DependOnMaterial {
 
         if (countOk) {
             quantity = Integer.parseInt(textFieldCount.getText());
-            if(index == -1) index = tableDesignerItemsList.size();
-            tableDesignerItemsList.add(index, new CutoutItem(material, type, model, quantity));
+            if(index == -1) index = TableDesignerSession.getTableDesignerAdditionalItemsList().size();
+            TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new CutoutItem(material, type, model, quantity));
         }
 
     }
@@ -615,7 +596,7 @@ public class CutoutItem extends TableDesignerItem implements DependOnMaterial {
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(cutoutItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(cutoutItem);
             addItem(index, cutoutItem.quantity);
 
             exitFromEditMode(cutoutItem);

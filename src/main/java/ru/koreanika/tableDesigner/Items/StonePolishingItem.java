@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -15,6 +14,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -22,9 +22,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class StonePolishingItem extends TableDesignerItem implements DependOnMaterial {
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalWorkItemsList();
-
 
     Label labelRowNumber, labelName, labelMaterial, labelNull1, labelLength, labelWidth, labelQuantity, labelRowPrice;
     ImageView imageView;
@@ -38,19 +35,14 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
     Image imageMain;
 
     public StonePolishingItem(Material material, double length, double width, int quantity) {
-
         this.material = material;
         this.length = length;
         this.width = width;
         this.quantity = quantity;
 
-        //imageMain = new ImageView(ProjectHandler.class.getResource("/styles/images/no_img.png").toString()).getImage();
         imageMain = material.getImageView().getImage();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/StonePolishingRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/StonePolishingRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -64,7 +56,6 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
         cardControlElementLogicInit();
 
         updateItemView();
-
     }
 
     @Override
@@ -112,7 +103,7 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
         StonePolishingItem newStonePolishingItem = new StonePolishingItem(newMaterial, oldStonePolishingItem.length, oldStonePolishingItem.width, oldStonePolishingItem.quantity);
 
         oldStonePolishingItem.removeThisItem();
-        tableDesignerItemsList.add(newStonePolishingItem);
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().add(newStonePolishingItem);
 
     }
 
@@ -133,7 +124,7 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().remove(this);
     }
 
     @Override
@@ -143,16 +134,10 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
         }
     }
 
-
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     @Override
     public void setRowNumber(int number) {
         labelRowNumber.setText("" + number);
     }
-
 
     @Override
     public AnchorPane getTableView() {
@@ -163,9 +148,7 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -183,8 +166,6 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -193,47 +174,21 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
         HBox.setHgrow(labelWidth, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> {
-            btnPlusClicked(event);
-        });
-
-        btnMinus.setOnAction(event -> {
-            btnMinusClicked(event);
-        });
-
-        btnDelete.setOnAction(event -> {
-            btnDeleteClicked(event);
-        });
-
-        btnEdit.setOnAction(event -> {
-            btnEditClicked(event);
-        });
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> {
-            btnPlusClicked(event);
-        });
-
-        btnMinusCard.setOnAction(event -> {
-            btnMinusClicked(event);
-        });
-
-        btnDeleteCard.setOnAction(event -> {
-            btnDeleteClicked(event);
-        });
-
-        btnEditCard.setOnAction(event -> {
-            btnEditClicked(event);
-        });
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
-
 
     private void btnPlusClicked(ActionEvent event){
         quantity++;
@@ -246,7 +201,7 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
     }
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().remove(this);
     }
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
@@ -373,7 +328,7 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalWorkItemsList().size(), 1));
 
         choiceBoxMaterial.setOnAction(event -> {
 
@@ -448,9 +403,8 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
             return;
         }
 
-
         if (length == 0 || width == 0) return;
-        tableDesignerItemsList.add(index, new StonePolishingItem(material, length, width, quantity));
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().add(index, new StonePolishingItem(material, length, width, quantity));
     }
     public static void settingsControlElementsRefresh() {
 
@@ -469,14 +423,12 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
     }
 
     public static void updatePriceInSettings() {
-
         for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = material.getStonePolishingCurrency();
                 String units = "м^2";
                 double priceForOne = -1.0;
-
 
                 priceForOne = material.getStonePolishingPrice();
 
@@ -513,7 +465,7 @@ public class StonePolishingItem extends TableDesignerItem implements DependOnMat
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(stonePolishingItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalWorkItemsList().indexOf(stonePolishingItem);
             addItem(index, stonePolishingItem.quantity);
 
             exitFromEditMode(stonePolishingItem);

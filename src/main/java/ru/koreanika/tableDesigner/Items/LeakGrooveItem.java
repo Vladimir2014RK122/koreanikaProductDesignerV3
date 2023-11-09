@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -17,6 +16,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -25,9 +25,6 @@ import java.util.Map;
 
 public class LeakGrooveItem extends TableDesignerItem implements DependOnMaterial {
 
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
-
-
     Label labelRowNumber, labelName, labelMaterial, labelNull1, labelLength, labelNull2, labelQuantity, labelRowPrice;
     ImageView imageView;
     Button btnPlus, btnMinus, btnDelete, btnEdit;
@@ -35,18 +32,12 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     Material material;
     double length = 0;
 
-
     public LeakGrooveItem(Material material, double length, int quantity) {
-
         this.material = material;
         this.length = length;
         this.quantity = quantity;
 
-
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/LeakGrooveRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/LeakGrooveRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -60,7 +51,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         cardControlElementLogicInit();
 
         updateItemView();
-
     }
 
     public Material getMaterial() {
@@ -73,7 +63,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     }
 
     private static void updateMaterial(LeakGrooveItem item) {
-
         LeakGrooveItem oldLeakGrooveItem = item;
 
         Material newMaterial = null;
@@ -104,12 +93,10 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
 
         }
 
-
         LeakGrooveItem newLeakGrooveItem = new LeakGrooveItem(newMaterial, oldLeakGrooveItem.length, oldLeakGrooveItem.quantity);
 
         oldLeakGrooveItem.removeThisItem();
-        tableDesignerItemsList.add(newLeakGrooveItem);
-
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(newLeakGrooveItem);
     }
 
     public double getLength() {
@@ -125,7 +112,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
 
     @Override
@@ -134,11 +121,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
             LeakGrooveItem.exitFromEditMode(this);
         }
     }
-
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
 
     /**
      * Table ROW part
@@ -155,7 +137,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     }
 
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -173,8 +154,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -183,29 +162,20 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         HBox.setHgrow(labelNull2, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -220,7 +190,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
@@ -352,7 +322,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerMainWorkItemsList().size(), 1));
 
         choiceBoxMaterial.setOnAction(event -> {
 
@@ -404,7 +374,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         }
 
         if (length == 0) return;
-        tableDesignerItemsList.add(index, new LeakGrooveItem(material, length, quantity));
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(index, new LeakGrooveItem(material, length, quantity));
     }
 
     public static void settingsControlElementsRefresh() {
@@ -478,7 +448,7 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(leakGrooveItem);
+            int index = TableDesignerSession.getTableDesignerMainWorkItemsList().indexOf(leakGrooveItem);
             addItem(index, leakGrooveItem.quantity);
 
             exitFromEditMode(leakGrooveItem);

@@ -1,5 +1,6 @@
-package ru.koreanika.utils.receipt;
+package ru.koreanika.utils.receipt.domain;
 
+import lombok.Getter;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 
@@ -10,12 +11,20 @@ import java.util.Locale;
 public class ReceiptItem {
 
     double additionalPrice = 0;//work part for stone
+
+    @Getter
     private String name;
+
+    @Getter
     private String units;
+
+    @Getter
     private String currency;//EUR,RUB,USD
     private double count;
     private double pseudoCount = -1.0;
     private double priceForOne;
+
+    @Getter
     private String priceColor = "black";
     private double allPrice;
 
@@ -83,18 +92,6 @@ public class ReceiptItem {
         this.additionalPrice = additionalPrice;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getUnits() {
-        return units;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
     public void setCurrency(String currency) {
         this.currency = currency;
     }
@@ -117,29 +114,6 @@ public class ReceiptItem {
 
         DecimalFormat formatter = new DecimalFormat("###,###", symbols);
         String result = formatter.format(priceForOne * coefficient);
-        return result;
-    }
-
-    public String getPriceForOneInRUR() {
-        double RUBtoUSD = MainWindow.getUSDValue().doubleValue();
-        double RUBtoEUR = MainWindow.getEURValue().doubleValue();
-
-        double priceForOneInRUR = 0;
-
-        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
-        symbols.setGroupingSeparator(' ');
-
-        DecimalFormat formatter = new DecimalFormat("###,###", symbols);
-
-        if (this.currency.equals("USD")) {
-            priceForOneInRUR = this.priceForOne * RUBtoUSD;
-        } else if (this.currency.equals("EUR")) {
-            priceForOneInRUR = this.priceForOne * RUBtoEUR;
-        } else {
-            priceForOneInRUR = this.priceForOne;
-        }
-
-        String result = formatter.format(priceForOneInRUR * coefficient);
         return result;
     }
 
@@ -197,10 +171,6 @@ public class ReceiptItem {
             allPriceInRUR = this.allPrice;
         }
         return allPriceInRUR;
-    }
-
-    public String getPriceColor() {
-        return priceColor;
     }
 
 }

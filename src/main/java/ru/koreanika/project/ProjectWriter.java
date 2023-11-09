@@ -12,7 +12,7 @@ import ru.koreanika.sketchDesigner.SketchDesigner;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.Main;
 import ru.koreanika.utils.MainWindow;
-import ru.koreanika.utils.receipt.controller.ReceiptManager;
+import ru.koreanika.utils.receipt.ui.controller.ReceiptManager;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

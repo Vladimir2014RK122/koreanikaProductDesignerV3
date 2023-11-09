@@ -63,7 +63,7 @@ public class CutPane extends Pane implements RepresentToJson {
     private double originalCutPaneWidth = 0;
     private double originalCutPaneHeight = 0;
 
-    private static Map<String, ArrayList<MaterialSheet>> materialSheetsMap = new LinkedHashMap<>();
+    private static Map<String, List<MaterialSheet>> materialSheetsMap = new LinkedHashMap<>();
 
     LoadingProgressDialog cuttingProgressDialog;
     private static Thread autoCutThread;
@@ -93,9 +93,9 @@ public class CutPane extends Pane implements RepresentToJson {
     BooleanProperty finishedCuttingThread = new SimpleBooleanProperty(false);
 
     /*CALCULATE STATISTICS START --->>>*/
-    public static void refreshStatistics(ArrayList<StatisticCellItem> materialSheetStatisticsListObservable) {
+    public static void refreshStatistics(List<StatisticCellItem> materialSheetStatisticsListObservable) {
         materialSheetStatisticsListObservable.clear();
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             double percentSumm = 0;
             int sheetsCount = entry.getValue().size();
             for (MaterialSheet materialSheet : entry.getValue()) {
@@ -143,8 +143,8 @@ public class CutPane extends Pane implements RepresentToJson {
         for (int i = 0; i < polygon.getPoints().size() - 1; i++) {
             if (i % 2 != 0) {
                 //Y
-                double x = polygon.getPoints().get(i + 1).doubleValue();
-                double y = polygon.getPoints().get(i).doubleValue();
+                double x = polygon.getPoints().get(i + 1);
+                double y = polygon.getPoints().get(i);
                 secondPart -= x * y;
             }
         }
@@ -160,193 +160,190 @@ public class CutPane extends Pane implements RepresentToJson {
     }
 
     public static void hideHalfOfMaterialIfNotUsed() {
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
-            //if(entry.getKey().indexOf("Кварцевый") != -1){
-            if (true) {
-                for (MaterialSheet materialSheet : entry.getValue()) {
-                    System.out.println("1112 materialSheet.getPartsOfSheet() = " + materialSheet.getPartsOfSheet());
-                    System.out.println("materialSheet.getCuttingDirection() = " + materialSheet.getCuttingDirection());
-                    if (materialSheet.getCuttingDirection().equals("h")) {
+        for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+            for (MaterialSheet materialSheet : entry.getValue()) {
+                System.out.println("1112 materialSheet.getPartsOfSheet() = " + materialSheet.getPartsOfSheet());
+                System.out.println("materialSheet.getCuttingDirection() = " + materialSheet.getCuttingDirection());
+                if (materialSheet.getCuttingDirection().equals("h")) {
 
-                        System.out.println("materialSheet.getPartsOfSheet() = " + materialSheet.getPartsOfSheet());
+                    System.out.println("materialSheet.getPartsOfSheet() = " + materialSheet.getPartsOfSheet());
 
-                        if(materialSheet.getPartsOfSheet() == 1){
+                    if (materialSheet.getPartsOfSheet() == 1) {
 
-                            System.out.println("for 1 = " + materialSheet.getPartsOfSheet());
+                        System.out.println("for 1 = " + materialSheet.getPartsOfSheet());
 
-                            boolean halfFirstHide = true;
+                        boolean halfFirstHide = true;
 
-                            for (CutShape cutShape : cutDesigner.getCutShapesList()) {
-                                if (checkOverMaterialOrNot(cutShape, materialSheet) && cutShape.getMaterial().equals(materialSheet.getMaterial())) {
-                                    halfFirstHide = false;
-                                }
-                            }
-
-                            for (CutShapeEdge cutShapeEdge : cutDesigner.getCutShapeEdgesList()) {
-                                if (checkOverMaterialOrNot(cutShapeEdge, materialSheet) && cutShapeEdge.getOwner().getMaterial().equals(materialSheet.getMaterial())) {
-                                    halfFirstHide = false;
-                                }
-                            }
-
-                            for (CutShapeAdditionalFeature cutShapeAdditionalFeature : cutDesigner.getCutShapeAdditionalFeaturesList()) {
-                                if (checkOverMaterialOrNot(cutShapeAdditionalFeature, materialSheet) && cutShapeAdditionalFeature.getMaterial().equals(materialSheet.getMaterial())) {
-                                    halfFirstHide = false;
-                                }
-                            }
-
-                            materialSheet.hideHorizontalHalf(1, halfFirstHide);
-                            System.out.println("HIDE 1 PART");
-
-                        }else if(materialSheet.getPartsOfSheet() == 2){
-
-                            //System.out.println("for 2 = " + materialSheet.getPartsOfSheet());
-
-                            boolean halfFirstHide = true;
-                            boolean halfSecondHide = true;
-                            for (CutShape cutShape : cutDesigner.getCutShapesList()) {
-
-                                Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
-                                Bounds cutShapeBounds = cutShape.getPolygon().localToScene(cutShape.getPolygon().getBoundsInLocal());
-
-                                if (checkOverMaterialOrNot(cutShape, materialSheet) && cutShape.getMaterial().equals(materialSheet.getMaterial())) {
-                                    halfFirstHide = false;
-                                    if (cutShapeBounds.getMaxY() > sheetBounds.getMinY() + sheetBounds.getHeight() / 2) {
-                                        halfSecondHide = false;
-                                    }
-
-                                }
-                            }
-
-                            for (CutShapeEdge cutShapeEdge : cutDesigner.getCutShapeEdgesList()) {
-
-                                Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
-                                Bounds cutShapeEdgeBounds = cutShapeEdge.getPolygon().localToScene(cutShapeEdge.getPolygon().getBoundsInLocal());
-
-                                if (checkOverMaterialOrNot(cutShapeEdge, materialSheet) && cutShapeEdge.getOwner().getMaterial().equals(materialSheet.getMaterial())) {
-                                    halfFirstHide = false;
-                                    if (cutShapeEdgeBounds.getMaxY() > sheetBounds.getMinY() + sheetBounds.getHeight() / 2) {
-                                        halfSecondHide = false;
-                                    }
-
-                                }
-                            }
-
-                            for (CutShapeAdditionalFeature cutShapeAdditionalFeature : cutDesigner.getCutShapeAdditionalFeaturesList()) {
-
-                                Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
-                                Bounds cutShapeAddFeatureBounds = cutShapeAdditionalFeature.getPolygon().localToScene(cutShapeAdditionalFeature.getPolygon().getBoundsInLocal());
-
-                                if (checkOverMaterialOrNot(cutShapeAdditionalFeature, materialSheet) && cutShapeAdditionalFeature.getMaterial().equals(materialSheet.getMaterial())) {
-                                    halfFirstHide = false;
-                                    if (cutShapeAddFeatureBounds.getMaxY() > sheetBounds.getMinY() + sheetBounds.getHeight() / 2) {
-                                        halfSecondHide = false;
-                                    }
-
-                                }
-                            }
-
-
-                            materialSheet.hideHorizontalHalf(1, halfFirstHide);
-                            materialSheet.hideHorizontalHalf(2, halfSecondHide);
-                        }
-
-
-                    } else if (materialSheet.getCuttingDirection().equals("v")) {
-
-
-                        boolean half1Hide = true;
-                        boolean half2Hide = true;
-                        boolean half3Hide = true;
-                        boolean half4Hide = true;
                         for (CutShape cutShape : cutDesigner.getCutShapesList()) {
                             if (checkOverMaterialOrNot(cutShape, materialSheet) && cutShape.getMaterial().equals(materialSheet.getMaterial())) {
+                                halfFirstHide = false;
+                            }
+                        }
 
-                                double materialScale = materialSheet.getMaterialScale();
-                                double minWidth = materialSheet.getSheetMinWidth() * cutPaneScale;
+                        for (CutShapeEdge cutShapeEdge : cutDesigner.getCutShapeEdgesList()) {
+                            if (checkOverMaterialOrNot(cutShapeEdge, materialSheet) && cutShapeEdge.getOwner().getMaterial().equals(materialSheet.getMaterial())) {
+                                halfFirstHide = false;
+                            }
+                        }
 
+                        for (CutShapeAdditionalFeature cutShapeAdditionalFeature : cutDesigner.getCutShapeAdditionalFeaturesList()) {
+                            if (checkOverMaterialOrNot(cutShapeAdditionalFeature, materialSheet) && cutShapeAdditionalFeature.getMaterial().equals(materialSheet.getMaterial())) {
+                                halfFirstHide = false;
+                            }
+                        }
 
-                                Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
-                                Bounds cutShapeBounds = cutShape.getPolygon().localToScene(cutShape.getPolygon().getBoundsInLocal());
+                        materialSheet.hideHorizontalHalf(1, halfFirstHide);
+                        System.out.println("HIDE 1 PART");
 
-                                if (cutShapeBounds.getMaxX() > sheetBounds.getMinX()) {
-                                    half1Hide = false;
-                                }
-                                if (cutShapeBounds.getMaxX() > sheetBounds.getMinX() + (minWidth * materialScale)) {
-                                    half2Hide = false;
-                                }
-                                if (materialSheet.getPartsOfSheet() == 4) {
-                                    if (cutShapeBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 2.0)) {
-                                        half3Hide = false;
-                                    }
-                                    if (cutShapeBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 3.0)) {
-                                        half4Hide = false;
-                                    }
+                    } else if (materialSheet.getPartsOfSheet() == 2) {
+
+                        //System.out.println("for 2 = " + materialSheet.getPartsOfSheet());
+
+                        boolean halfFirstHide = true;
+                        boolean halfSecondHide = true;
+                        for (CutShape cutShape : cutDesigner.getCutShapesList()) {
+
+                            Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
+                            Bounds cutShapeBounds = cutShape.getPolygon().localToScene(cutShape.getPolygon().getBoundsInLocal());
+
+                            if (checkOverMaterialOrNot(cutShape, materialSheet) && cutShape.getMaterial().equals(materialSheet.getMaterial())) {
+                                halfFirstHide = false;
+                                if (cutShapeBounds.getMaxY() > sheetBounds.getMinY() + sheetBounds.getHeight() / 2) {
+                                    halfSecondHide = false;
                                 }
 
                             }
                         }
 
                         for (CutShapeEdge cutShapeEdge : cutDesigner.getCutShapeEdgesList()) {
+
+                            Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
+                            Bounds cutShapeEdgeBounds = cutShapeEdge.getPolygon().localToScene(cutShapeEdge.getPolygon().getBoundsInLocal());
+
                             if (checkOverMaterialOrNot(cutShapeEdge, materialSheet) && cutShapeEdge.getOwner().getMaterial().equals(materialSheet.getMaterial())) {
-
-                                double materialScale = materialSheet.getMaterialScale();
-                                double minWidth = materialSheet.getSheetMinWidth() * cutPaneScale;
-
-                                Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
-                                Bounds cutShapeEdgeBounds = cutShapeEdge.getPolygon().localToScene(cutShapeEdge.getPolygon().getBoundsInLocal());
-
-                                if (cutShapeEdgeBounds.getMaxX() > sheetBounds.getMinX()) {
-                                    half1Hide = false;
-                                }
-                                if (cutShapeEdgeBounds.getMaxX() > sheetBounds.getMinX() + (minWidth * materialScale)) {
-                                    half2Hide = false;
+                                halfFirstHide = false;
+                                if (cutShapeEdgeBounds.getMaxY() > sheetBounds.getMinY() + sheetBounds.getHeight() / 2) {
+                                    halfSecondHide = false;
                                 }
 
-                                if (materialSheet.getPartsOfSheet() == 4) {
-                                    if (cutShapeEdgeBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 2)) {
-                                        half3Hide = false;
-                                    }
-                                    if (cutShapeEdgeBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 3)) {
-                                        half4Hide = false;
-                                    }
-                                }
                             }
                         }
 
                         for (CutShapeAdditionalFeature cutShapeAdditionalFeature : cutDesigner.getCutShapeAdditionalFeaturesList()) {
+
+                            Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
+                            Bounds cutShapeAddFeatureBounds = cutShapeAdditionalFeature.getPolygon().localToScene(cutShapeAdditionalFeature.getPolygon().getBoundsInLocal());
+
                             if (checkOverMaterialOrNot(cutShapeAdditionalFeature, materialSheet) && cutShapeAdditionalFeature.getMaterial().equals(materialSheet.getMaterial())) {
-
-                                double materialScale = materialSheet.getMaterialScale();
-                                double minWidth = materialSheet.getSheetMinWidth() * cutPaneScale;
-
-                                Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
-                                Bounds cutShapeAddFeatureBounds = cutShapeAdditionalFeature.getPolygon().localToScene(cutShapeAdditionalFeature.getPolygon().getBoundsInLocal());
-
-                                if (cutShapeAddFeatureBounds.getMaxX() > sheetBounds.getMinX()) {
-                                    half1Hide = false;
-                                }
-                                if (cutShapeAddFeatureBounds.getMaxX() > sheetBounds.getMinX() + (minWidth * materialScale)) {
-                                    half2Hide = false;
-                                }
-                                if (materialSheet.getPartsOfSheet() == 4) {
-                                    if (cutShapeAddFeatureBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 2)) {
-                                        half3Hide = false;
-                                    }
-                                    if (cutShapeAddFeatureBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 3)) {
-                                        half4Hide = false;
-                                    }
+                                halfFirstHide = false;
+                                if (cutShapeAddFeatureBounds.getMaxY() > sheetBounds.getMinY() + sheetBounds.getHeight() / 2) {
+                                    halfSecondHide = false;
                                 }
 
                             }
                         }
 
-                        materialSheet.hideVerticalHalf(1, half1Hide);
-                        materialSheet.hideVerticalHalf(2, half2Hide);
-                        materialSheet.hideVerticalHalf(3, half3Hide);
-                        materialSheet.hideVerticalHalf(4, half4Hide);
+
+                        materialSheet.hideHorizontalHalf(1, halfFirstHide);
+                        materialSheet.hideHorizontalHalf(2, halfSecondHide);
                     }
 
+
+                } else if (materialSheet.getCuttingDirection().equals("v")) {
+
+
+                    boolean half1Hide = true;
+                    boolean half2Hide = true;
+                    boolean half3Hide = true;
+                    boolean half4Hide = true;
+                    for (CutShape cutShape : cutDesigner.getCutShapesList()) {
+                        if (checkOverMaterialOrNot(cutShape, materialSheet) && cutShape.getMaterial().equals(materialSheet.getMaterial())) {
+
+                            double materialScale = materialSheet.getMaterialScale();
+                            double minWidth = materialSheet.getSheetMinWidth() * cutPaneScale;
+
+
+                            Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
+                            Bounds cutShapeBounds = cutShape.getPolygon().localToScene(cutShape.getPolygon().getBoundsInLocal());
+
+                            if (cutShapeBounds.getMaxX() > sheetBounds.getMinX()) {
+                                half1Hide = false;
+                            }
+                            if (cutShapeBounds.getMaxX() > sheetBounds.getMinX() + (minWidth * materialScale)) {
+                                half2Hide = false;
+                            }
+                            if (materialSheet.getPartsOfSheet() == 4) {
+                                if (cutShapeBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 2.0)) {
+                                    half3Hide = false;
+                                }
+                                if (cutShapeBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 3.0)) {
+                                    half4Hide = false;
+                                }
+                            }
+
+                        }
+                    }
+
+                    for (CutShapeEdge cutShapeEdge : cutDesigner.getCutShapeEdgesList()) {
+                        if (checkOverMaterialOrNot(cutShapeEdge, materialSheet) && cutShapeEdge.getOwner().getMaterial().equals(materialSheet.getMaterial())) {
+
+                            double materialScale = materialSheet.getMaterialScale();
+                            double minWidth = materialSheet.getSheetMinWidth() * cutPaneScale;
+
+                            Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
+                            Bounds cutShapeEdgeBounds = cutShapeEdge.getPolygon().localToScene(cutShapeEdge.getPolygon().getBoundsInLocal());
+
+                            if (cutShapeEdgeBounds.getMaxX() > sheetBounds.getMinX()) {
+                                half1Hide = false;
+                            }
+                            if (cutShapeEdgeBounds.getMaxX() > sheetBounds.getMinX() + (minWidth * materialScale)) {
+                                half2Hide = false;
+                            }
+
+                            if (materialSheet.getPartsOfSheet() == 4) {
+                                if (cutShapeEdgeBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 2)) {
+                                    half3Hide = false;
+                                }
+                                if (cutShapeEdgeBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 3)) {
+                                    half4Hide = false;
+                                }
+                            }
+                        }
+                    }
+
+                    for (CutShapeAdditionalFeature cutShapeAdditionalFeature : cutDesigner.getCutShapeAdditionalFeaturesList()) {
+                        if (checkOverMaterialOrNot(cutShapeAdditionalFeature, materialSheet) && cutShapeAdditionalFeature.getMaterial().equals(materialSheet.getMaterial())) {
+
+                            double materialScale = materialSheet.getMaterialScale();
+                            double minWidth = materialSheet.getSheetMinWidth() * cutPaneScale;
+
+                            Bounds sheetBounds = materialSheet.getPolygon().localToScene(materialSheet.getPolygon().getBoundsInLocal());
+                            Bounds cutShapeAddFeatureBounds = cutShapeAdditionalFeature.getPolygon().localToScene(cutShapeAdditionalFeature.getPolygon().getBoundsInLocal());
+
+                            if (cutShapeAddFeatureBounds.getMaxX() > sheetBounds.getMinX()) {
+                                half1Hide = false;
+                            }
+                            if (cutShapeAddFeatureBounds.getMaxX() > sheetBounds.getMinX() + (minWidth * materialScale)) {
+                                half2Hide = false;
+                            }
+                            if (materialSheet.getPartsOfSheet() == 4) {
+                                if (cutShapeAddFeatureBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 2)) {
+                                    half3Hide = false;
+                                }
+                                if (cutShapeAddFeatureBounds.getMaxX() > sheetBounds.getMinX() + ((minWidth * materialScale) * 3)) {
+                                    half4Hide = false;
+                                }
+                            }
+
+                        }
+                    }
+
+                    materialSheet.hideVerticalHalf(1, half1Hide);
+                    materialSheet.hideVerticalHalf(2, half2Hide);
+                    materialSheet.hideVerticalHalf(3, half3Hide);
+                    materialSheet.hideVerticalHalf(4, half4Hide);
                 }
+
             }
         }
     }
@@ -637,7 +634,7 @@ public class CutPane extends Pane implements RepresentToJson {
             this.cutPaneScale = cutPaneScale;
 
 
-            for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+            for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
 
                 for (MaterialSheet sheet : entry.getValue()) {
                     for (ConnectPoint connectPoint : sheet.getConnectPointArrayList()) {
@@ -753,28 +750,23 @@ public class CutPane extends Pane implements RepresentToJson {
         return null;
     }
 
-
-
-
-    public ArrayList<MaterialSheet> getUsedMaterialSheetsList() {
-
-        ArrayList<MaterialSheet> list = new ArrayList<>();
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+    public List<MaterialSheet> getUsedMaterialSheetsList() {
+        List<MaterialSheet> list = new ArrayList<>();
+        for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             list.addAll(entry.getValue());
         }
-
         return list;
     }
 
     /**
      * Should bu invoked after auto cutting, returned only correct placed cutShapes !!!
      */
-    public Map<MaterialSheet, ArrayList<CutShape>> getSheetsAndShapesOnItMap() {
+    public Map<MaterialSheet, List<CutShape>> getSheetsAndShapesOnItMap() {
 
-        Map<MaterialSheet, ArrayList<CutShape>> resultMap = new LinkedHashMap<>();
+        Map<MaterialSheet, List<CutShape>> resultMap = new LinkedHashMap<>();
 
 
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
 
             for (MaterialSheet sheet : entry.getValue()) {
 
@@ -786,7 +778,7 @@ public class CutPane extends Pane implements RepresentToJson {
 
                     if (cutShape.isCorrectPlaced() && checkOverMaterialOrNot(cutShape, sheet)) {
 
-                        ArrayList<CutShape> shapesList = resultMap.get(sheet);
+                        List<CutShape> shapesList = resultMap.get(sheet);
                         if (shapesList == null) {
                             shapesList = new ArrayList<>();
                         }
@@ -820,7 +812,7 @@ public class CutPane extends Pane implements RepresentToJson {
         refreshCutPaneView();
     }
 
-    public static Map<String, ArrayList<MaterialSheet>> getMaterialSheetsMap() {
+    public static Map<String, List<MaterialSheet>> getMaterialSheetsMap() {
         return materialSheetsMap;
     }
 
@@ -851,7 +843,7 @@ public class CutPane extends Pane implements RepresentToJson {
         ArrayList<MaterialSheet> sheetsForDelete = new ArrayList<>();
         ArrayList<MaterialSheet> sheetsForAdd = new ArrayList<>();
 
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             Material material = null;
             int depth = Integer.parseInt(entry.getKey().split("#")[1]);
 
@@ -911,13 +903,13 @@ public class CutPane extends Pane implements RepresentToJson {
         }
 
         for(MaterialSheet materialSheet : sheetsForDelete){
-            for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()){
+            for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()){
                 entry.getValue().remove(materialSheet);
             }
         }
 
         //Collections.reverse(sheetsForAdd);//need for correct sequence of adding sheets with different sizes
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()){
+        for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()){
 
             int index = 0;
             for(MaterialSheet materialSheet : sheetsForAdd){
@@ -932,7 +924,7 @@ public class CutPane extends Pane implements RepresentToJson {
 
 
         double lastY = 0;
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             Material material = null;
 
             for (Material m : Project.getMaterials()) {
@@ -1212,7 +1204,7 @@ public class CutPane extends Pane implements RepresentToJson {
 
         /** DELETE ALL SHEETS START */
         System.out.println("************************ materialSheetsMap = " + materialSheetsMap.toString());
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
 
             for (MaterialSheet sheet : entry.getValue()) {
                 System.out.println("************************ sheetDeleting = " + sheet.isActualPrice());
@@ -1229,11 +1221,7 @@ public class CutPane extends Pane implements RepresentToJson {
 
 
         //remove all objects which placed incorrect:
-        for (CutObject cutObject : cutDesigner.getCutShapesList()) {
-            //if (!cutObject.isCorrectPlaced()) {
-                deleteList.add(cutObject);
-            //}
-        }
+        deleteList.addAll(cutDesigner.getCutShapesList());
         for (CutObject cutObject : cutDesigner.getCutShapeAdditionalFeaturesList()) {
             if (!cutObject.isCorrectPlaced()) {
                 deleteList.add(cutObject);
@@ -1338,9 +1326,8 @@ public class CutPane extends Pane implements RepresentToJson {
 
         //get all sheets square
         double sheetsSquare = 0.0;
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
+        for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             for (MaterialSheet sheet : entry.getValue()) {
-
                 sheetsSquare += sheet.getSheetSquare()* (sheet.getUsesSlabs());
             }
         }
@@ -4199,8 +4186,7 @@ public class CutPane extends Pane implements RepresentToJson {
         JSONObject jsonObject = new JSONObject();
         //all material Sheets
         JSONArray materialSheetsArray = new JSONArray();
-        for (Map.Entry<String, ArrayList<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
-
+        for (Map.Entry<String, List<MaterialSheet>> entry : materialSheetsMap.entrySet()) {
             JSONObject materialObject = new JSONObject();
             materialObject.put("name", entry.getKey());
             //materialObject.put("size", entry.getValue().size());

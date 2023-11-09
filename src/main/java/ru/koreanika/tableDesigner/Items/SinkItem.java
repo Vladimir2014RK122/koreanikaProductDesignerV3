@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -29,6 +28,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -40,17 +40,12 @@ import java.util.Map;
 public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMaterial {
 
     /**
-     * static variables
-     */
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
-
-    /**
      * instance variables
      */
     private ArrayList<ArrayList<SketchShape>> sketchShapeArrayList = new ArrayList<>();
 
-    private ArrayList<ArrayList<Double>> cutShapesAngles = new ArrayList<>();
-    private ArrayList<ArrayList<Point2D>> cutShapesCoordinates = new ArrayList<>();
+    private ArrayList<ArrayList<Double>> cutShapesAngles;
+    private ArrayList<ArrayList<Point2D>> cutShapesCoordinates;
 
     private static ArrayList<SinkType> sinkTypes = new ArrayList<>();
 
@@ -248,7 +243,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
                     oldSinkItem.edgeType, oldSinkItem.workCoefficient, oldSinkItem.workCoefficientIndex, oldSinkItem.name);
 
             oldSinkItem.removeThisItem();
-            tableDesignerItemsList.add(newSinkItem);
+            TableDesignerSession.getTableDesignerAdditionalItemsList().add(newSinkItem);
         } else {
             oldSinkItem.removeThisItem();
         }
@@ -315,16 +310,12 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
 
         for (ArrayList<SketchShape> shapesItemList : sketchShapeArrayList) {
-
             for (SketchShape shape : shapesItemList) {
                 CutDesigner.getInstance().getCutPane().deleteCutShape(shape.getShapeNumber());
                 SketchDesigner.getSketchShapesList().remove(shape);
-//                CutShape cutShape = shape.getCutShape();
-//                CutDesigner.getCutShapesList().remove(cutShape);
-//                CutDesigner.getCutPane().cutObjectsGroup.getChildren().remove(cutShape);
             }
         }
         sketchShapeArrayList.clear();
@@ -339,17 +330,11 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -369,8 +354,6 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -379,29 +362,20 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         HBox.setHgrow(labelNull1, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -471,7 +445,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
 
         for (ArrayList<SketchShape> shapesItemList : sketchShapeArrayList) {
 
@@ -550,14 +524,8 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         if (type == Sink.SINK_TYPE_16 || type == Sink.SINK_TYPE_17 || type == Sink.SINK_TYPE_19 || type == Sink.SINK_TYPE_20 || type == Sink.SINK_TYPE_21) {
             priceForOne = material.getSinkCommonTypesAndPrices().get(type);
             currency = material.getSinkCommonCurrency().get(type);
-            //priceForOne += material.getSinkInstallTypesAndPrices()
         } else {
             String modelShort = model.split(" ")[0];
-
-//            System.out.println("material name = " + material.getName());
-//            System.out.println("material.getAvailableSinkModels() = " + material.getAvailableSinkModels());
-//            System.out.println("modelShort = " + modelShort);
-//            System.out.println("material.getAvailableSinkModels().get(modelShort) = " + material.getAvailableSinkModels().get(modelShort));
 
             if(material.getAvailableSinkModels().get(modelShort) == null){
                 priceForOne = -1; //sink unavailable now
@@ -575,17 +543,12 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
 
         priceForOne /= 100.0;
 
-//        System.out.println("MainWindow.getUSDValue().doubleValue() = " + MainWindow.getUSDValue().doubleValue());
-//        System.out.println("MainWindow.getEURValue().doubleValue() = " + MainWindow.getEURValue().doubleValue());
-
         double multiplier = 1;
         if (currency.equals("USD")) multiplier = MainWindow.getUSDValue().get();
         else if (currency.equals("EUR")) multiplier = MainWindow.getEURValue().get();
         else if (currency.equals("RUB")) multiplier = 1;
 
         priceForOne *= multiplier;
-
-//        System.out.println("priceForOne = " + priceForOne);
 
         //edgeType
         {
@@ -604,20 +567,13 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         //installType:
         {
             double priceForOneInstall = 0;
-
-            if (type == Sink.SINK_TYPE_16){
-                priceForOneInstall = material.getCutoutTypesAndPrices().get(Integer.valueOf(5)) / 100;
-            }else if(type == Sink.SINK_TYPE_19){
-                priceForOneInstall = material.getCutoutTypesAndPrices().get(Integer.valueOf(15)) / 100;
-            }else if(type == Sink.SINK_TYPE_21){
-                priceForOneInstall = material.getCutoutTypesAndPrices().get(Integer.valueOf(16)) / 100;
-            }else if (type == Sink.SINK_TYPE_17){
-                //priceForOneInstall = material.getCutoutTypesAndPrices().get(new Integer(5)) / 100;
-                priceForOneInstall += (material.getSinkInstallTypesAndPrices().get(1)) / 100;
-            }else{
-                priceForOneInstall = (material.getSinkInstallTypesAndPrices().get(installType-1)) / 100;
+            switch (type) {
+                case Sink.SINK_TYPE_16 -> priceForOneInstall = material.getCutoutTypesAndPrices().get(Integer.valueOf(5)) / 100;
+                case Sink.SINK_TYPE_19 -> priceForOneInstall = material.getCutoutTypesAndPrices().get(Integer.valueOf(15)) / 100;
+                case Sink.SINK_TYPE_21 -> priceForOneInstall = material.getCutoutTypesAndPrices().get(Integer.valueOf(16)) / 100;
+                case Sink.SINK_TYPE_17 -> priceForOneInstall += (material.getSinkInstallTypesAndPrices().get(1)) / 100;
+                default -> priceForOneInstall = (material.getSinkInstallTypesAndPrices().get(installType - 1)) / 100;
             }
-
             priceForOne += priceForOneInstall;
         }
 
@@ -629,8 +585,6 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         labelPriceForAllCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + Currency.RUR_SYMBOL);
 
         rowPrice = priceForOne * quantity;
-
-//        System.out.println("rowPrice = " + rowPrice);
     }
 
     public double getRowPrice() {
@@ -656,7 +610,6 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
     public AnchorPane getTableView() {
         return anchorPaneTableRow;
     }
-
 
     /**
      * Settings part
@@ -686,9 +639,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
             }
 
             settingsControlElementsInit();
-            //System.out.println(choiceBoxMaterial);
             settingsControlElementsLogicInit();
-            //System.out.println(choiceBoxMaterial);
         }
         settingsControlElementsRefresh();
 
@@ -772,11 +723,9 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         if (Project.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1 || Project.getDefaultMaterial().getMainType().indexOf("Полиэфирный камень") != -1) {
 
             for (int i = 1; i <= 11; i++) {
-//                comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), i));
                 comboBoxSinkType.getItems().add(sinkTypes.get(i));
             }
             if (Project.getDefaultMaterial().getMainType().indexOf("Акриловый камень") != -1)
-//                comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 18));
                 comboBoxSinkType.getItems().add(sinkTypes.get(18));
 
             comboBoxSinkType.getItems().add(sinkTypes.get(16));
@@ -785,8 +734,6 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
             comboBoxSinkType.getItems().add(sinkTypes.get(19));
             comboBoxSinkType.getItems().add(sinkTypes.get(20));
             comboBoxSinkType.getItems().add(sinkTypes.get(21));
-//            comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 16));
-//            comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 17));
         }else if(Project.getDefaultMaterial().getMainType().indexOf("Массив") != -1 ||
                 Project.getDefaultMaterial().getMainType().indexOf("Массив_шпон") != -1){
             comboBoxSinkType.getItems().add(sinkTypes.get(16));
@@ -797,7 +744,6 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         } else {
 
             for (int i = 12; i <= 14; i++) {
-               // comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), i));
                 comboBoxSinkType.getItems().add(sinkTypes.get(i));
             }
 
@@ -810,14 +756,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
             comboBoxSinkType.getItems().add(sinkTypes.get(19));
             comboBoxSinkType.getItems().add(sinkTypes.get(20));
             comboBoxSinkType.getItems().add(sinkTypes.get(21));
-
         }
-
-
-
-//        comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 19));
-//        comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 20));
-//        comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 21));
 
         comboBoxSinkType.getSelectionModel().select(0);
         comboBoxSinkType.setTooltip(comboBoxSinkType.getSelectionModel().getSelectedItem().getTooltip());
@@ -836,50 +775,23 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
             toggleButtonSinkInstallType1.setSelected(true);
         }
         toggleButtonSinkEdge1.setSelected(true);
-
-//        ImageView image1 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/SinkItem/sink_install_type_1.png").toString());
-//        image1.setFitWidth(45);
-//        image1.setFitHeight(45);
-//        toggleButtonSinkInstallType1.setGraphic(image1);
-//
-//        ImageView image2 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/SinkItem/sink_install_type_2.png").toString());
-//        image2.setFitWidth(45);
-//        image2.setFitHeight(45);
-//        toggleButtonSinkInstallType2.setGraphic(image2);
-//
-//        ImageView image3 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/SinkItem/sink_edge_type_1.png").toString());
-//        image3.setFitWidth(45);
-//        image3.setFitHeight(45);
-//        toggleButtonSinkEdge1.setGraphic(image3);
-//
-//        ImageView image4 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/SinkItem/sink_edge_type_2.png").toString());
-//        image4.setFitWidth(45);
-//        image4.setFitHeight(45);
-//        toggleButtonSinkEdge2.setGraphic(image4);
     }
 
     private static void settingsControlElementsLogicInit() {
-
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
-
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1));
 
         choiceBoxMaterial.setOnAction(event -> {
-
             comboBoxSinkType.getItems().clear();
 
             for (Material material : Project.getMaterials()) {
                 if (material.getReceiptName().equals(choiceBoxMaterial.getValue())) {
-
                     if (material.getName().indexOf("Акриловый камень") != -1 || material.getName().indexOf("Полиэфирный камень") != -1) {
-
                         for (int i = 1; i <= 11; i++) {
-//                            comboBoxSinkType.getItems().add(new SinkType(material, i));
                             comboBoxSinkType.getItems().add(sinkTypes.get(i));
                         }
 
                         if (material.getMainType().indexOf("Акриловый камень") != -1)
                             comboBoxSinkType.getItems().add(sinkTypes.get(18));
-//                            comboBoxSinkType.getItems().add(new SinkType(material, 18));
 
                         comboBoxSinkType.getItems().add(sinkTypes.get(16));
                         comboBoxSinkType.getItems().add(sinkTypes.get(17));
@@ -887,8 +799,6 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
                         comboBoxSinkType.getItems().add(sinkTypes.get(19));
                         comboBoxSinkType.getItems().add(sinkTypes.get(20));
                         comboBoxSinkType.getItems().add(sinkTypes.get(21));
-//                        comboBoxSinkType.getItems().add(new SinkType(material, 16));
-//                        comboBoxSinkType.getItems().add(new SinkType(material, 17));
                         comboBoxSinkType.getSelectionModel().select(0);
 
                         toggleButtonSinkInstallType2.setSelected(true);
@@ -902,7 +812,6 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
                     } else {
 
                         for (int i = 12; i <= 14; i++) {
-//                            comboBoxSinkType.getItems().add(new SinkType(material, i));
                             comboBoxSinkType.getItems().add(sinkTypes.get(i));
                         }
 
@@ -917,21 +826,10 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
                         comboBoxSinkType.getItems().add(sinkTypes.get(20));
                         comboBoxSinkType.getItems().add(sinkTypes.get(21));
 
-
-
                         comboBoxSinkType.getSelectionModel().select(0);
 
-
                         toggleButtonSinkInstallType1.setSelected(true);
-
-
                     }
-
-
-
-//                    comboBoxSinkType.getItems().add(new SinkType(material, 19));
-//                    comboBoxSinkType.getItems().add(new SinkType(material, 20));
-//                    comboBoxSinkType.getItems().add(new SinkType(material, 21));
 
                     //update depths:
                     choiceBoxDepth.getItems().clear();
@@ -967,33 +865,18 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
             toggleButtonSinkEdge2.setDisable(false);
             if (comboBoxSinkType.getSelectionModel().getSelectedItem().getType() >= 1 &&
                     comboBoxSinkType.getSelectionModel().getSelectedItem().getType() <=11) {
-
                 toggleButtonSinkInstallType1.setSelected(true);
                 toggleButtonSinkEdge1.setSelected(true);
-
             }else if (comboBoxSinkType.getSelectionModel().getSelectedItem().getType() >= 12 &&
                     comboBoxSinkType.getSelectionModel().getSelectedItem().getType() <=14) {
-
                 toggleButtonSinkInstallType2.setSelected(true);
                 toggleButtonSinkEdge1.setSelected(true);
-
             }else if (comboBoxSinkType.getSelectionModel().getSelectedItem().getType() == 18) {
-
                 toggleButtonSinkInstallType1.setSelected(true);
                 toggleButtonSinkEdge1.setSelected(true);
-
             }else if (comboBoxSinkType.getSelectionModel().getSelectedItem().getType() == Sink.SINK_TYPE_16 ||
                     comboBoxSinkType.getSelectionModel().getSelectedItem().getType() == Sink.SINK_TYPE_19 ||
                     comboBoxSinkType.getSelectionModel().getSelectedItem().getType() == Sink.SINK_TYPE_21) {
-//                ImageView image1 = new ImageView("styles/images/TableDesigner/SinkItem/sink_install_type_0.png");
-//                image1.setFitWidth(45);
-//                image1.setFitHeight(45);
-//                toggleButtonSinkInstallType1.setGraphic(image1);
-//
-//                ImageView image2 = new ImageView("styles/images/TableDesigner/SinkItem/sink_install_type_1.png");
-//                image2.setFitWidth(45);
-//                image2.setFitHeight(45);
-//                toggleButtonSinkInstallType2.setGraphic(image2);
                 toggleButtonSinkInstallType1.setSelected(false);
                 toggleButtonSinkInstallType2.setSelected(false);
                 toggleButtonSinkEdge1.setSelected(false);
@@ -1006,17 +889,6 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
                 toggleButtonSinkEdge2.setDisable(true);
 
             } else if (comboBoxSinkType.getSelectionModel().getSelectedItem().getType() == 17) {
-//                ImageView image1 = new ImageView("styles/images/TableDesigner/SinkItem/sink_install_type_0.png");
-//                image1.setFitWidth(45);
-//                image1.setFitHeight(45);
-//                toggleButtonSinkInstallType1.setGraphic(image1);
-//
-//                ImageView image2 = new ImageView("styles/images/TableDesigner/SinkItem/sink_install_type_1.png");
-//                image2.setFitWidth(45);
-//                image2.setFitHeight(45);
-//                toggleButtonSinkInstallType2.setGraphic(image2);
-
-
                 toggleButtonSinkInstallType2.setSelected(true);
 
                 toggleButtonSinkEdge1.setSelected(true);
@@ -1161,7 +1033,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         else if(type == Sink.SINK_TYPE_19) name = "Раковина накладная (прямоугольная)";
         else if(type == Sink.SINK_TYPE_20) name = "Раковина подстольная (круглая)";
         else if(type == Sink.SINK_TYPE_21) name = "Раковина в ровень со столешницей";
-        tableDesignerItemsList.add(index, new SinkItem(cutShapesCoordinates, cutShapesAngles, quantity, material,
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new SinkItem(cutShapesCoordinates, cutShapesAngles, quantity, material,
                 depth, type, model, installType, edgeType, workCoefficient, workCoefficientIndex, name));
 
     }
@@ -1228,15 +1100,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
             comboBoxSinkType.getItems().add(sinkTypes.get(19));
             comboBoxSinkType.getItems().add(sinkTypes.get(20));
             comboBoxSinkType.getItems().add(sinkTypes.get(21));
-
-
-            //toggleButtonSinkInstallType1.setSelected(true);
         }
-
-
-//        comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 19));
-//        comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 20));
-//        comboBoxSinkType.getItems().add(new SinkType(ProjectHandler.getDefaultMaterial(), 21));
 
         comboBoxSinkType.getSelectionModel().select(0);
 
@@ -1358,22 +1222,13 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
                         //priceForOneInstall = material.getCutoutTypesAndPrices().get(new Integer(5)) / 100;
                         priceForOneInstall += (material.getSinkInstallTypesAndPrices().get(1)) / 100;
                     }else{
-//                        System.out.println("installType = " + installType);
-//                        System.out.println("material.getSinkInstallTypesAndPrices() = " + material.getSinkInstallTypesAndPrices().toString());
-//                        System.out.println("material.getSinkInstallTypesAndPrices().get(installType-1) = " + material.getSinkInstallTypesAndPrices().get(installType-1));
                         priceForOneInstall = (material.getSinkInstallTypesAndPrices().get(installType-1)) / 100;
                     }
 
                     priceForOne += priceForOneInstall;
-
-
-                    //System.out.println("priceForOneInstall = " + priceForOneInstall);
                 }
 
-                //System.out.println("priceForOne = " + priceForOne);
                 priceForOne *= Project.getPriceMainCoefficient().doubleValue();
-
-                //System.out.println("priceForOne * coeff = " + priceForOne);
 
                 labelPrice.setText("Цена: " + String.format(Locale.ENGLISH, "%.0f", priceForOne) + " " + Currency.RUR_SYMBOL + "/" + units);
                 break;
@@ -1383,7 +1238,6 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
 
     private static void enterToEditMode(SinkItem sinkItem){
         TableDesigner.openSettings(SinkItem.class);
-
 
         //get row data to settings
         choiceBoxMaterial.getSelectionModel().select(sinkItem.material.getReceiptName());
@@ -1420,7 +1274,7 @@ public class SinkItem extends TableDesignerItem implements Cuttable, DependOnMat
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(sinkItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(sinkItem);
             addItem(index, sinkItem.quantity);
 
             exitFromEditMode(sinkItem);

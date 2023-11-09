@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.controller;
+package ru.koreanika.utils.receipt.ui.controller;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
@@ -25,10 +25,13 @@ import ru.koreanika.utils.currency.UserCurrency;
 import ru.koreanika.utils.*;
 import ru.koreanika.utils.print.PdfSaver;
 import ru.koreanika.utils.print.PrinterDialog;
-import ru.koreanika.utils.receipt.*;
 import ru.koreanika.utils.currency.Currency;
-import ru.koreanika.utils.receipt.builder.SketchReceiptNodeBuilder;
-import ru.koreanika.utils.receipt.builder.TableReceiptGenericNodeBuilder;
+import ru.koreanika.utils.receipt.policy.CalculateItemStocks;
+import ru.koreanika.utils.receipt.policy.CalculateMaterials;
+import ru.koreanika.utils.receipt.ui.builder.SketchReceiptNodeBuilder;
+import ru.koreanika.utils.receipt.ui.builder.TableReceiptGenericNodeBuilder;
+import ru.koreanika.utils.receipt.domain.ReceiptItem;
+import ru.koreanika.utils.receipt.domain.Receipt;
 
 import java.io.IOException;
 import java.util.*;
@@ -274,24 +277,24 @@ public abstract class ReceiptManager {
         });
 
         MainWindow.getUSDValue().addListener((observableValue, number, t1) -> {
-            Receipt.calculateMaterials();
-            Receipt.calculateItemsStocks();
+            CalculateMaterials.calculateMaterials();
+            CalculateItemStocks.calculateItemsStocks();
             updateReceiptTable();
         });
 
         MainWindow.getEURValue().addListener((observableValue, number, t1) -> {
-            Receipt.calculateMaterials();
-            Receipt.calculateItemsStocks();
+            CalculateMaterials.calculateMaterials();
+            CalculateItemStocks.calculateItemsStocks();
             updateReceiptTable();
         });
 
         Project.getPriceMainCoefficient().addListener((observableValue, number, t1) -> {
-            Receipt.calculateMaterials();
+            CalculateMaterials.calculateMaterials();
             updateReceiptTable();
         });
 
         Project.getPriceMaterialCoefficient().addListener((observableValue, number, t1) -> {
-            Receipt.calculateMaterials();
+            CalculateMaterials.calculateMaterials();
             updateReceiptTable();
         });
 
@@ -421,7 +424,7 @@ public abstract class ReceiptManager {
         allAddPriceForUSD = 0.0;
         allAddPriceForEUR = 0.0;
 
-        Receipt.calculateItemsStocks();
+        CalculateItemStocks.calculateItemsStocks();
 
         TableReceiptGenericNodeBuilder receiptNodeBuilder = new TableReceiptGenericNodeBuilder(this);
 
@@ -474,7 +477,7 @@ public abstract class ReceiptManager {
         allAddPriceForUSD = 0.0;
         allAddPriceForEUR = 0.0;
 
-        Receipt.calculateItemsStocks();
+        CalculateItemStocks.calculateItemsStocks();
 
         TableReceiptGenericNodeBuilder receiptNodeBuilder = new TableReceiptGenericNodeBuilder(this);
 
@@ -564,8 +567,8 @@ public abstract class ReceiptManager {
     public AnchorPane getView() {
         btnReceiptLog.setVisible(UserPreferences.getInstance().getSelectedApp() == AppType.KOREANIKAMASTER);
 
-        Receipt.calculateMaterials();
-        Receipt.calculateItemsStocks();
+        CalculateMaterials.calculateMaterials();
+        CalculateItemStocks.calculateItemsStocks();
 
         updateReceiptTable();
         showNotificationAboutCurrency();

@@ -1,16 +1,16 @@
-package ru.koreanika.utils.receipt.builder;
+package ru.koreanika.utils.receipt.ui.builder;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import org.json.simple.JSONObject;
 import ru.koreanika.PortalClient.UserEventHandler.UserEventService;
 import ru.koreanika.project.Project;
-import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.currency.Currency;
-import ru.koreanika.utils.receipt.Receipt;
-import ru.koreanika.utils.receipt.ReceiptItem;
-import ru.koreanika.utils.receipt.controller.ReceiptManager;
+import ru.koreanika.utils.receipt.domain.Receipt;
+import ru.koreanika.utils.receipt.domain.ReceiptItem;
+import ru.koreanika.utils.receipt.policy.TableDesignerItemMapper;
+import ru.koreanika.utils.receipt.ui.controller.ReceiptManager;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +25,7 @@ public class TableReceiptGenericNodeBuilder extends BaseTableReceiptNodeBuilder 
 
     @Override
     public void createMeasuringPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesigner.getMeasurerReceiptList()) {
+        for (ReceiptItem receiptItem : TableDesignerItemMapper.getMeasurerReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -51,7 +51,7 @@ public class TableReceiptGenericNodeBuilder extends BaseTableReceiptNodeBuilder 
 
     @Override
     public void createDeliveryPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesigner.getDeliveryReceiptList()) {
+        for (ReceiptItem receiptItem : TableDesignerItemMapper.getDeliveryReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -81,7 +81,7 @@ public class TableReceiptGenericNodeBuilder extends BaseTableReceiptNodeBuilder 
         double RUBtoEUR = MainWindow.getEURValue().doubleValue();
 
         double addPriceUSD = 0;
-        for (ReceiptItem receiptItem : TableDesigner.getMountingReceiptList()) {
+        for (ReceiptItem receiptItem : TableDesignerItemMapper.getMountingReceiptList()) {
             int rowIndex = addRowToGridPaneTop();
 
             double price = ((receiptManager.allPriceForRUR / RUBtoUSD) + (receiptManager.allPriceForUSD) + ((receiptManager.allPriceForEUR * RUBtoEUR) / RUBtoUSD)) * ((Double.parseDouble(receiptItem.getPriceForOne())) / 100.0);
@@ -109,7 +109,7 @@ public class TableReceiptGenericNodeBuilder extends BaseTableReceiptNodeBuilder 
         double RUBtoEUR = MainWindow.getEURValue().doubleValue();
 
         double addPriceUSD = 0;
-        for (ReceiptItem receiptItem : TableDesigner.getDiscountReceiptList()) {
+        for (ReceiptItem receiptItem : TableDesignerItemMapper.getDiscountReceiptList()) {
             int rowIndex = addRowToGridPaneTop();
 
             double price = -1 * (((receiptManager.allPriceForRUR / RUBtoUSD) + (receiptManager.allPriceForUSD) +

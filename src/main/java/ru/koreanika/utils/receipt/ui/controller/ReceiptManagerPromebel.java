@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.controller;
+package ru.koreanika.utils.receipt.ui.controller;
 
 public class ReceiptManagerPromebel extends ReceiptManager {
 

@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -14,6 +13,7 @@ import ru.koreanika.common.material.Material;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -21,9 +21,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MetalFootingItem extends TableDesignerItem {
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalWorkItemsList();
-
 
     Label labelRowNumber, labelName, labelPaintingType, labelNull1, labelLength, labelNull2, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -33,20 +30,14 @@ public class MetalFootingItem extends TableDesignerItem {
     int paintingType;
     Image imageMain;
 
-
     public MetalFootingItem(double length, int paintingType, int quantity) {
-
         this.length = length;
         this.paintingType = paintingType;
         this.quantity = quantity;
 
         imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/MetalFooting/paintingType" + paintingType + "_100px.png").toString()).getImage();
 
-
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/MetalFootingRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/MetalFootingRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -81,7 +72,7 @@ public class MetalFootingItem extends TableDesignerItem {
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().remove(this);
     }
 
     @Override
@@ -91,17 +82,11 @@ public class MetalFootingItem extends TableDesignerItem {
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -119,8 +104,6 @@ public class MetalFootingItem extends TableDesignerItem {
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelPaintingType, Priority.ALWAYS);
@@ -129,45 +112,38 @@ public class MetalFootingItem extends TableDesignerItem {
         HBox.setHgrow(labelNull2, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
         quantity++;
         updateItemView();
     }
+
     private void btnMinusClicked(ActionEvent event){
         if (quantity == 1) return;
         quantity--;
         updateItemView();
     }
+
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
-
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().remove(this);
     }
+
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
         for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
@@ -178,7 +154,6 @@ public class MetalFootingItem extends TableDesignerItem {
     }
 
     public void updateItemView(){
-
         labelRowNumber.setText("");
         labelName.setText("Металлокаркас");
         imageViewMain.setImage(imageMain);
@@ -190,13 +165,10 @@ public class MetalFootingItem extends TableDesignerItem {
 
         labelQuantity.setText("" + quantity);
 
-
         labelHeaderCard.setText("Металлокаркас");
         tooltipNameCard.setText("Металлокаркас");
         imageViewBackCard.setImage(imageMain);
         labelQuantityCard.setText("" + quantity);
-
-
 
         labelName1Card.setText("Материал");
         labelValue1Card.setText("-");
@@ -215,12 +187,9 @@ public class MetalFootingItem extends TableDesignerItem {
 
     @Override
     public void updateRowPrice() {
-
-        double priceForOne = -1.0;
         Material defaultMaterial = Project.getDefaultMaterial();
 
-        priceForOne = (paintingType == 1) ? defaultMaterial.getMetalFootingPrices().get(0)/100 : defaultMaterial.getMetalFootingPrices().get(1)/100;
-
+        double priceForOne = (paintingType == 1) ? defaultMaterial.getMetalFootingPrices().get(0)/100 : defaultMaterial.getMetalFootingPrices().get(1)/100;
         priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity * (length/1000)) + Currency.RUR_SYMBOL);
@@ -238,7 +207,6 @@ public class MetalFootingItem extends TableDesignerItem {
     public AnchorPane getTableView() {
         return anchorPaneTableRow;
     }
-
 
     /**
      * Settings part
@@ -289,23 +257,12 @@ public class MetalFootingItem extends TableDesignerItem {
         toggleButtonPaintingType2.setToggleGroup(toggleGroupPaintingType);
         toggleButtonPaintingType1.setSelected(true);
 
-//        ImageView image1 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/MetalFooting/paintingType1.png").toString());
-//        image1.setFitWidth(45);
-//        image1.setFitHeight(45);
-//        toggleButtonPaintingType1.setGraphic(image1);
-//
-//        ImageView image2 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/MetalFooting/paintingType2.png").toString());
-//        image2.setFitWidth(45);
-//        image2.setFitHeight(45);
-//        toggleButtonPaintingType2.setGraphic(image2);
-
         textFieldLength.setText("1000");
-
     }
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalWorkItemsList().size(), 1));
 
 
         textFieldLength.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -345,7 +302,7 @@ public class MetalFootingItem extends TableDesignerItem {
         else if (toggleButtonPaintingType2.isSelected()) paintingType = 2;
 
 
-        tableDesignerItemsList.add(index, new MetalFootingItem(length, paintingType, quantity));
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().add(index, new MetalFootingItem(length, paintingType, quantity));
 
     }
 
@@ -396,7 +353,7 @@ public class MetalFootingItem extends TableDesignerItem {
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(metalFootingItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalWorkItemsList().indexOf(metalFootingItem);
             addItem(index, metalFootingItem.quantity);
 
             exitFromEditMode(metalFootingItem);

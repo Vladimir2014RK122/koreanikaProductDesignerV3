@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -17,15 +16,12 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.*;
 
 public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
-
-
 
     Label labelRowNumber, labelName, labelMaterial, labelNull2, labelNull3, labelNull4, labelQuantity, labelRowPrice;
     ImageView imageView;
@@ -35,16 +31,12 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
     Image imageMain;
 
     public RadiusItem(Material material, int quantity) {
-
         this.material = material;
         this.quantity = quantity;
 
         imageMain = material.getImageView().getImage();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/RadiusRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/RadiusRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -106,7 +98,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
         RadiusItem newRadiusItem = new RadiusItem(newMaterial, oldRadiusItem.quantity);
 
         oldRadiusItem.removeThisItem();
-        if (oldRadiusItem.slave == false) tableDesignerItemsList.add(newRadiusItem);
+        if (oldRadiusItem.slave == false) TableDesignerSession.getTableDesignerMainWorkItemsList().add(newRadiusItem);
 
     }
 
@@ -119,7 +111,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
 
     @Override
@@ -128,11 +120,6 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
             RadiusItem.exitFromEditMode(this);
         }
     }
-
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
 
     /**
      * Table ROW part
@@ -149,7 +136,6 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -167,9 +153,6 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -178,29 +161,20 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
         HBox.setHgrow(labelNull4, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -217,7 +191,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
@@ -244,8 +218,6 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
         tooltipNameCard.setText("Радиусный элемент");
         imageViewBackCard.setImage(imageMain);
         labelQuantityCard.setText("" + quantity);
-
-
 
         labelName1Card.setText("Материал");
         labelValue1Card.setText(material.getReceiptName());
@@ -319,7 +291,6 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     private static void settingsControlElementsInit() {
-
         btnApply.getStyleClass().add("btnBrown");
         btnCancel.getStyleClass().add("btnBrown");
 
@@ -331,21 +302,14 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
         }
         choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
-
     }
 
     private static void settingsControlElementsLogicInit() {
-
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
-
-        choiceBoxMaterial.setOnAction(event -> {
-            updatePriceInSettings();
-        });
-
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerMainWorkItemsList().size(), 1));
+        choiceBoxMaterial.setOnAction(event -> updatePriceInSettings());
     }
 
     private static void addItem(int index, int quantity){
-
         Material material = null;
         for (Material m : Project.getMaterials()) {
             if (m.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
@@ -353,11 +317,10 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
             }
         }
 
-        tableDesignerItemsList.add(index, new RadiusItem(material, quantity));
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(index, new RadiusItem(material, quantity));
     }
 
     public static void settingsControlElementsRefresh() {
-
         choiceBoxMaterial.getItems().clear();
         for (Material material : Project.getMaterials()) {
             choiceBoxMaterial.getItems().add(material.getReceiptName());
@@ -368,19 +331,13 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     public static void updatePriceInSettings() {
-
         for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
                 String currency = material.getRadiusElementCurrency();
                 String units = "шт.";
-                double priceForOne = -1.0;
 
-
-                priceForOne = material.getRadiusElementPrice();
-
-                priceForOne /= 100.0;
-
+                double priceForOne = material.getRadiusElementPrice() / 100.0;
                 priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
                 labelPrice.setText(String.format(Locale.ENGLISH, "Цена: %.0f" + " " + currency + "/" + units, priceForOne));
@@ -391,7 +348,6 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
 
     private static void enterToEditMode(RadiusItem radiusItem){
         TableDesigner.openSettings(RadiusItem.class);
-
 
         //get row data to settings
         choiceBoxMaterial.getSelectionModel().select(radiusItem.material.getReceiptName());
@@ -411,7 +367,7 @@ public class RadiusItem extends TableDesignerItem implements DependOnMaterial {
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(radiusItem);
+            int index = TableDesignerSession.getTableDesignerMainWorkItemsList().indexOf(radiusItem);
             addItem(index, radiusItem.quantity);
 
             exitFromEditMode(radiusItem);

@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -14,6 +13,7 @@ import ru.koreanika.common.material.Material;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -26,10 +26,6 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
     public static final String NAME_RECEIPT_IMAGE = "Замер";
     public static final String NAME_RECEIPT_ROW = "Замер";
     public static final String NAME_RECEIPT_DISTANCE = "Удаленность";
-
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
-
 
     Label labelRowNumber, labelName, labelMaterial, labelNull2, labelLength, labelNull3, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -97,7 +93,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
 
     @Override
@@ -107,17 +103,11 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -135,7 +125,6 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -147,41 +136,36 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
         quantity++;
         updateItemView();
     }
+
     private void btnMinusClicked(ActionEvent event){
         if (quantity == 1) return;
         quantity--;
         updateItemView();
     }
+
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
+
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
         for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
@@ -192,8 +176,6 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
     }
 
     public void updateItemView(){
-
-
         labelRowNumber.setText("");
         labelName.setText(NAME_ROW);
         imageViewMain.setImage(imageMain);
@@ -205,13 +187,10 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
 
         labelQuantity.setText("" + quantity);
 
-
         labelHeaderCard.setText(NAME_ROW);
         tooltipNameCard.setText(NAME_ROW);
         imageViewBackCard.setImage(imageMain);
         labelQuantityCard.setText("" + quantity);
-
-
 
         labelName1Card.setText("Материал");
         labelValue1Card.setText(material.getReceiptName());
@@ -230,7 +209,6 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
 
     @Override
     public void updateRowPrice() {
-
         double priceForOne = (material.getMeasurerPrice() + material.getMeasurerKMPrice() * length);
         priceForOne *= Project.getPriceMainCoefficient().doubleValue();
 
@@ -249,7 +227,6 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
     public AnchorPane getTableView() {
         return anchorPaneTableRow;
     }
-
 
     /**
      * Settings part
@@ -302,7 +279,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerMainWorkItemsList().size(), 1));
 
         choiceBoxMaterial.setOnAction(event -> {
             updatePriceInSettings();
@@ -362,7 +339,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
             return;
         }
 
-        tableDesignerItemsList.add(index, new MeasurerItem(material, quantity, length));
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(index, new MeasurerItem(material, quantity, length));
 
     }
 
@@ -433,7 +410,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(measurerItem);
+            int index = TableDesignerSession.getTableDesignerMainWorkItemsList().indexOf(measurerItem);
             addItem(index, measurerItem.quantity);
 
             exitFromEditMode(measurerItem);
@@ -543,7 +520,7 @@ public class MeasurerItem extends TableDesignerItem implements DependOnMaterial 
         MeasurerItem newMeasurerItem = new MeasurerItem(newMaterial, oldMeasurerItem.quantity, oldMeasurerItem.length);
 
         oldMeasurerItem.removeThisItem();
-        tableDesignerItemsList.add(newMeasurerItem);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(newMeasurerItem);
 
     }
 }

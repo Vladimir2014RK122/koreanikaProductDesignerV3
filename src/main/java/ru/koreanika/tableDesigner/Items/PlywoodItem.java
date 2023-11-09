@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -14,6 +13,7 @@ import ru.koreanika.common.material.Material;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -21,9 +21,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalWorkItemsList();
-
 
     Label labelRowNumber, labelName, labelPaintingType, labelNull1, labelLength, labelWidth, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -35,23 +32,16 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
     int paintingType;
     Image imageMain;
 
-
     public PlywoodItem(Material material, double length, double width, int paintingType, int quantity) {
-
         this.material = material;
         this.length = length;
         this.width = width;
         this.paintingType = paintingType;
         this.quantity = quantity;
 
-
         imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/PlywoodItem/plywoodPaintingType" + paintingType + "_100px.png").toString()).getImage();
 
-
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/PlywoodRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/PlywoodRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -113,7 +103,7 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
                 oldPlywoodItem.length, oldPlywoodItem.width, oldPlywoodItem.paintingType, oldPlywoodItem.quantity);
 
         oldPlywoodItem.removeThisItem();
-        tableDesignerItemsList.add(newPlywoodItem);
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().add(newPlywoodItem);
     }
 
     public double getLength() {
@@ -146,7 +136,7 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().remove(this);
     }
 
     @Override
@@ -156,17 +146,11 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -184,10 +168,6 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelPaintingType, Priority.ALWAYS);
@@ -199,25 +179,17 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -231,7 +203,7 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
     }
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().remove(this);
     }
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
@@ -290,15 +262,8 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
 
     @Override
     public void updateRowPrice() {
-
-        double priceForOne = -1.0;
-        //Material material = ProjectHandler.getDefaultMaterial();
-//        if(material == null){
-//            System.out.println("PLYWOOD default material == null");
-//        }
-        priceForOne = (paintingType == 1) ? (material.getPlywoodPrices().get(0)/100) : (material.getPlywoodPrices().get(1)/100);
+        double priceForOne = (paintingType == 1) ? (material.getPlywoodPrices().get(0)/100) : (material.getPlywoodPrices().get(1)/100);
         priceForOne *= Project.getPriceMainCoefficient().doubleValue();
-
 
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity * (length/1000) * (width/1000)) + Currency.RUR_SYMBOL);
 
@@ -351,7 +316,6 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     private static void settingsControlElementsInit() {
-
         btnApply.getStyleClass().add("btnBrown");
         btnCancel.getStyleClass().add("btnBrown");
 
@@ -371,28 +335,16 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
         }
         choiceBoxMaterial.getSelectionModel().select(Project.getDefaultMaterial().getReceiptName());
 
-
         toggleButtonPlywoodType1.setToggleGroup(toggleGroupPaintingType);
         toggleButtonPlywoodType2.setToggleGroup(toggleGroupPaintingType);
         toggleButtonPlywoodType1.setSelected(true);
 
-//        ImageView image1 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/PlywoodItem/plywoodPaintingType1.png").toString());
-//        image1.setFitWidth(45);
-//        image1.setFitHeight(45);
-//        toggleButtonPaintingType1.setGraphic(image1);
-//
-//        ImageView image2 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/PlywoodItem/plywoodPaintingType2.png").toString());
-//        image2.setFitWidth(45);
-//        image2.setFitHeight(45);
-//        toggleButtonPaintingType2.setGraphic(image2);
-
         textFieldLength.setText("600");
-
     }
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalWorkItemsList().size(), 1));
 
         choiceBoxMaterial.setOnAction(event -> {
 
@@ -466,8 +418,7 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
         if (toggleButtonPlywoodType1.isSelected()) paintingType = 1;
         else if (toggleButtonPlywoodType2.isSelected()) paintingType = 2;
 
-        tableDesignerItemsList.add(index, new PlywoodItem(material, length, width, paintingType, quantity));
-
+        TableDesignerSession.getTableDesignerAdditionalWorkItemsList().add(index, new PlywoodItem(material, length, width, paintingType, quantity));
     }
 
     public static void settingsControlElementsRefresh() {
@@ -542,7 +493,7 @@ public class PlywoodItem extends TableDesignerItem implements DependOnMaterial {
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(plywoodItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalWorkItemsList().indexOf(plywoodItem);
             addItem(index, plywoodItem.quantity);
 
             exitFromEditMode(plywoodItem);

@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
@@ -10,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import lombok.Getter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.koreanika.common.material.Material;
@@ -22,24 +22,17 @@ import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.*;
 
 public class StoneProductItem extends TableDesignerItem implements Cuttable, DependOnMaterial {
 
-    /**
-     * static variables
-     */
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainItemsList();
-
-    /**
-     * instance variables
-     */
     private ArrayList<ArrayList<SketchShape>> sketchShapeArrayList = new ArrayList<>();
 
-    private ArrayList<ArrayList<Double>> cutShapesAngles = new ArrayList<>();
-    private ArrayList<ArrayList<Point2D>> cutShapesCoordinates = new ArrayList<>();
+    private ArrayList<ArrayList<Double>> cutShapesAngles;
+    private ArrayList<ArrayList<Point2D>> cutShapesCoordinates;
 
     ArrayList<TableDesignerItem> slaveItems = new ArrayList<>();
 
@@ -56,10 +49,19 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
     ShapeType shapeType;
     Material material;
 
+    @Getter
     int depth;
+
+    @Getter
     double sizeA;
+
+    @Getter
     double sizeB;
+
+    @Getter
     double sizeC;
+
+    @Getter
     double sizeD;
 
     double workCoefficient;
@@ -88,23 +90,14 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         this.workCoefficientIndex = workCoefficientIndex;
         this.name = name;
 
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/StoneProductRow.fxml")
-        );
-
-
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/StoneProductRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
-
-        FXMLLoader fxmlLoaderCard = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/ItemCardViewTemplateStoneProduct.fxml")
-        );
-
+        FXMLLoader fxmlLoaderCard = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/ItemCardViewTemplateStoneProduct.fxml"));
         try {
             anchorPaneCardView = fxmlLoaderCard.load();
         } catch (IOException ex) {
@@ -124,26 +117,20 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         //create depend on Radius element:
         if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS || shapeType == ShapeType.RECTANGLE_WITH_RADIUS_INTO) {
             RadiusItem radiusItem = RadiusItem.getSlaveInstance(material, quantity);
-            //radiusItem.setQuantity(quantity);
             slaveItems.add(radiusItem);
-
-            RadiusItem.getTableDesignerItemsList().add(radiusItem);
+            TableDesignerSession.getTableDesignerMainWorkItemsList().add(radiusItem);
         }else if(shapeType == ShapeType.CIRCLE_HALF){
-
             RadiusItem radiusItem = RadiusItem.getSlaveInstance(material, 2*quantity);
             slaveItems.add(radiusItem);
-            RadiusItem.getTableDesignerItemsList().add(radiusItem);
-
+            TableDesignerSession.getTableDesignerMainWorkItemsList().add(radiusItem);
         }else if(shapeType == ShapeType.CIRCLE){
             RadiusItem radiusItem = RadiusItem.getSlaveInstance(material, 4*quantity);
             slaveItems.add(radiusItem);
-            RadiusItem.getTableDesignerItemsList().add(radiusItem);
+            TableDesignerSession.getTableDesignerMainWorkItemsList().add(radiusItem);
         }
-
 
         //create shape and add it to sketchDesignerList
         for (int i = 0; i < quantity; i++) {
-
             ElementTypes elementType = ElementTypes.valueOf(stoneProductType.name());
 
             //check sizes:
@@ -172,7 +159,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 oversize = true;
             }
 
-
             double maxPieceXSize = materialLength;
             double maxPieceYSize = materialHeight;
 
@@ -183,9 +169,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 maxPieceXSize = materialHeight;
                 maxPieceYSize = materialLength;
             }
-
-            //System.out.println("shapeLen =" + shapeLen);
-            //System.out.println("maxPieceXSize =" + maxPieceXSize);
 
             int xPieces = (int) Math.floor(shapeLen / maxPieceXSize);
             if (shapeLen % maxPieceXSize != 0) xPieces += 1;
@@ -237,30 +220,23 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 }
 
             } else {
-                SketchShape shape = null;
-                if (shapeType == ShapeType.RECTANGLE)
-                    shape = new SketchShapeRectangle(elementType, material, depth, sizeA, sizeB);
-                else if (shapeType == ShapeType.RECTANGLE_WITH_CORNER)
-                    shape = new SketchShapeRectangleCutCorner(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
-                else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS)
-                    shape = new SketchShapeRectangleCircleCorner(elementType, material, depth, sizeA, sizeB, sizeC);
-                else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS_INTO)
-                    shape = new SketchShapeRectangleCircleCornerInto(elementType, material, depth, sizeA, sizeB, sizeC);
-                else if (shapeType == ShapeType.TRIANGLE)
-                    shape = new SketchShapeTriangle(elementType, material, depth, sizeA, sizeB);
-                else if (shapeType == ShapeType.CIRCLE_HALF)
-                    shape = new SketchShapeCircleHalf(elementType, material, depth, sizeC);
-                else if (shapeType == ShapeType.CIRCLE)
-                    shape = new SketchShapeCircle(elementType, material, depth, sizeC);
-                else if (shapeType == ShapeType.TRAPEZE)
-                    shape = new SketchShapeTrapeze(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
-                else if (shapeType == ShapeType.RHOMBUS)
-                    shape = new SketchShapeRhombus(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
+                SketchShape shape = switch (shapeType) {
+                    case RECTANGLE -> new SketchShapeRectangle(elementType, material, depth, sizeA, sizeB);
+                    case RECTANGLE_WITH_CORNER -> new SketchShapeRectangleCutCorner(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
+                    case RECTANGLE_WITH_RADIUS -> new SketchShapeRectangleCircleCorner(elementType, material, depth, sizeA, sizeB, sizeC);
+                    case RECTANGLE_WITH_RADIUS_INTO -> new SketchShapeRectangleCircleCornerInto(elementType, material, depth, sizeA, sizeB, sizeC);
+                    case TRIANGLE -> new SketchShapeTriangle(elementType, material, depth, sizeA, sizeB);
+                    case CIRCLE_HALF -> new SketchShapeCircleHalf(elementType, material, depth, sizeC);
+                    case CIRCLE -> new SketchShapeCircle(elementType, material, depth, sizeC);
+                    case TRAPEZE -> new SketchShapeTrapeze(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
+                    case RHOMBUS -> new SketchShapeRhombus(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
+                };
 
                 shape.setWorkCoefficient(workCoefficient);
                 shape.setProductName(name);
 
                 SketchDesigner.getSketchShapesList().add(shape);
+
                 //add shape to cutPane
                 CutShape cutShape = shape.getCutShape();
                 CutDesigner.getInstance().getCutShapesList().add(cutShape);
@@ -272,17 +248,11 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 cutShape.setTranslateX(cutShapesCoordinates.get(i).get(0).getX());
                 cutShape.setTranslateY(cutShapesCoordinates.get(i).get(0).getY());
 
-                cutShape.rotateShapeLocal(cutShapesAngles.get(i).get(0).doubleValue());
-
-
+                cutShape.rotateShapeLocal(cutShapesAngles.get(i).get(0));
             }
             sketchShapeArrayList.add(itemShapes);
         }
 
-    }
-
-    public StoneProductType getStoneProductType() {
-        return stoneProductType;
     }
 
     public ShapeType getShapeType() {
@@ -304,7 +274,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
     }
 
     private static void updateMaterial(StoneProductItem item) {
-
         StoneProductItem oldStoneProductItem = item;
 
         Material newMaterial = null;
@@ -333,22 +302,12 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
             }
         }
 
-
         if (newMaterial.getDepths().contains("" + oldStoneProductItem.depth)) {
-
             ArrayList<ArrayList<Point2D>> cutShapesCoordinates = new ArrayList<ArrayList<Point2D>>();
             ArrayList<ArrayList<Double>> cutShapesAngles = new ArrayList<ArrayList<Double>>();
 
             if(newMaterial.getMaterialWidth() != oldStoneProductItem.material.getMaterialWidth() ||
                     newMaterial.getMaterialHeight() != oldStoneProductItem.material.getMaterialHeight()){
-
-//                int index = getTableDesignerItemsList().indexOf(oldStoneProductItem);
-//
-//                oldStoneProductItem.removeThisItem();
-//
-//                addItem(index, oldStoneProductItem.quantity);
-
-
                 double materialLength = newMaterial.getMaterialWidth();//mm
                 double materialHeight = newMaterial.getMaterialHeight();//mm
                 double shapeLen = oldStoneProductItem.sizeA;//mm
@@ -398,13 +357,8 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                     cutShapesCoordinates.add(coordList);
                     cutShapesAngles.add(angleList);
                 }
-
-
             }else{
-
-
                 for (ArrayList<Point2D> arr1 : oldStoneProductItem.cutShapesCoordinates) {
-
                     ArrayList<Point2D> arrayPoints = new ArrayList<>();
                     for (Point2D p : arr1) {
                         arrayPoints.add(new Point2D(p.getX(), p.getY()));
@@ -422,11 +376,8 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 }
             }
 
-
             System.out.println("cutShapesCoordinates = " + cutShapesCoordinates);
             System.out.println("cutShapesAngles = " + cutShapesAngles);
-
-
 
             StoneProductItem newStoneProductItem = new StoneProductItem(cutShapesCoordinates, cutShapesAngles,
                     oldStoneProductItem.quantity, oldStoneProductItem.stoneProductType,
@@ -435,11 +386,10 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                     oldStoneProductItem.workCoefficient,oldStoneProductItem.workCoefficientIndex, oldStoneProductItem.name);
 
             oldStoneProductItem.removeThisItem();
-            tableDesignerItemsList.add(newStoneProductItem);
+            TableDesignerSession.getTableDesignerMainItemsList().add(newStoneProductItem);
         } else {
             oldStoneProductItem.removeThisItem();
         }
-
     }
 
     @Override
@@ -461,26 +411,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         }
     }
 
-    public int getDepth() {
-        return depth;
-    }
-
-    public double getSizeA() {
-        return sizeA;
-    }
-
-    public double getSizeB() {
-        return sizeB;
-    }
-
-    public double getSizeC() {
-        return sizeC;
-    }
-
-    public double getSizeD() {
-        return sizeD;
-    }
-
     @Override
     public Map<String, ImageView> getMainImageView() {
         Map<String, ImageView> imagesList = new LinkedHashMap<>();
@@ -489,98 +419,17 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         imagesList.put(material.getColor() + " текстура#" + imgPath + material.getColor() + "2", new ImageView(material.getTextureImage()));
 
         ImageView shapeImage = new ImageView();
-        String imgPath1 = "";
-        if (shapeType == ShapeType.RECTANGLE) {
-            imgPath1 = "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_2.png";
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon_tabletop.png";
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon_wallpanel.png";
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon_windowsill.png";
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon.png";
-        } else if (shapeType == ShapeType.RECTANGLE_WITH_CORNER) {
-            imgPath1 = "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_corner_2.png";
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon_tabletop.png";
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon_wallpanel.png";
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon_windowsill.png";
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon.png";
-        } else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS) {
-            imgPath1 = "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_2.png";
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon_tabletop.png";
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon_wallpanel.png";
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon_windowsill.png";
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon.png";
-        } else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS_INTO) {
-            imgPath1 = "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_2.png";
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon_tabletop.png";
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon_wallpanel.png";
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon_windowsill.png";
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon.png";
-        } else if (shapeType == ShapeType.TRIANGLE) {
-            imgPath1 = "/styles/images/TableDesigner/StoneProductItem/shapes/triangle_2.png";
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/triangleShape_icon_tabletop.png";
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/triangleShape_icon_wallpanel.png";
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/triangleShape_icon_windowsill.png";
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/triangleShape_icon.png";
-        } else if (shapeType == ShapeType.CIRCLE_HALF) {
-            imgPath1 = "/styles/images/TableDesigner/StoneProductItem/shapes/circle_half_2.png";
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon_tabletop.png";
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon_wallpanel.png";
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon_windowsill.png";
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon.png";
-        } else if (shapeType == ShapeType.CIRCLE) {
-            imgPath1 = "/styles/images/TableDesigner/StoneProductItem/shapes/circle_2.png";
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/circleShape_icon_tabletop.png";
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/circleShape_icon_wallpanel.png";
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/circleShape_icon_windowsill.png";
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/circleShape_icon.png";
-        } else if (shapeType == ShapeType.TRAPEZE) {
-            imgPath1 = "/styles/images/TableDesigner/StoneProductItem/shapes/trapeze_2.png";
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon_tabletop.png";
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon_wallpanel.png";
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon_windowsill.png";
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon.png";
-        } else if (shapeType == ShapeType.RHOMBUS) {
-            imgPath1 = "/styles/images/TableDesigner/StoneProductItem/shapes/rhombus_2.png";
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rhombusShape_icon_tabletop.png";
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rhombusShape_icon_wallpanel.png";
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rhombusShape_icon_windowsill.png";
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imgPath1 = "/styles/images/TableDesigner/StoneProductItem/rhombusShape_icon.png";
-        }
+        String imgPath1 = switch (shapeType) {
+            case RECTANGLE -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_2.png";
+            case RECTANGLE_WITH_CORNER -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_corner_2.png";
+            case RECTANGLE_WITH_RADIUS -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_2.png";
+            case RECTANGLE_WITH_RADIUS_INTO -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_2.png";
+            case TRIANGLE -> "/styles/images/TableDesigner/StoneProductItem/shapes/triangle_2.png";
+            case CIRCLE_HALF -> "/styles/images/TableDesigner/StoneProductItem/shapes/circle_half_2.png";
+            case CIRCLE -> "/styles/images/TableDesigner/StoneProductItem/shapes/circle_2.png";
+            case TRAPEZE -> "/styles/images/TableDesigner/StoneProductItem/shapes/trapeze_2.png";
+            case RHOMBUS -> "/styles/images/TableDesigner/StoneProductItem/shapes/rhombus_2.png";
+        };
         shapeImage.setImage(new Image(StoneProductItem.class.getResource(imgPath1).toString()));
         imagesList.put(stoneProductType.getName() + "#" + imgPath1, shapeImage);
 
@@ -589,16 +438,12 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainItemsList().remove(this);
 
         for (ArrayList<SketchShape> shapeList : sketchShapeArrayList) {
             for (SketchShape shape : shapeList) {
                 CutDesigner.getInstance().getCutPane().deleteCutShape(shape.getShapeNumber());
                 SketchDesigner.getSketchShapesList().remove(shape);
-
-//                CutShape cutShape = shape.getCutShape();
-//                CutDesigner.getCutShapesList().remove(cutShape);
-//                CutDesigner.getCutPane().cutObjectsGroup.getChildren().remove(cutShape);
             }
         }
 
@@ -607,10 +452,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         sketchShapeArrayList.clear();
         cutShapesCoordinates.clear();
         cutShapesAngles.clear();
-    }
-
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
     }
 
     public ImageView getImageViewShapeType() {
@@ -622,13 +463,13 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
             StoneProductItem.exitFromEditMode(this);
         }
     }
+
     /**
      * Table ROW part
      */
 
     @Override
     public AnchorPane getTableView() {
-
         return anchorPaneTableRow;
     }
 
@@ -637,13 +478,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         labelRowNumber.setText("" + number);
     }
 
-    public static JSONObject getJSONViewStaticParameters() {
-        JSONObject jsonObject = new JSONObject();
-        return jsonObject;
-    }
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -662,10 +497,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
-        //HBox.setHgrow(anchorPaneImageView, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
         HBox.setHgrow(labelDepth, Priority.ALWAYS);
@@ -673,44 +505,17 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         HBox.setHgrow(labelHeight, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
     }
-
-
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> {
-            btnPlusClicked(event);
-        });
-
-        btnMinus.setOnAction(event -> {
-            btnMinusClicked(event);
-
-        });
-
-        btnDelete.setOnAction(event -> {
-            btnDeleteClicked(event);
-
-        });
-
-        btnEdit.setOnAction(event -> {
-            btnEditClicked(event);
-
-        });
-
-//        material.getMaterialImage().cashedProperty().addListener((observableValue, aBoolean, t1) -> {
-//            if(t1.booleanValue()){
-//                updateItemView();
-//                System.out.println("\r\n UPDATED ITEM -----------------------------------------------------------------");
-//            }
-//        });
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
-
 
     @Override
     protected void cardControlElementsInit() {
-
         labelHeaderCard = (Label) anchorPaneCardView.lookup("#labelHeader");
         tooltipNameCard = labelHeaderCard.getTooltip();
 
@@ -738,32 +543,13 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         imageViewBackCard = (ImageView) anchorPaneCardView.lookup("#imageViewBack");
         imageViewFrontCard = (ImageView) anchorPaneCardView.lookup("#imageViewFront");
         imageViewCardLogo = (ImageView) anchorPaneCardView.lookup("#imageViewCardLogo");
-
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> {
-            btnPlusClicked(event);
-        });
-
-        btnMinusCard.setOnAction(event -> {
-            btnMinusClicked(event);
-        });
-
-        btnDeleteCard.setOnAction(event -> {
-            btnDeleteClicked(event);
-        });
-
-        btnEditCard.setOnAction(event -> {
-            btnEditClicked(event);
-        });
-
-//        material.getMaterialImage().cashedProperty().addListener((observableValue, aBoolean, t1) -> {
-//            if(t1.booleanValue()){
-//                updateItemView();
-//            }
-//        });
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -776,15 +562,12 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
             changeSlaveQuantity(quantity);
         }
 
-
-
         //create new shape
         ArrayList<SketchShape> itemShapes = new ArrayList<>(5);
         ArrayList<Point2D> coordList = new ArrayList<>();
         ArrayList<Double> angleList = new ArrayList<>();
 
         ElementTypes elementType = ElementTypes.valueOf(stoneProductType.name());
-
 
         //check sizes:
         double materialLength = material.getMaterialWidth();//mm
@@ -852,35 +635,21 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                     angleList.add(Double.valueOf(0));
                     cutShape.rotateShapeLocal(0);
 
-//                        cutShape.setTranslateX(cutShapesCoordinates.get(i).get(position).getX());
-//                        cutShape.setTranslateY(cutShapesCoordinates.get(i).get(position).getY());
-//
-//                        cutShape.rotateShapeLocal(cutShapesAngles.get(i).get(position).doubleValue());
-
                     position++;
                 }
             }
-
         } else {
-            SketchShape shape = null;
-            if (shapeType == ShapeType.RECTANGLE)
-                shape = new SketchShapeRectangle(elementType, material, depth, sizeA, sizeB);
-            else if (shapeType == ShapeType.RECTANGLE_WITH_CORNER)
-                shape = new SketchShapeRectangleCutCorner(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
-            else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS)
-                shape = new SketchShapeRectangleCircleCorner(elementType, material, depth, sizeA, sizeB, sizeC);
-            else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS_INTO)
-                shape = new SketchShapeRectangleCircleCornerInto(elementType, material, depth, sizeA, sizeB, sizeC);
-            else if (shapeType == ShapeType.TRIANGLE)
-                shape = new SketchShapeTriangle(elementType, material, depth, sizeA, sizeB);
-            else if (shapeType == ShapeType.CIRCLE_HALF)
-                shape = new SketchShapeCircleHalf(elementType, material, depth, sizeC);
-            else if (shapeType == ShapeType.CIRCLE)
-                shape = new SketchShapeCircle(elementType, material, depth, sizeC);
-            else if (shapeType == ShapeType.TRAPEZE)
-                shape = new SketchShapeTrapeze(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
-            else if (shapeType == ShapeType.RHOMBUS)
-                shape = new SketchShapeRhombus(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
+            SketchShape shape = switch (shapeType) {
+                case RECTANGLE -> new SketchShapeRectangle(elementType, material, depth, sizeA, sizeB);
+                case RECTANGLE_WITH_CORNER -> new SketchShapeRectangleCutCorner(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
+                case RECTANGLE_WITH_RADIUS -> new SketchShapeRectangleCircleCorner(elementType, material, depth, sizeA, sizeB, sizeC);
+                case RECTANGLE_WITH_RADIUS_INTO -> new SketchShapeRectangleCircleCornerInto(elementType, material, depth, sizeA, sizeB, sizeC);
+                case TRIANGLE -> new SketchShapeTriangle(elementType, material, depth, sizeA, sizeB);
+                case CIRCLE_HALF -> new SketchShapeCircleHalf(elementType, material, depth, sizeC);
+                case CIRCLE -> new SketchShapeCircle(elementType, material, depth, sizeC);
+                case TRAPEZE -> new SketchShapeTrapeze(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
+                case RHOMBUS -> new SketchShapeRhombus(elementType, material, depth, sizeA, sizeB, sizeC, sizeD);
+            };
 
             shape.setWorkCoefficient(workCoefficient);
             shape.setProductName(name);
@@ -927,12 +696,8 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
             CutShape cutShape = shape.getCutShape();
             CutDesigner.getInstance().getCutShapesList().remove(cutShape);
             CutDesigner.getInstance().getCutPane().cutObjectsGroup.getChildren().remove(cutShape);
-            //CutDesigner.getCutPane().deleteCutShape(cutShape);
-
         }
-        //System.out.println("cutShapesCoordinates.size() = " + cutShapesCoordinates.size());
         cutShapesCoordinates.remove(cutShapesCoordinates.size() - 1);
-        //System.out.println("cutShapesAngles.size() = " + cutShapesAngles.size());
         cutShapesAngles.remove(cutShapesAngles.size() - 1);
 
         updateItemView();
@@ -941,14 +706,12 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainItemsList().remove(this);
 
         deleteSlaves();
 
         for (ArrayList<SketchShape> shapesItemList : sketchShapeArrayList) {
-
             for (SketchShape shape : shapesItemList) {
-
                 shape.deleteShape();
 
                 SketchDesigner.getSketchShapesList().remove(shape);
@@ -963,7 +726,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
     }
 
     private void btnEditClicked(ActionEvent event){
-
         //setting change mode to edit
         for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
             item.setEditModeProperty(false);
@@ -972,114 +734,32 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         enterToEditMode(this);
     }
 
-
     public void updateItemView(){
-
         labelRowNumber.setText("");
 
-        //labelName.setText(stoneProductType.getName());
         labelName.setText(name);
         labelName.setWrapText(true);
 
         imageView.setImage(material.getImageViewLogo().getImage());
-        if (shapeType == ShapeType.RECTANGLE) {
-            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_1.png").toString()));
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon_tabletop.png").toString()));
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon_wallpanel.png").toString()));
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon_windowsill.png").toString()));
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon.png").toString()));
-        } else if (shapeType == ShapeType.RECTANGLE_WITH_CORNER) {
-            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_corner_1.png").toString()));
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon_tabletop.png").toString()));
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon_wallpanel.png").toString()));
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon_windowsill.png").toString()));
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon.png").toString()));
-        } else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS) {
-            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_1.png").toString()));
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon_tabletop.png").toString()));
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon_wallpanel.png").toString()));
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon_windowsill.png").toString()));
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon.png").toString()));
-        } else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS_INTO) {
-            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_1.png").toString()));
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon_tabletop.png").toString()));
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon_wallpanel.png").toString()));
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon_windowsill.png").toString()));
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon.png").toString()));
-        } else if (shapeType == ShapeType.TRIANGLE) {
 
-            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/triangle_1.png").toString()));
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/triangleShape_icon_tabletop.png").toString()));
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/triangleShape_icon_wallpanel.png").toString()));
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/triangleShape_icon_windowsill.png").toString()));
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/triangleShape_icon.png").toString()));
-        } else if (shapeType == ShapeType.CIRCLE_HALF) {
-            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/circle_half_1.png").toString()));
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon_tabletop.png").toString()));
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon_wallpanel.png").toString()));
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon_windowsill.png").toString()));
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon.png").toString()));
-        } else if (shapeType == ShapeType.CIRCLE) {
-            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/circle_1.png").toString()));
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleShape_icon_tabletop.png").toString()));
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleShape_icon_wallpanel.png").toString()));
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleShape_icon_windowsill.png").toString()));
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleShape_icon.png").toString()));
-        } else if (shapeType == ShapeType.TRAPEZE) {
-            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/trapeze_1.png").toString()));
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon_tabletop.png").toString()));
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon_wallpanel.png").toString()));
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon_windowsill.png").toString()));
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon.png").toString()));
-        } else if (shapeType == ShapeType.RHOMBUS) {
-            imageViewShapeType.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rhombus_1.png").toString()));
-//            if (stoneProductType == StoneProductType.TABLETOP)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rhombusShape_icon_tabletop.png").toString()));
-//            else if (stoneProductType == StoneProductType.WALL_PANEL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rhombusShape_icon_wallpanel.png").toString()));
-//            else if (stoneProductType == StoneProductType.WINDOWSILL)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rhombusShape_icon_windowsill.png").toString()));
-//            else if (stoneProductType == StoneProductType.FOOT)
-//                imageViewShapeType.setImage(new Image(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rhombusShape_icon.png").toString()));
-        }
+        String shapeTypeImagePath = switch (shapeType) {
+            case RECTANGLE -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_1.png";
+            case RECTANGLE_WITH_CORNER -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_corner_1.png";
+            case RECTANGLE_WITH_RADIUS -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_1.png";
+            case RECTANGLE_WITH_RADIUS_INTO -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_1.png";
+            case TRIANGLE -> "/styles/images/TableDesigner/StoneProductItem/shapes/triangle_1.png";
+            case CIRCLE_HALF -> "/styles/images/TableDesigner/StoneProductItem/shapes/circle_half_1.png";
+            case CIRCLE -> "/styles/images/TableDesigner/StoneProductItem/shapes/circle_1.png";
+            case TRAPEZE -> "/styles/images/TableDesigner/StoneProductItem/shapes/trapeze_1.png";
+            case RHOMBUS -> "/styles/images/TableDesigner/StoneProductItem/shapes/rhombus_1.png";
+        };
+        imageViewShapeType.setImage(new Image(Project.class.getResource(shapeTypeImagePath).toString()));
+
         labelMaterial.setText(material.getReceiptName());
         labelDepth.setText("" + depth);
         labelWidth.setText("" + sizeA);
         labelHeight.setText("" + sizeB);
         labelQuantity.setText("" + quantity);
-
 
         labelHeaderCard.setText(name);
         tooltipNameCard.setText(name);
@@ -1088,110 +768,59 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
         imageViewCardLogo.setImage(material.getImageViewLogo().getImage());
 
-        if (shapeType == ShapeType.RECTANGLE) {
-            imageViewFrontCard.setImage(
-                    new Image(Project
-                            .class
-                            .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_1.png")
-                            .toString()));
-        }else if (shapeType == ShapeType.RECTANGLE_WITH_CORNER) {
-            imageViewFrontCard.setImage(
-                    new Image(Project
-                            .class
-                            .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_corner_1.png")
-                            .toString()));
-        }else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS) {
-            imageViewFrontCard.setImage(
-                    new Image(Project
-                            .class
-                            .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_1.png")
-                            .toString()));
-        }else if (shapeType == ShapeType.RECTANGLE_WITH_RADIUS_INTO) {
-            imageViewFrontCard.setImage(
-                    new Image(Project
-                            .class
-                            .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_1.png")
-                            .toString()));
-        }else if (shapeType == ShapeType.TRIANGLE) {
-            imageViewFrontCard.setImage(
-                    new Image(Project
-                            .class
-                            .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/triangle_1.png")
-                            .toString()));
-        }else if (shapeType == ShapeType.TRAPEZE) {
-            imageViewFrontCard.setImage(
-                    new Image(Project
-                            .class
-                            .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/trapeze_1.png")
-                            .toString()));
-        }else if (shapeType == ShapeType.RHOMBUS) {
-            imageViewFrontCard.setImage(
-                    new Image(Project
-                            .class
-                            .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/rhombus_1.png")
-                            .toString()));
-        }else if (shapeType == ShapeType.CIRCLE) {
-            imageViewFrontCard.setImage(
-                    new Image(Project
-                            .class
-                            .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/circle_1.png")
-                            .toString()));
-        }else if (shapeType == ShapeType.CIRCLE_HALF) {
-            imageViewFrontCard.setImage(
-                    new Image(Project
-                            .class
-                            .getResource("/styles/images/TableDesigner/StoneProductItem/shapes/circle_half_1.png")
-                            .toString()));
-        }
-
+        String frontCardImagePath = switch (shapeType) {
+            case RECTANGLE -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_1.png";
+            case RECTANGLE_WITH_CORNER -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_corner_1.png";
+            case RECTANGLE_WITH_RADIUS -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_1.png";
+            case RECTANGLE_WITH_RADIUS_INTO -> "/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_circle_into_1.png";
+            case TRIANGLE -> "/styles/images/TableDesigner/StoneProductItem/shapes/triangle_1.png";
+            case TRAPEZE -> "/styles/images/TableDesigner/StoneProductItem/shapes/trapeze_1.png";
+            case RHOMBUS -> "/styles/images/TableDesigner/StoneProductItem/shapes/rhombus_1.png";
+            case CIRCLE -> "/styles/images/TableDesigner/StoneProductItem/shapes/circle_1.png";
+            case CIRCLE_HALF -> "/styles/images/TableDesigner/StoneProductItem/shapes/circle_half_1.png";
+        };
+        imageViewFrontCard.setImage(new Image(Project.class.getResource(frontCardImagePath).toString()));
 
         labelQuantityCard.setText("" + quantity);
-
 
 
         labelName1Card.setText("Материал");
         labelValue1Card.setText(material.getReceiptName());
 
         labelName2Card.setText("Толщина материала");
-        labelValue2Card.setText("" + depth + " мм");
+        labelValue2Card.setText(depth + " мм");
 
         if(shapeType == ShapeType.CIRCLE || shapeType == ShapeType.CIRCLE_HALF){
             labelName3Card.setText("Радиус");
-            labelValue3Card.setText("" + (int)sizeC + " мм");
+            labelValue3Card.setText((int)sizeC + " мм");
 
             labelName4Card.setText("Высота");
             labelValue4Card.setText("-");
         }else{
             labelName3Card.setText("Ширина");
-            labelValue3Card.setText("" + (int)sizeA + " мм");
+            labelValue3Card.setText((int)sizeA + " мм");
 
             labelName4Card.setText("Высота");
             labelValue4Card.setText(" " + (int)sizeB + " мм");
         }
-
-
-
 
         updateRowPrice();
     }
 
     @Override
     public void updateRowPrice() {
-
         labelRowPrice.setText("-");
-
         labelPriceForOneCard.setText("-");
         labelPriceForAllCard.setText("-");
     }
-
 
     /**
      * Settings part
      */
     private static AnchorPane anchorPaneSettingsView = null;
     private static Button btnAdd;
-    private static Button btnApply = new Button("OK"), btnCancel = new Button("Отмена");
-
+    private static Button btnApply = new Button("OK");
+    private static Button btnCancel = new Button("Отмена");
 
     private static ChoiceBox<String> choiceBoxElementType, choiceBoxMaterial, choiceBoxDepth;
     private static ToggleButton toggleButtonShape1, toggleButtonShape2, toggleButtonShape3, toggleButtonShape4;
@@ -1223,7 +852,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
     }
 
     private static void settingsControlElementsInit() {
-
         btnApply.getStyleClass().add("btnBrown");
         btnCancel.getStyleClass().add("btnBrown");
 
@@ -1283,66 +911,14 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         labelC_R.setText("C:");
         imageViewShape.setImage(new Image(StoneProductItem.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
 
-
-//        ImageView image1 = new ImageView(StoneProductItem.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon_tabletop.png").toString());
-//        image1.setFitWidth(45);
-//        image1.setFitHeight(45);
-//        toggleButtonShape1.setGraphic(image1);
-//
-//        ImageView image2 = new ImageView(StoneProductItem.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon_tabletop.png").toString());
-//        image2.setFitWidth(45);
-//        image2.setFitHeight(45);
-//        toggleButtonShape2.setGraphic(image2);
-//
-//        ImageView image3 = new ImageView(StoneProductItem.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon_tabletop.png").toString());
-//        image3.setFitWidth(45);
-//        image3.setFitHeight(45);
-//        toggleButtonShape3.setGraphic(image3);
-//
-//        ImageView image4 = new ImageView(StoneProductItem.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon_tabletop.png").toString());
-//        image4.setFitWidth(45);
-//        image4.setFitHeight(45);
-//        toggleButtonShape4.setGraphic(image4);
-//
-//        ImageView image5 = new ImageView(StoneProductItem.class.getResource("/styles/images/TableDesigner/StoneProductItem/triangleShape_icon_tabletop.png").toString());
-//        image5.setFitWidth(45);
-//        image5.setFitHeight(45);
-//        toggleButtonShape5.setGraphic(image5);
-//
-//        ImageView image6 = new ImageView(StoneProductItem.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon_tabletop.png").toString());
-//        image6.setFitWidth(45);
-//        image6.setFitHeight(45);
-//        toggleButtonShape4.setGraphic(image6);
-//
-//        ImageView image7 = new ImageView(StoneProductItem.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleShape_icon_tabletop.png").toString());
-//        image7.setFitWidth(45);
-//        image7.setFitHeight(45);
-//        toggleButtonShape7.setGraphic(image7);
-////
-//        ImageView image8 = new ImageView(StoneProductItem.class.getResource("/styles/images/TableDesigner/StoneProductItem/trapezeShape_icon_tabletop.png").toString());
-//        image8.setFitWidth(45);
-//        image8.setFitHeight(45);
-//        toggleButtonShape8.setGraphic(image8);
-////
-//        ImageView image9 = new ImageView(StoneProductItem.class.getResource("/styles/images/TableDesigner/StoneProductItem/rhombusShape_icon_tabletop.png").toString());
-//        image9.setFitWidth(45);
-//        image9.setFitHeight(45);
-//        toggleButtonShape9.setGraphic(image9);
-
-
         textFieldSizeA.setText("600");
         textFieldSizeB.setText("600");
         textFieldSizeC.setDisable(true);
         textFieldSizeD.setDisable(true);
-
-
     }
 
     private static void settingsControlElementsLogicInit() {
-
-        btnAdd.setOnAction(event -> {
-            addItem(getTableDesignerItemsList().size(), 1);
-        });
+        btnAdd.setOnAction(event -> addItem(TableDesignerSession.getTableDesignerMainItemsList().size(), 1));
 
         choiceBoxElementType.setOnAction(event -> {
             if (choiceBoxElementType.getSelectionModel().getSelectedIndex() == 0) {
@@ -1399,78 +975,22 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 toggleButtonShape9.setDisable(true);
 
                 imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
-
-
             }
 
-//            if (image1 != null) {
-//                image1.setFitWidth(45);
-//                image1.setFitHeight(45);
-//                image2.setFitWidth(45);
-//                image2.setFitHeight(45);
-//                image3.setFitWidth(45);
-//                image3.setFitHeight(45);
-//                image4.setFitWidth(45);
-//                image4.setFitHeight(45);
-//                image5.setFitWidth(45);
-//                image5.setFitHeight(45);
-//                image6.setFitWidth(45);
-//                image6.setFitHeight(45);
-//                image7.setFitWidth(45);
-//                image7.setFitHeight(45);
-//                image8.setFitWidth(45);
-//                image8.setFitHeight(45);
-//                image9.setFitWidth(45);
-//                image9.setFitHeight(45);
-
-//                toggleButtonShape1.setGraphic(image1);
-//                toggleButtonShape2.setGraphic(image2);
-//                toggleButtonShape3.setGraphic(image3);
-//                toggleButtonShape4.setGraphic(image4);
-//                toggleButtonShape5.setGraphic(image5);
-//                toggleButtonShape6.setGraphic(image6);
-//                toggleButtonShape7.setGraphic(image7);
-//                toggleButtonShape8.setGraphic(image8);
-//                toggleButtonShape9.setGraphic(image9);
-//            }
-
-
-
-
-
             refreshDepthsField();
-
-
-
             updatePrice();
         });
 
         choiceBoxMaterial.setOnAction(event -> {
-
-
-//            for(Material material : ProjectHandler.getMaterialsListInProject()){
-//                if(material.getReceiptName().equals(choiceBoxMaterial.getValue())){
-//
-//
-//
-//                    //choiceBoxDepth.getSelectionModel().select(0);
-//                }
-//            }
-
             refreshDepthsField();
-
-
-
             updatePrice();
         });
 
         choiceBoxDepth.setOnAction(event -> {
-
             updatePrice();
         });
 
         toggleGroupShapes.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-
             labelC_R.setText("C:");
             labelD.setText("D:");
 
@@ -1590,13 +1110,9 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 textFieldSizeD.setDisable(false);
             }
         });
-
-
     }
 
     private static void addItem(int index, int quantity){
-
-
         StoneProductType stoneProductType = StoneProductType.TABLETOP;
         if (choiceBoxElementType.getSelectionModel().getSelectedIndex() == 0)
             stoneProductType = StoneProductType.TABLETOP;
@@ -1936,14 +1452,12 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
         //String name = stoneProductType.getName() + " " + choiceBoxDepth.getSelectionModel().getSelectedItem();
 
-        tableDesignerItemsList.add(index, new StoneProductItem(cutShapesCoordinates, cutShapesAngles,
+        TableDesignerSession.getTableDesignerMainItemsList().add(index, new StoneProductItem(cutShapesCoordinates, cutShapesAngles,
                 quantity, stoneProductType, shapeType, material, depth, sizeA, sizeB, sizeC, sizeD,
                 workCoefficient, workCoefficientIndex, productName));
     }
 
     public static void refreshDepthsField() {
-
-
         choiceBoxDepth.getItems().clear();
         Material selectedMaterial = null;
         for (Material material : Project.getMaterials()) {
@@ -2168,38 +1682,9 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 choiceBoxDepth.getSelectionModel().select("d20 с кромкой >20мм");
             }
         }
-        //choiceBoxDepth.getSelectionModel().select(0);
-
 
         toggleButtonShape1.setSelected(true);
         imageViewShape.setImage(new Image(Project.class.getResource("/styles/images/TableDesigner/StoneProductItem/sizes/rectangle.png").toString()));
-
-//        ImageView image1 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleShape_icon_tabletop.png").toString());
-//        ImageView image2 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithCornerShape_icon_tabletop.png").toString());
-//        ImageView image3 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusShape_icon_tabletop.png").toString());
-//        ImageView image4 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/rectangleWithRadiusIntoShape_icon_tabletop.png").toString());
-//        ImageView image5 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/triangleShape_icon_tabletop.png").toString());
-//        ImageView image6 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/StoneProductItem/circleHalfShape_icon_tabletop.png").toString());
-
-//        image1.setFitWidth(45);
-//        image1.setFitHeight(45);
-//        image2.setFitWidth(45);
-//        image2.setFitHeight(45);
-//        image3.setFitWidth(45);
-//        image3.setFitHeight(45);
-//        image4.setFitWidth(45);
-//        image4.setFitHeight(45);
-//        image5.setFitWidth(45);
-//        image5.setFitHeight(45);
-//        image6.setFitWidth(45);
-//        image6.setFitHeight(45);
-
-//        toggleButtonShape1.setGraphic(image1);
-//        toggleButtonShape2.setGraphic(image2);
-//        toggleButtonShape3.setGraphic(image3);
-//        toggleButtonShape4.setGraphic(image4);
-//        toggleButtonShape5.setGraphic(image5);
-//        toggleButtonShape6.setGraphic(image6);
 
         textFieldSizeA.setText("600");
         textFieldSizeB.setText("600");
@@ -2217,8 +1702,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
         for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
-
-                String currency = material.getCurrency();
                 String units = "м^2";
                 double priceForOne = -1.0;
 
@@ -2296,7 +1779,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
                 stoneProductItem.shapeType == ShapeType.CIRCLE){
 
             depth = depth.split(",")[0];
-
         }
 
         choiceBoxDepth.getSelectionModel().select(depth);
@@ -2320,16 +1802,13 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
 
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
-
-            int index = getTableDesignerItemsList().indexOf(stoneProductItem);
+            int index = TableDesignerSession.getTableDesignerMainItemsList().indexOf(stoneProductItem);
             if(index != -1){//error when materialManager opened in edit mode
                 addItem(index, stoneProductItem.quantity);
             }
 
-
             exitFromEditMode(stoneProductItem);
             stoneProductItem.removeThisItem();
-
         });
         btnCancel.setOnAction(event -> {
             exitFromEditMode(stoneProductItem);
@@ -2337,8 +1816,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         //in listeners:
         //"apply". delete old row and create new row
         //"cancel". exit from edit mode
-
-
     }
 
     public static void exitFromEditMode(TableDesignerItem tableDesignerItem){
@@ -2365,7 +1842,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         for (TableDesignerItem slaveItem : slaveItems) {
             if (slaveItem instanceof RadiusItem) {
                 RadiusItem radiusItem = (RadiusItem) slaveItem;
-                RadiusItem.getTableDesignerItemsList().remove(radiusItem);
+                TableDesignerSession.getTableDesignerMainWorkItemsList().remove(radiusItem);
             }
         }
         slaveItems.clear();
@@ -2399,7 +1876,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         jsonObject.put("workCoefficientIndex", workCoefficientIndex);
 
 
-
         JSONArray coordinatesGlobal = new JSONArray();
         for (ArrayList<SketchShape> shapeList : sketchShapeArrayList) {
 
@@ -2431,8 +1907,6 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
     }
 
     public static StoneProductItem initFromJSON(JSONObject jsonObject) {
-
-
         String materialName = (String) jsonObject.get("material");
 
         int quantity = ((Long) jsonObject.get("quantity")).intValue();
@@ -2449,21 +1923,20 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
         }
         if (material == null) return null;
 
-        double workCoefficient = ((Double) jsonObject.get("workCoefficient")).doubleValue();
+        double workCoefficient = (Double) jsonObject.get("workCoefficient");
         int workCoefficientIndex = 0;
         if(jsonObject.get("workCoefficientIndex") != null){
             workCoefficientIndex = ((Long) jsonObject.get("workCoefficientIndex")).intValue();
         }
 
         int depth = ((Long) jsonObject.get("depth")).intValue();
-        double sizeA = ((Double) jsonObject.get("sizeA")).doubleValue();
-        double sizeB = ((Double) jsonObject.get("sizeB")).doubleValue();
-        double sizeC = ((Double) jsonObject.get("sizeC")).doubleValue();
-        double sizeD = ((Double) jsonObject.get("sizeD")).doubleValue();
+        double sizeA = (Double) jsonObject.get("sizeA");
+        double sizeB = (Double) jsonObject.get("sizeB");
+        double sizeC = (Double) jsonObject.get("sizeC");
+        double sizeD = (Double) jsonObject.get("sizeD");
 
         String name = ((String) jsonObject.get("name"));
 
-        //System.out.println("workCoefficient = " + workCoefficient);
         //get data for cutShapes
         ArrayList<ArrayList<Point2D>> cutShapeCoordinatesGlobal = new ArrayList<>(1);
         JSONArray coordinatesArrayGlobal = (JSONArray) jsonObject.get("cutShapesCoordinates");
@@ -2473,7 +1946,7 @@ public class StoneProductItem extends TableDesignerItem implements Cuttable, Dep
             JSONArray coordArray = (JSONArray) obj;
             for (Object obj1 : coordArray) {
                 JSONObject point = (JSONObject) obj1;
-                cutShapeCoordinates.add(new Point2D(((Double) point.get("x")).doubleValue(), ((Double) point.get("y")).doubleValue()));
+                cutShapeCoordinates.add(new Point2D((Double) point.get("x"), (Double) point.get("y")));
             }
             cutShapeCoordinatesGlobal.add(cutShapeCoordinates);
         }
@@ -2510,8 +1983,7 @@ enum StoneProductType {
 
     private String name;
 
-    private StoneProductType(String name) {
-
+    StoneProductType(String name) {
         this.name = name;
     }
 

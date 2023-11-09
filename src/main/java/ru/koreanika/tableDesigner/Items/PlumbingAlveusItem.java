@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -22,6 +21,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.*;
 import java.net.URL;
@@ -29,9 +29,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PlumbingAlveusItem extends TableDesignerItem{
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
-
 
     Label labelRowNumber, labelName, labelMaterial, labelType, labelModel, labelNull1, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -75,10 +72,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
 
         imageMain = new Image(imgURL.toString());
 
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/PlumbingAlveusRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/PlumbingAlveusRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -143,7 +137,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
 
     @Override
@@ -153,17 +147,11 @@ public class PlumbingAlveusItem extends TableDesignerItem{
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -181,8 +169,6 @@ public class PlumbingAlveusItem extends TableDesignerItem{
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -194,41 +180,35 @@ public class PlumbingAlveusItem extends TableDesignerItem{
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
         quantity++;
         updateItemView();
     }
+
     private void btnMinusClicked(ActionEvent event){
         if (quantity == 1) return;
         quantity--;
         updateItemView();
     }
+
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
-
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
+
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
         for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
@@ -239,13 +219,11 @@ public class PlumbingAlveusItem extends TableDesignerItem{
     }
 
     public void updateItemView(){
-
         labelRowNumber.setText("");
 
         labelName.setText(name);
         labelName.setWrapText(true);
         imageViewMain.setImage(imageMain);
-
 
         labelMaterial.setText(plumbingElement.getSize(model) + "мм");
         labelType.setText("");
@@ -253,13 +231,10 @@ public class PlumbingAlveusItem extends TableDesignerItem{
 
         labelQuantity.setText("" + quantity);
 
-
         labelHeaderCard.setText(name);
         tooltipNameCard.setText(name);
         imageViewBackCard.setImage(imageMain);
         labelQuantityCard.setText("" + quantity);
-
-
 
         labelName1Card.setText("Размер");
         labelValue1Card.setText(plumbingElement.getSize(model) + "мм");
@@ -278,10 +253,8 @@ public class PlumbingAlveusItem extends TableDesignerItem{
 
     @Override
     public void updateRowPrice() {
-
         String currency = plumbingElement.getCurrency();
         units = "шт.";
-
 
         priceForOne = plumbingElement.getPrice(model);
 
@@ -311,7 +284,6 @@ public class PlumbingAlveusItem extends TableDesignerItem{
     public AnchorPane getTableView() {
         return anchorPaneTableRow;
     }
-
 
     /**
      * Settings part
@@ -443,7 +415,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1));
 
         comboBoxType.setOnAction(event -> {
             if (comboBoxType.getItems().size() == 0 || comboBoxType.getSelectionModel().getSelectedIndex() == -1)
@@ -491,8 +463,8 @@ public class PlumbingAlveusItem extends TableDesignerItem{
 
         if (countOk) {
             quantity = Integer.parseInt(textFieldCount.getText());
-            if(index == -1) index = tableDesignerItemsList.size();
-            tableDesignerItemsList.add(index, new PlumbingAlveusItem(id, model, quantity));
+            if(index == -1) index = TableDesignerSession.getTableDesignerAdditionalItemsList().size();
+            TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new PlumbingAlveusItem(id, model, quantity));
         }
 
     }
@@ -590,7 +562,7 @@ public class PlumbingAlveusItem extends TableDesignerItem{
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(plumbingAlveus);
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(plumbingAlveus);
             addItem(index, plumbingAlveus.quantity);
 
             exitFromEditMode(plumbingAlveus);

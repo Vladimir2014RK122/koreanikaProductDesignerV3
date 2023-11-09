@@ -2,14 +2,14 @@ package ru.koreanika.utils;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import ru.koreanika.PortalClient.Authorization.AppType;
-import ru.koreanika.cutDesigner.CutDesigner;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ru.koreanika.PortalClient.Authorization.AppType;
+import ru.koreanika.cutDesigner.CutDesigner;
 import ru.koreanika.project.*;
 import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.service.event.*;
@@ -20,10 +20,10 @@ import ru.koreanika.utils.currency.UserCurrency;
 import ru.koreanika.utils.MaterialSelectionWindow.FirstStart;
 import ru.koreanika.utils.MaterialSelectionWindow.MaterialSelectionWindow;
 import ru.koreanika.utils.news.NewsController;
-import ru.koreanika.utils.receipt.controller.ReceiptManagerKoreanika;
-import ru.koreanika.utils.receipt.controller.ReceiptManagerPromebel;
-import ru.koreanika.utils.receipt.controller.ReceiptManager;
-import ru.koreanika.utils.receipt.controller.ReceiptManagerZetta;
+import ru.koreanika.utils.receipt.ui.controller.ReceiptManagerKoreanika;
+import ru.koreanika.utils.receipt.ui.controller.ReceiptManagerPromebel;
+import ru.koreanika.utils.receipt.ui.controller.ReceiptManager;
+import ru.koreanika.utils.receipt.ui.controller.ReceiptManagerZetta;
 
 import java.io.File;
 

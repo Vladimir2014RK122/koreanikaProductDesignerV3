@@ -21,7 +21,6 @@ public abstract class TableDesignerItem implements TableView {
 
     BooleanProperty editModeProperty = new SimpleBooleanProperty(false);
 
-
     // card controls:
     AnchorPane anchorPaneCardView = null;
 
@@ -36,19 +35,8 @@ public abstract class TableDesignerItem implements TableView {
     ImageView imageViewBackCard, imageViewFrontCard;
     Tooltip tooltipNameCard;
 
-
-    /** SETTINGS PANE START */
-
-
-
-    /** SETTINGS PANE END */
-
     protected TableDesignerItem(){
-
-        FXMLLoader fxmlLoaderCard = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/ItemCardViewTemplate.fxml")
-        );
-
+        FXMLLoader fxmlLoaderCard = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/ItemCardViewTemplate.fxml"));
         try {
             anchorPaneCardView = fxmlLoaderCard.load();
         } catch (IOException ex) {
@@ -64,8 +52,6 @@ public abstract class TableDesignerItem implements TableView {
                 anchorPaneCardView.setStyle("-fx-background-color: BACKGROUND_COLOR_1;");//MAIN_COLOR_LIGHT
             }
         });
-
-
     }
 
     public int getQuantity() {
@@ -92,13 +78,11 @@ public abstract class TableDesignerItem implements TableView {
         this.editModeProperty.set(editModeProperty);
     }
 
-
     public AnchorPane getCardView() {
         return anchorPaneCardView;
     }
 
     protected void cardControlElementsInit() {
-
         labelHeaderCard = (Label) anchorPaneCardView.lookup("#labelHeader");
         tooltipNameCard = labelHeaderCard.getTooltip();
 
@@ -125,18 +109,12 @@ public abstract class TableDesignerItem implements TableView {
 
         imageViewBackCard = (ImageView) anchorPaneCardView.lookup("#imageViewBack");
         imageViewFrontCard = (ImageView) anchorPaneCardView.lookup("#imageViewFront");
-
-
-
     }
-
-
 
     public void updateItemView(){}
 
-
-
     public abstract void exitEditMode();
+
     /**
      * JSON part
      */

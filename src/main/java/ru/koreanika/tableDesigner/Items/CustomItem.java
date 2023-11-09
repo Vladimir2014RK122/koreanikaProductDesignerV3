@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -12,6 +11,7 @@ import javafx.scene.layout.Priority;
 import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -19,9 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class CustomItem extends TableDesignerItem {
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
-
 
     Label labelRowNumber, labelName, labelNull1, labelNull2, labelNull3, labelNull4, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -32,20 +29,13 @@ public class CustomItem extends TableDesignerItem {
 
     String units;
 
-
     public CustomItem(String name, double price, int quantity, String units) {
-
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.units = units;
 
-
-
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/CustomRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/CustomRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -66,8 +56,6 @@ public class CustomItem extends TableDesignerItem {
         return name;
     }
 
-
-
     public double getPrice() {
         return price;
     }
@@ -79,13 +67,12 @@ public class CustomItem extends TableDesignerItem {
     @Override
     public Map<String, ImageView> getMainImageView() {
         Map<String, ImageView> imagesList = new LinkedHashMap<>();
-
         return imagesList;
     }
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
 
     @Override
@@ -95,17 +82,11 @@ public class CustomItem extends TableDesignerItem {
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -123,8 +104,6 @@ public class CustomItem extends TableDesignerItem {
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelNull1, Priority.ALWAYS);
@@ -133,47 +112,39 @@ public class CustomItem extends TableDesignerItem {
         HBox.setHgrow(labelNull4, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
-
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
-
 
     private void btnPlusClicked(ActionEvent event){
         quantity++;
         updateItemView();
     }
+
     private void btnMinusClicked(ActionEvent event){
         if (quantity == 1) return;
         quantity--;
         updateItemView();
     }
+
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
+
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
         for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
@@ -184,10 +155,8 @@ public class CustomItem extends TableDesignerItem {
     }
 
     public void updateItemView(){
-
         labelRowNumber.setText("");
         labelName.setText(name);
-//        imageViewMain.setImage(imageMain);
 
         labelNull1.setText("");
         labelNull2.setText("");
@@ -196,13 +165,10 @@ public class CustomItem extends TableDesignerItem {
 
         labelQuantity.setText("" + quantity);
 
-
         labelHeaderCard.setText(name);
         tooltipNameCard.setText(name);
         imageViewBackCard.setImage(new Image(getClass().getResource("/styles/images/no_img.png").toString()));
         labelQuantityCard.setText("" + quantity);
-
-
 
         labelName1Card.setText("Единицы измерения");
         labelValue1Card.setText(units);
@@ -221,10 +187,8 @@ public class CustomItem extends TableDesignerItem {
 
     @Override
     public void updateRowPrice() {
-
         double priceForOne = price;
 
-        //priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne * quantity) + Currency.RUR_SYMBOL);
 
         labelPriceForOneCard.setText(String.format(Locale.ENGLISH, "%.0f", priceForOne) + Currency.RUR_SYMBOL);
@@ -240,7 +204,6 @@ public class CustomItem extends TableDesignerItem {
     public AnchorPane getTableView() {
         return anchorPaneTableRow;
     }
-
 
     /**
      * Settings part
@@ -273,7 +236,6 @@ public class CustomItem extends TableDesignerItem {
     }
 
     private static void settingsControlElementsInit() {
-
         btnApply.getStyleClass().add("btnBrown");
         btnCancel.getStyleClass().add("btnBrown");
 
@@ -291,15 +253,12 @@ public class CustomItem extends TableDesignerItem {
         textFieldUnits.setText("шт");
 
         labelPrice.setText("Цена: по счету");
-
     }
 
     private static void settingsControlElementsLogicInit() {
-
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerMainWorkItemsList().size(), 1));
 
         textFieldPrice.textProperty().addListener((observable, oldValue, newValue) -> {
-
             try {
                 Double.parseDouble(newValue);
             } catch (NumberFormatException ex) {
@@ -311,12 +270,9 @@ public class CustomItem extends TableDesignerItem {
             priceOk = true;
 
             labelPrice.setText("Цена: " + textFieldPrice.getText() + "₽");
-
-
         });
 
         textFieldCount.textProperty().addListener((observable, oldValue, newValue) -> {
-
             try {
                 Double.parseDouble(newValue);
             } catch (NumberFormatException ex) {
@@ -327,17 +283,12 @@ public class CustomItem extends TableDesignerItem {
             textFieldCount.setStyle("-fx-text-fill:#A8A8A8");
             priceOk = true;
         });
-
     }
 
     private static void addItem(int index, int quantity){
-        if (!(priceOk && countOk)) return;
-//            for(TableDesignerItem item : MountingItem.getTableDesignerItemsList()){
-//                if(item instanceof MountingItem){
-//                    InfoMessage.showMessage(InfoMessage.MessageType.WARNING, "Не более одного элемента этого типа!");
-//                    return;
-//                }
-//            }
+        if (!(priceOk && countOk)) {
+            return;
+        }
 
         String name = textFieldName.getText();
         double price;
@@ -352,24 +303,20 @@ public class CustomItem extends TableDesignerItem {
 
         quantity = (int)Double.parseDouble(textFieldCount.getText());
 
-        tableDesignerItemsList.add(index, new CustomItem(name, price, quantity, units));
-
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(index, new CustomItem(name, price, quantity, units));
     }
 
     public static void settingsControlElementsRefresh() {
-
         textFieldName.setText("Дополнительно");
         textFieldPrice.setText("1");
         textFieldCount.setText("1");
         textFieldUnits.setText("шт");
 
         labelPrice.setText("Цена: " + textFieldPrice.getText() + "₽");
-
     }
 
     private static void enterToEditMode(CustomItem customItem){
         TableDesigner.openSettings(CustomItem.class);
-
 
         //get row data to settings
 
@@ -392,18 +339,14 @@ public class CustomItem extends TableDesignerItem {
 
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
-
-            int index = getTableDesignerItemsList().indexOf(customItem);
+            int index = TableDesignerSession.getTableDesignerMainWorkItemsList().indexOf(customItem);
             addItem(index, customItem.quantity);
 
             exitFromEditMode(customItem);
             customItem.removeThisItem();
-
-
         });
         btnCancel.setOnAction(event -> {
             exitFromEditMode(customItem);
-
         });
         //in listeners:
         //"apply". delete old row and create new row
@@ -425,7 +368,6 @@ public class CustomItem extends TableDesignerItem {
 
     @Override
     public JSONObject getJsonView() {
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("itemName", "CustomItem");
         jsonObject.put("quantity", quantity);
@@ -435,12 +377,10 @@ public class CustomItem extends TableDesignerItem {
 
         jsonObject.put("units", units);
 
-
         return jsonObject;
     }
 
     public static CustomItem initFromJSON(JSONObject jsonObject) {
-
         int quantity = ((Long) jsonObject.get("quantity")).intValue();
 
         String name = (String) jsonObject.get("name");
@@ -452,7 +392,6 @@ public class CustomItem extends TableDesignerItem {
         //customItem.quantity = quantity;
         customItem.labelQuantity.setText("" + quantity);
         customItem.updateRowPrice();
-
 
         return customItem;
     }

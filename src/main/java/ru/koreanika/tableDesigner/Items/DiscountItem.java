@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -15,6 +14,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.InfoMessage;
 import ru.koreanika.utils.UserPreferences;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -22,12 +22,9 @@ import java.util.Map;
 
 public class DiscountItem extends TableDesignerItem {
 
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
-
     Label labelRowNumber, labelName, labelNull1, labelNull2, labelPercent, labelNull3, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
     Button btnPlus, btnMinus, btnDelete, btnEdit;
-
 
     int percent;
     Image imageMain;
@@ -71,7 +68,7 @@ public class DiscountItem extends TableDesignerItem {
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
 
     @Override
@@ -81,17 +78,11 @@ public class DiscountItem extends TableDesignerItem {
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -131,45 +122,39 @@ public class DiscountItem extends TableDesignerItem {
         HBox.setHgrow(labelNull3, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
         quantity++;
         updateItemView();
     }
+
     private void btnMinusClicked(ActionEvent event){
         if (quantity == 1) return;
         quantity--;
         updateItemView();
     }
+
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
+
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
         for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
@@ -289,7 +274,7 @@ public class DiscountItem extends TableDesignerItem {
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerMainWorkItemsList().size(), 1));
 
         textFieldPercent.textProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -317,7 +302,7 @@ public class DiscountItem extends TableDesignerItem {
 
     private static void addItem(int index, int quantity){
         if (!(percentOk)) return;
-        for (TableDesignerItem item : DiscountItem.getTableDesignerItemsList()) {
+        for (TableDesignerItem item : TableDesignerSession.getTableDesignerMainWorkItemsList()) {
             if (item instanceof DiscountItem) {
                 InfoMessage.showMessage(InfoMessage.MessageType.WARNING, "Не более одного элемента этого типа!", null);
                 return;
@@ -331,9 +316,7 @@ public class DiscountItem extends TableDesignerItem {
             return;
         }
 
-
-        tableDesignerItemsList.add(index, new DiscountItem(quantity, percent));
-
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(index, new DiscountItem(quantity, percent));
     }
 
     public static void settingsControlElementsRefresh() {
@@ -365,7 +348,7 @@ public class DiscountItem extends TableDesignerItem {
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(discountItem);
+            int index = TableDesignerSession.getTableDesignerMainWorkItemsList().indexOf(discountItem);
             discountItem.removeThisItem();
             addItem(index, discountItem.quantity);
 

@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt;
+package ru.koreanika.utils.receipt.ui.component;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

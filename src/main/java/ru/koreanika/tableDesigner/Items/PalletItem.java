@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -22,6 +21,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,9 +30,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
-
 
     Label labelRowNumber, labelName, labelMaterial, labelType, labelModel, labelNull1, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -43,10 +40,8 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
     String model;
     Image imageMain;
 
-    double price;
     double priceForOne;
     String units;
-
 
     public PalletItem(Material material, int type, String model, int quantity) {
 
@@ -57,10 +52,7 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
 
         imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/PalleteItem/pallete_100_id1.png").toString()).getImage();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/PalletRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/PalletRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -116,19 +108,15 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
             }
         }
 
-
-
         PalletItem newPalletItem = new PalletItem(newMaterial, oldPalletItem.type, oldPalletItem.model, oldPalletItem.quantity);
 
         oldPalletItem.removeThisItem();
-        tableDesignerItemsList.add(newPalletItem);
-
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(newPalletItem);
     }
 
     public String getModel() {
         return model;
     }
-
 
     public int getType() {
         return type;
@@ -157,7 +145,7 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
 
     @Override
@@ -167,17 +155,11 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -195,8 +177,6 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -208,25 +188,17 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -241,7 +213,7 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
@@ -425,7 +397,7 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1));
 
 
         choiceBoxMaterial.setOnAction(event -> {
@@ -464,8 +436,7 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
         int type = comboBoxView.getSelectionModel().getSelectedItem().getId();
         String model = choiceBoxModel.getSelectionModel().getSelectedItem();
 
-        tableDesignerItemsList.add(index, new PalletItem(material, type, model, quantity));
-
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new PalletItem(material, type, model, quantity));
     }
 
     public static void settingsControlElementsRefresh() {
@@ -555,7 +526,7 @@ public class PalletItem extends TableDesignerItem implements DependOnMaterial  {
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(palletItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(palletItem);
             addItem(index, palletItem.quantity);
 
             exitFromEditMode(palletItem);

@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -21,6 +20,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -29,9 +29,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class RodsItem extends TableDesignerItem implements DependOnMaterial {
-
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
-
 
     Label labelRowNumber, labelName, labelMaterial, labelType, labelModel, labelNull1, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
@@ -42,14 +39,11 @@ public class RodsItem extends TableDesignerItem implements DependOnMaterial {
     String model;
     Image imageMain;
 
-
     public RodsItem(Material material, int type, String model, int quantity) {
-
         this.material = material;
         this.type = type;
         this.model = model;
         this.quantity = quantity;
-
 
         File file = new File("features_resources/rods/icons/" + "rods_" + type + "_icon.png");
         try {
@@ -122,7 +116,7 @@ public class RodsItem extends TableDesignerItem implements DependOnMaterial {
         RodsItem newRodsItem = new RodsItem(newMaterial, oldRodsItem.type, oldRodsItem.model, oldRodsItem.quantity);
 
         oldRodsItem.removeThisItem();
-        tableDesignerItemsList.add(newRodsItem);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(newRodsItem);
     }
 
     public int getType() {
@@ -150,7 +144,7 @@ public class RodsItem extends TableDesignerItem implements DependOnMaterial {
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
 
     @Override
@@ -160,17 +154,11 @@ public class RodsItem extends TableDesignerItem implements DependOnMaterial {
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -188,8 +176,6 @@ public class RodsItem extends TableDesignerItem implements DependOnMaterial {
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -201,41 +187,35 @@ public class RodsItem extends TableDesignerItem implements DependOnMaterial {
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
         quantity++;
         updateItemView();
     }
+
     private void btnMinusClicked(ActionEvent event){
         if (quantity == 1) return;
         quantity--;
         updateItemView();
     }
+
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
-
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
+
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
         for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
@@ -419,7 +399,7 @@ public class RodsItem extends TableDesignerItem implements DependOnMaterial {
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1));
 
 
         choiceBoxMaterial.setOnAction(event -> {
@@ -461,8 +441,7 @@ public class RodsItem extends TableDesignerItem implements DependOnMaterial {
         int type = comboBoxType.getSelectionModel().getSelectedItem().getType();
         String model = choiceBoxModel.getSelectionModel().getSelectedItem();
 
-        tableDesignerItemsList.add(index, new RodsItem(material, type, model, quantity));
-
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new RodsItem(material, type, model, quantity));
     }
 
     public static void settingsControlElementsRefresh() {
@@ -541,7 +520,7 @@ public class RodsItem extends TableDesignerItem implements DependOnMaterial {
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(rodsItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(rodsItem);
             addItem(index, rodsItem.quantity);
 
             exitFromEditMode(rodsItem);

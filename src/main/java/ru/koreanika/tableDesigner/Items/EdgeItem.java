@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -24,6 +23,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,11 +34,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMaterial {
-
-    /**
-     * static variables
-     */
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
 
     /**
      * instance variables
@@ -273,7 +268,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
                     oldEdgeItem.workCoefficient, oldEdgeItem.workCoefficientIndex, oldEdgeItem.name);
 
             oldEdgeItem.removeThisItem();
-            tableDesignerItemsList.add(newEdgeItem);
+            TableDesignerSession.getTableDesignerAdditionalItemsList().add(newEdgeItem);
         } else {
             oldEdgeItem.removeThisItem();
         }
@@ -328,7 +323,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
 
         for (ArrayList<SketchShape> shapeList : sketchShapeArrayList) {
             for (SketchShape shape : shapeList) {
@@ -349,10 +344,6 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     @Override
     public void setRowNumber(int number) {
         labelRowNumber.setText("" + number);
@@ -368,9 +359,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -388,8 +377,6 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -401,25 +388,17 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -498,7 +477,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
 
         for (ArrayList<SketchShape> shapesItemList : sketchShapeArrayList) {
 
@@ -802,7 +781,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1));
 
 
         choiceBoxMaterial.setOnAction(event -> {
@@ -1292,7 +1271,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
 //        System.out.println("EDGE LENGTH = " + b);
 //        System.out.println("EDGE HEIGHT = " + a);
 
-        tableDesignerItemsList.add(index, new EdgeItem(cutShapesCoordinates, cutShapesAngles, quantity, material,
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new EdgeItem(cutShapesCoordinates, cutShapesAngles, quantity, material,
                 depth, a, type, b, workCoefficient, workCoefficientIndex, name));
     }
 
@@ -1312,10 +1291,8 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         choiceBoxDepth.getSelectionModel().select("" + Project.getDefaultMaterial().getDefaultDepth());
 
         comboBoxShape.getItems().clear();
-        for(TableDesignerItem tableDesignerItem : TableDesigner.getTableDesignerMainItemsList()){
-            if(tableDesignerItem instanceof StoneProductItem){
-                StoneProductItem stoneProductItem = (StoneProductItem) tableDesignerItem;
-
+        for(TableDesignerItem tableDesignerItem : TableDesignerSession.getTableDesignerMainItemsList()){
+            if(tableDesignerItem instanceof StoneProductItem stoneProductItem){
                 if(stoneProductItem.getShapeType() == ShapeType.RECTANGLE_WITH_RADIUS ||
                         stoneProductItem.getShapeType() == ShapeType.RECTANGLE_WITH_RADIUS_INTO ||
                         stoneProductItem.getShapeType() == ShapeType.CIRCLE_HALF ||
@@ -1437,8 +1414,8 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(edgeItem);
-            if(index == -1) index = getTableDesignerItemsList().size();
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(edgeItem);
+            if(index == -1) index = TableDesignerSession.getTableDesignerAdditionalItemsList().size();
             addItem(index, edgeItem.quantity);
 
             exitFromEditMode(edgeItem);
@@ -1473,7 +1450,7 @@ public class EdgeItem extends TableDesignerItem implements Cuttable, DependOnMat
             anchorPaneSettingsView.getChildren().remove(btnCancel);
         }
 
-        for(TableDesignerItem item : tableDesignerItemsList){
+        for(TableDesignerItem item : TableDesignerSession.getTableDesignerAdditionalItemsList()){
             if(item instanceof EdgeItem && item.editModeProperty.get()){
                 item.setEditModeProperty(false);
             }

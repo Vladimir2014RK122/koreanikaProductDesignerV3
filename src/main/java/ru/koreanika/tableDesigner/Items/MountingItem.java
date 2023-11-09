@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -15,6 +14,7 @@ import ru.koreanika.project.Project;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.UserPreferences;
 import ru.koreanika.utils.InfoMessage;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 
 import java.io.IOException;
@@ -23,32 +23,22 @@ import java.util.Map;
 
 public class MountingItem extends TableDesignerItem {
 
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
-
-
     Label labelRowNumber, labelName, labelNull1, labelNull2, labelPercent, labelNull3, labelQuantity, labelRowPrice;
     ImageView imageViewMain;
     Button btnPlus, btnMinus, btnDelete, btnEdit;
 
-    //int count;
     int percent;
     Image imageMain;
 
 
     public MountingItem(int quantity, int percent) {
-
-        //this.count = count;
         this.percent = percent;
 
         this.quantity = quantity;
 
         imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/MountingItem/mountingItem.png").toString()).getImage();
 
-
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/MountingRow.fxml")
-        );
-
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/MountingRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoader.load();
         } catch (IOException ex) {
@@ -63,7 +53,6 @@ public class MountingItem extends TableDesignerItem {
 
         updateItemView();
     }
-
 
     public double getPercent() {
         return percent;
@@ -80,7 +69,7 @@ public class MountingItem extends TableDesignerItem {
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
 
     @Override
@@ -90,17 +79,11 @@ public class MountingItem extends TableDesignerItem {
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -118,8 +101,6 @@ public class MountingItem extends TableDesignerItem {
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelNull1, Priority.ALWAYS);
@@ -131,41 +112,35 @@ public class MountingItem extends TableDesignerItem {
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
         quantity++;
         updateItemView();
     }
+
     private void btnMinusClicked(ActionEvent event){
         if (quantity == 1) return;
         quantity--;
         updateItemView();
     }
+
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
-
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
+
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
         for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
@@ -285,7 +260,7 @@ public class MountingItem extends TableDesignerItem {
 
     private static void settingsControlElementsLogicInit() {
 
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerMainWorkItemsList().size(), 1));
 
         textFieldPercent.textProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -304,7 +279,7 @@ public class MountingItem extends TableDesignerItem {
 
     private static void addItem(int index, int quantity){
         if (!(percentOk)) return;
-        for (TableDesignerItem item : MountingItem.getTableDesignerItemsList()) {
+        for (TableDesignerItem item : TableDesignerSession.getTableDesignerMainWorkItemsList()) {
             if (item instanceof MountingItem) {
                 InfoMessage.showMessage(InfoMessage.MessageType.WARNING, "Не более одного элемента этого типа!", null);
                 return;
@@ -318,9 +293,7 @@ public class MountingItem extends TableDesignerItem {
             return;
         }
 
-
-        tableDesignerItemsList.add(index, new MountingItem(quantity, percent));
-
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(index, new MountingItem(quantity, percent));
     }
 
     public static void settingsControlElementsRefresh() {
@@ -333,7 +306,6 @@ public class MountingItem extends TableDesignerItem {
 
     private static void enterToEditMode(MountingItem mountingItem){
         TableDesigner.openSettings(MountingItem.class);
-
 
         //get row data to settings
         textFieldPercent.setText("" + mountingItem.percent);
@@ -353,7 +325,7 @@ public class MountingItem extends TableDesignerItem {
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(mountingItem);
+            int index = TableDesignerSession.getTableDesignerMainWorkItemsList().indexOf(mountingItem);
             mountingItem.removeThisItem();
             addItem(index, mountingItem.quantity);
 

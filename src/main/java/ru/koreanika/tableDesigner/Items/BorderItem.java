@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -28,6 +27,7 @@ import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,11 +38,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class BorderItem extends TableDesignerItem implements Cuttable, DependOnMaterial {
-
-    /**
-     * static variables
-     */
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
 
     /**
      * instance variables
@@ -270,7 +265,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
                     oldBorderItem.workCoefficient,oldBorderItem.workCoefficientIndex, oldBorderItem.name);
 
             oldBorderItem.removeThisItem();
-            tableDesignerItemsList.add(newBorderItem);
+            TableDesignerSession.getTableDesignerAdditionalItemsList().add(newBorderItem);
         } else {
             oldBorderItem.removeThisItem();
         }
@@ -349,7 +344,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
 
         for (ArrayList<SketchShape> shapeList : sketchShapeArrayList) {
             for (SketchShape shape : shapeList) {
@@ -373,17 +368,11 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
         }
     }
 
-
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -404,9 +393,6 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
         btnDelete = (Button) anchorPaneButtons.lookup("#btnDelete");
         btnEdit = (Button) anchorPaneButtons.lookup("#btnEdit");
 
-
-
-
         HBox.setHgrow(labelRowNumber, Priority.ALWAYS);
         HBox.setHgrow(labelName, Priority.ALWAYS);
         HBox.setHgrow(labelMaterial, Priority.ALWAYS);
@@ -415,29 +401,20 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
         HBox.setHgrow(labelHeight, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -509,7 +486,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
 
         for (ArrayList<SketchShape> shapesItemList : sketchShapeArrayList) {
 
@@ -792,49 +769,17 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
         toggleButtonBorderCut4.setToggleGroup(toggleGroupBorderCut);
         toggleButtonBorderCut2.setSelected(true);
 
-//        ImageView image1 = new ImageView(BorderItem.class.getResource("/styles/images/edgeManager/borderCut1.png").toString());
-//        image1.setFitWidth(45);
-//        image1.setFitHeight(45);
-//        toggleButtonBorderCut1.setGraphic(image1);
-//
-//        ImageView image2 = new ImageView(BorderItem.class.getResource("/styles/images/edgeManager/borderCut2.png").toString());
-//        image2.setFitWidth(45);
-//        image2.setFitHeight(45);
-//        toggleButtonBorderCut2.setGraphic(image2);
-//
-//        ImageView image3 = new ImageView(BorderItem.class.getResource("/styles/images/edgeManager/borderCut3.png").toString());
-//        image3.setFitWidth(45);
-//        image3.setFitHeight(45);
-//        toggleButtonBorderCut3.setGraphic(image3);
-//
-//        ImageView image4 = new ImageView(BorderItem.class.getResource("/styles/images/edgeManager/borderCut4.png").toString());
-//        image4.setFitWidth(45);
-//        image4.setFitHeight(45);
-//        toggleButtonBorderCut4.setGraphic(image4);
-
         toggleButtonBorderAngleCut1.setToggleGroup(toggleGroupBorderAngleCut);
         toggleButtonBorderAngleCut2.setToggleGroup(toggleGroupBorderAngleCut);
         toggleButtonBorderAngleCut1.setSelected(true);
 
-//        ImageView image5 = new ImageView(BorderItem.class.getResource("/styles/images/edgeManager/borderSideCut1.png").toString());
-//        image5.setFitWidth(45);
-//        image5.setFitHeight(45);
-//        toggleButtonBorderAngleCut1.setGraphic(image5);
-//
-//        ImageView image6 = new ImageView(BorderItem.class.getResource("/styles/images/edgeManager/borderSideCut2.png").toString());
-//        image6.setFitWidth(45);
-//        image6.setFitHeight(45);
-//        toggleButtonBorderAngleCut2.setGraphic(image6);
-
         choiceBoxAngleCutQuantity.getItems().add("Нет");
         choiceBoxAngleCutQuantity.getItems().add("С одной стороны");
         choiceBoxAngleCutQuantity.getItems().add("С двух сторон");
-
-
     }
 
     private static void settingsControlElementsLogicInit() {
-        btnAdd.setOnMouseClicked(event -> addItem(getTableDesignerItemsList().size(), 1));
+        btnAdd.setOnMouseClicked(event -> addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1));
 
 
         choiceBoxMaterial.setOnAction(event -> {
@@ -986,18 +931,6 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
 
         int angleCutQuantity = choiceBoxAngleCutQuantity.getSelectionModel().getSelectedIndex();
 
-        //check sizes:
-        double materialLength = material.getMaterialWidth();//mm
-        double materialHeight = material.getMaterialHeight();//mm
-        double shapeLen = length;//mm
-        double shapeHeight = height;//mm
-
-//            if(((shapeLen > materialLength && shapeLen > materialHeight) || (shapeHeight > materialLength && shapeHeight > materialHeight)) ||
-//                    (shapeHeight > materialHeight && shapeLen > materialHeight) || (shapeHeight > materialLength && shapeLen > materialLength)) {
-//                InfoMessage.showMessage(InfoMessage.MessageType.WARNING, "Размер не соответствует материалу!");
-//                return;
-//            }
-
         int pieces = (int) ((length) / material.getMaterialWidth());
         if (pieces == 0) pieces = 1;
         else pieces += 1;
@@ -1015,8 +948,6 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
             cutShapesCoordinates.add(coordList);
             cutShapesAngles.add(angleList);
         }
-
-
 
         double workCoefficient = 0;
         int workCoefficientIndex = 0;
@@ -1043,7 +974,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
         String name = "Бортик №" + type;
 
 
-        tableDesignerItemsList.add(index, new BorderItem(cutShapesCoordinates, cutShapesAngles, quantity, material,
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new BorderItem(cutShapesCoordinates, cutShapesAngles, quantity, material,
                 depth, height, type, length, cutType, angleCutType, angleCutQuantity, workCoefficient,
                 workCoefficientIndex, name));
 
@@ -1184,7 +1115,7 @@ public class BorderItem extends TableDesignerItem implements Cuttable, DependOnM
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(borderItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(borderItem);
             addItem(index, borderItem.quantity);
 
             exitFromEditMode(borderItem);

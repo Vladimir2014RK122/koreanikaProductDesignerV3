@@ -1,6 +1,5 @@
 package ru.koreanika.tableDesigner.Items;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -13,6 +12,7 @@ import org.json.simple.JSONObject;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -21,32 +21,23 @@ import java.util.Map;
 
 public class SiphonItem extends TableDesignerItem{
 
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerAdditionalItemsList();
-
-
     // row controls:
     Label labelRowNumber, labelName, labelNull1, labelNull2, labelNull3, labelNull4, labelQuantity, labelRowPrice;
     ImageView imageView;
     Button btnPlus, btnMinus, btnDelete, btnEdit;
 
-
     int type = 0;
     Image imageMain;
 
     public SiphonItem(int type, int quantity) {
-
         this.type = type;
         this.quantity = quantity;
 
         imageMain = new ImageView(Project.class.getResource("/styles/images/TableDesigner/SiphonItem/siphonType" + type + ".png").toString()).getImage();
 
-        FXMLLoader fxmlLoaderRow = new FXMLLoader(
-                this.getClass().getResource("/fxmls/TableDesigner/TableItems/SiphonRow.fxml")
-        );
-
+        FXMLLoader fxmlLoaderRow = new FXMLLoader(this.getClass().getResource("/fxmls/TableDesigner/TableItems/SiphonRow.fxml"));
         try {
             anchorPaneTableRow = fxmlLoaderRow.load();
-//            anchorPaneCardView = fxmlLoaderCard.load();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -58,7 +49,6 @@ public class SiphonItem extends TableDesignerItem{
         cardControlElementLogicInit();
 
         updateItemView();
-
     }
 
     public int getType() {
@@ -76,7 +66,7 @@ public class SiphonItem extends TableDesignerItem{
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
 
     @Override
@@ -84,11 +74,6 @@ public class SiphonItem extends TableDesignerItem{
         if(this.editModeProperty.get()){
             SiphonItem.exitFromEditMode(this);
         }
-    }
-
-
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
     }
 
     @Override
@@ -105,9 +90,7 @@ public class SiphonItem extends TableDesignerItem{
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -142,45 +125,20 @@ public class SiphonItem extends TableDesignerItem{
         HBox.setHgrow(labelNull4, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> {
-            btnPlusClicked(event);
-        });
-
-        btnMinus.setOnAction(event -> {
-            btnMinusClicked(event);
-        });
-
-        btnDelete.setOnAction(event -> {
-            btnDeleteClicked(event);
-        });
-
-        btnEdit.setOnAction(event -> {
-            btnEditClicked(event);
-        });
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> {
-            btnPlusClicked(event);
-        });
-
-        btnMinusCard.setOnAction(event -> {
-            btnMinusClicked(event);
-        });
-
-        btnDeleteCard.setOnAction(event -> {
-            btnDeleteClicked(event);
-        });
-
-        btnEditCard.setOnAction(event -> {
-            btnEditClicked(event);
-        });
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
@@ -195,7 +153,7 @@ public class SiphonItem extends TableDesignerItem{
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerAdditionalItemsList().remove(this);
     }
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
@@ -207,7 +165,6 @@ public class SiphonItem extends TableDesignerItem{
     }
 
     public void updateItemView(){
-
         labelRowNumber.setText("");
         labelName.setText("Сифон" + ((type == 1) ? " с одним выпуском" : " с двумя выпусками"));
         imageView.setImage(imageMain);
@@ -217,13 +174,10 @@ public class SiphonItem extends TableDesignerItem{
         labelNull4.setText("");
         labelQuantity.setText("" + quantity);
 
-
         labelHeaderCard.setText("Сифон");
         tooltipNameCard.setText("Сифон");
         imageViewBackCard.setImage(imageMain);
         labelQuantityCard.setText("" + quantity);
-
-
 
         labelName1Card.setText("Тип");
         labelValue1Card.setText(((type == 1) ? " C одним выпуском" : " C двумя выпусками"));
@@ -290,11 +244,9 @@ public class SiphonItem extends TableDesignerItem{
     }
 
     private static void settingsControlElementsInit() {
-
         btnApply.getStyleClass().add("btnBrown");
         btnCancel.getStyleClass().add("btnBrown");
 
-        //choiceBoxType = (ChoiceBox<String>) anchorPaneSettingsView.lookup("#choiceBoxType");
         toggleButtonSiphonType1 = (ToggleButton) anchorPaneSettingsView.lookup("#toggleButtonSiphonType1");
         toggleButtonSiphonType2 = (ToggleButton) anchorPaneSettingsView.lookup("#toggleButtonSiphonType2");
 
@@ -304,25 +256,13 @@ public class SiphonItem extends TableDesignerItem{
         toggleButtonSiphonType1.setToggleGroup(toggleGroupSiphonType);
         toggleButtonSiphonType2.setToggleGroup(toggleGroupSiphonType);
         toggleButtonSiphonType1.setSelected(true);
-
-//        ImageView image1 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/SiphonItem/siphonType1.png").toString());
-//        image1.setFitWidth(45);
-//        image1.setFitHeight(45);
-//        toggleButtonSiphonType1.setGraphic(image1);
-//
-//        ImageView image2 = new ImageView(ProjectHandler.class.getResource("/styles/images/TableDesigner/SiphonItem/siphonType2.png").toString());
-//        image2.setFitWidth(45);
-//        image2.setFitHeight(45);
-//        toggleButtonSiphonType2.setGraphic(image2);
-
-
     }
 
     private static void settingsControlElementsLogicInit() {
 
         btnAdd.setOnMouseClicked(event -> {
 
-            addItem(getTableDesignerItemsList().size(), 1);
+            addItem(TableDesignerSession.getTableDesignerAdditionalItemsList().size(), 1);
         });
 
         toggleGroupSiphonType.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
@@ -332,20 +272,18 @@ public class SiphonItem extends TableDesignerItem{
     }
 
     private static void addItem(int index, int quantity){
-
         int type = (toggleGroupSiphonType.getSelectedToggle() == toggleButtonSiphonType1)? 1 : 2;
-
-        tableDesignerItemsList.add(index, new SiphonItem(type, quantity));
+        TableDesignerSession.getTableDesignerAdditionalItemsList().add(index, new SiphonItem(type, quantity));
     }
 
     public static void settingsControlElementsRefresh() {
         updatePriceInSettings();
-
     }
 
     public static void updatePriceInSettings() {
-
-        if(Project.getDefaultMaterial() == null) return;
+        if(Project.getDefaultMaterial() == null) {
+            return;
+        }
 
         String currency = Project.getDefaultMaterial().getSiphonsCurrency();
         String units = "шт";
@@ -362,7 +300,6 @@ public class SiphonItem extends TableDesignerItem{
 
     private static void enterToEditMode(SiphonItem siphonItem){
         TableDesigner.openSettings(SiphonItem.class);
-
 
         //get row data to settings
         if(siphonItem.type == 1){
@@ -386,7 +323,7 @@ public class SiphonItem extends TableDesignerItem{
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
 
-            int index = getTableDesignerItemsList().indexOf(siphonItem);
+            int index = TableDesignerSession.getTableDesignerAdditionalItemsList().indexOf(siphonItem);
             addItem(index, siphonItem.quantity);
 
             exitFromEditMode(siphonItem);

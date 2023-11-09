@@ -1,7 +1,6 @@
 package ru.koreanika.tableDesigner.Items;
 
 import javafx.scene.control.*;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
@@ -15,6 +14,7 @@ import ru.koreanika.sketchDesigner.Shapes.SketchShape;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.project.Project;
 import ru.koreanika.utils.currency.Currency;
+import ru.koreanika.tableDesigner.TableDesignerSession;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +32,6 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
     public static final String NAME_RECEIPT_HAND_CARRY = "Ручной пронос";
     public static final double HAND_CARRY_COEFFICIENT = 1.1;
 
-    private static ObservableList<TableDesignerItem> tableDesignerItemsList = TableDesigner.getTableDesignerMainWorkItemsList();
     private static TextField textFieldHandCarry;
     private static CheckBox checkBoxHandCarry;
 
@@ -124,7 +123,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
     @Override
     public void removeThisItem() {
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
 
     @Override
@@ -134,17 +133,11 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         }
     }
 
-    public static ObservableList<TableDesignerItem> getTableDesignerItemsList() {
-        return tableDesignerItemsList;
-    }
-
     /**
      * Table ROW part
      */
 
-
     private void rowControlElementsInit() {
-
         HBox hBox = (HBox) anchorPaneTableRow.lookup("#hBox");
         labelRowNumber = (Label) hBox.getChildren().get(0);
         labelName = (Label) hBox.getChildren().get(1);
@@ -181,45 +174,39 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         HBox.setHgrow(labelNull2, Priority.ALWAYS);
         HBox.setHgrow(labelQuantity, Priority.ALWAYS);
         HBox.setHgrow(labelRowPrice, Priority.ALWAYS);
-
     }
 
     private void rowControlElementLogicInit() {
-
-        btnPlus.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinus.setOnAction(event -> btnMinusClicked(event));
-
-        btnDelete.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEdit.setOnAction(event -> btnEditClicked(event));
+        btnPlus.setOnAction(this::btnPlusClicked);
+        btnMinus.setOnAction(this::btnMinusClicked);
+        btnDelete.setOnAction(this::btnDeleteClicked);
+        btnEdit.setOnAction(this::btnEditClicked);
     }
 
     private void cardControlElementLogicInit() {
-
-        btnPlusCard.setOnAction(event -> btnPlusClicked(event));
-
-        btnMinusCard.setOnAction(event -> btnMinusClicked(event));
-
-        btnDeleteCard.setOnAction(event -> btnDeleteClicked(event));
-
-        btnEditCard.setOnAction(event -> btnEditClicked(event));
+        btnPlusCard.setOnAction(this::btnPlusClicked);
+        btnMinusCard.setOnAction(this::btnMinusClicked);
+        btnDeleteCard.setOnAction(this::btnDeleteClicked);
+        btnEditCard.setOnAction(this::btnEditClicked);
     }
 
     private void btnPlusClicked(ActionEvent event){
         quantity++;
         updateItemView();
     }
+
     private void btnMinusClicked(ActionEvent event){
         if (quantity == 1) return;
         quantity--;
         updateItemView();
     }
+
     private void btnDeleteClicked(ActionEvent event){
         if(editModeProperty.get()) exitFromEditMode(this);
 
-        tableDesignerItemsList.remove(this);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().remove(this);
     }
+
     private void btnEditClicked(ActionEvent event){
         //setting change mode to edit
         for(TableDesignerItem item : TableDesigner.getTableDesignerAllItemsList()){
@@ -230,7 +217,6 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
     }
 
     public void updateItemView(){
-
         labelRowNumber.setText("");
         labelName.setText(NAME_ROW);
         imageViewMain.setImage(imageMain);
@@ -242,12 +228,10 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
         labelQuantity.setText("" + quantity);
 
-
         labelHeaderCard.setText(NAME_ROW);
         tooltipNameCard.setText(NAME_ROW);
         imageViewBackCard.setImage(imageMain);
         labelQuantityCard.setText("" + quantity);
-
 
         labelName1Card.setText("Материал");
         labelValue1Card.setText(material.getReceiptName());
@@ -258,8 +242,6 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         labelName3Card.setText("Стоимость проноса");
         labelValue3Card.setText(handCarryPrice + " руб.");
 
-//        labelName4Card.setText("Высота");
-//        labelValue4Card.setText("-");
         labelName4Card.setText("Расстояние");
         labelValue4Card.setText(lengthOutsideMKAD + " км");
 
@@ -268,31 +250,12 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
     @Override
     public void updateRowPrice() {
-
         priceForOne = 0.0;
         double priceForDelivery = material.getDeliveryInsideMKADPrice();
 
         double priceForDeliveryKM = material.getMeasurerKMPrice();
 
-//        double priceForUnBox = 0;
-
-//        for(TableDesignerItem tableDesignerItem : TableDesigner.getTableDesignerMainItemsList()){
-//            if(tableDesignerItem instanceof StoneProductItem){
-//                StoneProductItem stoneProductItem = (StoneProductItem) tableDesignerItem;
-//
-//                for(ArrayList<SketchShape> listOfShapes :  stoneProductItem.getSketchShapeArrayList()){
-//                    for(SketchShape shape : listOfShapes){
-//                        priceForUnBox += (stoneProductItem.getMaterial().getManualLiftingPrice() / 100) * (shape.getCutShape().getShapeSquare()/10000);
-//                    }
-//                }
-//
-//            }
-//        }
-
-
         priceForOne += insideMKADCount * priceForDelivery + priceForDeliveryKM * lengthOutsideMKAD + priceForUnbox + handCarryPrice;
-
-//        priceForOne *= ProjectHandler.getPriceMainCoefficient().doubleValue();
 
         labelRowPrice.setText(String.format(Locale.ENGLISH, "%.0f", (priceForOne * Project.getPriceMainCoefficient().doubleValue() * quantity)) + Currency.RUR_SYMBOL);
 
@@ -309,12 +272,10 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
         labelRowNumber.setText("" + number);
     }
 
-
     @Override
     public AnchorPane getTableView() {
         return anchorPaneTableRow;
     }
-
 
     /**
      * Settings part
@@ -376,7 +337,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
     private static void settingsControlElementsLogicInit() {
 
         btnAdd.setOnMouseClicked(event -> {
-            addItem(getTableDesignerItemsList().size(), 1);
+            addItem(TableDesignerSession.getTableDesignerMainWorkItemsList().size(), 1);
         });
 
         choiceBoxMaterial.setOnAction(event -> {
@@ -474,11 +435,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
             return;
         }
 
-
-
-
-        //if(index == -1 || tableDesignerItemsList.size() < index) index = 0;
-        tableDesignerItemsList.add(index, new DeliveryItem(material, quantity, insideMKADCount, length, lifting, handCarry));
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(index, new DeliveryItem(material, quantity, insideMKADCount, length, lifting, handCarry));
 
     }
 
@@ -519,7 +476,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
         int priceForUnBox = 0;
 
-        for (TableDesignerItem tableDesignerItem : TableDesigner.getTableDesignerMainItemsList()) {
+        for (TableDesignerItem tableDesignerItem : TableDesignerSession.getTableDesignerMainItemsList()) {
             if (tableDesignerItem instanceof StoneProductItem) {
                 StoneProductItem stoneProductItem = (StoneProductItem) tableDesignerItem;
 
@@ -592,8 +549,8 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
 
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
-            int index = getTableDesignerItemsList().indexOf(deliveryItem);
-            if(index == -1) index = getTableDesignerItemsList().size();
+            int index = TableDesignerSession.getTableDesignerMainWorkItemsList().indexOf(deliveryItem);
+            if(index == -1) index = TableDesignerSession.getTableDesignerMainWorkItemsList().size();
             addItem(index, deliveryItem.quantity);
 
             exitFromEditMode(deliveryItem);
@@ -731,7 +688,7 @@ public class DeliveryItem extends TableDesignerItem implements DependOnMaterial 
                 oldDeliveryItem.handCarryPrice);
 
         oldDeliveryItem.removeThisItem();
-        tableDesignerItemsList.add(newDeliveryItem);
+        TableDesignerSession.getTableDesignerMainWorkItemsList().add(newDeliveryItem);
 
     }
 }
