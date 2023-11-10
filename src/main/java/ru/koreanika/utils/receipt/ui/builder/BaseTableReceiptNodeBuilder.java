@@ -13,7 +13,7 @@ import ru.koreanika.service.ServiceLocator;
 import ru.koreanika.tableDesigner.TableDesigner;
 import ru.koreanika.utils.MainWindow;
 import ru.koreanika.utils.currency.Currency;
-import ru.koreanika.utils.receipt.policy.TableDesignerItemMapper;
+import ru.koreanika.utils.receipt.policy.ReceiptItemGenerators;
 import ru.koreanika.utils.receipt.ui.component.ReceiptImageItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
 import ru.koreanika.utils.receipt.ui.controller.ReceiptManager;
@@ -203,7 +203,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     public void createEdgesAndBordersPartGridPaneTD() {
         int rowIndex;
 
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getEdgesReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getEdgesReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             RowConstraints rowForEdge = new RowConstraints(40);
@@ -228,7 +228,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
             receiptManager.allAddPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
         }
 
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getBordersReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getBordersReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             RowConstraints rowForEdge = new RowConstraints(40);
@@ -255,7 +255,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createSinkAcrylPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getSinkAcrylReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getSinkAcrylReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -280,7 +280,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createSinkQuartzPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getSinkQuarzReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getSinkQuarzReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -305,7 +305,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createSinkInstallTypesPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getSinkInstallReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getSinkInstallReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -330,7 +330,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createJointsPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getJointsReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getJointsReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -355,7 +355,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createCutoutPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getCutoutsReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getCutoutsReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -380,7 +380,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createPlumbingAlveusPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getPlumbingAlveusReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getPlumbingAlveusReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -405,7 +405,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createPlumbingPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getPlumbingReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getPlumbingReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -430,7 +430,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createPalletPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getPalletReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getPalletReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -455,7 +455,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createGroovesPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getGroovesReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getGroovesReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -480,7 +480,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createRodsPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getRodsReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getRodsReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -505,7 +505,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createRadiusElementsPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getRadiusReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getRadiusReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -530,7 +530,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createLeakGroovePartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getLeakGroovesReceiptItems()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getLeakGroovesReceiptItems()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -559,7 +559,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createMetalFootingPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getMetalFootingReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getMetalFootingReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -584,7 +584,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createPlywoodPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getPlywoodReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getPlywoodReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -609,7 +609,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createStonePolishingPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getStonePolishingReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getStonePolishingReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -634,7 +634,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createSiphonPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getSiphonReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getSiphonReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -659,7 +659,7 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     }
 
     public void createCustomPartGridPaneTD() {
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getCustomReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getCustomReceiptList()) {
             receiptItem.setCoefficient(receiptManager.coefficient);
 
             int rowIndex = addRowToGridPaneTop();
@@ -694,24 +694,24 @@ public abstract class BaseTableReceiptNodeBuilder extends BaseReceiptNodeBuilder
     public void createAdditionalRowShort() {
         List<ReceiptItem> allAdditionalItems = new ArrayList<>();
 
-        allAdditionalItems.addAll(TableDesignerItemMapper.getEdgesReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getBordersReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getLeakGroovesReceiptItems());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getSinkAcrylReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getSinkInstallReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getJointsReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getRadiusReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getCutoutsReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getPlumbingAlveusReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getPlumbingReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getPalletReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getGroovesReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getRodsReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getMetalFootingReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getPlywoodReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getStonePolishingReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getSiphonReceiptList());
-        allAdditionalItems.addAll(TableDesignerItemMapper.getCustomReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getEdgesReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getBordersReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getLeakGroovesReceiptItems());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getSinkAcrylReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getSinkInstallReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getJointsReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getRadiusReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getCutoutsReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getPlumbingAlveusReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getPlumbingReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getPalletReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getGroovesReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getRodsReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getMetalFootingReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getPlywoodReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getStonePolishingReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getSiphonReceiptList());
+        allAdditionalItems.addAll(ReceiptItemGenerators.getCustomReceiptList());
 
         for (ReceiptItem receiptItem : allAdditionalItems) {
             receiptManager.allPriceForRUR += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));

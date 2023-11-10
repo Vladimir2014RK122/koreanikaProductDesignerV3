@@ -1,11 +1,11 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.tableDesigner.item.RadiatorGroovesItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class RadiatorGroovesItemMapper implements ItemMapper<RadiatorGroovesItem> {
+public class RadiatorGroovesItemMapper implements ItemMapper<RadiatorGroovesItem> {
     @Nullable
     @Override
     public ReceiptItem apply(RadiatorGroovesItem radiatorGroovesItem) {

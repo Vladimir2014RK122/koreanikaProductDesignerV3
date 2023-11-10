@@ -26,10 +26,8 @@ public class ReceiptItem {
 
     @Getter
     private String priceColor = "black";
-    private double allPrice;
 
-    private double RUBtoUSD = 0.0;
-    private double RUBtoEUR = 0.0;
+    private double allPrice;
 
     private double coefficient = 1.0;
 
@@ -72,20 +70,8 @@ public class ReceiptItem {
         this.coefficient = coefficient;
     }
 
-    public void setRUBtoEUR(double RUBtoEUR) {
-        this.RUBtoEUR = RUBtoEUR;
-    }
-
-    public void setRUBtoUSD(double RUBtoUSD) {
-        this.RUBtoUSD = RUBtoUSD;
-    }
-
     public double getPseudoCountDouble() {
         return pseudoCount;
-    }
-
-    public double getAdditionalPrice() {
-        return additionalPrice;
     }
 
     public void setAdditionalPrice(double additionalPrice) {

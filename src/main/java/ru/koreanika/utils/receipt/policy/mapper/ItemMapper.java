@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.tableDesigner.item.TableDesignerItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;

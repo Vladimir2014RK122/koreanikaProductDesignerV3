@@ -1,11 +1,11 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.tableDesigner.item.EdgeItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class EdgeItemMapper implements ItemMapper<EdgeItem> {
+public class EdgeItemMapper implements ItemMapper<EdgeItem> {
     @Nullable
     @Override
     public ReceiptItem apply(EdgeItem edgeItem) {

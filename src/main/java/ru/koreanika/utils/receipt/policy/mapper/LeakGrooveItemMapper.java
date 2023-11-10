@@ -1,11 +1,11 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.tableDesigner.item.LeakGrooveItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class LeakGrooveItemMapper implements ItemMapper<LeakGrooveItem> {
+public class LeakGrooveItemMapper implements ItemMapper<LeakGrooveItem> {
     @Nullable
     @Override
     public ReceiptItem apply(LeakGrooveItem item) {

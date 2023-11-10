@@ -1,14 +1,12 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.tableDesigner.item.BorderItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-class BorderItemFlatMapper implements ItemFlatMapper<BorderItem> {
-    @Nullable
+public class BorderItemFlatMapper implements ItemFlatMapper<BorderItem> {
     @Override
     public List<ReceiptItem> apply(BorderItem borderItem) {
         ReceiptItem item1 = mapToBorderReceiptItem(borderItem);

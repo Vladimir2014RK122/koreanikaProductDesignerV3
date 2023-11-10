@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.project.Project;
 import ru.koreanika.tableDesigner.item.CustomItem;
@@ -6,7 +6,7 @@ import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class CustomItemMapper implements ItemMapper<CustomItem> {
+public class CustomItemMapper implements ItemMapper<CustomItem> {
     @Nullable
     @Override
     public ReceiptItem apply(CustomItem customItem) {

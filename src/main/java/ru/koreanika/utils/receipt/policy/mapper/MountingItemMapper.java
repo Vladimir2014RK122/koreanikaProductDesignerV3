@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.project.Project;
 import ru.koreanika.tableDesigner.item.MountingItem;
@@ -6,7 +6,7 @@ import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class MountingItemMapper implements ItemMapper<MountingItem> {
+public class MountingItemMapper implements ItemMapper<MountingItem> {
     @Nullable
     @Override
     public ReceiptItem apply(MountingItem mountingItem) {

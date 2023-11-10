@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.sketchDesigner.Features.Sink;
 import ru.koreanika.tableDesigner.item.SinkItem;
@@ -6,7 +6,7 @@ import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class SinkItemMapper implements ItemMapper<SinkItem> {
+public class SinkItemMapper implements ItemMapper<SinkItem> {
     @Nullable
     @Override
     public ReceiptItem apply(SinkItem sinkItem) {

@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.common.material.Material;
 import ru.koreanika.tableDesigner.item.PlywoodItem;
@@ -6,7 +6,7 @@ import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class PlywoodItemMapper implements ItemMapper<PlywoodItem> {
+public class PlywoodItemMapper implements ItemMapper<PlywoodItem> {
     @Nullable
     @Override
     public ReceiptItem apply(PlywoodItem plywoodItem) {

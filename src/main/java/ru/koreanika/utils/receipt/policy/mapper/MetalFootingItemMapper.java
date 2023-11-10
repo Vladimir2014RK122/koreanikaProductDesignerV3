@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.project.Project;
 import ru.koreanika.tableDesigner.item.MetalFootingItem;
@@ -6,7 +6,7 @@ import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class MetalFootingItemMapper implements ItemMapper<MetalFootingItem> {
+public class MetalFootingItemMapper implements ItemMapper<MetalFootingItem> {
     @Nullable
     @Override
     public ReceiptItem apply(MetalFootingItem metalFootingItem) {

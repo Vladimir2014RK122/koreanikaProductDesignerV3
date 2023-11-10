@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.project.Project;
 import ru.koreanika.tableDesigner.item.SiphonItem;
@@ -6,7 +6,7 @@ import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class SiphonItemMapper implements ItemMapper<SiphonItem> {
+public class SiphonItemMapper implements ItemMapper<SiphonItem> {
     @Nullable
     @Override
     public ReceiptItem apply(SiphonItem siphonItem) {

@@ -1,11 +1,11 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.tableDesigner.item.RodsItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class RodsItemMapper implements ItemMapper<RodsItem> {
+public class RodsItemMapper implements ItemMapper<RodsItem> {
     @Nullable
     @Override
     public ReceiptItem apply(RodsItem rodsItem) {

@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.sketchDesigner.Features.Cutout;
 import ru.koreanika.tableDesigner.item.CutoutItem;
@@ -6,7 +6,7 @@ import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class CutoutItemMapper implements ItemMapper<CutoutItem> {
+public class CutoutItemMapper implements ItemMapper<CutoutItem> {
     @Nullable
     @Override
     public ReceiptItem apply(CutoutItem cutoutItem) {

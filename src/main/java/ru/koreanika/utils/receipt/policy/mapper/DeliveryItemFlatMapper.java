@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.tableDesigner.item.DeliveryItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
@@ -6,7 +6,7 @@ import ru.koreanika.utils.receipt.domain.ReceiptItem;
 import java.util.ArrayList;
 import java.util.List;
 
-class DeliveryItemFlatMapper implements ItemFlatMapper<DeliveryItem> {
+public class DeliveryItemFlatMapper implements ItemFlatMapper<DeliveryItem> {
     @Override
     public List<ReceiptItem> apply(DeliveryItem deliveryItem) {
         List<ReceiptItem> result = new ArrayList<>();

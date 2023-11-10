@@ -1,15 +1,13 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.sketchDesigner.Features.Sink;
 import ru.koreanika.tableDesigner.item.SinkItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-class InstallSinkItemFlatMapper implements ItemFlatMapper<SinkItem> {
-    @Nullable
+public class InstallSinkItemFlatMapper implements ItemFlatMapper<SinkItem> {
     @Override
     public List<ReceiptItem> apply(SinkItem sinkItem) {
         ReceiptItem receiptItemForInstallType = mapInstallTypeReceiptItem(sinkItem);

@@ -18,7 +18,7 @@ import ru.koreanika.utils.UserPreferences;
 import ru.koreanika.utils.currency.Currency;
 import ru.koreanika.utils.receipt.domain.Receipt;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
-import ru.koreanika.utils.receipt.policy.TableDesignerItemMapper;
+import ru.koreanika.utils.receipt.policy.ReceiptItemGenerators;
 import ru.koreanika.utils.receipt.ui.controller.ReceiptManager;
 
 import java.text.DecimalFormat;
@@ -351,7 +351,7 @@ public abstract class BaseReceiptNodeBuilder {
                 priceForPartInRUB += Double.parseDouble(receiptItem.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
             }
 
-            for (ReceiptItem receiptItemSink : TableDesignerItemMapper.getSinkQuarzReceiptList()) {
+            for (ReceiptItem receiptItemSink : ReceiptItemGenerators.getSinkQuarzReceiptList()) {
                 String subNameSink = receiptItemSink.getName().split("#")[1];
                 if (subNameSink.equals(materialCollectionType + " " + materialColor)) {
                     priceForPartInRUB += Double.parseDouble(receiptItemSink.getAllPriceInRUR().replaceAll(" ", "").replace(',', '.'));
@@ -365,7 +365,7 @@ public abstract class BaseReceiptNodeBuilder {
         }
 
         // allPrice
-        for (ReceiptItem receiptItem : TableDesignerItemMapper.getSinkQuarzReceiptList()) {
+        for (ReceiptItem receiptItem : ReceiptItemGenerators.getSinkQuarzReceiptList()) {
             addToAllPriceRunningTotal(receiptItem);
             addToStoneProductsPriceRunningTotal(receiptItem);
         }

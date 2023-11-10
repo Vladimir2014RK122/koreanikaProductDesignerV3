@@ -39,13 +39,10 @@ import java.util.Map;
 
 public class BorderItem extends TableDesignerItem implements Cuttable, DependOnMaterial {
 
-    /**
-     * instance variables
-     */
     private ArrayList<ArrayList<SketchShape>> sketchShapeArrayList = new ArrayList<>();
 
-    private ArrayList<ArrayList<Double>> cutShapesAngles = new ArrayList<>();
-    private ArrayList<ArrayList<Point2D>> cutShapesCoordinates = new ArrayList<>();
+    private ArrayList<ArrayList<Double>> cutShapesAngles;
+    private ArrayList<ArrayList<Point2D>> cutShapesCoordinates;
 
     Label labelRowNumber, labelName, labelMaterial, labelType, labelLength, labelHeight, labelQuantity, labelRowPrice;
     ImageView imageViewMain, imageViewCut, imageViewAngleCut;

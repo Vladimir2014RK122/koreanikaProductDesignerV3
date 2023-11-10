@@ -151,7 +151,6 @@ public class MountingItem extends TableDesignerItem {
     }
 
     public void updateItemView(){
-
         btnPlus.setDisable(true);
         btnMinus.setDisable(true);
 
@@ -161,12 +160,10 @@ public class MountingItem extends TableDesignerItem {
 
         labelNull1.setText("");
         labelNull2.setText("");
-        labelPercent.setText("" + percent + "%");
+        labelPercent.setText(percent + "%");
         labelNull3.setText("");
 
         labelQuantity.setText("" + quantity);
-
-
 
         btnPlusCard.setDisable(true);
         btnMinusCard.setDisable(true);
@@ -176,13 +173,11 @@ public class MountingItem extends TableDesignerItem {
         imageViewBackCard.setImage(imageMain);
         labelQuantityCard.setText("" + quantity);
 
-
-
         labelName1Card.setText("Материал");
         labelValue1Card.setText("-");
 
         labelName2Card.setText("Соотношение");
-        labelValue2Card.setText("" + percent + " %");
+        labelValue2Card.setText(percent + " %");
 
         labelName3Card.setText("Ширина");
         labelValue3Card.setText("-");

@@ -1,11 +1,11 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.tableDesigner.item.JointItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class JointItemMapper implements ItemMapper<JointItem> {
+public class JointItemMapper implements ItemMapper<JointItem> {
     @Nullable
     @Override
     public ReceiptItem apply(JointItem jointItem) {

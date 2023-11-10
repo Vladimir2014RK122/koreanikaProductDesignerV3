@@ -1,11 +1,11 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.tableDesigner.item.RadiusItem;
 import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class RadiusItemMapper implements ItemMapper<RadiusItem> {
+public class RadiusItemMapper implements ItemMapper<RadiusItem> {
     @Nullable
     @Override
     public ReceiptItem apply(RadiusItem radiusItem) {

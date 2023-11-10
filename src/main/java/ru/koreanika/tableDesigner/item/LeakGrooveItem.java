@@ -202,7 +202,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     }
 
     public void updateItemView(){
-
         labelRowNumber.setText("");
         labelName.setText("Каплесборник");
         //imageView.setImage(image);
@@ -212,13 +211,10 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
         labelNull2.setText("");
         labelQuantity.setText("" + quantity);
 
-
         labelHeaderCard.setText("Каплесборник");
         tooltipNameCard.setText("Каплесборник");
         imageViewBackCard.setImage(material.getImageView().getImage());
         labelQuantityCard.setText("" + quantity);
-
-
 
         labelName1Card.setText("Материал");
         labelValue1Card.setText(material.getReceiptName());
@@ -237,7 +233,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
 
     @Override
     public void updateRowPrice() {
-
         String currency = "";
         String units = "м.п.";
         double priceForOne = -1.0;
@@ -252,10 +247,12 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
 
         priceForOne /= 100.0;
 
-        double multiplier = 1;
-        if (currency.equals("USD")) multiplier = MainWindow.getUSDValue().get();
-        else if (currency.equals("EUR")) multiplier = MainWindow.getEURValue().get();
-        else if (currency.equals("RUB")) multiplier = 1;
+        double multiplier = switch (currency) {
+            case "USD" -> MainWindow.getUSDValue().get();
+            case "EUR" -> MainWindow.getEURValue().get();
+            case "RUB" -> 1;
+            default -> 1;
+        };
 
         priceForOne *= multiplier;
         priceForOne *= Project.getPriceMainCoefficient().doubleValue();
@@ -399,8 +396,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     }
 
     public static void updatePriceInSettings() {
-
-
         for (Material material : Project.getMaterials()) {
             if (material.getReceiptName().equals(choiceBoxMaterial.getSelectionModel().getSelectedItem())) {
 
@@ -428,7 +423,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     private static void enterToEditMode(LeakGrooveItem leakGrooveItem){
         TableDesigner.openSettings(LeakGrooveItem.class);
 
-
         //get row data to settings
         choiceBoxMaterial.getSelectionModel().select(leakGrooveItem.material.getReceiptName());
         textFieldLength.setText("" + leakGrooveItem.length);
@@ -447,13 +441,11 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
 
         //add listeners to new buttons
         btnApply.setOnAction(event -> {
-
             int index = TableDesignerSession.getTableDesignerMainWorkItemsList().indexOf(leakGrooveItem);
             addItem(index, leakGrooveItem.quantity);
 
             exitFromEditMode(leakGrooveItem);
             leakGrooveItem.removeThisItem();
-
         });
         btnCancel.setOnAction(event -> {
             exitFromEditMode(leakGrooveItem);
@@ -478,7 +470,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
 
     @Override
     public JSONObject getJsonView() {
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("itemName", "LeakGrooveItem");
         jsonObject.put("quantity", quantity);
@@ -490,7 +481,6 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
     }
 
     public static LeakGrooveItem initFromJSON(JSONObject jsonObject) {
-
         String materialName = (String) jsonObject.get("material");
 
         Material material = null;
@@ -504,10 +494,9 @@ public class LeakGrooveItem extends TableDesignerItem implements DependOnMateria
 
         int quantity = ((Long) jsonObject.get("quantity")).intValue();
 
-        double length = ((Double) jsonObject.get("length")).doubleValue();
+        double length = (Double) jsonObject.get("length");
 
         LeakGrooveItem leakGrooveItem = new LeakGrooveItem(material, length, quantity);
-       //leakGrooveItem.quantity = quantity;
         leakGrooveItem.labelQuantity.setText("" + quantity);
         leakGrooveItem.updateRowPrice();
         return leakGrooveItem;

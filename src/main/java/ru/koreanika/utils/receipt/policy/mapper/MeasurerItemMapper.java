@@ -1,4 +1,4 @@
-package ru.koreanika.utils.receipt.policy;
+package ru.koreanika.utils.receipt.policy.mapper;
 
 import ru.koreanika.common.material.Material;
 import ru.koreanika.tableDesigner.item.MeasurerItem;
@@ -6,7 +6,7 @@ import ru.koreanika.utils.receipt.domain.ReceiptItem;
 
 import javax.annotation.Nullable;
 
-class MeasurerItemMapper implements ItemMapper<MeasurerItem> {
+public class MeasurerItemMapper implements ItemMapper<MeasurerItem> {
     @Nullable
     @Override
     public ReceiptItem apply(MeasurerItem measurerItem) {
