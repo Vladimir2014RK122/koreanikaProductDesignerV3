@@ -56,6 +56,10 @@ public class PdfSaver {
             return;
         }
 
+        for (Node node : printNodes) {
+            NodeHTMLExporter.export(node);
+        }
+
         PDPage page = new PDPage();
         List<ImageView> preparedPrintImages = prepareImagesForPrinting(
                 printNodes,
