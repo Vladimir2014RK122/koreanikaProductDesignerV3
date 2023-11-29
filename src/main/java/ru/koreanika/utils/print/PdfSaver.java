@@ -57,7 +57,7 @@ public class PdfSaver {
         }
 
         for (Node node : printNodes) {
-            NodeHTMLExporter.export(node);
+            new NodeHTMLExporter(System.err).export(node);
         }
 
         PDPage page = new PDPage();

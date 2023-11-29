@@ -1,0 +1,290 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/sheets-of-paper-a4.css">
+    <link rel="stylesheet" type="text/css" href="css/receipt.css">
+    <title></title>
+</head>
+<body class="document">
+<div id="gridPaneTop" class="GridPane page" contenteditable="true">
+    <div class="table"><table>
+        <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <div class="AnchorPane headerBackground">
+                <img class="ImageView image-view imageViewLogo" src="../../../../target/classes/styles/images/receiptManager/koreanikaNewLogo.png">
+                <span class="Label label labelTextField">ФИО заказчика:</span>
+                <span class="Label label labelTextField">Адрес заказчика:</span>
+                <span class="Label label labelTextField">Менеджер ФИО:</span>
+                <input id="textFieldCostumerName" type="text" class="TextField text-input text-field textFieldData"
+                       value=""/>
+                <input id="textFieldCostumerAddress" type="text" class="TextField text-input text-field textFieldData"
+                       value=""/>
+                <input id="textFieldManagerName" type="text" class="TextField text-input text-field textFieldData"
+                       value=""/>
+                <span class="Label label labelBlack">$</span>
+                <span class="Label label labelBlack">€</span>
+                <span id="labelDate" class="Label label labelBlack">17.11.2023</span>
+                <span id="labelGeneralName" class="Label label labelAddress">ООО "Кореаника" Балашиха, мкр. Гагарина 13а e-mail: info@koreanika.ru +7(495) 665-82-95</span>
+                <input id="textFieldDocName" type="text" class="TextField text-input text-field textFieldDocName"
+                       value="Приложение №1 к заказу №"/>
+                <span id="labelUSD" class="Label label labelCurrency">$93.39</span>
+                <span id="labelEUR" class="Label label labelCurrency">€101.42</span>
+                <span id="labelCutoutInfo" class="Label label labelAddress">S:1.0 K:2.0 P:1.0 Sq:1.62</span>
+            </div>
+        </tr>
+        <tr>
+            <td colspan="1">
+                <span class="Label label labelTableHeader">Наименование изделия</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelTableHeader">Материал</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelTableHeader">Цвет</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelTableHeader">Сторона 1, мм.</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelTableHeader">Сторона 2, мм.</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelTableHeader">Ед.</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelTableHeader">Кол-во</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelTableHeader">Стоимость</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">Стоимость изделия с обработкой</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">Кварцевый агломерат</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">Avant, Амьен 1012</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">-</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">-</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">м2</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">0.90</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelStoneProductPrice">₽102 130</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">Стоимость изделия с обработкой</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">Кварцевый агломерат</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">Radianz, Granada GN290 (J)</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">-</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">-</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">м2</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelStoneProduct">0.72</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelStoneProductPrice">₽81 704</span>
+            </td>
+        </tr>
+        <tr>
+            <div id="sketchPane" class="BorderPane ">
+                <div id="anchorPaneButtonsSketchImage" class="AnchorPane ">
+                    <!-- <div class="Button button"><span>Attach</span></div> //-->
+                    <!-- <div class="Button button"><span>Delete</span></div> //-->
+                </div>
+            </div>
+        </tr>
+        <tr>
+            <div id="flowPaneForFeaturesPictures" class="FlowPane ">
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Амьен 1012 лого</span>
+                    <img class="ImageView image-view"
+                         src="../../../../materials_resources/1.%20Avant%20100x100.jpg">
+                </div>
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Амьен 1012 текстура</span>
+                    <img class="ImageView image-view"
+                         src="no_image.png">
+                </div>
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Подоконник</span>
+                    <img class="ImageView image-view"
+                         src="../../../../target/classes/styles/images/TableDesigner/StoneProductItem/shapes/rectangle_2.png">
+                </div>
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Подоконник</span>
+                    <img class="ImageView image-view"
+                         src="../../../../target/classes/styles/images/TableDesigner/StoneProductItem/shapes/triangle_2.png">
+                </div>
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Granada GN290 (J) лого</span>
+                    <img class="ImageView image-view"
+                         src="../../../../materials_resources/3.%20Radianz%20100х100.jpg">
+                </div>
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Granada GN290 (J) текстура</span>
+                    <img class="ImageView image-view"
+                         src="../../../../materials_resources/no_image.png">
+                </div>
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Вырез</span>
+                    <img class="ImageView image-view"
+                         src="../../../../features_resources/cutout/icons/cutout_1_icon.png">
+                </div>
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Кромка</span>
+                    <img class="ImageView image-view"
+                         src="../../../../edges_resources/edge_1_1.png">
+                </div>
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Проточки под радиатор</span>
+                    <img class="ImageView image-view"
+                         src="../../../../features_resources/cutout/icons/cutout_7_icon.png">
+                </div>
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Монтаж</span>
+                    <img class="ImageView image-view"
+                         src="../../../../target/classes/styles/images/TableDesigner/MountingItem/mountingItem.png">
+                </div>
+                <div id="rootPaneFeatureImg" class="ReceiptImageItem ">
+                    <span id="labelFeatureImage" class="Label label">Доставка</span>
+                    <img class="ImageView image-view"
+                         src="../../../../target/classes/styles/images/TableDesigner/DeliveryItem/delivery.png">
+                </div>
+            </div>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <span class="Label label labelTableResult">  Итого стоимость обязательных работ</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelTableResultPrice">₽183 834</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <span id="null"
+                      class="Label label labelTableResult labelProduct-right">Стоимость дополнительных работ</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelTableResultPrice">₽18 000</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span class="Label label labelProduct">Доставка/Разгрузка</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelProduct"></span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelProduct"></span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelProduct"></span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelProduct">1.00</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelProductPrice">₽10 008</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span class="Label label labelProduct">Ручной пронос изделия</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelProduct"></span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelProduct"></span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelProduct"></span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelProduct">1.00</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelProductPrice">₽4 988</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <span class="Label label labelTableResult">  Итого стоимость дополнительных работ</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelTableResultPrice">₽32 996</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <span class="Label label labelProduct labelProduct-right">Монтаж изделий в % (но не менее 4000 рублей)</span>
+            </td>
+            <td colspan="1">
+                <span class="Label label labelProduct">10%</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelProductPrice">₽21 683</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <span class="Label label labelTableResult labelTableResultEnd">  Стоимость в рублях действительна на день просчета:</span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelTableResultPrice labelTableResultEndPrice">₽238 513</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <span class="Label label labelLastRowTransparent"></span>
+            </td>
+            <td colspan="2">
+                <span class="Label label labelLastRowTransparent"></span>
+            </td>
+        </tr>
+        <tr>
+        </tbody>
+    </table></div>
+</div>
+</body>
+</html>

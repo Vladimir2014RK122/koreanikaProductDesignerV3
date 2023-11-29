@@ -1,0 +1,217 @@
+.bold {
+  font-family: 'Segoe UI Bold';
+}
+.light {
+  font-family: 'Segoe UI Light';
+}
+.normal {
+  font-family: "Segoe UI Normal";
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Segoe UI Normal', sans-serif;
+}
+
+
+/* ******************************** HEADER ********************************* */
+
+.headerBackground {
+    background-color: white;
+}
+
+.imageViewLogo {
+    position: relative;
+    top: 5px;
+    height: 117px;
+}
+
+.labelTextField {
+    position: relative;
+    left: 280px;
+    color: #4F5F56;
+    font-family: 'Segoe UI Normal', sans-serif;
+    font-size: 12px;
+    height: 25px;
+    width: 91px;
+}
+
+.labelBlack {
+    color: black;
+    font-family: 'Segoe UI Normal', sans-serif;
+    font-size: 12px;
+    height: 25px;
+}
+
+.labelAddress {
+    color: black;
+    font-family: 'Segoe UI Normal', sans-serif;
+    font-size: 10px;
+}
+
+.labelCurrency {
+    border-color: transparent transparent #8C8C8C transparent;
+    border-width: 2px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.receiptImageItem {
+    float: left;
+}
+.receiptImageItem span {
+    display: block;
+    position: relative;
+    top: 90px;
+}
+.receiptImageItem div {
+    display : block;
+    position: relative;
+    top: 0px;
+    height: 80px;
+}
+.ReceiptImageItem img {
+    height: 70px;
+    width: 70px;
+}
+
+.textFieldData {
+    height: 25px;
+}
+
+.textFieldDocName {
+    border-color: transparent;
+    border-radius: 6px 6px 0 0;
+    background-radius: 6px 6px 0 0;
+    background-color: #EDEBE9;
+    background-image: url(../img/backgroundPattern1.png);
+    background-size:600px;
+}
+/* ******************************** HEADER ********************************* */
+
+.labelTableHeader {
+    background-color: #EDEBE9;
+    color: black;
+    font-family: 'Segoe UI Normal', sans-serif;
+    font-size: 12px;
+    text-align: center;
+}
+
+.labelStoneProduct, .labelProduct {
+    background-color: white;
+    color: black;
+    font-family: 'Segoe UI Normal', sans-serif;
+    font-size: 12px;
+    text-align: center;
+    wrap-text: true;
+}
+
+.labelStoneProductPrice, .labelProductPrice {
+    background-color: white;
+    color: black;
+    font-family: 'Segoe UI Normal', sans-serif;
+    font-size: 12px;
+    text-align: center;
+}
+
+.labelProduct-left {
+    text-align: center-left;
+}
+.labelProduct-right {
+    text-align: center-right;
+}
+
+.labelTableResult {
+    background-color: #EDEBE9;
+    color: black;
+    font-family: 'Segoe UI Normal', sans-serif;
+    font-size: 12px;
+    text-align: center-right;
+}
+
+.labelTableResultPrice {
+    background-color: #EDEBE9;
+    color: black;
+    font-family: 'Segoe UI Normal', sans-serif;
+    font-size: 14px;
+    text-align: center;
+}
+
+.labelTableResultEnd , .labelTableResultEndPrice {
+    background-color: black;
+    color: white;
+}
+
+.labelTableResultEndPrice {
+    font-size: 16px;
+}
+
+.labelLastRowTransparent {
+    background-color: black;
+    color: white;
+    border-width: 0;
+    border-color: black;
+}
+
+#rootAnchorPane {
+    padding: 0;
+    background-color: #ffffff;
+}
+
+#anchorPaneIntoScrollPane {
+    background-color: #ffffff;
+    padding: 5px;
+}
+
+#gridPaneTop {
+    text-align: center;
+    background-repeat: repeat-y;
+    background-position: left 160;
+    background-size: 600px 900px;
+    background-color: #ffffff;
+    padding: 0;
+}
+
+#flowPaneForFeaturesPictures {
+    width: 80%;
+}
+
+#hBoxDetalizationMenu{
+    text-align: center;
+    spacing: 0;
+    padding: 0;
+    border-insets: 0;
+}
+
+#LabelDetalization{
+    color: TEXT_COLOR;
+    border-width: 0;
+    padding: 0 10 0 10;
+}
+
+#labelUSDHeader, #labelEURHeader, #labelNotification{
+    text-align: center-right;
+    border-width: 0;
+    color: TEXT_COLOR;
+}
+
+#sketchPane {
+     border-style: solid inside;
+     border-width: 0;
+     border-color: RECEIPT_BORDER_COLOR_2;
+ }
+
+#LabelDetalization{
+    font-family: 'Segoe UI Normal', sans-serif;
+    color: white;
+}
+
+.label-divider{
+    border-width: 0;
+}
+
+.hbox-printing{
+    spacing: 5;
+}
+
+.table {
+}
